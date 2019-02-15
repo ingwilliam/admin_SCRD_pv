@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="vendor/jquery/jquery.min.js"></script>
+        <script src='dist/js/main.js'></script>
+        <script>
+            //document.cookie = "session_api_pv=william; max-age=60; path=/";
+
+            /*
+             var session_api_pv = getCookie("session_api_pv");
+             
+             if(session_api_pv=="")
+             {
+             setCookie("session_api_pv","80882565","60");        
+             session_api_pv = getCookie("session_api_pv");
+             alert("la creo "+session_api_pv);
+             }
+             else
+             {
+             alert("solo la imprime "+session_api_pv);
+             }
+             
+             function getCookie(cname) {
+             var name = cname + "=";
+             var ca = document.cookie.split(';');
+             for(var i = 0; i <ca.length; i++) {
+             var c = ca[i];
+             while (c.charAt(0)==' ') {
+             c = c.substring(1);
+             }
+             if (c.indexOf(name) == 0) {
+             return c.substring(name.length,c.length);
+             }
+             }
+             return "";
+             }
+             
+             function setCookie(cname, cvalue, csegundos) {
+             document.cookie = cname + "=" + cvalue + "; max-age=" + csegundos + "; path=/ ";                
+             }
+             */
+
+
+            //setLocalStorage("token_pv","$2y$08$SUFzTzhDUGkzVHZocVpPZuDUfXXkuXgLTZs7pcKMEXSYcMAZrtnda");
+            var a = getLocalStorage(name_local_storage);
+            alert(a.token);
+            
+            
+            
+
+        </script>
+    </head>
+    <body>
+        <div>TODO write content</div>
+    </body>
+</html>
