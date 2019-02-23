@@ -178,6 +178,12 @@
                                     //cargar select departamento
                                     $('#pais').on('change', function () {
                                         var pais = $(this).val();
+
+
+                                        $('#departamento').find('option').remove();
+
+
+
                                         $.ajax({
                                             type: 'GET',
                                             data: {"token": token_actual.token, "pais": pais},
