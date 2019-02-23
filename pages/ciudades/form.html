@@ -145,9 +145,9 @@
                                     permiso_lectura(token_actual, "Ciudades");
 
                                     $('#form_validator').attr('action', url_pv + 'Ciudades/new');
-                                    
+
                                     //
-                                    
+
                                     //Cargar el select de Pais
                                     $.ajax({
                                         type: 'GET',
@@ -174,34 +174,38 @@
                                             }
                                         }
                                     });
-                                    
+
                                     //cargar select departamento
-                                    
-                                    $.ajax({
-                                        type: 'GET',
-                                        data: {"token": token_actual.token},
-                                        url: url_pv + 'Departamentos/select'
-                                    }).done(function (data) {
-                                        if (data == 'error_metodo')
-                                        {
-                                            notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                        } else
-                                        {
-                                            if (data == 'error')
+                                    $('#pais').on('change', function () {
+                                        var pais = $(this).val();
+                                        $.ajax({
+                                            type: 'GET',
+                                            data: {"token": token_actual.token, "pais": pais},
+                                            url: url_pv + 'Departamentos/select'
+                                        }).done(function (data) {
+                                            if (data == 'error_metodo')
                                             {
-                                                notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                                                notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                             } else
                                             {
-                                                var json = JSON.parse(data);
-                                                $("#departamento").append('<option value="">:: Seleccionar ::</option>');
-                                                if (json.length > 0) {
-                                                    $.each(json, function (key, value) {
-                                                        $("#departamento").append('<option value="' + value.id + '">' + value.nombre + '</option>');
-                                                    });
+                                                if (data == 'error')
+                                                {
+                                                    notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                                                } else
+                                                {
+                                                    var json = JSON.parse(data);
+                                                    $("#departamento").append('<option value="">:: Seleccionar ::</option>');
+                                                    if (json.length > 0) {
+                                                        $.each(json, function (key, value) {
+                                                            $("#departamento").append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                                                        });
+                                                    }
                                                 }
                                             }
-                                        }
+                                        });
                                     });
+
+
 
                                     if ($('#id').val().length > 0) {
                                         //Realizo la peticion para cargar el formulario
