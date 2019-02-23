@@ -72,10 +72,6 @@
                                     <form id="form_validator" action="" class="form_validator" role="form" method="post">
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Nombre</label>
-                                                <input type="text" name="nombre" class="form-control">                                                
-                                            </div>
-                                            <div class="form-group">
                                                 <label>Pais</label>
                                                 <select id='pais' name="pais" class="form-control" tabindex="1">                                                    
                                                 </select>
@@ -84,6 +80,10 @@
                                                 <label>Departamento</label>
                                                 <select id='departamento' name="departamento" class="form-control" tabindex="1">                                                    
                                                 </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Nombre</label>
+                                                <input type="text" name="nombre" class="form-control">                                                
                                             </div>
                                         </div>                                                                    
                                         <div class="col-lg-12" style="text-align: right">
@@ -263,6 +263,11 @@
                                         tipo_documento: {
                                             validators: {
                                                 notEmpty: {message: 'El Pais es requerido'}
+                                            }
+                                        },
+                                        departamento: {
+                                            validators: {
+                                                notEmpty: {message: 'El departamento es requerido'}
                                             }
                                         }
                                     }
