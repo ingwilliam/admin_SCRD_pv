@@ -74,7 +74,11 @@
                                             <div class="form-group">
                                                 <label>Nombre</label>
                                                 <input type="text" name="nombre" class="form-control">                                                
-                                            </div>                                                                                                                              
+                                            </div>   
+                                            <div class="form-group">
+                                                <label>Descripción</label>
+                                                <input type="text" name="descripcion" id="descricion" class="form-control">                                                
+                                            </div>
                                         </div>                                                                    
                                         <div class="col-lg-12" style="text-align: right">
                                             <input type="hidden" id="id" name="id" />
@@ -179,6 +183,11 @@
                                         nombre: {
                                             validators: {
                                                 notEmpty: {message: 'El nombre es requerido'}
+                                            }
+                                        },
+                                        descripcion: {
+                                            validators: {
+                                                notEmpty: {message: 'La descripción es requerida'}
                                             }
                                         }
                                     }
