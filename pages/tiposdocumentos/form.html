@@ -65,7 +65,7 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">                            
                             <div class="panel-heading">
-                                Crea Tipo de documento
+                                Crear Tipo de documento
                             </div>
                             <div class="panel-body">
                                 <div class="row">
@@ -136,7 +136,7 @@
                                     location.href = '../../index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                                 } else
                                 {
-                                    permiso_lectura(token_actual, "Tiposdocumentos");
+                                    permiso_lectura(token_actual, "Tipos de documentos");
 
                                     $('#form_validator').attr('action', url_pv + 'Tiposdocumentos/new');
 
@@ -207,12 +207,12 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: $form.attr('action'),
-                                            data: $form.serialize() + "&modulo=Tiposdocumentos&token=" + token_actual.token
+                                            data: $form.serialize() + "&modulo=Tipos de documentos&token=" + token_actual.token
                                         }).done(function (result) {
 
                                             if (result == 'error')
                                             {
-                                                notify("danger", "ok", "Tiposdocumentos:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                notify("danger", "ok", "Tipos de documentos:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                             } else
                                             {
                                                 if (result == 'acceso_denegado')
@@ -221,12 +221,12 @@
                                                 } else
                                                 {
                                                     if (isNaN(result)) {
-                                                        notify("danger", "ok", "Tiposdocumentos:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        notify("danger", "ok", "Tipos de documentos:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                                     } else
                                                     {
                                                         //Asigno el valor id al hidden 
                                                         $("#id").attr('value', result);
-                                                        notify("success", "ok", "Tiposdocumentos:", "Se creó el Tipo de documento con éxito.");
+                                                        notify("success", "ok", "Tipos de documentos:", "Se creó el Tipo de documento con éxito.");
                                                     }
                                                 }
                                             }
@@ -237,11 +237,11 @@
                                         $.ajax({
                                             type: 'PUT',
                                             url: url_pv + 'Tiposdocumentos/edit/' + $("#id").attr('value'),
-                                            data: $form.serialize() + "&modulo=Tiposdocumentos&token=" + token_actual.token
+                                            data: $form.serialize() + "&modulo=Tipos de documentos&token=" + token_actual.token
                                         }).done(function (result) {
                                             if (result == 'error')
                                             {
-                                                notify("danger", "ok", "Tiposdocumentos:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                notify("danger", "ok", "Tipos de documentos:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                             } else
                                             {
                                                 if (result == 'acceso_denegado')
@@ -251,10 +251,10 @@
                                                 {
                                                     if (isNaN(result))
                                                     {
-                                                        notify("danger", "ok", "Tiposdocumentos:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        notify("danger", "ok", "Tipos de documentos:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                                     } else
                                                     {
-                                                        notify("info", "ok", "Tiposdocumentos:", "Se edito el Tipo de documento con éxito.");
+                                                        notify("info", "ok", "Tipos de documentos:", "Se edito el Tipo de documento con éxito.");
                                                     }
                                                 }
                                             }

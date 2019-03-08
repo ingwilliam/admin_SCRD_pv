@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>::Departamentos::</title>
+        <title>::Lineas Estratégicas::</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -48,7 +48,7 @@
             <div id="page-wrapper">                
                 <div class="row">                    
                     <div class="col-lg-12">                         
-                        <h1 class="page-header">Departamentos</h1>
+                        <h1 class="page-header">Lineas Estratégicas</h1>
                     </div>
                     <div class="panel-body" style="text-align: right">                    
                         <button type="button" class="btn btn-default btn-circle btn-lg" onclick="location.href = 'list.html'"><i class="fa fa-arrow-left"></i>
@@ -65,21 +65,16 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">                            
                             <div class="panel-heading">
-                                Crear departamento
+                                Crear linea estratégica
                             </div>
                             <div class="panel-body">
                                 <div class="row">
                                     <form id="form_validator" action="" class="form_validator" role="form" method="post">
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Pais</label>
-                                                <select id='pais' name="pais" class="form-control" tabindex="1">                                                    
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
                                                 <label>Nombre</label>
                                                 <input type="text" name="nombre" class="form-control">                                                
-                                            </div>
+                                            </div>                                                                                                                              
                                         </div>                                                                    
                                         <div class="col-lg-12" style="text-align: right">
                                             <input type="hidden" id="id" name="id" />
@@ -137,54 +132,25 @@
                                     location.href = '../../index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                                 } else
                                 {
-                                    permiso_lectura(token_actual, "Departamentos");
+                                    permiso_lectura(token_actual, "Lineas estratégicas");
 
-                                    $('#form_validator').attr('action', url_pv + 'Departamentos/new');
-                                    
-                                    //
-                                    
-                                    //Cargar el select de sexos
-                                    $.ajax({
-                                        type: 'GET',
-                                        data: {"token": token_actual.token},
-                                        url: url_pv + 'Paises/select'
-                                    }).done(function (data) {
-                                        if (data == 'error_metodo')
-                                        {
-                                            notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                        } else
-                                        {
-                                            if (data == 'error')
-                                            {
-                                                notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
-                                            } else
-                                            {
-                                                var json = JSON.parse(data);
-                                                $("#pais").append('<option value="">:: Seleccionar ::</option>');
-                                                if (json.length > 0) {
-                                                    $.each(json, function (key, value) {
-                                                        $("#pais").append('<option value="' + value.id + '">' + value.nombre + '</option>');
-                                                    });
-                                                }
-                                            }
-                                        }
-                                    });
+                                    $('#form_validator').attr('action', url_pv + 'Lineasestrategicas/new');
 
                                     if ($('#id').val().length > 0) {
                                         //Realizo la peticion para cargar el formulario
                                         $.ajax({
                                             type: 'GET',
                                             data: {"token": token_actual.token},
-                                            url: url_pv + 'Departamentos/search/' + $("#id").attr('value')
+                                            url: url_pv + 'Lineasestrategicas/search/' + $("#id").attr('value')
                                         }).done(function (data) {
                                             if (data == 'error_metodo')
                                             {
-                                                notify("danger", "ok", "Departamentos:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                notify("danger", "ok", "Lineas estratégicas:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                             } else
                                             {
                                                 if (data == 'error')
                                                 {
-                                                    notify("danger", "ok", "Departamentos:", "El departamento no se encuentra registrado, por favor registrarse");
+                                                    notify("danger", "ok", "Lineas estratégicas:", "La linea estratégica no se encuentra registrada, por favor registrarla");
                                                 } else
                                                 {
                                                     var json = JSON.parse(data);
@@ -201,8 +167,6 @@
                                 }
                             });
 
-
-
                             function validator_form(token_actual) {
                                 //Validar el formulario
                                 $('.form_validator').bootstrapValidator({
@@ -215,11 +179,6 @@
                                         nombre: {
                                             validators: {
                                                 notEmpty: {message: 'El nombre es requerido'}
-                                            }
-                                        },
-                                        tipo_documento: {
-                                            validators: {
-                                                notEmpty: {message: 'El Pais es requerido'}
                                             }
                                         }
                                     }
@@ -239,12 +198,12 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: $form.attr('action'),
-                                            data: $form.serialize() + "&modulo=Departamentos&token=" + token_actual.token
+                                            data: $form.serialize() + "&modulo=Lineas estratégicas&token=" + token_actual.token
                                         }).done(function (result) {
 
                                             if (result == 'error')
                                             {
-                                                notify("danger", "ok", "Departamentos:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                notify("danger", "ok", "Lineas estratégicas:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                             } else
                                             {
                                                 if (result == 'acceso_denegado')
@@ -253,12 +212,12 @@
                                                 } else
                                                 {
                                                     if (isNaN(result)) {
-                                                        notify("danger", "ok", "Departamentos:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        notify("danger", "ok", "Lineas estratégicas:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                                     } else
                                                     {
                                                         //Asigno el valor id al hidden 
                                                         $("#id").attr('value', result);
-                                                        notify("success", "ok", "Departamentos:", "Se creó el departamento con éxito.");
+                                                        notify("success", "ok", "Lineas estratégicas", "Se creó la linea estratégica con éxito.");
                                                     }
                                                 }
                                             }
@@ -268,12 +227,12 @@
                                         //Realizo la peticion con el fin de editar el registro actual
                                         $.ajax({
                                             type: 'PUT',
-                                            url: url_pv + 'Departamentos/edit/' + $("#id").attr('value'),
-                                            data: $form.serialize() + "&modulo=Departamentos&token=" + token_actual.token
+                                            url: url_pv + 'Lineasestrategicas/edit/' + $("#id").attr('value'),
+                                            data: $form.serialize() + "&modulo=Lineas estratégicas&token=" + token_actual.token
                                         }).done(function (result) {
                                             if (result == 'error')
                                             {
-                                                notify("danger", "ok", "Departamentos:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                notify("danger", "ok", "Lineas estratégicas:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                             } else
                                             {
                                                 if (result == 'acceso_denegado')
@@ -283,10 +242,10 @@
                                                 {
                                                     if (isNaN(result))
                                                     {
-                                                        notify("danger", "ok", "Departamentos:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        notify("danger", "ok", "Lineas estratégicas:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                                     } else
                                                     {
-                                                        notify("info", "ok", "Departamentos:", "Se edito el departamento con éxito.");
+                                                        notify("info", "ok", "Lineas estratégicas", "Se edito la linea estratégica con éxito.");
                                                     }
                                                 }
                                             }
