@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>::Barrio::</title>
+        <title>::Barrios::</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -160,8 +160,6 @@
                                     permiso_lectura(token_actual, "Barrios");
 
                                     $('#form_validator').attr('action', url_pv + 'Barrios/new');
-
-                                    //
 
                                     //Cargar el select de Pais
                                     $.ajax({
@@ -380,11 +378,6 @@
                                             validators: {
                                                 notEmpty: {message: 'La Localidad es requerida'}
                                             }
-                                        },
-                                        upz: {
-                                            validators: {
-                                                notEmpty: {message: 'La Upz es requerida'}
-                                            }
                                         }
                                     }
                                 }).on('success.form.bv', function (e) {
@@ -403,7 +396,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: $form.attr('action'),
-                                            data: $form.serialize() + "&modulo=Barrio&token=" + token_actual.token
+                                            data: $form.serialize() + "&modulo=Barrios&token=" + token_actual.token
                                         }).done(function (result) {
 
                                             if (result == 'error')
