@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>::Upz::</title>
+        <title>::Entidades::</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -54,7 +54,7 @@
             <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Upz</h1>
+                        <h1 class="page-header">Entidades</h1>
                     </div>
                     <div class="panel-body" style="text-align: right">                    
                         <button type="button" class="btn btn-primary btn-circle btn-lg" onclick="location.href='list.html'"><i class="fa fa-list"></i>
@@ -69,7 +69,7 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                Upz registrados
+                                Entidades registradas
                             </div>
                             <div class="panel-body">
                                 <div class="row">
@@ -77,11 +77,8 @@
                                         <table id="table_list" class="table">
                                             <thead>
                                                 <tr>
-                                                    <th>Pais</th>
-                                                    <th>Departamento</th>
-                                                    <th>Ciudad</th>
-                                                    <th>Localidad</th>
                                                     <th>Nombre</th>
+                                                    <th>Descripción</th>
                                                     <th>Acciones</th>
                                                 </tr>
                                             </thead>
@@ -148,7 +145,7 @@
                 {
                     
                     //Verifica si el token actual tiene acceso de lectura
-                    permiso_lectura(token_actual,"Upz");
+                    permiso_lectura(token_actual,"Entidades");
 
                     //Cargar datos en la tabla actual
                     $('#table_list').DataTable({
@@ -159,15 +156,12 @@
                         "serverSide": true,
                         "lengthMenu": [5, 10, 20],
                         "ajax":{
-                            url : url_pv+"Upz/all",
+                            url : url_pv+"Entidades/all",
                             data: {"token": token_actual.token}
                           },                        
                         "columns": [                        
-                            {"data": "pais"},
-                            {"data": "departamento"},
-                            {"data": "ciudad"},
-                            {"data": "localidad"},
-                            {"data": "upz"},
+                            {"data": "nombre"},
+                            {"data": "descripcion"},
                             {"data": "acciones"}
                         ]
                     });
@@ -189,23 +183,23 @@
                 {                 
                     $.ajax({
                         type: 'DELETE',
-                        data: {"token": token_actual.token,"modulo":"Upz"},
-                        url: url_pv+'Upz/delete/' + id                  
+                        data: {"token": token_actual.token,"modulo":"Entidades"},
+                        url: url_pv+'Entidades/delete/' + id                  
                     }).done(function (data) {    
                         if (data == 'ok')
                         {
-                            notify("info", "ok", "Upz:", "Se elimino la upz con éxito.");
+                            notify("info", "ok", "Entidades:", "Se elimino el area con éxito.");
                             $('#table_list').DataTable().ajax.reload();
                         }
                         else
                         {
                             if (data == 'acceso_denegado')
                             {
-                                notify("danger", "remove", "Upz:", "Acceso denegado.");
+                                notify("danger", "remove", "Entidades:", "Acceso denegado.");
                             }
                             else
                             {
-                                notify("danger", "ok", "Upz:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                notify("danger", "ok", "Entidades:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                             }
                         }
                     });   

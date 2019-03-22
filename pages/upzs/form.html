@@ -79,16 +79,19 @@
                                             <div class="form-group">
                                                 <label>Departamento</label>
                                                 <select id='departamento' name="departamento" class="form-control" tabindex="1">                                                    
+                                                    <option value="">:: Seleccionar ::</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label>Ciudad</label>
                                                 <select id='ciudad' name="ciudad" class="form-control" tabindex="1">                                                    
+                                                    <option value="">:: Seleccionar ::</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label>Localidad</label>
                                                 <select id='localidad' name="localidad" class="form-control" tabindex="1">                                                    
+                                                    <option value="">:: Seleccionar ::</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -152,11 +155,9 @@
                                     location.href = '../../index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                                 } else
                                 {
-                                    permiso_lectura(token_actual, "Upz");
+                                    permiso_lectura(token_actual, "Upzs");
 
-                                    $('#form_validator').attr('action', url_pv + 'Upz/new');
-
-                                    //
+                                    $('#form_validator').attr('action', url_pv + 'Upzs/new');
 
                                     //Cargar el select de Pais
                                     $.ajax({
@@ -284,7 +285,7 @@
                                         $.ajax({
                                             type: 'GET',
                                             data: {"token": token_actual.token},
-                                            url: url_pv + 'Upz/search/' + $("#id").attr('value')
+                                            url: url_pv + 'Upzs/search/' + $("#id").attr('value')
                                         }).done(function (data) {
                                             if (data == 'error_metodo')
                                             {
@@ -298,8 +299,50 @@
                                                 {
                                                     var json = JSON.parse(data);
 
-                                                    if (typeof json.id === 'number') {
-                                                        $('#form_validator').loadJSON(data);
+                                                    if (typeof json.localidad.id === 'number') {
+                                                        
+                                                        $('#departamento').find('option').remove();
+                                                        $("#departamento").append('<option value="">:: Seleccionar ::</option>');
+                                                        if (json.departamentos.length > 0) {
+                                                            $.each(json.departamentos, function (key, departamento) {
+                                                                var selected = '';
+                                                                if(departamento.id == json.departamento.id)
+                                                                {
+                                                                    selected = 'selected="selected"';
+                                                                }
+                                                                $("#departamento").append('<option value="' + departamento.id + '" '+selected+' >' + departamento.nombre + '</option>');
+                                                            });
+                                                        }
+                                                        
+                                                        $('#ciudad').find('option').remove();
+                                                        $("#ciudad").append('<option value="">:: Seleccionar ::</option>');
+                                                        if (json.ciudades.length > 0) {
+                                                            $.each(json.ciudades, function (key, ciudad) {
+                                                                var selected = '';
+                                                                if(ciudad.id == json.ciudad.id)
+                                                                {
+                                                                    selected = 'selected="selected"';
+                                                                }
+                                                                $("#ciudad").append('<option value="' + ciudad.id + '" '+selected+' >' + ciudad.nombre + '</option>');
+                                                            });
+                                                        }
+                                                        
+                                                        $('#localidad').find('option').remove();
+                                                        $("#localidad").append('<option value="">:: Seleccionar ::</option>');
+                                                        if (json.localidades.length > 0) {
+                                                            $.each(json.localidades, function (key, localidad) {
+                                                                var selected = '';
+                                                                if(localidad.id == json.localidad.id)
+                                                                {
+                                                                    selected = 'selected="selected"';
+                                                                }
+                                                                $("#localidad").append('<option value="' + localidad.id + '" '+selected+' >' + localidad.nombre + '</option>');
+                                                            });
+                                                        }
+                                                        
+                                                        json.upz.pais=json.pais.id;
+                                                        
+                                                        $('#form_validator').loadJSON(json.upz);
                                                     }
                                                 }
                                             }
@@ -363,7 +406,7 @@
                                         $.ajax({
                                             type: 'POST',
                                             url: $form.attr('action'),
-                                            data: $form.serialize() + "&modulo=Upz&token=" + token_actual.token
+                                            data: $form.serialize() + "&modulo=Upzs&token=" + token_actual.token
                                         }).done(function (result) {
 
                                             if (result == 'error')
@@ -392,8 +435,8 @@
                                         //Realizo la peticion con el fin de editar el registro actual
                                         $.ajax({
                                             type: 'PUT',
-                                            url: url_pv + 'Upz/edit/' + $("#id").attr('value'),
-                                            data: $form.serialize() + "&modulo=Upz&token=" + token_actual.token
+                                            url: url_pv + 'Upzs/edit/' + $("#id").attr('value'),
+                                            data: $form.serialize() + "&modulo=Upzs&token=" + token_actual.token
                                         }).done(function (result) {
                                             if (result == 'error')
                                             {

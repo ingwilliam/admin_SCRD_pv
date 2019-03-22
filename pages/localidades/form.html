@@ -79,11 +79,13 @@
                                             <div class="form-group">
                                                 <label>Departamento</label>
                                                 <select id='departamento' name="departamento" class="form-control" tabindex="1">                                                    
+                                                    <option value="">:: Seleccionar ::</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label>Ciudad</label>
                                                 <select id='ciudad' name="ciudad" class="form-control" tabindex="1">                                                    
+                                                    <option value="">:: Seleccionar ::</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -150,8 +152,6 @@
                                     permiso_lectura(token_actual, "Localidades");
 
                                     $('#form_validator').attr('action', url_pv + 'Localidades/new');
-
-                                    //
 
                                     //Cargar el select de Pais
                                     $.ajax({
@@ -260,9 +260,36 @@
                                                 } else
                                                 {
                                                     var json = JSON.parse(data);
-
-                                                    if (typeof json.id === 'number') {
-                                                        $('#form_validator').loadJSON(data);
+                                                    if (typeof json.localidad.id === 'number') {
+                                                        
+                                                        $('#departamento').find('option').remove();
+                                                        $("#departamento").append('<option value="">:: Seleccionar ::</option>');
+                                                        if (json.departamentos.length > 0) {
+                                                            $.each(json.departamentos, function (key, departamento) {
+                                                                var selected = '';
+                                                                if(departamento.id == json.departamento.id)
+                                                                {
+                                                                    selected = 'selected="selected"';
+                                                                }
+                                                                $("#departamento").append('<option value="' + departamento.id + '" '+selected+' >' + departamento.nombre + '</option>');
+                                                            });
+                                                        }
+                                                        
+                                                        $('#ciudad').find('option').remove();
+                                                        $("#ciudad").append('<option value="">:: Seleccionar ::</option>');
+                                                        if (json.ciudades.length > 0) {
+                                                            $.each(json.ciudades, function (key, ciudad) {
+                                                                var selected = '';
+                                                                if(ciudad.id == json.ciudad.id)
+                                                                {
+                                                                    selected = 'selected="selected"';
+                                                                }
+                                                                $("#ciudad").append('<option value="' + ciudad.id + '" '+selected+' >' + ciudad.nombre + '</option>');
+                                                            });
+                                                        }
+                                                        
+                                                        json.localidad.pais=json.pais.id;                                                        
+                                                        $('#form_validator').loadJSON(json.localidad);
                                                     }
                                                 }
                                             }
