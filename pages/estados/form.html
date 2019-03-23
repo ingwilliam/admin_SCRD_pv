@@ -72,8 +72,23 @@
                                     <form id="form_validator" action="" class="form_validator" role="form" method="post">
                                         <div class="col-lg-12">
                                             <div class="form-group">
+                                                <label>Tipo de estados</label>
+                                                <select id='tipo_estado' name="tipo_estado" class="form-control" tabindex="1">                                                    
+                                                    <option value="">:: Seleccionar ::</option>
+                                                    <option value="convocatorias">Convocatorias</option>
+                                                    <option value="propuestas">Propuestas</option>
+                                                    <option value="jurados">Jurados</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
                                                 <label>Nombre</label>
-                                                <input type="text" name="nombre" class="form-control">                                                
+                                                <select id='nombre' name="nombre" class="form-control" tabindex="1">                                                    
+                                                    <option value="">:: Seleccionar ::</option>                                                    
+                                                </select>                                                
+                                            </div>                                                                                                                              
+                                            <div class="form-group">
+                                                <label>Orden</label>
+                                                <input type="text" name="orden" class="form-control">
                                             </div>                                                                                                                              
                                         </div>                                                                    
                                         <div class="col-lg-12" style="text-align: right">
@@ -136,6 +151,42 @@
 
                                     $('#form_validator').attr('action', url_pv + 'Estados/new');
 
+                                    //cargar select departamento
+                                    $('#tipo_estado').on('change', function () {
+                                        var nombre = $(this).val();
+
+                                        $('#nombre').find('option').remove();
+
+                                        $.ajax({
+                                            type: 'GET',
+                                            data: {"token": token_actual.token, "nombre": nombre},
+                                            url: url_pv + 'Tablasmaestras/select'
+                                        }).done(function (data) {
+                                            if (data == 'error_metodo')
+                                            {
+                                                notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                            } else
+                                            {
+                                                if (data == 'error')
+                                                {
+                                                    notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                                                } else
+                                                {
+                                                    var json = JSON.parse(data);
+                                                    $("#nombre").append('<option value="">:: Seleccionar ::</option>');
+                                                    if (json.length > 0) {
+                                                        $.each(json, function (key, value) {
+                                                            if(value!="")
+                                                            {
+                                                                $("#nombre").append('<option value="' + value + '">' + value+ '</option>');
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    });
+
                                     if ($('#id').val().length > 0) {
                                         //Realizo la peticion para cargar el formulario
                                         $.ajax({
@@ -156,7 +207,41 @@
                                                     var json = JSON.parse(data);
 
                                                     if (typeof json.id === 'number') {
-                                                        $('#form_validator').loadJSON(data);
+                                                        
+                                                        $('#nombre').find('option').remove();
+                                                        
+                                                        $.ajax({
+                                                            type: 'GET',
+                                                            data: {"token": token_actual.token, "nombre": json.tipo_estado},
+                                                            url: url_pv + 'Tablasmaestras/select'
+                                                        }).done(function (data_interno) {
+                                                            if (data_interno == 'error_metodo')
+                                                            {
+                                                                notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                            } else
+                                                            {
+                                                                if (data_interno == 'error')
+                                                                {
+                                                                    notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                                                                } else
+                                                                {
+                                                                    var json_interno = JSON.parse(data_interno);
+                                                                    $("#nombre").append('<option value="">:: Seleccionar ::</option>');
+                                                                    if (json_interno.length > 0) {
+                                                                        $.each(json_interno, function (key, value) {
+                                                                            var selected = '';
+                                                                            if(value == json.nombre)
+                                                                            {
+                                                                                selected = 'selected="selected"';
+                                                                            }
+                                                                            $("#nombre").append('<option value="' +value+ '" '+selected+' >'+value+'</option>');                                                                                                                                                        
+                                                                        });
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+                                                        
+                                                        $('#form_validator').loadJSON(json);
                                                     }
                                                 }
                                             }
@@ -176,9 +261,22 @@
                                         validating: 'glyphicon glyphicon-refresh'
                                     },
                                     fields: {
+                                        tipo_estado: {
+                                            validators: {
+                                                notEmpty: {message: 'El tipo es requerido'}
+                                            }
+                                        },
                                         nombre: {
                                             validators: {
                                                 notEmpty: {message: 'El nombre es requerido'}
+                                            }
+                                        },
+                                        orden: {
+                                            validators: {
+                                                integer: {
+                                                    message: 'El valor no es un entero'
+                                                },
+                                                notEmpty: {message: 'El orden es requerido'}
                                             }
                                         }
                                     }
