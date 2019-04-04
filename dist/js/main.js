@@ -23,6 +23,16 @@ function form_edit(id)
     location.href = "form.html?id=" + id;
 }
 
+function form_edit_page(page,id)
+{
+    var redirect="";
+    if(page==1)
+    {
+        redirect="update";
+    }
+    location.href = redirect+".html?id=" + id;
+}
+
 /* Función para cargar alertas */
 function notify(xclass, xicon, xtitle, xmessage) {
     $.notify({
@@ -150,7 +160,7 @@ $(document).ready(function () {
     var msg_tipo = getURLParameter('msg_tipo');
     if (typeof msg !== 'undefined' && typeof msg_tipo !== 'undefined')
     {
-        notify(msg_tipo, "ok", "Login:", decodeURI(msg));
+        notify(msg_tipo, "ok", "Mensaje:", decodeURI(msg));
     }
 
     //Asignamos el valor a input id
