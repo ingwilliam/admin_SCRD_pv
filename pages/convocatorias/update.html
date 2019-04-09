@@ -35,10 +35,21 @@
 
         <!-- Bootstrap animate -->
         <link href="../../dist/libraries/bootstrap-notify-3.1.3/animate.css" rel="stylesheet" type="text/css"/>
+        
+        <!-- Text area editor html -->
+        <link type="text/css" rel="stylesheet" href="../../dist/libraries/jQuery-TE_v.1.4.0/jquery-te-1.4.0.css">
+        
+        <!-- css principales de la aplicacion -->
+        <link href="../../dist/css/main.css" rel="stylesheet" type="text/css"/>
     </head>
 
     <body>
-
+        <!-- Modal que se activa cuando se realiza cualquier peticion ajax -->
+        <div class="modal fade" id="my_loader" role="dialog">
+          <div class="modal-dialog">    
+                <div class="loader" style="margin: 0 auto;"></div>             
+          </div>
+        </div>
         <div id="wrapper">
 
             <!-- Navigation -->
@@ -117,13 +128,13 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Descripción corta de la convocatoria <span class="icono_requerido">*</span></label>
-                                                <textarea id="descripcion" name="descripcion" class="form-control" rows="3"></textarea>
+                                                <textarea id="descripcion" name="descripcion" class="form-control textarea_html" rows="3"></textarea>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>                                                                                                            
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Justificación de la convocatoria <span class="icono_requerido">*</span></label>
-                                                <textarea id="justificacion" name="justificacion" class="form-control" rows="3"></textarea>                                                
+                                                <textarea id="justificacion" name="justificacion" class="form-control textarea_html" rows="3"></textarea>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>                                                                                                                                                    
                                     </div>
@@ -216,61 +227,51 @@
                                         </div>                                                                                                                                                    
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>¿La convocatoria se presenta a través de seudónimo?</label><br/>
-                                                <label class="radio-inline">
-                                                    <input type="radio" name="seudonimo" value="true" /> Sí
-                                                </label>
-                                                <label class="radio-inline">
-                                                    <input type="radio" name="seudonimo" value="false" checked="checked" /> No
-                                                </label>                                                
+                                                <label>¿La convocatoria se presenta a través de seudónimo?</label>
+                                                <select id='seudonimo' name="seudonimo" class="form-control" tabindex="1">                                                    
+                                                    <option value="true">Sí</option>
+                                                    <option value="false" selected="selected">No</option>
+                                                </select>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>  
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>¿Tiene categorias?</label><br/>
-                                                <label class="radio-inline">
-                                                    <input type="radio" name="tiene_categorias" value="true" /> Sí
-                                                </label>
-                                                <label class="radio-inline">
-                                                    <input type="radio" name="tiene_categorias" value="false" checked="checked" /> No
-                                                </label>                                                 
+                                                <label>¿Tiene categorias?</label>
+                                                <select id='tiene_categorias' name="tiene_categorias" class="form-control" tabindex="1">                                                    
+                                                    <option value="true">Sí</option>
+                                                    <option value="false" selected="selected">No</option>
+                                                </select>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>                                                                                                                                                    
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>¿Las categorías manejan diferentes requisitos y/o fechas?</label><br/>
-                                                <label class="radio-inline">
-                                                    <input disabled="disabled" class="tiene_categorias" type="radio" name="diferentes_categorias" value="true" /> Sí
-                                                </label>
-                                                <label class="radio-inline">
-                                                    <input disabled="disabled" class="tiene_categorias" type="radio" name="diferentes_categorias" value="false" checked="checked" /> No
-                                                </label>
+                                                <label>¿Las categorías manejan diferentes requisitos y/o fechas?</label>
+                                                <select id='diferentes_categorias' name="diferentes_categorias" class="form-control tiene_categorias" tabindex="1">                                                    
+                                                    <option value="true">Sí</option>
+                                                    <option value="false" selected="selected">No</option>
+                                                </select>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div> 
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>¿Los jurados para esta convocatoria, son los mismos para sus diferentes categorías?</label><br/>
-                                                <label class="radio-inline">
-                                                    <input disabled="disabled" class="tiene_categorias" type="radio" name="mismos_jurados_categorias" value="true" /> Sí
-                                                </label>
-                                                <label class="radio-inline">
-                                                    <input disabled="disabled" class="tiene_categorias" type="radio" name="mismos_jurados_categorias" value="false" checked="checked" /> No
-                                                </label> 
+                                                <label>¿Los jurados para esta convocatoria, son los mismos para sus diferentes categorías?</label>
+                                                <select id='mismos_jurados_categorias' name="mismos_jurados_categorias" class="form-control tiene_categorias" tabindex="1">                                                    
+                                                    <option value="true">Sí</option>
+                                                    <option value="false" selected="selected">No</option>
+                                                </select>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>                                                                                                                                                    
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Esta convocatoria tendrá <br/>seguimiento?</label><br/>
-                                                <label class="radio-inline">
-                                                    <input type="radio" name="seguimiento" value="true" checked="checked" /> Sí
-                                                </label>
-                                                <label class="radio-inline">
-                                                    <input type="radio" name="seguimiento" value="false" /> No
-                                                </label>
+                                                <label>Esta convocatoria tendrá <br/>seguimiento?</label>
+                                                <select id='seguimiento' name="seguimiento" class="form-control tiene_categorias" tabindex="1">                                                    
+                                                    <option value="true" selected="selected">Sí</option>
+                                                    <option value="false">No</option>
+                                                </select>                                                                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
                                     </div>
@@ -377,7 +378,7 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Objeto <span class="icono_requerido">*</span></label>
-                                                <textarea id="objeto" name="objeto" class="form-control" rows="3"></textarea>
+                                                <textarea id="objeto" name="objeto" class="form-control textarea_html" rows="3"></textarea>
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
                                     </div>
@@ -385,7 +386,7 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Quiénes no pueden participar <span class="icono_requerido">*</span></label>
-                                                <textarea id="no_pueden_participar" name="no_pueden_participar" class="form-control" rows="3"></textarea>
+                                                <textarea id="no_pueden_participar" name="no_pueden_participar" class="form-control textarea_html" rows="3"></textarea>
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
                                     </div>
@@ -393,7 +394,7 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Derechos específicos de los ganadores <span class="icono_requerido">*</span></label>
-                                                <textarea id="derechos_ganadores" name="derechos_ganadores" class="form-control" rows="3"></textarea>
+                                                <textarea id="derechos_ganadores" name="derechos_ganadores" class="form-control textarea_html" rows="3"></textarea>
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
                                     </div>
@@ -401,7 +402,7 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Deberes específicos de los ganadores <span class="icono_requerido">*</span></label>
-                                                <textarea id="deberes_ganadores" name="deberes_ganadores" class="form-control" rows="3"></textarea>
+                                                <textarea id="deberes_ganadores" name="deberes_ganadores" class="form-control textarea_html" rows="3"></textarea>
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
                                     </div>
@@ -509,7 +510,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                
                                 <div class="modal fade" id="detalle_especie_modal">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -612,48 +613,97 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="modal fade" id="perfiles_participantes_modal">
-                                    <div class="modal-dialog">
+                                
+                                <div class="modal fade" id="perfiles_jurados_modal">
+                                    <div class="modal-dialog" style="width: 60%">
                                         <div class="modal-content">
+
                                             <!-- cabecera del diálogo -->
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                <h4 class="modal-title">Detalle especie</h4>                                                    
+                                                <h4 class="modal-title">Perfiles de los jurados</h4>                                                    
                                             </div>
 
                                             <!-- cuerpo del diálogo -->
-                                            <div class="modal-body">
-                                                <form id="form_validator_bolsa" action="" class="form_validator" role="form" method="post">
+                                            <div class="modal-body" style="height: 450px; overflow-y: auto;">
+                                                <form id="form_validator_jurado" action="" class="form_validator_jurado" role="form" method="post">
                                                     <div class="row">
-                                                        <div class="col-lg-6">
+                                                        <div class="col-lg-12">
                                                             <div class="form-group">
-                                                                <label>Orden</label>
-                                                                <input type="text" name="nombre" class="form-control">                                                
+                                                                <label>Jurado numero <span class="icono_requerido">*</span></label>
+                                                                <select id='orden_perfil_jurado' name="orden" class="form-control validacion_general" tabindex="1">                                                    
+                                                                    <option value="">:: Seleccionar ::</option>
+                                                                </select>
+                                                            </div>                                                                                                                                                                                                                                                                                                        
+                                                        </div>                                                                                                            
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <label>Perfil. Describa de manera clara y breve las características básicas de conocimiento, formación, experiencia y trayectoria que debe tener el jurado  <span class="icono_requerido">*</span></label>
+                                                                <textarea id="descripcion_perfil" name="descripcion_perfil" class="form-control" rows="3"></textarea>                                                
                                                             </div>                                                                                                                                                                                                                                                                                                        
                                                         </div>                                                                                                            
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
-                                                                <label>Tipo de estímulo no pecuniario</label>
-                                                                <input type="text" name="nombre" class="form-control">                                                
+                                                                <label>¿El jurado debe tener formación profesional universitaria?</label><br/>
+                                                                <select id='formacion_profesional' name="formacion_profesional" class="form-control validacion_general" tabindex="1">                                                    
+                                                                    <option value="">:: Seleccionar ::</option>
+                                                                    <option value="true">Sí</option>
+                                                                    <option value="false">No</option>
+                                                                </select>                                                                
                                                             </div>                                                                                                                                                                                                                                                                                                        
-                                                        </div>                                                                                                                                                    
-                                                    </div>
-                                                    <div class="row">
+                                                        </div>
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
-                                                                <label>Valoración de recursos no pecuniarios</label>
-                                                                <input type="text" name="nombre" class="form-control">                                                
+                                                                <label>Área(s) de conocimiento</label>
+                                                                <select id="area_conocimiento" class="form-control validacion_general" name="area_conocimiento[]" multiple="multiple">                                                                                                                        
+                                                                </select>
                                                             </div>                                                                                                                                                                                                                                                                                                        
-                                                        </div>                                                                                                            
+                                                        </div>
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
-                                                                <label>Descripción del recurso no pecuniario</label>
-                                                                <textarea  name="descripcion" class="form-control" rows="3"></textarea>
+                                                                <label>¿El jurado debe tener formación de posgrado?</label><br/>
+                                                                <select id='formacion_postgrado' name="formacion_postgrado" class="form-control validacion_general" tabindex="1">                                                    
+                                                                    <option value="">:: Seleccionar ::</option>
+                                                                    <option value="true">Sí</option>
+                                                                    <option value="false">No</option>
+                                                                </select>                                                                                                                                                                              
                                                             </div>                                                                                                                                                                                                                                                                                                        
-                                                        </div>                                                                                                                                                    
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Nivel de formación de posgrado</label>
+                                                                <select id="nivel_educativo" class="form-control validacion_general" name="nivel_educativo[]" multiple="multiple">                                                                                                                        
+                                                                </select>
+                                                            </div>                                                                                                                                                                                                                                                                                                        
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <label>Campo(s) de experiencia o trayectoria</label>
+                                                                <textarea id="campo_experiencia" name="campo_experiencia" class="form-control" rows="3"></textarea>                                                
+                                                            </div>                                                                                                                                                                                                                                                                                                        
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Áreas</label>
+                                                                <select id="area_perfil" class="form-control validacion_general" name="area_perfil[]" multiple="multiple">                                                                                                                        
+                                                                </select>
+                                                            </div>                                                                                                                                                                                                                                                                                                        
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>¿El jurado debe residir en Bogotá?</label><br/>
+                                                                <select id='reside_bogota' name="reside_bogota" class="form-control validacion_general" tabindex="1">                                                    
+                                                                    <option value="">:: Seleccionar ::</option>
+                                                                    <option value="true">Sí</option>
+                                                                    <option value="false">No</option>
+                                                                </select>                                                                
+                                                            </div>                                                                                                                                                                                                                                                                                                        
+                                                        </div>
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-lg-12" style="text-align: right">                                                        
+                                                            <input type="hidden" name="tipo_participante" value="4" />
+                                                            <input type="hidden" id="id_cpj" name="id" />
                                                             <button type="submit" class="btn btn-default">Guardar</button>
                                                         </div>
                                                     </div>
@@ -666,8 +716,72 @@
                                                                         <table class="table">
                                                                             <thead>
                                                                                 <tr>
-                                                                                    <th>Tipo de participante</th>                                                                                    
-                                                                                    <th>Descripción</th>                                                                                                                                                                        
+                                                                                    <th>Jurado N°</th>
+                                                                                    <th>Descripción del perfil</th>                                                                                    
+                                                                                    <th>¿Activo?</th>
+                                                                                    <th>Acciones</th>                                                                                    
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody id="tbody_perfiles_jurados">
+                                                                                                                                                               
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <!-- /.table-responsive -->
+                                                                </div>
+                                                                <!-- /.panel-body -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="modal fade" id="perfiles_participantes_modal">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <!-- cabecera del diálogo -->
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title">Perfiles de los participantes</h4>                                                    
+                                            </div>
+
+                                            <!-- cuerpo del diálogo -->
+                                            <div class="modal-body" style="height: 450px; overflow-y: auto;">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <label>Tipo de participante</label><br/>
+                                                                <span id="tipo_participante_cp"></span>
+                                                            </div>                                                                                                                                                                                                                                                                                                        
+                                                        </div>                                                                                                                                                                                                                                                                                                                        
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <label>Descripción</label>
+                                                                <textarea id="descripcion_cp" name="descripcion_cp" class="form-control textarea_html" rows="3"></textarea>
+                                                            </div>                                                                                                                                                                                                                                                                                                        
+                                                        </div>                                                                                                                                                   
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-12" style="text-align: right">                                                        
+                                                            <input type="hidden" id="id_cp" name="id_cp" />
+                                                            <button id="guardar_cp" type="submit" class="btn btn-default">Guardar</button>
+                                                        </div>
+                                                    </div>
+                                                    <br/>
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="panel panel-default">
+                                                                <div class="panel-body">
+                                                                    <div class="table-responsive">
+                                                                        <table class="table">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Tipo de participante</th>                                                                                                                                                                        
                                                                                     <th>¿Activo?</th>
                                                                                     <th>Acciones</th>
                                                                                 </tr>
@@ -682,8 +796,7 @@
                                                                 <!-- /.panel-body -->
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </form>
+                                                    </div>                                                
                                             </div>
                                         </div>
                                     </div>
@@ -727,6 +840,8 @@
         <script src='../../dist/js/jquery.loadJSON.js'></script>
         <script src='../../dist/js/verificar_token.js'></script>
 
+        <!-- Text area editor html -->
+        <script type="text/javascript" src="../../dist/libraries/jQuery-TE_v.1.4.0/jquery-te-1.4.0.min.js" charset="utf-8"></script>
         <script>
                             $(document).ready(function () {
 
@@ -741,6 +856,64 @@
                                     permiso_lectura(token_actual, "Convocatorias");
 
                                     $('#form_validator').attr('action', url_pv + 'Convocatorias/new');
+                                    
+                                    //Establesco los text area html
+                                    $('.textarea_html').jqte();  
+                                    
+                                    //Limpio el formulario de los perfiles de los participantes
+                                    $('#perfiles_participantes_modal').on('hidden.bs.modal', function () {
+                                        $("#id_cp").attr('value','');
+                                        $("#descripcion_cp").jqteVal('');
+                                        $("#tipo_participante_cp").html('');
+                                    })
+                                    
+                                    //Limpio el formulario de los perfiles de los jurados
+                                    $('#perfiles_jurados_modal').on('hidden.bs.modal', function () {
+                                        $("#id_cpj").attr('value','');
+                                        $("#perfiles_jurados_modal select option:selected").removeAttr("selected");
+                                        $("#perfiles_jurados_modal select option:selected").prop("selected", false);
+                                        $("#perfiles_jurados_modal input[type=text] , form textarea").each(function() { this.value = '' });
+                                    })
+                                    
+                                    //guardar registro de convocatoria perfil participante
+                                    $("#guardar_cp").click(function () {
+                                        if ($("#id_cp").val() != "") {
+                                            //Realizo la peticion con el fin de editar el registro del perfil de la convocatoria
+                                            $.ajax({
+                                                type: 'PUT',
+                                                url: url_pv + 'Convocatoriasparticipantes/edit/' + $("#id_cp").attr('value'),
+                                                data: "descripcion_perfil="+ $("#descripcion_cp").val() + "&modulo=Convocatorias&token=" + token_actual.token
+                                            }).done(function (result) {
+                                                if (result == 'error')
+                                                {
+                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                } else
+                                                {
+                                                    if (result == 'acceso_denegado')
+                                                    {
+                                                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                                    } else
+                                                    {
+                                                        if (isNaN(result))
+                                                        {
+                                                            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        } else
+                                                        {
+                                                            notify("info", "ok", "Convocatorias:", "Se edito el perfil de participante con éxito.");
+                                                            $("#id_cp").attr('value','');
+                                                            $("#descripcion_cp").jqteVal('');
+                                                            $("#tipo_participante_cp").html('');
+                                                            cargar_tabla_perfiles_participante(token_actual);
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        else
+                                        {
+                                            notify("danger", "ok", "Convocatorias:", "No ha seleccionado ningun perfil del participante");
+                                        }                                                                                                                        
+                                    });
                                     
                                     //Verifico si tiene permisos para cambiar el estado de la convocatoria
                                     $("#estado").on('focus', function () {
@@ -921,6 +1094,7 @@
                                             $("input[name='mismos_jurados_categorias']").prop('checked', true);
                                         }
                                     });
+                                    
                                     //Valido si tiene convenio
                                     $("input[name='convenio']").click(function () {
                                         if ($(this).val() == "true")
@@ -1056,11 +1230,9 @@
                                                 if (json.tipos_participantes.length > 0) {
                                                     $.each(json.tipos_participantes, function (key, tipo_participante) {
                                                         var checked = '';                                                        
-                                                        var active="No";
                                                         if (tipo_participante.active == true)
                                                         {
                                                             checked = 'checked="checked"';
-                                                            active="Si";
                                                         }                                                        
                                                         
                                                         $("#quienes_pueden_participar").append('<label class="checkbox-inline"><input class="tipo_participante tipo_participante_' + tipo_participante.id + '" value="' + tipo_participante.id + '" type="checkbox" '+checked+'>' + tipo_participante.nombre + '</label>');
@@ -1070,9 +1242,29 @@
                                                             tipo_participante.descripcion  = '';
                                                         }
                                                         
-                                                        $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td>' + tipo_participante.descripcion + '</td><td class="activo_participante_' + tipo_participante.id + '">'+active+'</td><td><button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-edit"></span></button><button type="button" class="btn btn-danger" onclick="activar_participante('+tipo_participante.id+','+$("#id").attr('value')+',\''+token_actual.token+'\')"><span class="glyphicon glyphicon-remove"></span></button></td></tr>');
+                                                        $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><input class="activo_participante_'+tipo_participante.id+'" onclick="activar_participante('+tipo_participante.id+','+$("#id").attr('value')+',\''+token_actual.token+'\')" type="checkbox" '+checked+'></td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="'+JSON.stringify(tipo_participante).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                                                     });
                                                 }
+                                                
+                                                //Cargo los perfiles de los jurados en esta convocatoria
+                                                if (json.perfiles_jurados.length > 0) {
+                                                    $.each(json.perfiles_jurados, function (key, perfil_jurado) {
+                                                        var checked = '';
+                                                        if (perfil_jurado.active == true)
+                                                        {
+                                                            checked="checked='checked'";
+                                                        }                                                                                                                                                                                                                                
+                                                        $("#tbody_perfiles_jurados").append('<tr><td>' + perfil_jurado.orden + '</td><td>' + perfil_jurado.descripcion_perfil + '</td><td><input onclick="activar_perfil_jurado('+perfil_jurado.id+','+$("#id").attr('value')+',\''+token_actual.token+'\')" type="checkbox" '+checked+'></td><td><button type="button" class="btn btn-warning btn-update-convocatoria-jurados-'+perfil_jurado.id+'" onclick="cargar_perfil_jurado('+perfil_jurado.id+')" lang="'+JSON.stringify(perfil_jurado).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                                    });
+                                                }
+                                                
+                                                //para habilitar formulario de convocatoria participante
+                                                $(".btn-update-convocatoria-participante").click(function () {
+                                                    var json_update = JSON.parse($(this).attr("lang"));
+                                                    $("#id_cp").val(json_update.id_cp);
+                                                    $("#tipo_participante_cp").html(json_update.nombre);
+                                                    $("#descripcion_cp").jqteVal(json_update.descripcion_cp);
+                                                });
                                                 
                                                 //Creamos los participantes en la convocatoria
                                                 $('.tipo_participante').click(function () {
@@ -1099,8 +1291,9 @@
                                                                         notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                                                     } else
                                                                     {
-                                                                        notify("success", "ok", "Areas:", "Se creó el area con éxito.");
-                                                                        $(".activo_participante_"+tipo_participante).html("Si");
+                                                                        notify("success", "ok", "Convocatorias:", "Se creó el perfil del participante con éxito.");
+                                                                        $(".activo_participante_"+tipo_participante).attr('checked', true);
+                                                                        $(".activo_participante_"+tipo_participante).prop( "checked", true );
                                                                     }
                                                                 }
                                                             }
@@ -1117,8 +1310,9 @@
                                                         }).done(function (data) {    
                                                             if (data == 'ok')
                                                             {
-                                                                notify("info", "ok", "Convocatorias:", "Se elimino el perfil delsss participante con éxito.");                                                                
-                                                                $(".activo_participante_"+tipo_participante).html("No");                                                                
+                                                                notify("info", "ok", "Convocatorias:", "Se elimino el perfil del participante con éxito.");                                                                
+                                                                $(".activo_participante_"+tipo_participante).attr('checked', false);
+                                                                $(".activo_participante_"+tipo_participante).prop( "checked", false );
                                                             }
                                                             else
                                                             {
@@ -1176,7 +1370,7 @@
                                                     });
                                                 }
 
-                                                //Cargo el select de areas
+                                                //Cargo el select de enfoques
                                                 $('#enfoque').find('option').remove();
                                                 $("#enfoque").append('<option value="">:: Seleccionar ::</option>');
                                                 if (json.enfoques.length > 0) {
@@ -1190,7 +1384,7 @@
                                                     });
                                                 }
 
-                                                //Cargo el select de areas
+                                                //Cargo el select de lineas estrategicas
                                                 $('#linea_estrategica').find('option').remove();
                                                 $("#linea_estrategica").append('<option value="">:: Seleccionar ::</option>');
                                                 if (json.lineas_estrategicas.length > 0) {
@@ -1214,6 +1408,7 @@
                                                             selected = 'selected="selected"';
                                                         }
                                                         $("#area").append('<option value="' + area.id + '" ' + selected + ' >' + area.nombre + '</option>');
+                                                        $("#area_perfil").append('<option value="' + area.nombre + '" >' + area.nombre + '</option>');
                                                     });
                                                 }
                                                 //Cargo el select de cantidad de jurados
@@ -1227,6 +1422,7 @@
                                                             selected = 'selected="selected"';
                                                         }
                                                         $("#cantidad_perfil_jurado").append('<option value="' + cantidad_perfil_jurado + '" ' + selected + ' >' + cantidad_perfil_jurado + '</option>');
+                                                        $("#orden_perfil_jurado").append('<option value="' + cantidad_perfil_jurado + '" >' + cantidad_perfil_jurado + '</option>');
                                                     });
                                                 }
                                                 //Cargo el select de tipos de convenios
@@ -1271,6 +1467,22 @@
                                                     });
                                                 }
                                                 
+                                                //Cargo el select de areas de conocimientos
+                                                $('#area_conocimiento').find('option').remove();
+                                                if (json.areas_conocimientos.length > 0) {
+                                                    $.each(json.areas_conocimientos, function (key, area_conocimiento) {
+                                                        $("#area_conocimiento").append('<option value="' + area_conocimiento.nombre + '" >' + area_conocimiento.nombre + '</option>');
+                                                    });
+                                                }
+                                                
+                                                //Cargo el select de niveles educativos
+                                                $('#nivel_educativo').find('option').remove();
+                                                if (json.niveles_educativos.length > 0) {
+                                                    $.each(json.niveles_educativos, function (key, nivel_educativo) {
+                                                        $("#nivel_educativo").append('<option value="' + nivel_educativo.nombre + '" >' + nivel_educativo.nombre + '</option>');
+                                                    });
+                                                }
+                                                
                                                 //Cargo el select de entidades
                                                 $('#estado').find('option').remove();
                                                 $("#estado").append('<option value="">:: Seleccionar ::</option>');
@@ -1295,6 +1507,14 @@
                                                 }
                                                 
                                                 $('#form_validator').loadJSON(json.convocatoria);
+                                                
+                                                //Se realiza este set en cada text area html debido a que jste no es compatible con load json
+                                                $("#descripcion").jqteVal(json.convocatoria.descripcion);
+                                                $("#justificacion").jqteVal(json.convocatoria.justificacion);
+                                                $("#objeto").jqteVal(json.convocatoria.objeto);
+                                                $("#no_pueden_participar").jqteVal(json.convocatoria.no_pueden_participar);
+                                                $("#derechos_ganadores").jqteVal(json.convocatoria.derechos_ganadores);
+                                                $("#deberes_ganadores").jqteVal(json.convocatoria.deberes_ganadores);
 
                                             }
                                         }
@@ -1316,13 +1536,21 @@
                                     type: 'DELETE',
                                     data: {"token": token_actual,"modulo":"Convocatorias","convocatoria":convocatoria,"tipo_participante":tipo_participante},
                                     url: url_pv+'Convocatoriasparticipantes/delete'                  
-                                }).done(function (data) {    
-                                    if (data == 'ok')
+                                }).done(function (data) {  
+                                    if (data == 'Si' || data == 'No')
                                     {
-                                        notify("info", "ok", "Convocatorias:", "Se elimino el perfil del participante con éxito.");                                        
-                                        $(".activo_participante_"+tipo_participante).html("No");
-                                        $(".tipo_participante_"+tipo_participante).attr('checked', false);
-                                        $(".tipo_participante_"+tipo_participante).prop( "checked", false );
+                                        if (data == 'Si')
+                                        {
+                                            notify("info", "ok", "Convocatorias:", "Se activo el perfil del participante con éxito.");                                        
+                                            $(".tipo_participante_"+tipo_participante).attr('checked', true);
+                                            $(".tipo_participante_"+tipo_participante).prop( "checked", true );
+                                        }
+                                        else
+                                        {
+                                            notify("info", "ok", "Convocatorias:", "Se elimino el perfil del participante con éxito.");                                        
+                                            $(".tipo_participante_"+tipo_participante).attr('checked', false);
+                                            $(".tipo_participante_"+tipo_participante).prop( "checked", false );
+                                        }  
                                     }
                                     else
                                     {
@@ -1338,8 +1566,148 @@
                                 });                                                                
                             }
                             
+                            //Funcion para activar o desactivar el perfil de los jurados
+                            function activar_perfil_jurado(id,convocatoria,token_actual) {
+                                //Se realiza la peticion para desactivar la convocatoria participante
+                                $.ajax({
+                                    type: 'DELETE',
+                                    data: {"token": token_actual,"modulo":"Convocatorias","convocatoria":convocatoria},
+                                    url: url_pv+'Convocatoriasparticipantes/delete_perfil_jurado/' + id                 
+                                }).done(function (data) {    
+                                    if (data == 'Si' || data == 'No')
+                                    {
+                                        if (data == 'Si')
+                                        {
+                                            notify("info", "ok", "Convocatorias:", "Se activo el perfil del jurado con éxito.");                                        
+                                        }
+                                        else
+                                        {
+                                            notify("info", "ok", "Convocatorias:", "Se elimino el perfil del jurado con éxito.");                                        
+                                        }                                        
+                                    }
+                                    else
+                                    {
+                                        if (data == 'acceso_denegado')
+                                        {
+                                            notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                                        }
+                                        else
+                                        {
+                                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");                                                                                        
+                                        }
+                                    }
+                                });                                                                
+                            }
+                            
+                            //Carga la tabla de los perfiles de los jurados
+                            function cargar_tabla_perfiles_jurado(token_actual){
+                                $.ajax({
+                                    type: 'GET',
+                                    data: {"token": token_actual.token,"convocatoria":$("#id").val(),"tipo_participante":4},
+                                    url: url_pv + 'Convocatoriasparticipantes/select'
+                                }).done(function (data) {
+                                    if (data == 'error_metodo')
+                                    {
+                                        notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+                                        if (data == 'error')
+                                        {
+                                            notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                                        } else
+                                        {
+                                            var json = JSON.parse(data);
+                                            if (json.length > 0) {
+                                                $("#tbody_perfiles_jurados").find("tr").remove();
+                                                $.each(json, function (key, perfil_jurado) {                                                        
+                                                    var checked = '';
+                                                    if (perfil_jurado.active == true)
+                                                    {
+                                                        checked="checked='checked'";
+                                                    }                                                                                                                                                                                                                                
+                                                    $("#tbody_perfiles_jurados").append('<tr><td>' + perfil_jurado.orden + '</td><td>' + perfil_jurado.descripcion_perfil + '</td><td><input onclick="activar_perfil_jurado('+perfil_jurado.id+','+$("#id").attr('value')+',\''+token_actual.token+'\')" type="checkbox" '+checked+'></td><td><button type="button" class="btn btn-warning btn-update-convocatoria-jurados-'+perfil_jurado.id+'" onclick="cargar_perfil_jurado('+perfil_jurado.id+')" lang="'+JSON.stringify(perfil_jurado).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                                });
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                            
+                            //Carga la tabla de los perfiles de los participantes
+                            function cargar_tabla_perfiles_participante(token_actual){
+                                $.ajax({
+                                    type: 'GET',
+                                    data: {"token": token_actual.token,"convocatoria":$("#id").val()},
+                                    url: url_pv + 'Convocatoriasparticipantes/select_form_convocatoria'
+                                }).done(function (data) {
+                                    if (data == 'error_metodo')
+                                    {
+                                        notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+                                        if (data == 'error')
+                                        {
+                                            notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                                        } else
+                                        {
+                                            var json = JSON.parse(data);
+                                            if (json.length > 0) {
+                                                $("#tbody_tipos_participantes").find("tr").remove();
+                                                $.each(json, function (key, tipo_participante) {                                                        
+                                                    var checked = '';
+                                                    if (tipo_participante.active == true)
+                                                    {
+                                                        checked="checked='checked'";
+                                                    }                                                                                                                                                                                                                                                                                    
+                                                    $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><input class="activo_participante_'+tipo_participante.id+'" onclick="activar_participante('+tipo_participante.id+','+$("#id").attr('value')+',\''+token_actual.token+'\')" type="checkbox" '+checked+'></td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="'+JSON.stringify(tipo_participante).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                                });
+                                                
+                                                //para habilitar formulario de convocatoria participante
+                                                $(".btn-update-convocatoria-participante").click(function () {
+                                                    var json_update = JSON.parse($(this).attr("lang"));
+                                                    $("#id_cp").val(json_update.id_cp);
+                                                    $("#tipo_participante_cp").html(json_update.nombre);
+                                                    $("#descripcion_cp").jqteVal(json_update.descripcion_cp);
+                                                });
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                            
+                            //Carga el registro del perfil del jurado sobre el formulario
+                            function cargar_perfil_jurado(id){
+                                var json_update = JSON.parse($(".btn-update-convocatoria-jurados-"+id).attr("lang"));
+                                $("#formacion_profesional option[value='"+json_update.formacion_profesional+"']").prop('selected', true);
+                                $("#formacion_postgrado option[value='"+json_update.formacion_postgrado+"']").prop('selected', true);
+                                $("#reside_bogota option[value='"+json_update.reside_bogota+"']").prop('selected', true);
+                                $("#orden_perfil_jurado option[value='"+json_update.orden+"']").prop('selected', true);
+                                
+                                $("#area_conocimiento option:selected").removeAttr("selected");
+                                $("#area_conocimiento option:selected").prop("selected", false);
+                                $.each(JSON.parse(json_update.area_conocimiento), function(i,e){
+                                    $("#area_conocimiento option[value='" + e + "']").prop("selected", true);
+                                });
+
+                                $("#area_perfil option:selected").removeAttr("selected");                                                    
+                                $("#area_perfil option:selected").prop("selected", false);
+                                $.each(JSON.parse(json_update.area_perfil), function(i,e){
+                                    $("#area_perfil option[value='" + e + "']").prop("selected", true);
+                                });
+
+                                $("#nivel_educativo option:selected").removeAttr("selected");
+                                $("#nivel_educativo option:selected").prop("selected", false);
+                                $.each(JSON.parse(json_update.nivel_educativo), function(i,e){
+                                    $("#nivel_educativo option[value='" + e + "']").prop("selected", true);
+                                });       
+
+                                $("#descripcion_perfil").val(json_update.descripcion_perfil);
+                                $("#campo_experiencia").val(json_update.campo_experiencia);                                
+                                $("#id_cpj").val(json_update.id);                                
+                            }
+                            
                             function validator_form(token_actual) {
-                                //Validar el formulario
+                                //Validar el formulario principal
                                 $('.form_validator').bootstrapValidator({
                                     feedbackIcons: {
                                         valid: 'glyphicon glyphicon-ok',
@@ -1481,6 +1849,117 @@
                                     });
                                     
                                     //$form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
+                                    bv.resetForm();
+                                });
+                                
+                                //Validar el formulario principal
+                                $('.form_validator_jurado').bootstrapValidator({
+                                    feedbackIcons: {
+                                        valid: 'glyphicon glyphicon-ok',
+                                        invalid: 'glyphicon glyphicon-remove',
+                                        validating: 'glyphicon glyphicon-refresh'
+                                    },
+                                    fields: {
+                                        myClass: {
+                                            selector: '.validacion_general',
+                                            validators: {
+                                                notEmpty: {
+                                                    message: 'Este campo es requerido'
+                                                }
+                                            }
+                                        },
+                                        descripcion_perfil: {
+                                            validators: {
+                                                notEmpty: {message: 'El perfil del jurado es requerido'}
+                                            }
+                                        },                                        
+                                        campo_experiencia: {
+                                            validators: {
+                                                notEmpty: {message: 'Los campos de experiencia son requeridos'}
+                                            }
+                                        }                                       
+                                    }
+                                }).on('success.form.bv', function (e) {
+                                    // Prevent form submission
+                                    e.preventDefault();
+                                    // Get the form instance
+                                    var $form = $(e.target);
+
+                                    // Get the BootstrapValidator instance
+                                    var bv = $form.data('bootstrapValidator');
+
+                                    // Enviar datos del formulario para guardar
+                                    if ($("#id_cpj").val() == "") {
+                                        //Se realiza la peticion con el fin de guardar el registro actual
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: url_pv + 'Convocatoriasparticipantes/new/',
+                                            data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token+"&convocatoria=" + $("#id").attr('value')+"&cantidad_perfil_jurado="+ $("#cantidad_perfil_jurado").val()
+                                        }).done(function (result) {
+
+                                            if (result == 'error')
+                                            {
+                                                notify("danger", "ok", "Convocatoria perfil:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                            } else
+                                            {
+                                                if (result == 'acceso_denegado')
+                                                {
+                                                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                                } 
+                                                else
+                                                {
+                                                    if (result == 'error_maximo_jurados')
+                                                    {
+                                                        notify("danger", "remove", "Convocatoria perfil:", "No puede exceder el máximo de perfiles como jurado para esta convocatoria.");
+                                                    } 
+                                                    else
+                                                    {
+                                                        if (isNaN(result)) {
+                                                            notify("danger", "ok", "Convocatoria perfil:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        } else
+                                                        {
+                                                            cargar_tabla_perfiles_jurado(token_actual);
+                                                            notify("success", "ok", "Convocatoria perfil:", "Se creó el perfil del jurado con éxito.");
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                        });
+                                    } else {
+                                        //Realizo la peticion con el fin de editar el registro actual
+                                        $.ajax({
+                                            type: 'PUT',
+                                            url: url_pv + 'Convocatoriasparticipantes/edit/' + $("#id_cpj").attr('value'),
+                                            data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token
+                                        }).done(function (result) {
+                                            if (result == 'error')
+                                            {
+                                                notify("danger", "ok", "Convocatoria perfil:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                            } else
+                                            {
+                                                if (result == 'acceso_denegado')
+                                                {
+                                                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                                } else
+                                                {
+                                                    if (isNaN(result))
+                                                    {
+                                                        notify("danger", "ok", "Convocatoria perfil:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                    } else
+                                                    {
+                                                        cargar_tabla_perfiles_jurado(token_actual);
+                                                        
+                                                        notify("info", "ok", "Convocatoria perfil:", "Se edito el perfil del jurado con éxito.");
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                    
+                                    //Elimino contenido del formulario
+                                    $("#id_cpj").attr("value","");                                    
+                                    $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
                                     bv.resetForm();
                                 });
                             }
