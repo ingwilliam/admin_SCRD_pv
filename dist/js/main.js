@@ -172,10 +172,16 @@ $(document).ready(function () {
     var token_actual = getLocalStorage(name_local_storage);
     if ((token_actual != null) || (token_actual != "") || (token_actual != "undefined"))
     {
+        //Envio del modulo actual
+        var modulo_actual = "";
+        if(location.href.includes('/pages/convocatorias/')) {
+            modulo_actual = "convocatoria";            
+        }
+        
         //Cargamos el menu principal
         $.ajax({
             type: 'POST',
-            data: {"token": token_actual.token},
+            data: {"token": token_actual.token,"id":getURLParameter('id'),"modulo":modulo_actual},
             url: url_pv + 'Administrador/menu'
         }).done(function (data) {
                 $("#menu_principal").html(data);            
@@ -185,9 +191,7 @@ $(document).ready(function () {
 
 //Al crear cualquier peticion de ajax muestra el modal
 $(document).ajaxStart(function () {
-    $('#my_loader').modal({
-        show: 'true'
-    });
+    $('#my_loader').modal();
 });
 //Al completar cualquier peticion de ajax oculta el modal
 $(document).ajaxComplete(function () {
