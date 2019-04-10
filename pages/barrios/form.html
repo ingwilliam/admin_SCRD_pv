@@ -79,21 +79,25 @@
                                             <div class="form-group">
                                                 <label>Departamento</label>
                                                 <select id='departamento' name="departamento" class="form-control" tabindex="1">                                                    
+                                                    <option value="">:: Seleccionar ::</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label>Ciudad</label>
                                                 <select id='ciudad' name="ciudad" class="form-control" tabindex="1">                                                    
+                                                    <option value="">:: Seleccionar ::</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label>Localidad</label>
                                                 <select id='localidad' name="localidad" class="form-control" tabindex="1">                                                    
+                                                    <option value="">:: Seleccionar ::</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label>Upz</label>
                                                 <select id='upz' name="upz" class="form-control" tabindex="1">                                                    
+                                                    <option value="">:: Seleccionar ::</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -282,12 +286,12 @@
 
                                     //Cargar Upz
                                     $('#localidad').on('change', function () {
-                                        var upz = $(this).val();
+                                        var localidad = $(this).val();
                                         $('#upz').find('option').remove();
                                         $.ajax({
                                             type: 'GET',
-                                            data: {"token": token_actual.token, "upz": upz},
-                                            url: url_pv + 'Upz/select'
+                                            data: {"token": token_actual.token, "localidad": localidad},
+                                            url: url_pv + 'Upzs/select'
                                         }).done(function (data) {
                                             if (data == 'error_metodo')
                                             {
@@ -317,7 +321,7 @@
                                         $.ajax({
                                             type: 'GET',
                                             data: {"token": token_actual.token},
-                                            url: url_pv + 'Barrio/search/' + $("#id").attr('value')
+                                            url: url_pv + 'Barrios/search/' + $("#id").attr('value')
                                         }).done(function (data) {
                                             if (data == 'error_metodo')
                                             {
@@ -331,8 +335,62 @@
                                                 {
                                                     var json = JSON.parse(data);
 
-                                                    if (typeof json.id === 'number') {
-                                                        $('#form_validator').loadJSON(data);
+                                                    if (typeof json.barrio.id === 'number') {
+                                                        $('#departamento').find('option').remove();
+                                                        $("#departamento").append('<option value="">:: Seleccionar ::</option>');
+                                                        if (json.departamentos.length > 0) {
+                                                            $.each(json.departamentos, function (key, departamento) {
+                                                                var selected = '';
+                                                                if(departamento.id == json.departamento.id)
+                                                                {
+                                                                    selected = 'selected="selected"';
+                                                                }
+                                                                $("#departamento").append('<option value="' + departamento.id + '" '+selected+' >' + departamento.nombre + '</option>');
+                                                            });
+                                                        }
+                                                        
+                                                        $('#ciudad').find('option').remove();
+                                                        $("#ciudad").append('<option value="">:: Seleccionar ::</option>');
+                                                        if (json.ciudades.length > 0) {
+                                                            $.each(json.ciudades, function (key, ciudad) {
+                                                                var selected = '';
+                                                                if(ciudad.id == json.ciudad.id)
+                                                                {
+                                                                    selected = 'selected="selected"';
+                                                                }
+                                                                $("#ciudad").append('<option value="' + ciudad.id + '" '+selected+' >' + ciudad.nombre + '</option>');
+                                                            });
+                                                        }
+                                                        
+                                                        $('#localidad').find('option').remove();
+                                                        $("#localidad").append('<option value="">:: Seleccionar ::</option>');
+                                                        if (json.localidades.length > 0) {
+                                                            $.each(json.localidades, function (key, localidad) {
+                                                                var selected = '';
+                                                                if(localidad.id == json.localidad.id)
+                                                                {
+                                                                    selected = 'selected="selected"';
+                                                                }
+                                                                $("#localidad").append('<option value="' + localidad.id + '" '+selected+' >' + localidad.nombre + '</option>');
+                                                            });
+                                                        }
+                                                        
+                                                        $('#upz').find('option').remove();
+                                                        $("#upz").append('<option value="">:: Seleccionar ::</option>');
+                                                        if (json.upzs.length > 0) {
+                                                            $.each(json.upzs, function (key, upz) {
+                                                                var selected = '';
+                                                                if(upz.id == json.upz.id)
+                                                                {
+                                                                    selected = 'selected="selected"';
+                                                                }
+                                                                $("#upz").append('<option value="' + upz.id + '" '+selected+' >' + upz.nombre + '</option>');
+                                                            });
+                                                        }
+                                                        
+                                                        json.barrio.pais=json.pais.id;
+                                                        
+                                                        $('#form_validator').loadJSON(json.barrio);
                                                     }
                                                 }
                                             }
@@ -425,8 +483,8 @@
                                         //Realizo la peticion con el fin de editar el registro actual
                                         $.ajax({
                                             type: 'PUT',
-                                            url: url_pv + 'Barrio/edit/' + $("#id").attr('value'),
-                                            data: $form.serialize() + "&modulo=Barrio&token=" + token_actual.token
+                                            url: url_pv + 'Barrios/edit/' + $("#id").attr('value'),
+                                            data: $form.serialize() + "&modulo=Barrios&token=" + token_actual.token
                                         }).done(function (result) {
                                             if (result == 'error')
                                             {
