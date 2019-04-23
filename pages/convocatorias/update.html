@@ -2225,7 +2225,7 @@
                                     var bv = $form.data('bootstrapValidator');
 
                                     // Enviar datos del formulario para guardar
-                                    if ($("#id_bolsa").val() == "") {
+                                    if ($("#id_especie").val() == "") {
                                         //Se realiza la peticion con el fin de guardar el registro actual
                                         $.ajax({
                                             type: 'POST',
@@ -2260,7 +2260,7 @@
                                         //Realizo la peticion con el fin de editar el registro actual
                                         $.ajax({
                                             type: 'PUT',
-                                            url: url_pv + 'Convocatoriasrecursos/edit/' + $("#id_bolsa").attr('value'),
+                                            url: url_pv + 'Convocatoriasrecursos/edit/' + $("#id_especie").attr('value'),
                                             data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token
                                         }).done(function (result) {
                                             if (result == 'error')
@@ -2287,7 +2287,7 @@
                                     }
                                     
                                     //Elimino contenido del formulario
-                                    $("#id_bolsa").attr("value","");                                    
+                                    $("#id_especie").attr("value","");                                    
                                     $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
                                     bv.resetForm();
                                 });
