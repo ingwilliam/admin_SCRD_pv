@@ -726,6 +726,7 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-lg-12" style="text-align: right">                                                        
+                                                            <input type="hidden" id="id_tipo_participante" name="tipo_participante" />
                                                             <input type="hidden" id="id_cp" name="id_cp" />
                                                             <button id="guardar_cp" type="submit" class="btn btn-default">Guardar</button>
                                                         </div>
@@ -739,8 +740,7 @@
                                                                         <table class="table">
                                                                             <thead>
                                                                                 <tr>
-                                                                                    <th>Tipo de participante</th>                                                                                                                                                                        
-                                                                                    <th>¿Activo?</th>
+                                                                                    <th>Tipo de participante</th>                                                                                                                                                                                                                                                            
                                                                                     <th>Acciones</th>
                                                                                 </tr>
                                                                             </thead>
@@ -821,6 +821,7 @@
                                     //Limpio el formulario de los perfiles de los participantes
                                     $('#perfiles_participantes_modal').on('hidden.bs.modal', function () {
                                         $("#id_cp").attr('value','');
+                                        $("#tipo_participante").attr('value','');
                                         $("#descripcion_cp").jqteVal('');
                                         $("#tipo_participante_cp").html('');
                                     })
@@ -840,7 +841,7 @@
                                             $.ajax({
                                                 type: 'PUT',
                                                 url: url_pv + 'Convocatoriasparticipantes/edit/' + $("#id_cp").attr('value'),
-                                                data: "descripcion_perfil="+ $("#descripcion_cp").val() + "&modulo=Convocatorias&token=" + token_actual.token
+                                                data: "active=TRUE&descripcion_perfil="+ $("#descripcion_cp").val() + "&modulo=Convocatorias&token=" + token_actual.token
                                             }).done(function (result) {
                                                 if (result == 'error')
                                                 {
@@ -858,9 +859,16 @@
                                                         } else
                                                         {
                                                             notify("info", "ok", "Convocatorias:", "Se edito el perfil de participante con éxito.");
+                                                            //Activo en perfil de la convocatoria actual
+                                                            $(".tipo_participante_"+$("#id_tipo_participante").val()).attr('checked', true);
+                                                            $(".tipo_participante_"+$("#id_tipo_participante").val()).prop( "checked", true );
+
+                                                            //Limpio el formulario
                                                             $("#id_cp").attr('value','');
+                                                            $("#id_tipo_participante").attr('value','');
                                                             $("#descripcion_cp").jqteVal('');
                                                             $("#tipo_participante_cp").html('');
+                                                            
                                                             cargar_tabla_perfiles_participante(token_actual);
                                                         }
                                                     }
@@ -869,7 +877,51 @@
                                         }
                                         else
                                         {
-                                            notify("danger", "ok", "Convocatorias:", "No ha seleccionado ningun perfil del participante");
+                                            if ($("#id_tipo_participante").val() != "") {
+                                                //Se realiza la peticion con el fin de guardar el registro de la convocatoria participante
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: url_pv + 'Convocatoriasparticipantes/new/',
+                                                    data: "active=TRUE&descripcion_perfil="+ $("#descripcion_cp").val() + "&convocatoria="+$("#id").val()+"&tipo_participante="+$("#id_tipo_participante").val()+"&modulo=Convocatorias&token=" + token_actual.token
+                                                }).done(function (result) {
+
+                                                    if (result == 'error')
+                                                    {
+                                                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");                                                                
+                                                    } else
+                                                    {
+                                                        if (result == 'acceso_denegado')
+                                                        {
+                                                            notify("danger", "remove", "Convocatorias:", "No tiene permisos para editar información.");
+                                                        } else
+                                                        {
+                                                            if (isNaN(result)) {
+                                                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                            } else
+                                                            {
+                                                                notify("info", "ok", "Convocatorias:", "Se creo el perfil de participante con éxito.");
+                                                                
+                                                                //Activo en perfil de la convocatoria actual
+                                                                $(".tipo_participante_"+$("#id_tipo_participante").val()).attr('checked', true);
+                                                                $(".tipo_participante_"+$("#id_tipo_participante").val()).prop( "checked", true );
+                                                                
+                                                                //Limpio el formulario
+                                                                $("#id_cp").attr('value','');
+                                                                $("#id_tipo_participante").attr('value','');
+                                                                $("#descripcion_cp").jqteVal('');
+                                                                $("#tipo_participante_cp").html('');
+                                                                
+                                                                cargar_tabla_perfiles_participante(token_actual);
+                                                            }
+                                                        }
+                                                    }
+
+                                                });                                                                                                                                                                                                
+                                            }
+                                            else
+                                            {
+                                                notify("danger", "ok", "Convocatorias:", "No ha seleccionado ningun perfil del participante");
+                                            }
                                         }                                                                                                                        
                                     });
                                     
@@ -1190,7 +1242,7 @@
                                                             tipo_participante.descripcion  = '';
                                                         }
                                                         
-                                                        $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><input class="activo_participante_'+tipo_participante.id+'" onclick="activar_participante('+tipo_participante.id+','+$("#id").attr('value')+',\''+token_actual.token+'\')" type="checkbox" '+checked+'></td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="'+JSON.stringify(tipo_participante).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                                        $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="'+JSON.stringify(tipo_participante).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                                                     });
                                                 }
                                                 
@@ -1234,13 +1286,13 @@
                                                 $(".btn-update-convocatoria-participante").click(function () {
                                                     var json_update = JSON.parse($(this).attr("lang"));
                                                     $("#id_cp").val(json_update.id_cp);
+                                                    $("#id_tipo_participante").val(json_update.id);
                                                     $("#tipo_participante_cp").html(json_update.nombre);
                                                     $("#descripcion_cp").jqteVal(json_update.descripcion_cp);
                                                 });
                                                 
                                                 //Creamos los participantes en la convocatoria
                                                 $('.tipo_participante').click(function () {
-                                                    var tipo_participante = $(this).val();
                                                     if( $(this).prop('checked') ) {                                                        
                                                         //Se realiza la peticion con el fin de guardar el registro de la convocatoria participante
                                                         $.ajax({
@@ -1264,8 +1316,7 @@
                                                                     } else
                                                                     {
                                                                         notify("success", "ok", "Convocatorias:", "Se creó el perfil del participante con éxito.");
-                                                                        $(".activo_participante_"+tipo_participante).attr('checked', true);
-                                                                        $(".activo_participante_"+tipo_participante).prop( "checked", true );
+                                                                        cargar_tabla_perfiles_participante(token_actual)                                                                        
                                                                     }
                                                                 }
                                                             }
@@ -1280,11 +1331,18 @@
                                                             data: {"token": token_actual.token,"modulo":"Convocatorias","convocatoria":$("#id").val(),"tipo_participante":$(this).val()},
                                                             url: url_pv+'Convocatoriasparticipantes/delete'                  
                                                         }).done(function (data) {    
-                                                            if (data == 'ok')
+                                                            if (data == 'Si' || data == 'No')
                                                             {
-                                                                notify("info", "ok", "Convocatorias:", "Se elimino el perfil del participante con éxito.");                                                                
-                                                                $(".activo_participante_"+tipo_participante).attr('checked', false);
-                                                                $(".activo_participante_"+tipo_participante).prop( "checked", false );
+                                                                if (data == 'Si')
+                                                                {
+                                                                    notify("info", "ok", "Convocatorias:", "Se activo el perfil del participante con éxito.");                                                                                                            
+                                                                }
+                                                                else
+                                                                {
+                                                                    notify("info", "ok", "Convocatorias:", "Se elimino el perfil del participante con éxito.");                                                                                                            
+                                                                }  
+                                                                
+                                                                cargar_tabla_perfiles_participante(token_actual)
                                                             }
                                                             else
                                                             {
@@ -1569,43 +1627,6 @@
                                 }
                             });
 
-                            //Funcion para activar o desactivar participante
-                            function activar_participante(tipo_participante,convocatoria,token_actual) {
-                                //Se realiza la peticion para desactivar la convocatoria participante
-                                $.ajax({
-                                    type: 'DELETE',
-                                    data: {"token": token_actual,"modulo":"Convocatorias","convocatoria":convocatoria,"tipo_participante":tipo_participante},
-                                    url: url_pv+'Convocatoriasparticipantes/delete'                  
-                                }).done(function (data) {  
-                                    if (data == 'Si' || data == 'No')
-                                    {
-                                        if (data == 'Si')
-                                        {
-                                            notify("info", "ok", "Convocatorias:", "Se activo el perfil del participante con éxito.");                                        
-                                            $(".tipo_participante_"+tipo_participante).attr('checked', true);
-                                            $(".tipo_participante_"+tipo_participante).prop( "checked", true );
-                                        }
-                                        else
-                                        {
-                                            notify("info", "ok", "Convocatorias:", "Se elimino el perfil del participante con éxito.");                                        
-                                            $(".tipo_participante_"+tipo_participante).attr('checked', false);
-                                            $(".tipo_participante_"+tipo_participante).prop( "checked", false );
-                                        }  
-                                    }
-                                    else
-                                    {
-                                        if (data == 'acceso_denegado')
-                                        {
-                                            notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
-                                        }
-                                        else
-                                        {
-                                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");                                                                                        
-                                        }
-                                    }
-                                });                                                                
-                            }
-                            
                             //Funcion para activar o desactivar los recursos del estimulo
                             function activar_registro(id,token_actual) {
                                 $.ajax({
@@ -1776,17 +1797,18 @@
                                                     {
                                                         checked="checked='checked'";
                                                     }                                                                                                                                                                                                                                                                                    
-                                                    $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><input class="activo_participante_'+tipo_participante.id+'" onclick="activar_participante('+tipo_participante.id+','+$("#id").attr('value')+',\''+token_actual.token+'\')" type="checkbox" '+checked+'></td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="'+JSON.stringify(tipo_participante).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                                    $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="'+JSON.stringify(tipo_participante).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                                                 });
                                                 
                                                 //para habilitar formulario de convocatoria participante
                                                 $(".btn-update-convocatoria-participante").click(function () {
                                                     var json_update = JSON.parse($(this).attr("lang"));
                                                     $("#id_cp").val(json_update.id_cp);
+                                                    $("#id_tipo_participante").val(json_update.id);
                                                     $("#tipo_participante_cp").html(json_update.nombre);
                                                     $("#descripcion_cp").jqteVal(json_update.descripcion_cp);
-                                                });
-                                            }
+                                                }); 
+                                           }
                                         }
                                     }
                                 });
@@ -1965,7 +1987,7 @@
                                                     notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                                 } else
                                                 {
-                                                    notify("info", "ok", "Convocatorias:", "Se edito el convocatoria con éxito.");
+                                                    notify("info", "ok", "Convocatorias:", "Se edito la convocatoria con éxito.");
                                                 }
                                             }
                                         }

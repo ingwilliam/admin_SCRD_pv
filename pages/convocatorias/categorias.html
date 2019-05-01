@@ -113,7 +113,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-12" style="text-align: right">
-                                            <input type="hidden" id="id" name="convocatoria" />
+                                            <input type="hidden" id="id" name="convocatoria_padre_categoria" />
                                             <button type="submit" class="btn btn-default">Guardar</button>                                            
                                         </div>
                                     </div>
@@ -236,7 +236,7 @@
                                     
                                     <div class="row">
                                         <div class="col-lg-12" style="text-align: right">
-                                            <input type="hidden" id="convocatoria" name="convocatoria" />
+                                            <input type="hidden" id="convocatoria_padre_categoria" name="convocatoria_padre_categoria" />
                                             <input type="hidden" id="id_categoria" name="id" />
                                             <button type="submit" class="btn btn-default">Guardar</button>                                            
                                         </div>
@@ -275,6 +275,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-12" style="text-align: right">                                                        
+                                            <input type="hidden" id="id_tipo_participante" name="tipo_participante" />
                                             <input type="hidden" id="id_cp" name="id_cp" />
                                             <button id="guardar_cp" type="submit" class="btn btn-default">Guardar</button>
                                         </div>
@@ -288,8 +289,7 @@
                                                         <table class="table">
                                                             <thead>
                                                                 <tr>
-                                                                    <th>Tipo de participante</th>                                                                                                                                                                        
-                                                                    <th>¿Activo?</th>
+                                                                    <th>Tipo de participante</th>                                                                                                                                                                                                                                            
                                                                     <th>Acciones</th>
                                                                 </tr>
                                                             </thead>
@@ -587,6 +587,7 @@
                                         if(json.convocatoria.tiene_categorias==false)
                                         {
                                            notify("danger", "ok", "Convocatorias:", "La convocatoria no tiene habilitada la opción de crear categorías, para habilitarla debe seleccionar (Sí) en el campo ¿Tiene categorias? de la seccion Información General."); 
+                                           $("#page-wrapper").css("display","none");
                                         }                                                                                                                        
                                     }
                                 }
@@ -623,7 +624,7 @@
                             $.ajax({
                                 type: 'PUT',
                                 url: url_pv + 'Convocatoriasparticipantes/edit/' + $("#id_cp").attr('value'),
-                                data: "descripcion_perfil="+ $("#descripcion_cp").val() + "&modulo=Convocatorias&token=" + token_actual.token
+                                data: "active=TRUE&descripcion_perfil="+ $("#descripcion_cp").val() + "&modulo=Convocatorias&token=" + token_actual.token
                             }).done(function (result) {
                                 if (result == 'error')
                                 {
@@ -641,9 +642,16 @@
                                         } else
                                         {
                                             notify("info", "ok", "Convocatorias:", "Se edito el perfil de participante con éxito.");
+                                            //Activo en perfil de la convocatoria actual
+                                            $(".tipo_participante_"+$("#id_tipo_participante").val()).attr('checked', true);
+                                            $(".tipo_participante_"+$("#id_tipo_participante").val()).prop( "checked", true );
+
+                                            //Limpio el formulario
                                             $("#id_cp").attr('value','');
+                                            $("#id_tipo_participante").attr('value','');
                                             $("#descripcion_cp").jqteVal('');
                                             $("#tipo_participante_cp").html('');
+
                                             cargar_tabla_perfiles_participante(token_actual);
                                         }
                                     }
@@ -652,11 +660,54 @@
                         }
                         else
                         {
-                            notify("danger", "ok", "Convocatorias:", "No ha seleccionado ningun perfil del participante");
+                            if ($("#id_tipo_participante").val() != "") {
+                                //Se realiza la peticion con el fin de guardar el registro de la convocatoria participante
+                                $.ajax({
+                                    type: 'POST',
+                                    url: url_pv + 'Convocatoriasparticipantes/new/',
+                                    data: "active=TRUE&descripcion_perfil="+ $("#descripcion_cp").val() + "&convocatoria="+$("#id_categoria").val()+"&tipo_participante="+$("#id_tipo_participante").val()+"&modulo=Convocatorias&token=" + token_actual.token                                    
+                                }).done(function (result) {
+
+                                    if (result == 'error')
+                                    {
+                                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");                                                                
+                                    } else
+                                    {
+                                        if (result == 'acceso_denegado')
+                                        {
+                                            notify("danger", "remove", "Convocatorias:", "No tiene permisos para editar información.");
+                                        } else
+                                        {
+                                            if (isNaN(result)) {
+                                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                            } else
+                                            {
+                                                notify("info", "ok", "Convocatorias:", "Se creo el perfil de participante con éxito.");
+
+                                                //Activo en perfil de la convocatoria actual
+                                                $(".tipo_participante_"+$("#id_tipo_participante").val()).attr('checked', true);
+                                                $(".tipo_participante_"+$("#id_tipo_participante").val()).prop( "checked", true );
+
+                                                //Limpio el formulario
+                                                $("#id_cp").attr('value','');
+                                                $("#id_tipo_participante").attr('value','');
+                                                $("#descripcion_cp").jqteVal('');
+                                                $("#tipo_participante_cp").html('');
+
+                                                cargar_tabla_perfiles_participante(token_actual);
+                                            }
+                                        }
+                                    }
+
+                                });                                                                                                                                                                                                
+                            }
+                            else
+                            {
+                                notify("danger", "ok", "Convocatorias:", "No ha seleccionado ningun perfil del participante");
+                            }
                         }                                                                                                                        
                     });
                     
-
                     validator_form(token_actual);
                     $(".check_activar_t").attr("checked", "true"); 
                 }                
@@ -712,7 +763,7 @@
                                     notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                 } else
                                 {
-                                    notify("success", "ok", "Convocatorias:", "Se creó el area con éxito.");
+                                    notify("success", "ok", "Convocatorias:", "Se creó la categoría con éxito.");
                                     //Cargar datos de la tabla de categorias
                                     cargar_tabla(token_actual);
                                 }
@@ -723,6 +774,9 @@
                     
                     $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
                     bv.resetForm();
+                    $("#nuevo_descripcion").jqteVal('');
+                    $("#nuevo_nombre").val("");                            
+                    $("#nuevo_seudonimo option[value='false']").prop("selected", true);
                 });
                 
                 //Validar el formulario de editar la categoria
@@ -771,8 +825,8 @@
 
                     //Se realiza la peticion con el fin de guardar el registro actual
                     $.ajax({
-                        type: 'POST',
-                        url: url_pv + 'Convocatorias/new_categoria',
+                        type: 'PUT',
+                        url: url_pv + 'Convocatorias/edit_categoria/' + $("#id").attr('value'),
                         data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token
                     }).done(function (result) {
 
@@ -790,17 +844,14 @@
                                     notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                 } else
                                 {
-                                    notify("success", "ok", "Convocatorias:", "Se creó el area con éxito.");
+                                    notify("success", "ok", "Convocatorias:", "Se edito la categoría con éxito.");
                                     //Cargar datos de la tabla de categorias
                                     cargar_tabla(token_actual);
                                 }
                             }
                         }
 
-                    });
-                    
-                    $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
-                    bv.resetForm();
+                    });                                        
                 });
                 
                 //Validar el formulario de la bolsa
@@ -1080,7 +1131,7 @@
                 //Permite realizar la carga respectiva de la categoria
                 $(".btn_categoria").click(function () {                    
                     $("#id_categoria").attr('value', $(this).attr("title"));
-                    $("#convocatoria").attr('value', getURLParameter('id'));
+                    $("#convocatoria_padre_categoria").attr('value', getURLParameter('id'));
                     
                     
                     //Realizo la peticion para cargar el formulario
@@ -1119,7 +1170,7 @@
                                             tipo_participante.descripcion  = '';
                                         }
 
-                                        $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><input class="activo_participante_'+tipo_participante.id+'" onclick="activar_participante('+tipo_participante.id+','+$("#id").attr('value')+',\''+token_actual.token+'\')" type="checkbox" '+checked+'></td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="'+JSON.stringify(tipo_participante).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                        $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="'+JSON.stringify(tipo_participante).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                                     });
                                 }
                                 
@@ -1165,9 +1216,10 @@
                                 $(".btn-update-convocatoria-participante").click(function () {
                                     var json_update = JSON.parse($(this).attr("lang"));
                                     $("#id_cp").val(json_update.id_cp);
+                                    $("#id_tipo_participante").val(json_update.id);
                                     $("#tipo_participante_cp").html(json_update.nombre);
                                     $("#descripcion_cp").jqteVal(json_update.descripcion_cp);
-                                });
+                                }); 
 
                                 //Creamos los participantes en la convocatoria
                                 $('.tipo_participante').click(function () {
@@ -1195,8 +1247,7 @@
                                                     } else
                                                     {
                                                         notify("success", "ok", "Convocatorias:", "Se creó el perfil del participante con éxito.");
-                                                        $(".activo_participante_"+tipo_participante).attr('checked', true);
-                                                        $(".activo_participante_"+tipo_participante).prop( "checked", true );
+                                                        cargar_tabla_perfiles_participante(token_actual)                                                                                                                                                                                        
                                                     }
                                                 }
                                             }
@@ -1215,15 +1266,11 @@
                                             {
                                                 if (data == 'Si')
                                                 {
-                                                    notify("info", "ok", "Convocatorias:", "Se activo el perfil del participante con éxito.");                                        
-                                                    $(".activo_participante_"+tipo_participante).attr('checked', true);
-                                                    $(".activo_participante_"+tipo_participante).prop( "checked", true );
+                                                    notify("info", "ok", "Convocatorias:", "Se activo el perfil del participante con éxito.");                                                                                            
                                                 }
                                                 else
                                                 {
-                                                    notify("info", "ok", "Convocatorias:", "Se elimino el perfil del participante con éxito.");                                        
-                                                    $(".activo_participante_"+tipo_participante).attr('checked', false);
-                                                    $(".activo_participante_"+tipo_participante).prop( "checked", false );
+                                                    notify("info", "ok", "Convocatorias:", "Se elimino el perfil del participante con éxito.");                                                                                            
                                                 }  
                                             }
                                             else
@@ -1497,16 +1544,17 @@
                                     {
                                         checked="checked='checked'";
                                     }                                                                                                                                                                                                                                                                                    
-                                    $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><input class="activo_participante_'+tipo_participante.id+'" onclick="activar_participante('+tipo_participante.id+','+$("#id_categoria").attr('value')+',\''+token_actual.token+'\')" type="checkbox" '+checked+'></td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="'+JSON.stringify(tipo_participante).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                    $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="'+JSON.stringify(tipo_participante).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                                 });
 
                                 //para habilitar formulario de convocatoria participante
                                 $(".btn-update-convocatoria-participante").click(function () {
                                     var json_update = JSON.parse($(this).attr("lang"));
                                     $("#id_cp").val(json_update.id_cp);
+                                    $("#id_tipo_participante").val(json_update.id);
                                     $("#tipo_participante_cp").html(json_update.nombre);
                                     $("#descripcion_cp").jqteVal(json_update.descripcion_cp);
-                                });
+                                }); 
                             }
                         }
                     }
