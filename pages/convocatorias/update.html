@@ -435,7 +435,7 @@
                                             </div>
 
                                             <!-- cuerpo del diálogo -->
-                                            <div class="modal-body">
+                                            <div class="modal-body" style="height: 450px; overflow-y: auto;">
                                                 <form id="form_validator_bolsa" action="" class="form_validator_bolsa" role="form" method="post">
                                                     <div class="row">
                                                         <div class="col-lg-6">
@@ -500,7 +500,7 @@
                                             </div>
 
                                             <!-- cuerpo del diálogo -->
-                                            <div class="modal-body">
+                                            <div class="modal-body" style="height: 450px; overflow-y: auto;">
                                                 <form id="form_validator_especie" class="form_validator_especie" action="" role="form" method="post">
                                                     <div class="row">
                                                         <div class="col-lg-6">
@@ -808,7 +808,7 @@
 
                                 //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
                                 if ($.isEmptyObject(token_actual)) {
-                                    location.href = '../../index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                    location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                                 } else
                                 {
                                     permiso_lectura(token_actual, "Convocatorias");
@@ -1277,8 +1277,8 @@
                                                         if (distribucion_especie.active == true)
                                                         {
                                                             checked="checked='checked'";
-                                                        }                                                                                                                                                                                                                                
-                                                        $("#tbody_distribuciones_especie").append('<tr><td>' + distribucion_especie.orden + '</td><td>' + distribucion_especie.recurso_no_pecuniario + '</td><td>' + distribucion_especie.valor_recurso + '</td><td><input onclick="activar_registro('+distribucion_especie.id+',\''+token_actual.token+'\')" type="checkbox" '+checked+'></td><td><button type="button" class="btn btn-warning btn-update-distribucion-registro-'+distribucion_especie.id+'" onclick="cargar_registro('+distribucion_especie.id+',\'form_validator_especie\')" lang="'+JSON.stringify(distribucion_especie).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                                        }                                                                                                                                                                                                                                                                                        
+                                                        $("#tbody_distribuciones_especie").append('<tr><td>' + distribucion_especie.orden + '</td><td>' + distribucion_especie.nombre_recurso_no_pecuniario + '</td><td>' + distribucion_especie.valor_recurso + '</td><td><input onclick="activar_registro('+distribucion_especie.id+',\''+token_actual.token+'\')" type="checkbox" '+checked+'></td><td><button type="button" class="btn btn-warning btn-update-distribucion-registro-'+distribucion_especie.id+'" onclick="cargar_registro('+distribucion_especie.id+',\'form_validator_especie\')" lang="'+JSON.stringify(distribucion_especie).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                                                     });
                                                 }
                                                 
@@ -1760,7 +1760,7 @@
                                                     }
                                                     else
                                                     {
-                                                        $("#"+tbody).append('<tr><td>' + distribucion_bolsa.orden + '</td><td>' + distribucion_bolsa.recurso_no_pecuniario + '</td><td>' + distribucion_bolsa.valor_recurso + '</td><td><input onclick="activar_registro('+distribucion_bolsa.id+',\''+token_actual.token+'\')" type="checkbox" '+checked+'></td><td><button type="button" class="btn btn-warning btn-update-distribucion-registro-'+distribucion_bolsa.id+'" onclick="cargar_registro('+distribucion_bolsa.id+',\'form_validator_especie\')" lang="'+JSON.stringify(distribucion_bolsa).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                                        $("#"+tbody).append('<tr><td>' + distribucion_bolsa.orden + '</td><td>' + distribucion_bolsa.nombre_recurso_no_pecuniario + '</td><td>' + distribucion_bolsa.valor_recurso + '</td><td><input onclick="activar_registro('+distribucion_bolsa.id+',\''+token_actual.token+'\')" type="checkbox" '+checked+'></td><td><button type="button" class="btn btn-warning btn-update-distribucion-registro-'+distribucion_bolsa.id+'" onclick="cargar_registro('+distribucion_bolsa.id+',\'form_validator_especie\')" lang="'+JSON.stringify(distribucion_bolsa).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                                                     }
                                                     
                                                     
