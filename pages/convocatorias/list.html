@@ -111,6 +111,13 @@
                             <select id='enfoque' name="enfoque" class="form-control" tabindex="1">                                                    
                             </select>
                         </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label>Nombre de la convocatoria <span class="icono_requerido">*</span></label>
+                            <input type="text" id="nombre" name="nombre" class="form-control">                                                
+                            <input type="hidden" id="estado" name="estado">                                                
+                        </div>                                                                                                                                                                                                                                                                                                        
                     </div>                    
                     <!-- /.col-lg-12 -->
                 </div>
@@ -189,7 +196,8 @@
 
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
-        <script src='../../dist/js/verificar_token.js'></script>
+        <script src='../../dist/js/jquery.loadJSON.js'></script>
+        <script src='../../dist/js/verificar_token.js'></script>        
 
         <script>
                             $(document).ready(function () {
@@ -272,27 +280,32 @@
                                                         
                                                         if(estado.id==1){
                                                             var style_class='panel-primary';
+                                                            var style_class_number='estados estado_1';                                                            
                                                             var icono_class='fa-save';
                                                         }
                                                         if(estado.id==2){
                                                             var style_class='panel-green';
+                                                            var style_class_number='estados estado_2';
                                                             var icono_class='fa-check-circle';
                                                         }
                                                         if(estado.id==3){
                                                             var style_class='panel-yellow';
+                                                            var style_class_number='estados estado_3';
                                                             var icono_class='fa-eye';
                                                         }
                                                         if(estado.id==4){
                                                             var style_class='panel-info';
+                                                            var style_class_number='estados estado_4';
                                                             var icono_class='fa-check-circle-o';
                                                         }
                                                         if(estado.id==5){
                                                             var style_class='panel-red';
+                                                            var style_class_number='estados estado_5';
                                                             var icono_class='fa-cloud-upload';
                                                         }
-                                                        $("#filtros_estados_convocatorias").append('<div class="col-lg-2 col-md-6"><div class="panel '+style_class+'"><div class="panel-heading"><div class="row"><div class="col-xs-3"><i class="fa '+icono_class+' fa-5x"></i></div><div class="col-xs-9 text-right"><div class="huge">26</div><div>'+estado.nombre+'</div></div></div></div><a href="#"><div class="panel-footer"><span class="pull-left">Filtrar convocatorias</span><span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span><div class="clearfix"></div></div></a></div></div>');                                                            
+                                                        $("#filtros_estados_convocatorias").append('<div class="col-lg-2 col-md-6"><div class="panel '+style_class+'"><div class="panel-heading"><div class="row"><div class="col-xs-3"><i class="fa '+icono_class+' fa-5x"></i></div><div class="col-xs-9 text-right"><div class="huge '+style_class_number+'">0</div><div>'+estado.nombre+'</div></div></div></div><a href="javascript:void(0)" class="estado_filter" title="'+estado.id+'"><div class="panel-footer"><span class="pull-left">Filtrar convocatorias</span><span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span><div class="clearfix"></div></div></a></div></div>');                                                            
                                                     });
-                                                    $("#filtros_estados_convocatorias").append('<div class="col-lg-2 col-md-6"><div class="panel panel-default"><div class="panel-heading"><div class="row"><div class="col-xs-3"><i class="fa fa-search fa-5x"></i></div><div class="col-xs-9 text-right"><div class="huge">13</div><div>Total</div></div></div></div><a href="#"><div class="panel-footer"><span class="pull-left">Filtrar convocatorias</span><span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span><div class="clearfix"></div></div></a></div></div>');                                                            
+                                                    $("#filtros_estados_convocatorias").append('<div class="col-lg-2 col-md-6"><div class="panel panel-default"><div class="panel-heading"><div class="row"><div class="col-xs-3"><i class="fa fa-search fa-5x"></i></div><div class="col-xs-9 text-right"><div class="huge estados estado_total">0</div><div>Total</div></div></div></div><a href="javascript:void(0)" class="estado_filter" title=""><div class="panel-footer"><span class="pull-left">Filtrar convocatorias</span><span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span><div class="clearfix"></div></div></a></div></div>');                                                            
                                                 }
                                                 
                                             }
@@ -304,20 +317,39 @@
                                         "language": {
                                             "url": "../../dist/libraries/datatables/js/spanish.json"
                                         },
+                                        "searching": false,
                                         "processing": true,
                                         "serverSide": true,
                                         "lengthMenu": [20, 30, 40],
                                         "ajax": {
                                             url: url_pv + "Convocatorias/all",
                                             data: function ( d ) {
-                                                d.anio = $('#anio').val();
-                                                d.entidad = $('#entidad').val();
-                                                d.area = $('#area').val();
-                                                d.linea_estrategica = $('#linea_estrategica').val();
-                                                d.enfoque = $('#enfoque').val();
-                                                d.programa = $('#programa').val();
+                                                var params = new Object();
+                                                params.anio = $('#anio').val();
+                                                params.entidad = $('#entidad').val();
+                                                params.area = $('#area').val();
+                                                params.linea_estrategica = $('#linea_estrategica').val();
+                                                params.enfoque = $('#enfoque').val();
+                                                params.programa = $('#programa').val();                                                
+                                                params.nombre = $('#nombre').val();                                                
+                                                params.estado = $('#estado').val();                                                
+                                                d.params = JSON.stringify(params);
                                                 d.token = token_actual.token;
-                                            }
+                                            },                                            
+                                        },
+                                        "drawCallback": function (settings) {                                             
+                                            $(".estados").html("0");                                                                                                
+                                            var json = settings.json;                                            
+                                            $(".estado_total").html(json["recordsTotal"]);                                                
+                                            $.each(json["dataEstados"], function (key, value) {
+                                                $(".estado_"+value["estado"]).html(value["total"]);                                                                                                
+                                            }); 
+                                            
+                                            $('.estado_filter').click(function(){                                                                                        
+                                                $("#estado").val($(this).attr("title"));
+                                                dataTable.draw();
+                                            });
+                                    
                                         },
                                         "columns": [
                                             {"data": "estado_convocatoria"},                                            
@@ -334,7 +366,7 @@
                                     });
                                     
                                     $('#anio').change(function(){                                        
-                                        dataTable.draw();
+                                        dataTable.draw();                                       
                                     });
                                     
                                     $('#entidad').change(function(){                                        
@@ -355,6 +387,20 @@
                                     
                                     $('#programa').change(function(){                                        
                                         dataTable.draw();
+                                    });
+                                    
+                                    $('#nombre').on('keyup', function() {
+                                        if(this.value.length>3)
+                                        {
+                                            dataTable.draw();
+                                        }
+                                        else
+                                        {
+                                            if( $('#nombre').val() == "")                                            
+                                            {
+                                                dataTable.draw();
+                                            }
+                                        }
                                     });
 
                                 }
