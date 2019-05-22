@@ -191,9 +191,15 @@ $(document).ready(function () {
 
 //Al crear cualquier peticion de ajax muestra el modal
 $(document).ajaxStart(function () {
+    //Cuando se utiliza modal
     $('#my_loader').modal();
+    //Cuando se utiliza divs
+    $('.loading').show();          
 });
 //Al completar cualquier peticion de ajax oculta el modal
 $(document).ajaxComplete(function () {
+    //Cuando se utiliza modal
     $("#my_loader").modal('hide');
+    //Cuando se utiliza divs    
+    $('.loading').hide(); 
 });
