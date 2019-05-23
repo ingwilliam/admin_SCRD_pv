@@ -1,3 +1,7 @@
+.es_periodo{
+    display: none;
+}
+
 .loader {
     border-top: 16px solid blue;
     border-right: 16px solid green;
