@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>::Categorias::</title>
+        <title>::Categoriás::</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -49,12 +49,6 @@
     </head>
 
     <body>
-        <!-- Modal que se activa cuando se realiza cualquier peticion ajax -->
-        <div class="modal fade" id="my_loader" role="dialog">
-            <div class="modal-dialog">    
-                <div class="loader" style="margin: 0 auto;"></div>             
-            </div>
-        </div>
         <div id="wrapper">
 
             <!-- Navigation -->
@@ -62,13 +56,15 @@
             </nav>
 
             <div id="page-wrapper">
+                <!-- Modal que se activa cuando se realiza cualquier peticion ajax -->
+                <div class="loading centrado-porcentual"></div>             
                 <div class="row">                    
                     <div class="col-lg-12">                         
                         <h1 class="page-header">Categoriás</h1>
                     </div>
                     <div class="panel-body" style="text-align: right">                    
                         <button type="button" class="btn btn-default btn-circle btn-lg regresar" onclick=""><i class="fa fa-arrow-left"></i></button>
-                        <button type="button" class="btn btn-primary btn-circle btn-lg regresar" onclick="'"><i class="fa fa-list"></i></button>
+                        <button type="button" class="btn btn-primary btn-circle btn-lg" onclick="location.href = 'list.html'"><i class="fa fa-list"></i></button>
                         <button type="button" class="btn btn-success btn-circle btn-lg" data-toggle="modal" data-target="#nueva_convocatoria" ><i class="fa fa-file-o"></i></button>
                     </div>
                     <!-- /.col-lg-12 -->
@@ -76,7 +72,8 @@
                 <div class="modal fade" id="nueva_convocatoria">
                     <div class="modal-dialog">
                         <div class="modal-content">
-
+                            <!-- Modal que se activa cuando se realiza cualquier peticion ajax -->
+                            <div class="loading centrado-porcentual"></div> 
                             <!-- cabecera del diálogo -->
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -100,11 +97,11 @@
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row diferentes_requisitos">
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>¿La convocatoria se presenta a través de seudónimo?</label>
-                                                <select id='nuevo_seudonimo' name="seudonimo" class="form-control" >                                                    
+                                                <select id='nuevo_seudonimo' name="seudonimo" class="form-control diferentes_requisitos_disable" >                                                    
                                                     <option value="true">Sí</option>
                                                     <option value="false" selected="selected">No</option>
                                                 </select>                                                
@@ -125,7 +122,8 @@
                 <div class="modal fade" id="editar_convocatoria">
                     <div class="modal-dialog">
                         <div class="modal-content">
-
+                            <!-- Modal que se activa cuando se realiza cualquier peticion ajax -->
+                            <div class="loading centrado-porcentual"></div> 
                             <!-- cabecera del diálogo -->
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -149,87 +147,87 @@
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row diferentes_requisitos">
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>¿La convocatoria se presenta a través de seudónimo?</label>
-                                                <select id='seudonimo' name="seudonimo" class="form-control" >                                                    
+                                                <select id='seudonimo' name="seudonimo" class="form-control diferentes_requisitos_disable" >                                                    
                                                     <option value="true">Sí</option>
                                                     <option value="false" selected="selected">No</option>
                                                 </select>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
                                     </div>    
-                                    <div class="row">
+                                    <div class="row diferentes_requisitos">
                                         <div class="col-lg-12">
                                             <div id="quienes_pueden_participar" class="form-group" style="text-align: center">
 
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>                                                                                                                                                                                                                                                                                                       
                                     </div>                                
-                                    <h3>Información general de los recursos a otorgar</h3>                                    
-                                    <div class="row">
+                                    <h3 class="diferentes_requisitos">Información general de los recursos a otorgar</h3>                                    
+                                    <div class="row diferentes_requisitos">
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Tipo de estímulo <span class="icono_requerido">*</span></label>
-                                                <select class="form-control" id='tipo_estimulo' name="tipo_estimulo" >                                                    
+                                                <select class="form-control diferentes_requisitos_disable" id='tipo_estimulo' name="tipo_estimulo" >                                                    
                                                     <option value="">:: Seleccionar ::</option>
                                                 </select>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>                                         
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-6 diferentes_requisitos">
                                             <div class="form-group">
                                                 <label>Número de estímulos</label>
-                                                <input type="text" name="numero_estimulos" class="form-control">                                                
+                                                <input type="text" name="numero_estimulos" class="form-control diferentes_requisitos_disable">                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>                                         
                                     </div>
-                                    <div class="row">
+                                    <div class="row diferentes_requisitos">
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Valor total de recursos que entregará la convocatoria <span class="icono_requerido">*</span></label>
-                                                <input type="text" name="valor_total_estimulos" class="form-control">                                                
+                                                <input type="text" name="valor_total_estimulos" class="form-control diferentes_requisitos_disable">                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>                                         
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Bolsa Concursable</label>
-                                                <select id='bolsa_concursable' name="bolsa_concursable" class="form-control" >                                                    
+                                                <select id='bolsa_concursable' name="bolsa_concursable" class="form-control diferentes_requisitos_disable" >                                                    
                                                     <option value="true" >Sí</option>
                                                     <option value="false" selected="selected">No</option>
                                                 </select>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>                                         
                                     </div>
-                                    <div class="row">
+                                    <div class="row diferentes_requisitos">
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Descripción de la distribución de la bolsa</label>
-                                                <textarea disabled="disabled" id="descripcion_bolsa" name="descripcion_bolsa" class="form-control class_bolsa_concursable" rows="3"></textarea>                                                
+                                                <textarea disabled="disabled" id="descripcion_bolsa" name="descripcion_bolsa" class="form-control class_bolsa_concursable diferentes_requisitos_disable" rows="3"></textarea>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>                                          
                                     </div>
 
-                                    <div class="row">
+                                    <div class="row diferentes_requisitos">
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>&nbsp;</label><br/>
-                                                <button disabled="disabled" type="button" class="btn btn-primary class_bolsa_concursable" data-toggle="modal" data-target="#distribucion_bolsa_modal" >Abrir ventana de distribución de la bolsa</button>
+                                                <button disabled="disabled" type="button" class="btn btn-primary class_bolsa_concursable diferentes_requisitos_disable" data-toggle="modal" data-target="#distribucion_bolsa_modal" >Abrir ventana de distribución de la bolsa</button>
                                             </div>                                                                                                                                                                                                                                                                                                      
                                         </div>                                         
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>&nbsp;</label><br/>
-                                                <button disabled="disabled" type="button" class="btn btn-primary class_tipo_estimulo" data-toggle="modal" data-target="#detalle_especie_modal" >Abrir ventana de detalle especie</button>
+                                                <button disabled="disabled" type="button" class="btn btn-primary class_tipo_estimulo diferentes_requisitos_disable" data-toggle="modal" data-target="#detalle_especie_modal" >Abrir ventana de detalle especie</button>
                                             </div>                                                                                                                                                                                                                                                                                                       
                                         </div>                                         
                                     </div>
                                     
-                                    <div class="row">
+                                    <div class="row diferentes_requisitos">
                                         <div class="col-lg-12">
                                             <div class="form-group text-center">
                                                 <label>&nbsp;</label><br/>
-                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#perfiles_participantes_modal" >Abrir ventana de perfiles de los participantes</button>
+                                                <button type="button" class="btn btn-primary diferentes_requisitos_disable" data-toggle="modal" data-target="#perfiles_participantes_modal" >Abrir ventana de perfiles de los participantes</button>
                                             </div>                                                                                                                                                                                                                                                                                                      
                                         </div>                                                                                 
                                     </div>
@@ -249,6 +247,8 @@
                 <div class="modal fade" id="perfiles_participantes_modal">
                     <div class="modal-dialog">
                         <div class="modal-content">
+                            <!-- Modal que se activa cuando se realiza cualquier peticion ajax -->
+                            <div class="loading centrado-porcentual"></div> 
                             <!-- cabecera del diálogo -->
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -311,7 +311,8 @@
                 <div class="modal fade" id="distribucion_bolsa_modal">
                     <div class="modal-dialog">
                         <div class="modal-content">
-
+                            <!-- Modal que se activa cuando se realiza cualquier peticion ajax -->
+                            <div class="loading centrado-porcentual"></div> 
                             <!-- cabecera del diálogo -->
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -339,6 +340,7 @@
                                         <div class="col-lg-12" style="text-align: right">   
                                             <input type="hidden" id="id_bolsa" name="id" />
                                             <input type="hidden" name="tipo_recurso" value="Bolsa"/>
+                                            
                                             <button type="submit" class="btn btn-default">Guardar</button>
                                         </div>
                                     </div>
@@ -373,10 +375,11 @@
                         </div>
                     </div>
                 </div>
-                <!-- ME QUEDE EN EL FUNCIONANIMENTO DE LOS MODAL OJO WILLIAM-->
                 <div class="modal fade" id="detalle_especie_modal">
                     <div class="modal-dialog">
                         <div class="modal-content">
+                            <!-- Modal que se activa cuando se realiza cualquier peticion ajax -->
+                            <div class="loading centrado-porcentual"></div> 
                             <!-- cabecera del diálogo -->
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -534,7 +537,7 @@
 
                 //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
                 if ($.isEmptyObject(token_actual)) {
-                    location.href = '../../index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                 } 
                 else
                 {
@@ -575,20 +578,35 @@
                                 if (data == 'error')
                                 {
                                     location.href = 'list.html?msg=Debe seleccionar una convocatoria, para poder continuar.&msg_tipo=danger';
-                                } else
+                                } 
+                                else
                                 {
-                                    var json = JSON.parse(data);
+                                    if (data == 'error_token')
+                                    {
+                                        location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                    } 
+                                    else
+                                    {
+                                        var json = JSON.parse(data);
 
-                                    if (typeof json.convocatoria.id === 'number') {
-                                        
-                                        $(".regresar").attr("onclick","location.href='update.html?id="+$("#id").attr('value')+"'");
-                                        
-                                        //Valido si la convocatoria tiene categorias
-                                        if(json.convocatoria.tiene_categorias==false)
-                                        {
-                                           notify("danger", "ok", "Convocatorias:", "La convocatoria no tiene habilitada la opción de crear categorías, para habilitarla debe seleccionar (Sí) en el campo ¿Tiene categorias? de la seccion Información General."); 
-                                           $("#page-wrapper").css("display","none");
-                                        }                                                                                                                        
+                                        if (typeof json.convocatoria.id === 'number') {
+
+                                            $(".regresar").attr("onclick","location.href='update.html?id="+$("#id").attr('value')+"'");
+
+                                            //Valido si la convocatoria tiene categorias
+                                            if(json.convocatoria.tiene_categorias==false)
+                                            {
+                                               notify("danger", "ok", "Convocatorias:", "La convocatoria no tiene habilitada la opción de crear categorías, para habilitarla debe seleccionar (Sí) en el campo ¿Tiene categorias? de la seccion Información General."); 
+                                               $("#page-wrapper").css("display","none");
+                                            }    
+                                            
+                                            //Valido si la convocatoria tiene categorias
+                                            if(json.convocatoria.diferentes_categorias==false)
+                                            {
+                                                $(".diferentes_requisitos").css("display","none");                                                
+                                                $(".diferentes_requisitos_disable").attr("disabled","disabled");                                                
+                                            }                                            
+                                        }
                                     }
                                 }
                             }
@@ -634,26 +652,34 @@
                                     if (result == 'acceso_denegado')
                                     {
                                         notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                                    } else
+                                    } 
+                                    else
                                     {
-                                        if (isNaN(result))
+                                        if (result == 'error_token')
                                         {
-                                            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                        } else
+                                            location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                        } 
+                                        else
                                         {
-                                            notify("info", "ok", "Convocatorias:", "Se edito el perfil de participante con éxito.");
-                                            //Activo en perfil de la convocatoria actual
-                                            $(".tipo_participante_"+$("#id_tipo_participante").val()).attr('checked', true);
-                                            $(".tipo_participante_"+$("#id_tipo_participante").val()).prop( "checked", true );
+                                            if (isNaN(result))
+                                            {
+                                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                            } else
+                                            {
+                                                notify("info", "ok", "Convocatorias:", "Se edito el perfil de participante con éxito.");
+                                                //Activo en perfil de la convocatoria actual
+                                                $(".tipo_participante_"+$("#id_tipo_participante").val()).attr('checked', true);
+                                                $(".tipo_participante_"+$("#id_tipo_participante").val()).prop( "checked", true );
 
-                                            //Limpio el formulario
-                                            $("#id_cp").attr('value','');
-                                            $("#id_tipo_participante").attr('value','');
-                                            $("#descripcion_cp").jqteVal('');
-                                            $("#tipo_participante_cp").html('');
+                                                //Limpio el formulario
+                                                $("#id_cp").attr('value','');
+                                                $("#id_tipo_participante").attr('value','');
+                                                $("#descripcion_cp").jqteVal('');
+                                                $("#tipo_participante_cp").html('');
 
-                                            cargar_tabla_perfiles_participante(token_actual);
-                                        }
+                                                cargar_tabla_perfiles_participante(token_actual);
+                                            }
+                                        }                                                                                                                                                                
                                     }
                                 }
                             });
@@ -676,25 +702,33 @@
                                         if (result == 'acceso_denegado')
                                         {
                                             notify("danger", "remove", "Convocatorias:", "No tiene permisos para editar información.");
-                                        } else
+                                        } 
+                                        else
                                         {
-                                            if (isNaN(result)) {
-                                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                            } else
+                                            if (result == 'error_token')
                                             {
-                                                notify("info", "ok", "Convocatorias:", "Se creo el perfil de participante con éxito.");
+                                                location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                            } 
+                                            else
+                                            {
+                                                if (isNaN(result)) {
+                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                } else
+                                                {
+                                                    notify("info", "ok", "Convocatorias:", "Se creo el perfil de participante con éxito.");
 
-                                                //Activo en perfil de la convocatoria actual
-                                                $(".tipo_participante_"+$("#id_tipo_participante").val()).attr('checked', true);
-                                                $(".tipo_participante_"+$("#id_tipo_participante").val()).prop( "checked", true );
+                                                    //Activo en perfil de la convocatoria actual
+                                                    $(".tipo_participante_"+$("#id_tipo_participante").val()).attr('checked', true);
+                                                    $(".tipo_participante_"+$("#id_tipo_participante").val()).prop( "checked", true );
 
-                                                //Limpio el formulario
-                                                $("#id_cp").attr('value','');
-                                                $("#id_tipo_participante").attr('value','');
-                                                $("#descripcion_cp").jqteVal('');
-                                                $("#tipo_participante_cp").html('');
+                                                    //Limpio el formulario
+                                                    $("#id_cp").attr('value','');
+                                                    $("#id_tipo_participante").attr('value','');
+                                                    $("#descripcion_cp").jqteVal('');
+                                                    $("#tipo_participante_cp").html('');
 
-                                                cargar_tabla_perfiles_participante(token_actual);
+                                                    cargar_tabla_perfiles_participante(token_actual);
+                                                }
                                             }
                                         }
                                     }
@@ -1012,14 +1046,21 @@
                                 } 
                                 else
                                 {
-                                    if (isNaN(result)) {
-                                        notify("danger", "ok", "Convocatoria recurso:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    if (result == 'error_token')
+                                    {
+                                        location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                                     } 
                                     else
-                                    {
-                                        notify("success", "ok", "Convocatoria recurso:", "Se creó el registro con éxito.");
-                                        cargar_tabla_registros(token_actual,'tbody_distribuciones_especie','Especie');
-                                    }                                                    
+                                    {                                    
+                                        if (isNaN(result)) {
+                                            notify("danger", "ok", "Convocatoria recurso:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                        } 
+                                        else
+                                        {
+                                            notify("success", "ok", "Convocatoria recurso:", "Se creó el registro con éxito.");
+                                            cargar_tabla_registros(token_actual,'tbody_distribuciones_especie','Especie');
+                                        }                                                    
+                                    }
                                 }
                             }
 
@@ -1039,15 +1080,23 @@
                                 if (result == 'acceso_denegado')
                                 {
                                     notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                                } else
+                                } 
+                                else
                                 {
-                                    if (isNaN(result))
+                                    if (result == 'error_token')
                                     {
-                                        notify("danger", "ok", "Convocatoria recurso:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                    } else
+                                        location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                    } 
+                                    else
                                     {
-                                        notify("info", "ok", "Convocatoria recurso:", "Se edito el registro con éxito.");
-                                        cargar_tabla_registros(token_actual,'tbody_distribuciones_especie','Especie');
+                                        if (isNaN(result))
+                                        {
+                                            notify("danger", "ok", "Convocatoria recurso:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                        } else
+                                        {
+                                            notify("info", "ok", "Convocatoria recurso:", "Se edito el registro con éxito.");
+                                            cargar_tabla_registros(token_actual,'tbody_distribuciones_especie','Especie');
+                                        }
                                     }
                                 }
                             }
@@ -1076,7 +1125,7 @@
                         url: url_pv + "Convocatorias/all",
                         data: {"token": token_actual.token, "convocatoria": $("#id").attr('value')}
                     },
-                    "initComplete": function(settings, json) {
+                    "drawCallback": function (settings) {
                         $(".check_activar_t").attr("checked", "true"); 
                         $(".check_activar_f").removeAttr("checked"); 
                         acciones_categoria(token_actual);                        
@@ -1208,7 +1257,7 @@
                                         {
                                             checked="checked='checked'";
                                         }                                                                                                                                                                                                                                
-                                        $("#tbody_distribuciones_especie").append('<tr><td>' + distribucion_especie.orden + '</td><td>' + distribucion_especie.recurso_no_pecuniario + '</td><td>' + distribucion_especie.valor_recurso + '</td><td><input onclick="activar_registro('+distribucion_especie.id+',\''+token_actual.token+'\')" type="checkbox" '+checked+'></td><td><button type="button" class="btn btn-warning btn-update-distribucion-registro-'+distribucion_especie.id+'" onclick="cargar_registro('+distribucion_especie.id+',\'form_validator_especie\')" lang="'+JSON.stringify(distribucion_especie).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                        $("#tbody_distribuciones_especie").append('<tr><td>' + distribucion_especie.orden + '</td><td>' + distribucion_especie.nombre_recurso_no_pecuniario + '</td><td>' + distribucion_especie.valor_recurso + '</td><td><input onclick="activar_registro('+distribucion_especie.id+',\''+token_actual.token+'\')" type="checkbox" '+checked+'></td><td><button type="button" class="btn btn-warning btn-update-distribucion-registro-'+distribucion_especie.id+'" onclick="cargar_registro('+distribucion_especie.id+',\'form_validator_especie\')" lang="'+JSON.stringify(distribucion_especie).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                                     });
                                 }
 
@@ -1240,14 +1289,22 @@
                                                 if (result == 'acceso_denegado')
                                                 {
                                                     notify("danger", "remove", "Convocatorias:", "No tiene permisos para editar información.");
-                                                } else
+                                                } 
+                                                else
                                                 {
-                                                    if (isNaN(result)) {
-                                                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                                    } else
+                                                    if (result == 'error_token')
                                                     {
-                                                        notify("success", "ok", "Convocatorias:", "Se creó el perfil del participante con éxito.");
-                                                        cargar_tabla_perfiles_participante(token_actual)                                                                                                                                                                                        
+                                                        location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                                    } 
+                                                    else
+                                                    {
+                                                        if (isNaN(result)) {
+                                                            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        } else
+                                                        {
+                                                            notify("success", "ok", "Convocatorias:", "Se creó el perfil del participante con éxito.");
+                                                            cargar_tabla_perfiles_participante(token_actual)                                                                                                                                                                                        
+                                                        }
                                                     }
                                                 }
                                             }
@@ -1432,7 +1489,7 @@
                                     }
                                     else
                                     {
-                                        $("#"+tbody).append('<tr><td>' + distribucion_bolsa.orden + '</td><td>' + distribucion_bolsa.recurso_no_pecuniario + '</td><td>' + distribucion_bolsa.valor_recurso + '</td><td><input onclick="activar_registro('+distribucion_bolsa.id+',\''+token_actual.token+'\')" type="checkbox" '+checked+'></td><td><button type="button" class="btn btn-warning btn-update-distribucion-registro-'+distribucion_bolsa.id+'" onclick="cargar_registro('+distribucion_bolsa.id+',\'form_validator_especie\')" lang="'+JSON.stringify(distribucion_bolsa).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                        $("#"+tbody).append('<tr><td>' + distribucion_bolsa.orden + '</td><td>' + distribucion_bolsa.nombre_recurso_no_pecuniario + '</td><td>' + distribucion_bolsa.valor_recurso + '</td><td><input onclick="activar_registro('+distribucion_bolsa.id+',\''+token_actual.token+'\')" type="checkbox" '+checked+'></td><td><button type="button" class="btn btn-warning btn-update-distribucion-registro-'+distribucion_bolsa.id+'" onclick="cargar_registro('+distribucion_bolsa.id+',\'form_validator_especie\')" lang="'+JSON.stringify(distribucion_bolsa).replace(/\"/g,"&quot;")+'"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                                     }
 
 
