@@ -85,12 +85,13 @@
 
                             <!-- cuerpo del diálogo -->
                             <div class="modal-body">
+                                <input type="hidden" id="id" name="convocatoria_padre_categoria" />
                                 <form id="form_nuevo_documento" action="" class="form_nuevo_documento" role="form" method="post">
                                     <div class="row">
                                         <div class="col-lg-12 diferentes_requisitos">
                                             <div class="form-group">
                                                 <label>Categoría <span class="icono_requerido">*</span></label>
-                                                <select id='categoria' name="categoria" class="form-control" >                                                                                                                                                            
+                                                <select id='convocatoria' name="convocatoria" class="form-control" >                                                                                                                                                            
                                                 </select>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>                                                                                                                                                    
@@ -133,9 +134,8 @@
                                         </div>
                                     </div>                                    
                                     <div class="row">
-                                        <div class="col-lg-12" style="text-align: right">
-                                            <input type="hidden" id="id" name="convocatoria" />
-                                            <input type="hidden" id="id_registro" name="id" />
+                                        <div class="col-lg-12" style="text-align: right">                                            
+                                            <input type="hidden" id="id_registro" name="id" />                                            
                                             <button type="submit" class="btn btn-default">Guardar</button>                                            
                                         </div>
                                     </div>
@@ -156,6 +156,7 @@
                                         <table id="table_cronogramas" class="table_cronogramas table">
                                             <thead>
                                                 <tr>
+                                                    <th>Convocatoria</th>
                                                     <th>Categoría</th>
                                                     <th>Requisito</th>
                                                     <th>Subsanable</th>
@@ -283,7 +284,7 @@
                                             $(".regresar").attr("onclick","location.href='update.html?id="+$("#id").attr('value')+"'");
                                             
                                             //Limpio select de categorias
-                                            $('#categoria').find('option').remove();
+                                            $('#convocatoria').find('option').remove();
 
                                             //Valido si la convocatoria tiene categorias                                            
                                             if(json.convocatoria.diferentes_categorias==true)
@@ -292,7 +293,7 @@
                                                 //Cargo el select de las categorias                                                
                                                 if (json.categorias.length > 0) {
                                                     $.each(json.categorias, function (key, categoria) {                                                        
-                                                        $("#categoria").append('<option value="' + categoria.id + '" >' + categoria.nombre + '</option>');
+                                                        $("#convocatoria").append('<option value="' + categoria.id + '" >' + categoria.nombre + '</option>');
                                                     });
                                                 }
                                             }
@@ -401,12 +402,12 @@
                     // Get the BootstrapValidator instance
                     var bv = $form.data('bootstrapValidator');
                     
-                    if ($("#id_registro").attr('value') == '') {
+                    if ($("#id_registro").val().length < 1 ) {
                         //Se realiza la peticion con el fin de guardar el registro actual
                         $.ajax({
                             type: 'POST',
                             url: url_pv + 'Convocatoriasdocumentos/new',
-                            data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token
+                            data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token +"&convocatoria_padre_categoria="+$("#id").attr('value')
                         }).done(function (result) {
 
                             if (result == 'error')
@@ -445,7 +446,7 @@
                         $.ajax({
                             type: 'PUT',
                             url: url_pv + 'Convocatoriasdocumentos/edit/' + $("#id_registro").attr('value'),
-                            data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token
+                            data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token+"&convocatoria_padre_categoria="+$("#id").attr('value')
                         }).done(function (result) {
                             if (result == 'error')
                             {
@@ -511,6 +512,7 @@
                         acciones_categoria(token_actual);                        
                     },
                     "columns": [
+                        {"data": "convocatoria"},
                         {"data": "categoria"},
                         {"data": "requisito"},
                         {"data": "subsanable"},
@@ -519,8 +521,32 @@
                         {"data": "descripcion"},
                         {"data": "activar_registro"},
                         {"data": "acciones"}
-                    ]
-                });                                
+                    ],
+                    "columnDefs": [ {
+                        "targets": 0,                                        
+                        "render": function ( data, type, row, meta ) {                          
+                            if(row.subsanable==true){
+                                row.subsanable="Si";                                              
+                            }  
+                            if(row.subsanable==false){
+                                row.subsanable="No";
+                            }
+
+                            if(row.obligatorio==true){
+                                row.obligatorio="Si";                                              
+                            }  
+                            if(row.obligatorio==false){
+                                row.obligatorio="No";
+                            }  
+                            if(data==null){
+                                row.convocatoria=row.categoria;
+                                row.categoria="";
+                            }  
+                            return row.convocatoria;
+                        }
+                      }
+                        ]
+                });                             
                 
             }
             
