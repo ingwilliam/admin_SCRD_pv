@@ -291,8 +291,16 @@
                                             } else
                                             {
                                                 if (isNaN(result)) {
-                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                                } else
+                                                    if(result=="error_alfresco")
+                                                    {                                                        
+                                                        location.href = 'update.html?id='+result+'&msg=Se creó la convocatoria con éxito, pero se genero un error con alfresco, por favor informar a la mesa de ayuda soporte.convocatorias@scrd.gov.co.&msg_tipo=warning';
+                                                    }
+                                                    else
+                                                    {
+                                                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                    }                                                    
+                                                } 
+                                                else
                                                 {
                                                     location.href = 'update.html?id='+result+'&msg=Se creó la convocatoria con éxito.&msg_tipo=success';
                                                 }
