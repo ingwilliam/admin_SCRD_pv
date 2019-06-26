@@ -205,11 +205,11 @@
                                       <div class="col-lg-12">
                                           <div class="form-group col-lg-6">
                                                 <label>Criterio<span class="icono_requerido">*</span></label>
-                                                <input id="numero_ronda" type="text" name="numero_ronda" class="form-control">
+                                                <input id="descripcion_criterio" type="text" name="descripcion_criterio" class="form-control">
                                           </div>
                                           <div class="form-group col-lg-6">
                                                 <label>Puntaje máximo<span class="icono_requerido">*</span></label>
-                                                <input id="nombre_ronda" type="text" name="nombre_ronda" class="form-control">
+                                                <input id="puntaje_maximo" type="text" name="puntaje_maximo" class="form-control">
                                           </div>
                                         </div>
                                     </div>
@@ -218,7 +218,7 @@
                                         <div class="col-lg-12">
                                             <div class="form-group col-lg-6">
                                                 <label>Orden<span class="icono_requerido">*</span></label>
-                                                <input id="total_ganadores" type="text" name="total_ganadores" class="form-control">
+                                                <input id="orden" type="text" name="orden" class="form-control">
                                             </div>
 
                                         </div>
@@ -226,7 +226,8 @@
 
                                     <div class="row">
                                         <div class="col-lg-12" style="text-align: right">
-                                              <input type="hidden" id="id_registro" name="id_registro_ronda" />
+                                            <input type="hidden" id="id_registro_criterio" name="id_registro_criterio" />
+                                            <input type="hidden" id="convocatoria_ronda" name="convocatoria_ronda" />
                                             <button type="submit" class="btn btn-default">Guardar</button>
                                         </div>
                                     </div>
@@ -301,6 +302,7 @@
             </div>
             <!-- /#page-wrapper -->
               <input type="hidden" id="id" value="">
+
 
         </div>
         <!-- /#wrapper -->
@@ -492,7 +494,7 @@
                                           render: function ( data, type, row ) {
                                                       return '<button title="'+row.ronda.id+'" type="button" class="btn btn-warning btn_cargar" data-toggle="modal" data-target="#nueva_ronda\">'
                                                       		+'<span class="glyphicon glyphicon-edit"></span></button>'+
-                                                      		'<button title="'+row.ronda.id+'" type="button" class="btn btn-warning btn_cargar_criterio" data-toggle="modal" data-target="#nueva_criterio\">'
+                                                      		'<button title="'+row.ronda.id+'" type="button" class="btn btn-warning btn_cargar_criterios" data-toggle="modal" data-target="#nueva_criterio\">'
                                                       		+'<span class="glyphicon glyphicon-list"></span></button>';
                                                       },
                                 }
@@ -828,16 +830,19 @@
               });
 
               //carga el modal de criterios
-              $(".btn_cargar_criterio").click(function(){
-                //alert("cargando criterios");
+              $(".btn_cargar_criterios").click(function(){
+                alert("cargando criterios");
                 cargar_tabla_criterio(  $(this).attr("title"), token_actual);
+                $("#convocatoria_ronda").val($(this).attr("title"));
+                validator_form_criterio(token_actual);
               });
 
 
             }
 
             function cargar_tabla_criterio(idRonda, token_actual){
-              //alert("cargar_tabla_criterio");
+
+              alert("cargar_tabla_criterio");
                     //Cargar datos en la tabla actual
                         $('#table_list_criterio').DataTable({
                             "language": {
@@ -846,7 +851,7 @@
                             "processing": true,
                             "destroy": true,
                             "serverSide": true,
-                            "lengthMenu": [5],
+                            "lengthMenu": [3],
                             "ajax":{
                                 url : url_pv+"Convocatoriasrondascriterios/all_criterios_ronda",
                                 data: {"token": token_actual.token, "idRonda": idRonda}
@@ -854,7 +859,7 @@
                               "drawCallback": function (settings) {
                                  $(".check_activar_t").attr("checked", "true");
                                  $(".check_activar_f").removeAttr("checked");
-                                 acciones_ronda(token_actual);
+                                 acciones_criterio(token_actual);
                               },
                             "columns": [
                                 {"data": "orden"},
@@ -867,10 +872,8 @@
                                 },
                                 {"data": "aciones",
                                           render: function ( data, type, row ) {
-                                                      return '<button title="'+row.id+'" type="button" class="btn btn-warning btn_cargar" data-toggle="modal" data-target="#nueva_ronda\">'
-                                                          +'<span class="glyphicon glyphicon-edit"></span></button>'+
-                                                          '<button title="'+row.id+'" type="button" class="btn btn-warning btn_cargar_criterio" data-toggle="modal" data-target="#nueva_criterio\">'
-                                                          +'<span class="glyphicon glyphicon-list"></span></button>';
+                                                      return '<button title="'+row.id+'" type="button" class="btn btn-warning btn_cargar_criterio">'
+                                                          +'<span class="glyphicon glyphicon-edit"></span></button>';
                                                       },
                                 }
 
@@ -878,6 +881,229 @@
 
                             ]
                         });
+
+            }
+
+            function validator_form_criterio(token_actual) {
+                        alert("validando");
+
+                        $('.form_nuevo_criterio').bootstrapValidator({
+                            feedbackIcons: {
+                                valid: 'glyphicon glyphicon-ok',
+                                invalid: 'glyphicon glyphicon-remove',
+                                validating: 'glyphicon glyphicon-refresh'
+                            },
+                            excluded: ':disabled',
+                            fields: {
+                              descripcion_criterio: {
+                                  validators: {
+                                      notEmpty: {message: 'El numero de ronda es requerida'}
+                                  }
+                              },
+                                puntaje_maximo: {
+                                    validators: {
+                                        notEmpty: {message: 'El puntaje máximo es requerido'}
+                                    }
+                                },
+                                orden: {
+                                    validators: {
+                                        notEmpty: {message: 'El orden es requerido'}
+                                    }
+                                },
+
+                            }
+                        }).on('success.form.bv', function (e) {
+
+                          alert("id_registro_criterio->"+$("#id_registro_criterio").attr('value')+"  id_registro_criterio->>"+$("#id_registro_criterio").val());
+                          // Prevent form submission
+                          e.preventDefault();
+                          // Get the form instance
+                          var $form = $(e.target);
+
+                          // Get the BootstrapValidator instance
+                          var bv = $form.data('bootstrapValidator');
+
+                          //$form.bootstrapValidator('resetForm', true);
+
+                          console.log("form-->"+$form.serialize() );
+
+                          if (typeof $("#id_registro_criterio").attr('value') === 'undefined') {
+
+                              //Se realiza la peticion con el fin de guardar el registro actual
+                              $.ajax({
+                                  type: 'POST',
+                                  url: url_pv + 'Convocatoriasrondascriterios/new',
+                                  data: $form.serialize() + "&modulo=Criterios&token=" + token_actual.token
+                              }).done(function (result) {
+
+                                  if (result == 'error')
+                                  {
+                                      notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                  } else
+                                  {
+                                      if (result == 'error_token')
+                                      {
+                                          location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                      }
+                                      else
+                                      {
+                                          if (result == 'acceso_denegado')
+                                          {
+                                              notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                          } else
+                                          {
+                                              if (isNaN(result)) {
+                                                  notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                              } else
+                                              {
+                                                  notify("success", "ok", "Convocatorias:", "Se creó el criterio con éxito.");
+                                                  //Cargar datos de la tabla de rondas
+                                                  cargar_tabla_criterio($("#convocatoria_ronda").attr('value'),token_actual);
+                                              }
+                                          }
+                                      }
+                                  }
+
+                              });
+                          }else{
+
+                            alert("Editando!!!!!!!,  criterio -->>>"+$("#id_registro_criterio").val());
+                            //Realizo la peticion con el fin de editar el registro actual
+                            $.ajax({
+                                type: 'PUT',
+                                url: url_pv + 'Convocatoriasrondascriterios/edit/' + $("#id_registro_criterio").attr('value'),
+                                data: $form.serialize() + "&modulo=Criterios&token=" + token_actual.token
+                            }).done(function (result) {
+                                if (result == 'error')
+                                {
+                                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                }
+                                else
+                                {
+                                    if (result == 'error_token')
+                                    {
+                                        location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                    }
+                                    else
+                                    {
+                                        if (result == 'acceso_denegado')
+                                        {
+                                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                        } else
+                                        {
+                                            if (isNaN(result))
+                                            {
+                                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                            } else
+                                            {
+                                                notify("info", "ok", "Convocatorias:", "Se edito el criterio con éxito.");
+                                                cargar_tabla_criterio($("#convocatoria_ronda").attr('value'),token_actual);
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+
+                          }
+
+
+                          $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
+                          bv.resetForm();
+
+
+
+                         //$('#form_nuevo_criterio').trigger("reset");
+
+                        //  $('.form_nuevo_criterio').bootstrapValidator('destroy', true);
+                        //$("#orden").val("");
+                          //$("#requisto option[value='']").prop("selected", true);
+                          //$("#subsanable option[value='true']").prop("selected", true);
+                          //$("#obligatorio option[value='true']").prop("selected", true);
+                          //$("#id_registro_criterio").val(null);
+                          //$('#nueva_criterio').modal('toggle');
+
+                        });
+
+
+                }
+
+            //Permite realizar acciones despues de cargar la tabla
+            function acciones_criterio(token_actual){
+
+
+              //Permite activar o eliminar una registro
+              $(".activar_registro").click(function () {
+
+                //Cambio el estado del check
+                var active = "false";
+
+                if( $(this).prop('checked') ) {
+                      active = "true";
+                }
+
+                //Peticion para inactivar el evento
+                $.ajax({
+                  type: 'DELETE',
+                  data: {"token": token_actual.token, "modulo": "Rondas","active":active},
+                  url: url_pv + 'Convocatoriasrondascriterios/delete/' + $(this).attr("title")
+                }).done(function (data) {
+                                if (data == 'Si' || data == 'No')
+                                {
+                                    if (data == 'Si')
+                                    {
+                                        notify("info", "ok", "Convocatorias:", "Se activo el evento con éxito.");
+                                    }
+                                    else
+                                    {
+                                        notify("info", "ok", "Convocatorias:", "Se elimino el evento con éxito.");
+                                    }
+                                }
+                                else
+                                {
+                                    if (data == 'acceso_denegado')
+                                    {
+                                        notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                                    }
+                                    else
+                                    {
+                                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    }
+                                }
+                            });
+              });
+
+              //carga los datos del formulario del modal de criterios
+              $(".btn_cargar_criterio").click(function () {
+
+                  //Realizo la peticion para cargar el formulario
+                  $.ajax({
+                        type: 'GET',
+                        data: {"token": token_actual.token},
+                        url: url_pv + 'Convocatoriasrondascriterios/search/'+ $(this).attr("title")
+                    }).done(function (data) {
+                        if (data == 'error_metodo')
+                        {
+                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        } else
+                        {
+                            if (data == 'error')
+                            {
+                                notify("danger", "ok", "Convocatorias:", "El usuario no se encuentra registrado, por favor registrarse");
+                            } else
+                            {
+                                var json = JSON.parse(data);
+                                //Cargo el formulario con los datos
+                                $('#form_nuevo_criterio').loadJSON(json);
+                                $("#id_registro_criterio").val(json.id);
+                            }
+                        }
+                    });
+
+
+                  validator_form_criterio(token_actual);
+
+              });
+
 
             }
 
