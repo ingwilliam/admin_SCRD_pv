@@ -172,19 +172,20 @@ $(document).ready(function () {
     var token_actual = getLocalStorage(name_local_storage);
     if ((token_actual != null) || (token_actual != "") || (token_actual != "undefined"))
     {
-        //Envio del modulo actual
-        var modulo_actual = "";
-        if(location.href.includes('/pages/convocatorias/')) {
-            modulo_actual = "convocatoria";            
-        }
-        
         //Cargamos el menu principal
         $.ajax({
             type: 'POST',
-            data: {"token": token_actual.token,"id":getURLParameter('id'),"modulo":modulo_actual},
+            data: {"token": token_actual.token,"id":getURLParameter('id')},
             url: url_pv + 'Administrador/menu'
-        }).done(function (data) {
-                $("#menu_principal").html(data);            
+        }).done(function (result) {
+            if (result == 'error_token')
+            {
+                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+            } 
+            else
+            {
+                $("#menu_principal").html(result);            
+            }                
         });
     }
     
