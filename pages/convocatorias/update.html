@@ -809,9 +809,10 @@
                                 var token_actual = getLocalStorage(name_local_storage);
 
                                 //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
-                                if ($.isEmptyObject(token_actual)) {
-                                    location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                                } else
+                                if ($.isEmptyObject(token_actual)) {                                    
+                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                } 
+                                else
                                 {
                                     permiso_lectura(token_actual, "Convocatorias");
 
@@ -848,32 +849,41 @@
                                                 if (result == 'error')
                                                 {
                                                     notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                                } else
+                                                } 
+                                                else
                                                 {
-                                                    if (result == 'acceso_denegado')
+                                                    if (result == 'error_token')
                                                     {
-                                                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                                                    } else
+                                                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                                    } 
+                                                    else
                                                     {
-                                                        if (isNaN(result))
+                                                        if (result == 'acceso_denegado')
                                                         {
-                                                            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                                        } else
+                                                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                                        } 
+                                                        else
                                                         {
-                                                            notify("info", "ok", "Convocatorias:", "Se edito el perfil de participante con éxito.");
-                                                            //Activo en perfil de la convocatoria actual
-                                                            $(".tipo_participante_"+$("#id_tipo_participante").val()).attr('checked', true);
-                                                            $(".tipo_participante_"+$("#id_tipo_participante").val()).prop( "checked", true );
+                                                            if (isNaN(result))
+                                                            {
+                                                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                            } else
+                                                            {
+                                                                notify("info", "ok", "Convocatorias:", "Se edito el perfil de participante con éxito.");
+                                                                //Activo en perfil de la convocatoria actual
+                                                                $(".tipo_participante_"+$("#id_tipo_participante").val()).attr('checked', true);
+                                                                $(".tipo_participante_"+$("#id_tipo_participante").val()).prop( "checked", true );
 
-                                                            //Limpio el formulario
-                                                            $("#id_cp").attr('value','');
-                                                            $("#id_tipo_participante").attr('value','');
-                                                            $("#descripcion_cp").jqteVal('');
-                                                            $("#tipo_participante_cp").html('');
-                                                            
-                                                            cargar_tabla_perfiles_participante(token_actual);
+                                                                //Limpio el formulario
+                                                                $("#id_cp").attr('value','');
+                                                                $("#id_tipo_participante").attr('value','');
+                                                                $("#descripcion_cp").jqteVal('');
+                                                                $("#tipo_participante_cp").html('');
+
+                                                                cargar_tabla_perfiles_participante(token_actual);
+                                                            }
                                                         }
-                                                    }
+                                                    }                                                                                                                                                            
                                                 }
                                             });
                                         }
@@ -890,32 +900,40 @@
                                                     if (result == 'error')
                                                     {
                                                         notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");                                                                
-                                                    } else
+                                                    } 
+                                                    else
                                                     {
-                                                        if (result == 'acceso_denegado')
+                                                        if (result == 'error_token')
                                                         {
-                                                            notify("danger", "remove", "Convocatorias:", "No tiene permisos para editar información.");
-                                                        } else
+                                                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                                        } 
+                                                        else
                                                         {
-                                                            if (isNaN(result)) {
-                                                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                            if (result == 'acceso_denegado')
+                                                            {
+                                                                notify("danger", "remove", "Convocatorias:", "No tiene permisos para editar información.");
                                                             } else
                                                             {
-                                                                notify("info", "ok", "Convocatorias:", "Se creo el perfil de participante con éxito.");
-                                                                
-                                                                //Activo en perfil de la convocatoria actual
-                                                                $(".tipo_participante_"+$("#id_tipo_participante").val()).attr('checked', true);
-                                                                $(".tipo_participante_"+$("#id_tipo_participante").val()).prop( "checked", true );
-                                                                
-                                                                //Limpio el formulario
-                                                                $("#id_cp").attr('value','');
-                                                                $("#id_tipo_participante").attr('value','');
-                                                                $("#descripcion_cp").jqteVal('');
-                                                                $("#tipo_participante_cp").html('');
-                                                                
-                                                                cargar_tabla_perfiles_participante(token_actual);
+                                                                if (isNaN(result)) {
+                                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                                } else
+                                                                {
+                                                                    notify("info", "ok", "Convocatorias:", "Se creo el perfil de participante con éxito.");
+
+                                                                    //Activo en perfil de la convocatoria actual
+                                                                    $(".tipo_participante_"+$("#id_tipo_participante").val()).attr('checked', true);
+                                                                    $(".tipo_participante_"+$("#id_tipo_participante").val()).prop( "checked", true );
+
+                                                                    //Limpio el formulario
+                                                                    $("#id_cp").attr('value','');
+                                                                    $("#id_tipo_participante").attr('value','');
+                                                                    $("#descripcion_cp").jqteVal('');
+                                                                    $("#tipo_participante_cp").html('');
+
+                                                                    cargar_tabla_perfiles_participante(token_actual);
+                                                                }
                                                             }
-                                                        }
+                                                        }                                                                                                                
                                                     }
 
                                                 });                                                                                                                                                                                                
@@ -941,9 +959,9 @@
                                                 notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                             } else
                                             {
-                                                if (data == 'error')
-                                                {
-                                                    notify("danger", "ok", "Convocatorias:", "El usuario no se encuentra registrado, por favor registrarse");
+                                                if (data == 'error_token')
+                                                {                                                    
+                                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';                                                   
                                                 } 
                                                 else
                                                 {
@@ -973,9 +991,9 @@
                                                 notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                             } else
                                             {
-                                                if (data == 'error')
+                                                if (data == 'error_token')
                                                 {
-                                                    notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';                                                   
                                                 } else
                                                 {
                                                     var json = JSON.parse(data);
@@ -1005,9 +1023,9 @@
                                                 notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                             } else
                                             {
-                                                if (data == 'error')
+                                                if (data == 'error_token')
                                                 {
-                                                    notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';                                                                                                       
                                                 } else
                                                 {
                                                     var json = JSON.parse(data);
@@ -1030,9 +1048,9 @@
                                                 notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                             } else
                                             {
-                                                if (data == 'error')
+                                                if (data == 'error_token')
                                                 {
-                                                    notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';                                                                                                       
                                                 } else
                                                 {
                                                     var json = JSON.parse(data);
@@ -1062,9 +1080,9 @@
                                                 notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                             } else
                                             {
-                                                if (data == 'error')
+                                                if (data == 'error_token')
                                                 {
-                                                    notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';                                                   
                                                 } else
                                                 {
                                                     var json = JSON.parse(data);
@@ -1158,10 +1176,11 @@
                                             notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                         } else
                                         {
-                                            if (data == 'error')
-                                            {
-                                                notify("danger", "ok", "Convocatorias:", "El convocatoria no se encuentra registrado, por favor registrarse");
-                                            } else
+                                            if (data == 'error_token')
+                                            {                                                
+                                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';                                                   
+                                            } 
+                                            else
                                             {
                                                 var json = JSON.parse(data);
                                                 
@@ -1306,21 +1325,29 @@
                                                             if (result == 'error')
                                                             {
                                                                 notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");                                                                
-                                                            } else
-                                                            {
-                                                                if (result == 'acceso_denegado')
+                                                            } 
+                                                            else
+                                                            {                                                                
+                                                                if (result == 'error_token')
+                                                                {                                                    
+                                                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';                                                   
+                                                                } 
+                                                                else
                                                                 {
-                                                                    notify("danger", "remove", "Convocatorias:", "No tiene permisos para editar información.");
-                                                                } else
-                                                                {
-                                                                    if (isNaN(result)) {
-                                                                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                                    if (result == 'acceso_denegado')
+                                                                    {
+                                                                        notify("danger", "remove", "Convocatorias:", "No tiene permisos para editar información.");
                                                                     } else
                                                                     {
-                                                                        notify("success", "ok", "Convocatorias:", "Se creó el perfil del participante con éxito.");
-                                                                        cargar_tabla_perfiles_participante(token_actual)                                                                        
-                                                                    }
-                                                                }
+                                                                        if (isNaN(result)) {
+                                                                            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                                        } else
+                                                                        {
+                                                                            notify("success", "ok", "Convocatorias:", "Se creó el perfil del participante con éxito.");
+                                                                            cargar_tabla_perfiles_participante(token_actual)                                                                        
+                                                                        }
+                                                                    }                                                                    
+                                                                }                                                                                                                                
                                                             }
 
                                                         });
@@ -1332,31 +1359,38 @@
                                                             type: 'DELETE',
                                                             data: {"token": token_actual.token,"modulo":"Convocatorias","convocatoria":$("#id").val(),"tipo_participante":$(this).val()},
                                                             url: url_pv+'Convocatoriasparticipantes/delete'                  
-                                                        }).done(function (data) {    
-                                                            if (data == 'Si' || data == 'No')
-                                                            {
-                                                                if (data == 'Si')
-                                                                {
-                                                                    notify("info", "ok", "Convocatorias:", "Se activo el perfil del participante con éxito.");                                                                                                            
-                                                                }
-                                                                else
-                                                                {
-                                                                    notify("info", "ok", "Convocatorias:", "Se elimino el perfil del participante con éxito.");                                                                                                            
-                                                                }  
-                                                                
-                                                                cargar_tabla_perfiles_participante(token_actual)
-                                                            }
+                                                        }).done(function (data) {
+                                                            if (data == 'error_token')
+                                                            {                                                    
+                                                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';                                                   
+                                                            } 
                                                             else
-                                                            {
-                                                                if (data == 'acceso_denegado')
+                                                            { 
+                                                                if (data == 'Si' || data == 'No')
                                                                 {
-                                                                    notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                                                                    if (data == 'Si')
+                                                                    {
+                                                                        notify("info", "ok", "Convocatorias:", "Se activo el perfil del participante con éxito.");                                                                                                            
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        notify("info", "ok", "Convocatorias:", "Se elimino el perfil del participante con éxito.");                                                                                                            
+                                                                    }  
+
+                                                                    cargar_tabla_perfiles_participante(token_actual)
                                                                 }
                                                                 else
                                                                 {
-                                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                                    if (data == 'acceso_denegado')
+                                                                    {
+                                                                        notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                                    }
                                                                 }
-                                                            }
+                                                            }                                                                  
                                                         });
                                                     }
                                                 });
@@ -1635,29 +1669,36 @@
                                     type: 'DELETE',
                                     data: {"token": token_actual,"modulo":"Convocatorias"},
                                     url: url_pv+'Convocatoriasrecursos/delete/' + id                    
-                                }).done(function (data) {  
-                                    if (data == 'Si' || data == 'No')
-                                    {
-                                        if (data == 'Si')
-                                        {
-                                            notify("info", "ok", "Convocatoria recurso:", "Se activo el registro con éxito.");                                                                                    
-                                        }
-                                        else
-                                        {
-                                            notify("danger", "ok", "Convocatoria recurso:", "Se inactivo el registro con éxito.");                                                                                    
-                                        }  
-                                    }
+                                }).done(function (data) {
+                                    if (data == 'error_token')
+                                    {                                                    
+                                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';                                                   
+                                    } 
                                     else
-                                    {
-                                        if (data == 'acceso_denegado')
+                                    { 
+                                        if (data == 'Si' || data == 'No')
                                         {
-                                            notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                                            if (data == 'Si')
+                                            {
+                                                notify("info", "ok", "Convocatoria recurso:", "Se activo el registro con éxito.");                                                                                    
+                                            }
+                                            else
+                                            {
+                                                notify("danger", "ok", "Convocatoria recurso:", "Se inactivo el registro con éxito.");                                                                                    
+                                            }  
                                         }
                                         else
                                         {
-                                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");                                                                                        
+                                            if (data == 'acceso_denegado')
+                                            {
+                                                notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                                            }
+                                            else
+                                            {
+                                                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");                                                                                        
+                                            }
                                         }
-                                    }
+                                    }                                                                                                            
                                 });                                                                
                             }
                             
@@ -1669,26 +1710,33 @@
                                     data: {"token": token_actual,"modulo":"Convocatorias","convocatoria":convocatoria},
                                     url: url_pv+'Convocatoriasparticipantes/delete_perfil_jurado/' + id                 
                                 }).done(function (data) {    
-                                    if (data == 'Si' || data == 'No')
-                                    {
-                                        if (data == 'Si')
-                                        {
-                                            notify("info", "ok", "Convocatorias:", "Se activo el perfil del jurado con éxito.");                                        
-                                        }
-                                        else
-                                        {
-                                            notify("info", "ok", "Convocatorias:", "Se elimino el perfil del jurado con éxito.");                                        
-                                        }                                        
-                                    }
+                                    if (data == 'error_token')
+                                    {                                                    
+                                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';                                                   
+                                    } 
                                     else
                                     {
-                                        if (data == 'acceso_denegado')
+                                        if (data == 'Si' || data == 'No')
                                         {
-                                            notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                                            if (data == 'Si')
+                                            {
+                                                notify("info", "ok", "Convocatorias:", "Se activo el perfil del jurado con éxito.");                                        
+                                            }
+                                            else
+                                            {
+                                                notify("info", "ok", "Convocatorias:", "Se elimino el perfil del jurado con éxito.");                                        
+                                            }                                        
                                         }
                                         else
                                         {
-                                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");                                                                                        
+                                            if (data == 'acceso_denegado')
+                                            {
+                                                notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                                            }
+                                            else
+                                            {
+                                                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");                                                                                        
+                                            }
                                         }
                                     }
                                 });                                                                
@@ -1706,9 +1754,9 @@
                                         notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                     } else
                                     {
-                                        if (data == 'error')
+                                        if (data == 'error_token')
                                         {
-                                            notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';                                                   
                                         } else
                                         {
                                             var json = JSON.parse(data);
@@ -1740,9 +1788,9 @@
                                         notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                     } else
                                     {
-                                        if (data == 'error')
-                                        {
-                                            notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                                        if (data == 'error_token')
+                                        {                                            
+                                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';                                                   
                                         } else
                                         {
                                             var json = JSON.parse(data);
@@ -1779,15 +1827,15 @@
                                     type: 'GET',
                                     data: {"token": token_actual.token,"convocatoria":$("#id").val()},
                                     url: url_pv + 'Convocatoriasparticipantes/select_form_convocatoria'
-                                }).done(function (data) {
+                                }).done(function (data) {                                    
                                     if (data == 'error_metodo')
                                     {
                                         notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                     } else
                                     {
-                                        if (data == 'error')
+                                        if (data == 'error_token')
                                         {
-                                            notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';                                                   
                                         } else
                                         {
                                             var json = JSON.parse(data);
@@ -1977,21 +2025,29 @@
                                         if (result == 'error')
                                         {
                                             notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                        } else
+                                        } 
+                                        else
                                         {
-                                            if (result == 'acceso_denegado')
+                                            if (result == 'error_token')
                                             {
-                                                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                                            } else
+                                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                            } 
+                                            else
                                             {
-                                                if (isNaN(result))
+                                                if (result == 'acceso_denegado')
                                                 {
-                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                                                 } else
                                                 {
-                                                    notify("info", "ok", "Convocatorias:", "Se edito la convocatoria con éxito.");
+                                                    if (isNaN(result))
+                                                    {
+                                                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                    } else
+                                                    {
+                                                        notify("info", "ok", "Convocatorias:", "Se edito la convocatoria con éxito.");
+                                                    }
                                                 }
-                                            }
+                                            }                                                                                        
                                         }
                                     });
                                     
@@ -2047,31 +2103,38 @@
                                             if (result == 'error')
                                             {
                                                 notify("danger", "ok", "Convocatoria perfil:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                            } else
+                                            } 
+                                            else
                                             {
-                                                if (result == 'acceso_denegado')
+                                                if (result == 'error_token')
                                                 {
-                                                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                                                 } 
                                                 else
                                                 {
-                                                    if (result == 'error_maximo_jurados')
+                                                    if (result == 'acceso_denegado')
                                                     {
-                                                        notify("danger", "remove", "Convocatoria perfil:", "No puede exceder el máximo de perfiles como jurado para esta convocatoria.");
+                                                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                                                     } 
                                                     else
                                                     {
-                                                        if (isNaN(result)) {
-                                                            notify("danger", "ok", "Convocatoria perfil:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                                        } else
+                                                        if (result == 'error_maximo_jurados')
                                                         {
-                                                            cargar_tabla_perfiles_jurado(token_actual);
-                                                            notify("success", "ok", "Convocatoria perfil:", "Se creó el perfil del jurado con éxito.");
+                                                            notify("danger", "remove", "Convocatoria perfil:", "No puede exceder el máximo de perfiles como jurado para esta convocatoria.");
+                                                        } 
+                                                        else
+                                                        {
+                                                            if (isNaN(result)) {
+                                                                notify("danger", "ok", "Convocatoria perfil:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                            } else
+                                                            {
+                                                                cargar_tabla_perfiles_jurado(token_actual);
+                                                                notify("success", "ok", "Convocatoria perfil:", "Se creó el perfil del jurado con éxito.");
+                                                            }
                                                         }
-                                                    }
-                                                }
+                                                    }                                                    
+                                                }                                                                                                
                                             }
-
                                         });
                                     } else {
                                         //Realizo la peticion con el fin de editar el registro actual
@@ -2083,23 +2146,31 @@
                                             if (result == 'error')
                                             {
                                                 notify("danger", "ok", "Convocatoria perfil:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                            } else
+                                            } 
+                                            else
                                             {
-                                                if (result == 'acceso_denegado')
+                                                if (result == 'error_token')
                                                 {
-                                                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                                                } else
+                                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                                } 
+                                                else
                                                 {
-                                                    if (isNaN(result))
+                                                    if (result == 'acceso_denegado')
                                                     {
-                                                        notify("danger", "ok", "Convocatoria perfil:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                                                     } else
                                                     {
-                                                        cargar_tabla_perfiles_jurado(token_actual);
-                                                        
-                                                        notify("info", "ok", "Convocatoria perfil:", "Se edito el perfil del jurado con éxito.");
+                                                        if (isNaN(result))
+                                                        {
+                                                            notify("danger", "ok", "Convocatoria perfil:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        } else
+                                                        {
+                                                            cargar_tabla_perfiles_jurado(token_actual);
+
+                                                            notify("info", "ok", "Convocatoria perfil:", "Se edito el perfil del jurado con éxito.");
+                                                        }
                                                     }
-                                                }
+                                                }                                                
                                             }
                                         });
                                     }
@@ -2152,25 +2223,32 @@
                                             if (result == 'error')
                                             {
                                                 notify("danger", "ok", "Convocatoria recurso:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                            } else
+                                            } 
+                                            else
                                             {
-                                                if (result == 'acceso_denegado')
+                                                if (result == 'error_token')
                                                 {
-                                                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                                                 } 
                                                 else
                                                 {
-                                                    if (isNaN(result)) {
-                                                        notify("danger", "ok", "Convocatoria recurso:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                    if (result == 'acceso_denegado')
+                                                    {
+                                                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                                                     } 
                                                     else
                                                     {
-                                                        notify("success", "ok", "Convocatoria recurso:", "Se creó el registro con éxito.");
-                                                        cargar_tabla_registros(token_actual,'tbody_distribuciones_bolsas','Bolsa');
-                                                    }                                                    
+                                                        if (isNaN(result)) {
+                                                            notify("danger", "ok", "Convocatoria recurso:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        } 
+                                                        else
+                                                        {
+                                                            notify("success", "ok", "Convocatoria recurso:", "Se creó el registro con éxito.");
+                                                            cargar_tabla_registros(token_actual,'tbody_distribuciones_bolsas','Bolsa');
+                                                        }                                                    
+                                                    }
                                                 }
                                             }
-
                                         });
                                     } else {
                                         //Realizo la peticion con el fin de editar el registro actual
@@ -2182,20 +2260,28 @@
                                             if (result == 'error')
                                             {
                                                 notify("danger", "ok", "Convocatoria recurso:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                            } else
+                                            } 
+                                            else
                                             {
-                                                if (result == 'acceso_denegado')
+                                                if (result == 'error_token')
                                                 {
-                                                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                                                } else
+                                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                                } 
+                                                else
                                                 {
-                                                    if (isNaN(result))
+                                                    if (result == 'acceso_denegado')
                                                     {
-                                                        notify("danger", "ok", "Convocatoria recurso:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                                                     } else
                                                     {
-                                                        notify("info", "ok", "Convocatoria recurso:", "Se edito el registro con éxito.");
-                                                        cargar_tabla_registros(token_actual,'tbody_distribuciones_bolsas','Bolsa');
+                                                        if (isNaN(result))
+                                                        {
+                                                            notify("danger", "ok", "Convocatoria recurso:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        } else
+                                                        {
+                                                            notify("info", "ok", "Convocatoria recurso:", "Se edito el registro con éxito.");
+                                                            cargar_tabla_registros(token_actual,'tbody_distribuciones_bolsas','Bolsa');
+                                                        }
                                                     }
                                                 }
                                             }
@@ -2260,25 +2346,32 @@
                                             if (result == 'error')
                                             {
                                                 notify("danger", "ok", "Convocatoria recurso:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                            } else
+                                            } 
+                                            else
                                             {
-                                                if (result == 'acceso_denegado')
+                                                if (result == 'error_token')
                                                 {
-                                                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                                                 } 
                                                 else
                                                 {
-                                                    if (isNaN(result)) {
-                                                        notify("danger", "ok", "Convocatoria recurso:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                    if (result == 'acceso_denegado')
+                                                    {
+                                                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                                                     } 
                                                     else
                                                     {
-                                                        notify("success", "ok", "Convocatoria recurso:", "Se creó el registro con éxito.");
-                                                        cargar_tabla_registros(token_actual,'tbody_distribuciones_especie','Especie');
-                                                    }                                                    
+                                                        if (isNaN(result)) {
+                                                            notify("danger", "ok", "Convocatoria recurso:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        } 
+                                                        else
+                                                        {
+                                                            notify("success", "ok", "Convocatoria recurso:", "Se creó el registro con éxito.");
+                                                            cargar_tabla_registros(token_actual,'tbody_distribuciones_especie','Especie');
+                                                        }                                                    
+                                                    }
                                                 }
                                             }
-
                                         });
                                     } else {
                                         //Realizo la peticion con el fin de editar el registro actual
@@ -2290,20 +2383,28 @@
                                             if (result == 'error')
                                             {
                                                 notify("danger", "ok", "Convocatoria recurso:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                            } else
+                                            } 
+                                            else
                                             {
-                                                if (result == 'acceso_denegado')
+                                                if (result == 'error_token')
                                                 {
-                                                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                                                } else
+                                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                                } 
+                                                else
                                                 {
-                                                    if (isNaN(result))
+                                                    if (result == 'acceso_denegado')
                                                     {
-                                                        notify("danger", "ok", "Convocatoria recurso:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                                                     } else
                                                     {
-                                                        notify("info", "ok", "Convocatoria recurso:", "Se edito el registro con éxito.");
-                                                        cargar_tabla_registros(token_actual,'tbody_distribuciones_especie','Especie');
+                                                        if (isNaN(result))
+                                                        {
+                                                            notify("danger", "ok", "Convocatoria recurso:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        } else
+                                                        {
+                                                            notify("info", "ok", "Convocatoria recurso:", "Se edito el registro con éxito.");
+                                                            cargar_tabla_registros(token_actual,'tbody_distribuciones_especie','Especie');
+                                                        }
                                                     }
                                                 }
                                             }
