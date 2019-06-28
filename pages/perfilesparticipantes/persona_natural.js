@@ -110,38 +110,60 @@ $(document).ready(function () {
                         });
                     }
                     
-                    //Cargos el select de ciudad de nacimiento y de residencia 
-                    $('#ciudad_nacimiento').find('option').remove();
-                    $("#ciudad_nacimiento").append('<option value=""></option>');                    
-                    if (json.ciudad.length > 0) {
-                        $.each(json.ciudad, function (key, array) {
-                            var selected = '';
-                            if(array.id == json.participante.ciudad_nacimiento)
-                            {
-                                selected = 'selected="selected"';
+                    //Cargos el autocomplete de ciudad de nacimiento                    
+                    $( "#ciudad_nacimiento_name" ).autocomplete({
+                        source: json.ciudad,
+                        minLength: 2,
+                        select: function (event, ui) {
+                            $(this).val(ui.item ? ui.item : " ");
+                            $("#ciudad_nacimiento").val(ui.item.id);                            
+                        },
+
+                        change: function (event, ui) {
+                            if (!ui.item) {
+                                this.value = '';                                
+                                $("#ciudad_nacimiento").val("");
                             }
-                            $("#ciudad_nacimiento").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-                        });
-                    }
+                        //else { Return your label here }
+                        }
+                    });
                     
-                    $('#ciudad_residencia').find('option').remove();
-                    $("#ciudad_residencia").append('<option value=""></option>');                    
-                    if (json.ciudad.length > 0) {
-                        $.each(json.ciudad, function (key, array) {
-                            var selected = '';
-                            if(array.id == json.participante.ciudad_residencia)
-                            {
-                                selected = 'selected="selected"';
+                    //Cargos el autocomplete de ciudad de residencia
+                    $( "#ciudad_residencia_name" ).autocomplete({
+                        source: json.ciudad,
+                        minLength: 2,
+                        select: function (event, ui) {
+                            $(this).val(ui.item ? ui.item : " ");
+                            $("#ciudad_residencia").val(ui.item.id); 
+                        },
+                        change: function (event, ui) {
+                            if (!ui.item) {
+                                this.value = '';
+                                $('.formulario_principal').bootstrapValidator('revalidateField', 'ciudad_residencia_name');
+                                $("#ciudad_residencia").val("");
                             }
-                            $("#ciudad_residencia").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-                        });
-                    }
+                        //else { Return your label here }
+                        }
+                    });
                     
+                    //Cargos el autocomplete de barrios
+                    $( "#barrio_residencia_name" ).autocomplete({
+                        source: json.barrio,
+                        minLength: 2,
+                        select: function (event, ui) {
+                            $(this).val(ui.item ? ui.item : " ");
+                            $("#barrio_residencia").val(ui.item.id); 
+                        },
+                        change: function (event, ui) {
+                            if (!ui.item) {
+                                this.value = '';                                
+                                $("#barrio_residencia").val("");
+                            }
+                        //else { Return your label here }
+                        }
+                    });
                     
-                    $("select.flexselect").flexselect({
-                        allowMismatch: true,
-                        inputNameTransform:  function(name) { return "new_" + name; }
-                      });
+                                        
                 }
 
             }
@@ -194,7 +216,7 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'El sexo es requerido'}
                 }
             },
-            ciudad_residencia: {
+            ciudad_residencia_name: {
                 validators: {
                     notEmpty: {message: 'La ciudad de residencia es requerida'}
                 }
@@ -227,7 +249,8 @@ function validator_form(token_actual) {
         // Get the BootstrapValidator instance
         var bv = $form.data('bootstrapValidator');
 
-
+        alert($form.serialize());
+        
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         bv.resetForm();
     });
