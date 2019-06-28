@@ -148,11 +148,21 @@
                                         <div class="col-lg-12">
                                             <div class="form-group col-lg-6">
                                                 <label>Fecha inicio de evaluación<span class="icono_requerido">*</span></label>
-                                                <input id="fecha_inicio_evaluacion" type="date" name="fecha_inicio_evaluacion" class="form-control">
+
+                                                <div class="input-group date calendario" data-date="" data-date-format="yyyy-mm-dd" data-link-format="yyyy-mm-dd">
+                                                    <input class="form-control" id="fecha_inicio_evaluacion" name="fecha_inicio_evaluacion" size="16" type="text" value="" readonly>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div>
+
                                             </div>
                                             <div class="form-group col-lg-6">
                                                 <label>Fecha fin de evaluación<span class="icono_requerido">*</span></label>
-                                                <input id="fecha_fin_evaluacion" type="date" name="fecha_fin_evaluacion" class="form-control" min="2019-05-01" >
+
+                                                <div class="input-group date calendario" data-date="" data-date-format="yyyy-mm-dd" data-link-format="yyyy-mm-dd">
+                                                    <input class="form-control" id="fecha_fin_evaluacion" name="fecha_fin_evaluacion" size="16" type="text" value="" readonly>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -161,7 +171,12 @@
                                         <div class="col-lg-12">
                                             <div class="form-group col-lg-6">
                                                 <label>Fecha inicio deliberación<span class="icono_requerido">*</span></label>
-                                                <input id="fecha_deliberacion" type="date" name="fecha_deliberacion" class="form-control">
+
+                                                <div class="input-group date calendario" data-date="" data-date-format="yyyy-mm-dd" data-link-format="yyyy-mm-dd">
+                                                    <input class="form-control" id="fecha_deliberacion" name="fecha_deliberacion" size="16" type="text" value="" readonly>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div>
+
                                             </div>
                                             <div class="form-group col-lg-6">
                                               <label>Tipo de acta <span class="icono_requerido">*</span></label>
@@ -302,6 +317,9 @@
             </div>
             <!-- /#page-wrapper -->
               <input type="hidden" id="id" value="">
+              <input type="hidden" id="limite" value="">
+
+
 
 
         </div>
@@ -392,15 +410,15 @@
                 });//$('#b_nueva_ronda').click(
 
                 $('#fecha_inicio_evaluacion').change(function(){
-                      console.log("estableciendo..."+$('#fecha_inicio_evaluacion').val() );
-                      $('#fecha_fin_evaluacion').prop("min",  $('#fecha_inicio_evaluacion').val() );
-                      $('#fecha_fin_evaluacion').val("");
+                      //console.log("estableciendo..."+$('#fecha_inicio_evaluacion').val() );
+                      //$('#fecha_fin_evaluacion').prop("min",  $('#fecha_inicio_evaluacion').val() );
+                      //$('#fecha_fin_evaluacion').val("");
                 });
 
                 $('#fecha_fin_evaluacion').change(function(){
-                      $('#fecha_fin_evaluacion').prop("min",  $('#fecha_inicio_evaluacion').val() );
-                      $('#fecha_deliberacion').prop("min",  $('#fecha_fin_evaluacion').val() );
-                      $('#fecha_deliberacion').val("");
+                      //$('#fecha_fin_evaluacion').prop("min",  $('#fecha_inicio_evaluacion').val() );
+                      //$('#fecha_deliberacion').prop("min",  $('#fecha_fin_evaluacion').val() );
+                      //$('#fecha_deliberacion').val("");
                 });
 
                 //establece el valor de la convocatoria cuando existen categorias
@@ -573,7 +591,11 @@
 
             function validator_form(token_actual) {
 
-
+                        $('.calendario').on('changeDate show', function (e) {
+                            $('.form_nuevo_ronda').bootstrapValidator('revalidateField', 'fecha_inicio_evaluacion');
+                            $('.form_nuevo_ronda').bootstrapValidator('revalidateField', 'fecha_fin_evaluacion');
+                            $('.form_nuevo_ronda').bootstrapValidator('revalidateField', 'fecha_deliberacion');
+                        });
 
                         $('.form_nuevo_ronda').bootstrapValidator({
                             feedbackIcons: {
@@ -620,9 +642,7 @@
                                 },
                                 fecha_fin_evaluacion: {
                                     validators: {
-                                        notEmpty: {message: 'La fecha de fin es requerida'},
-                                        date:{ }
-
+                                        notEmpty: {message: 'La fecha de fin es requerida'}
                                     }
                                 },
                                 fecha_deliberacion: {
@@ -733,6 +753,7 @@
 
 
                           $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
+                          $form.bootstrapValidator('destroy', true);
                           bv.resetForm();
                         //$("#orden").val("");
                           //$("#requisto option[value='']").prop("selected", true);
@@ -831,10 +852,80 @@
 
               //carga el modal de criterios
               $(".btn_cargar_criterios").click(function(){
-                alert("cargando criterios");
+
+                var puntaje_maximo_criterios;
+                var total_puntaje_criterios=0;
+                var limite;
+                //traer el valor puntaje_maximo
+                $.ajax({
+                    type: 'GET',
+                    data: {"token": token_actual.token, "nombre": "puntaje_maximo_criterios"},
+                    url: url_pv + 'Tablasmaestras/search_nombre/'
+                  }).done( function (data) {
+                              var json = JSON.parse(data);
+                              if (data == 'error_metodo') {
+                                  notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                              } else if (data == 'error'){
+                                      notify("danger", "ok", "Convocatorias:", "El convocatoria no se encuentra registrado, por favor registrarse");
+                              } else {
+                                    //Cargo el select categorias
+                                      console.log("json-->"+ json.valor);
+                                      puntaje_maximo_criterios = json.valor;
+                                }
+
+                            }
+                        );
+
+                        //Calcular la suma de los puntajes de los criterios
+                        console.log("idRonda-->"+$(this).attr("title"));
+                        $.ajax({
+                            type: 'GET',
+                            data:{"token": token_actual.token, "idRonda": $(this).attr("title")},
+                            url: url_pv + 'Convocatoriasrondascriterios/criterios_ronda'
+                          }).done( function (data) {
+
+                                      var json = JSON.parse(data);
+
+                                      if (data == 'error_metodo') {
+                                          notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                      } else if (data == 'error'){
+                                              notify("danger", "ok", "Convocatorias:", "El convocatoria no se encuentra registrado, por favor registrarse");
+                                      } else {
+
+                                        console.log("json-xxxx->>"+json);
+
+                                        if (json.length > 0) {
+
+                                            $.each(json, function (key, criterio) {
+                                              console.log("key->"+key+"  valor->"+criterio.id);
+                                              total_puntaje_criterios+=criterio.puntaje_maximo;
+                                            });
+
+                                            //asignar valor al limite
+                                             limite = (puntaje_maximo_criterios - total_puntaje_criterios);
+                                            console.log("limite"+limite);
+                                            $("#limite").val(limite);
+
+
+
+
+                                        }
+
+                                        }
+
+                                        //cargar_tabla_criterio(  $(this).attr("title"), token_actual);
+                                        $("#convocatoria_ronda").val($(this).attr("title"));
+                                        validator_form_criterio(token_actual,$(this).attr("title"));
+
+                                    }
+                                );
+
+
+
+              //  sum_criterios(token_actual, $(this).attr("title"));
                 cargar_tabla_criterio(  $(this).attr("title"), token_actual);
-                $("#convocatoria_ronda").val($(this).attr("title"));
-                validator_form_criterio(token_actual);
+                //$("#convocatoria_ronda").val($(this).attr("title"));
+                //validator_form_criterio(token_actual,$(this).attr("title"));
               });
 
 
@@ -842,7 +933,6 @@
 
             function cargar_tabla_criterio(idRonda, token_actual){
 
-              alert("cargar_tabla_criterio");
                     //Cargar datos en la tabla actual
                         $('#table_list_criterio').DataTable({
                             "language": {
@@ -851,7 +941,7 @@
                             "processing": true,
                             "destroy": true,
                             "serverSide": true,
-                            "lengthMenu": [3],
+                            "lengthMenu": [1],
                             "ajax":{
                                 url : url_pv+"Convocatoriasrondascriterios/all_criterios_ronda",
                                 data: {"token": token_actual.token, "idRonda": idRonda}
@@ -864,28 +954,32 @@
                             "columns": [
                                 {"data": "orden"},
                                 {"data": "descripcion_criterio"},
-                                {"data": "puntaje_maximo" },
+                                {"data": "puntaje_maximo"},
                                 {"data": "active",
-                                  render: function ( data, type, row ) {
-                                        return ' <input title=\"'+row.id+'\" type=\"checkbox\" class=\"check_activar_'+row.active+'  activar_registro" '+(row.active? 'checked ':'')+' />';
+                                        render: function ( data, type, row ) {
+                                            return ' <input title=\"'+row.id+'\" type=\"checkbox\" class=\"check_activar_'+row.active+'  activar_registro" '+(row.active? 'checked ':'')+' />';
                                         },
                                 },
                                 {"data": "aciones",
-                                          render: function ( data, type, row ) {
+                                        render: function ( data, type, row ) {
                                                       return '<button title="'+row.id+'" type="button" class="btn btn-warning btn_cargar_criterio">'
                                                           +'<span class="glyphicon glyphicon-edit"></span></button>';
-                                                      },
+                                          },
                                 }
-
-
-
                             ]
                         });
 
             }
 
-            function validator_form_criterio(token_actual) {
-                        alert("validando");
+            function validator_form_criterio(token_actual, idRonda ) {
+
+                        //se limpia el formulario y las validaciones
+                        $('.form_nuevo_criterio').bootstrapValidator('resetForm', true);
+                        $('.form_nuevo_criterio').bootstrapValidator('destroy', true);
+
+                          var limite =10;
+                          console.log("limite------>"+$("#limite").val());
+                          limite =  $("#limite").val();
 
                         $('.form_nuevo_criterio').bootstrapValidator({
                             feedbackIcons: {
@@ -900,21 +994,36 @@
                                       notEmpty: {message: 'El numero de ronda es requerida'}
                                   }
                               },
-                                puntaje_maximo: {
-                                    validators: {
-                                        notEmpty: {message: 'El puntaje máximo es requerido'}
+                              puntaje_maximo: {
+                                  validators: {
+                                      notEmpty: {message: 'El puntaje máximo es requerido'},
+                                      integer: {message: 'Debe ingresar un número'},
+                                      callback: {
+                                                   message: 'El puntaje no es valido',
+                                                   callback: function(value, validator, $field) {
+                                                     console.log("value:"+value+" $field.val():"+$field.val()+"  limite:"+limite);
+                                                       // Check the password strength
+                                                        if ( parseInt($field.val())  > parseInt(limite) ) {
+                                                            return {
+                                                                valid: false,
+                                                                message: 'El puntaje maximo del criterio sobrepasa el valor total definido'
+                                                            };
+                                                        }
+                                                         return true;
+                                                       }
+                                                    },
                                     }
                                 },
                                 orden: {
                                     validators: {
-                                        notEmpty: {message: 'El orden es requerido'}
+                                        notEmpty: {message: 'El orden es requerido'},
+                                        integer: {message: 'Debe ingresar un número'},
                                     }
                                 },
 
                             }
                         }).on('success.form.bv', function (e) {
 
-                          alert("id_registro_criterio->"+$("#id_registro_criterio").attr('value')+"  id_registro_criterio->>"+$("#id_registro_criterio").val());
                           // Prevent form submission
                           e.preventDefault();
                           // Get the form instance
@@ -967,7 +1076,6 @@
                               });
                           }else{
 
-                            alert("Editando!!!!!!!,  criterio -->>>"+$("#id_registro_criterio").val());
                             //Realizo la peticion con el fin de editar el registro actual
                             $.ajax({
                                 type: 'PUT',
@@ -1008,22 +1116,9 @@
 
 
                           $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
+                          $form.bootstrapValidator('destroy', true);
                           bv.resetForm();
-
-
-
-                         //$('#form_nuevo_criterio').trigger("reset");
-
-                        //  $('.form_nuevo_criterio').bootstrapValidator('destroy', true);
-                        //$("#orden").val("");
-                          //$("#requisto option[value='']").prop("selected", true);
-                          //$("#subsanable option[value='true']").prop("selected", true);
-                          //$("#obligatorio option[value='true']").prop("selected", true);
-                          //$("#id_registro_criterio").val(null);
-                          //$('#nueva_criterio').modal('toggle');
-
                         });
-
 
                 }
 
@@ -1107,6 +1202,85 @@
 
             }
 
+
+            function sum_criterios(token_actual, idRonda){
+                    var puntaje_maximo_criterios;
+                    var total_puntaje_criterios=0;
+                    var limite;
+                    //traer el valor puntaje_maximo
+                    $.ajax({
+                        type: 'GET',
+                        data: {"token": token_actual.token, "nombre": "puntaje_maximo_criterios"},
+                        url: url_pv + 'Tablasmaestras/search_nombre/'
+                      }).done( function (data) {
+                                  var json = JSON.parse(data);
+                                  if (data == 'error_metodo') {
+                                      notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                  } else if (data == 'error'){
+                                          notify("danger", "ok", "Convocatorias:", "El convocatoria no se encuentra registrado, por favor registrarse");
+                                  } else {
+                                        //Cargo el select categorias
+                                          console.log("json-->"+ json.valor);
+                                          puntaje_maximo_criterios = json.valor;
+                                    }
+
+                                }
+                            );
+
+                            //Calcular la suma de los puntajes de los criterios
+                            console.log("idRonda-->"+idRonda);
+                            $.ajax({
+                                type: 'GET',
+                                data:{"token": token_actual.token, "idRonda": idRonda},
+                                url: url_pv + 'Convocatoriasrondascriterios/criterios_ronda'
+                              }).done( function (data) {
+
+                                          var json = JSON.parse(data);
+
+                                          if (data == 'error_metodo') {
+                                              notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                          } else if (data == 'error'){
+                                                  notify("danger", "ok", "Convocatorias:", "El convocatoria no se encuentra registrado, por favor registrarse");
+                                          } else {
+
+                                            console.log("json-xxxx->>"+json);
+
+                                            if (json.length > 0) {
+
+                                                $.each(json, function (key, criterio) {
+                                                  console.log("key->"+key+"  valor->"+criterio.id);
+                                                  total_puntaje_criterios+=criterio.puntaje_maximo;
+                                                });
+
+                                                //asignar valor al limite
+                                                 limite = (puntaje_maximo_criterios - total_puntaje_criterios);
+                                                console.log("limite"+limite);
+                                                $("#limite").val(limite);
+
+
+
+                                            }
+
+                                            }
+
+
+                                        }
+                                    );
+
+            }
+
+            jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
+                return this.flatten().reduce( function ( a, b ) {
+                    if ( typeof a === 'string' ) {
+                        a = a.replace(/[^\d.-]/g, '') * 1;
+                    }
+                    if ( typeof b === 'string' ) {
+                        b = b.replace(/[^\d.-]/g, '') * 1;
+                    }
+
+                    return a + b;
+                }, 0 );
+            } );
         </script>
     </body>
 </html>
