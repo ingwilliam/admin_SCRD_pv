@@ -30,6 +30,10 @@ function form_edit_page(page,id)
     {
         redirect="update";
     }
+    if(page==2)
+    {
+        redirect="publicar";
+    }
     location.href = redirect+".html?id=" + id;
 }
 
@@ -70,7 +74,7 @@ function issetLocalStorage() {
         return true
     } else
     {
-        location.href = 'error.html?msg=actualizar_navegador';
+        location.href = 'index.html?msg=Debe actualizar su navegador.&msg_tipo=danger';
         return false;
     }
 }

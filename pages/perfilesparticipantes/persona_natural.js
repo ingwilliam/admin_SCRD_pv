@@ -26,7 +26,7 @@ $(document).ready(function () {
             {
                 if (data == 'error_token')
                 {
-                    location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                 } else
                 {
                     var json = JSON.parse(data);
@@ -249,10 +249,62 @@ function validator_form(token_actual) {
         // Get the BootstrapValidator instance
         var bv = $form.data('bootstrapValidator');
 
-        alert($form.serialize());
+        // Valido si el id existe, con el fin de eviarlo al metodo correcto
+        if (typeof $("#id").attr('value') === 'undefined') {
+            $('#formulario_principal').attr('action', url_pv + 'Personasnaturales/new');
+        }
+        else
+        {
+            $('#formulario_principal').attr('action', url_pv + 'Personasnaturales/edit');
+        }
+
+        //Se realiza la peticion con el fin de guardar el registro actual
+        $.ajax({
+            type: 'POST',
+            url: $form.attr('action'),
+            data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
+        }).done(function (result) {
+
+            if (result == 'error')
+            {
+                notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            } 
+            else
+            {
+                if (result == 'error_token')
+                {
+                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                } 
+                else
+                {
+                    if (result == 'acceso_denegado')
+                    {
+                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                    } 
+                    else
+                    {
+                        if (result == 'error_usuario_perfil')
+                        {
+                            notify("danger", "ok", "Persona natural:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        } 
+                        else
+                        {
+                            if (isNaN(result)) {
+                                notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            } 
+                            else
+                            {
+                                //Asigno el valor id al hidden 
+                                alert(result);
+                            }
+                        }                                                
+                    }
+                }                                
+            }
+
+        });
         
-        $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
-        bv.resetForm();
+        $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);        
     });
 
 }
