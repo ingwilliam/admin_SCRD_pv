@@ -1,6 +1,6 @@
 //Definimos las variables del sitio
-var url_pv = "http://localhost/crud_pv/api/";
-var url_pv_admin = "http://localhost/admin_pv/";
+var url_pv = "http://localhost/crud_SCRD_pv/api/";
+var url_pv_admin = "http://localhost/admin_SCRD_pv/";
 var name_local_storage = "token_pv";
 
 //funcion para extaer un parametro de la url
@@ -21,6 +21,20 @@ function getURLParameter(sParam)
 function form_edit(id)
 {
     location.href = "form.html?id=" + id;
+}
+
+function form_edit_page(page,id)
+{
+    var redirect="";
+    if(page==1)
+    {
+        redirect="update";
+    }
+    if(page==2)
+    {
+        redirect="publicar";
+    }
+    location.href = redirect+".html?id=" + id;
 }
 
 /* Función para cargar alertas */
@@ -60,7 +74,7 @@ function issetLocalStorage() {
         return true
     } else
     {
-        location.href = 'error.html?msg=actualizar_navegador';
+        location.href = 'index.html?msg=Debe actualizar su navegador.&msg_tipo=danger';
         return false;
     }
 }
@@ -150,7 +164,7 @@ $(document).ready(function () {
     var msg_tipo = getURLParameter('msg_tipo');
     if (typeof msg !== 'undefined' && typeof msg_tipo !== 'undefined')
     {
-        notify(msg_tipo, "ok", "Login:", decodeURI(msg));
+        notify(msg_tipo, "ok", "Mensaje:", decodeURI(msg));
     }
 
     //Asignamos el valor a input id
@@ -165,21 +179,43 @@ $(document).ready(function () {
         //Cargamos el menu principal
         $.ajax({
             type: 'POST',
-            data: {"token": token_actual.token},
+            data: {"token": token_actual.token,"id":getURLParameter('id'),"m":getURLParameter('m')},
             url: url_pv + 'Administrador/menu'
-        }).done(function (data) {
-                $("#menu_principal").html(data);            
+        }).done(function (result) {
+            if (result == 'error_token')
+            {
+                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+            } 
+            else
+            {
+                $("#menu_principal").html(result);            
+            }                
         });
     }
+    
+    $('.calendario').datetimepicker({
+        language:  'es',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    });
 });
 
 //Al crear cualquier peticion de ajax muestra el modal
 $(document).ajaxStart(function () {
-    $('#my_loader').modal({
-        show: 'true'
-    });
+    //Cuando se utiliza modal
+    $('#my_loader').modal();
+    //Cuando se utiliza divs
+    $('.loading').show();          
 });
 //Al completar cualquier peticion de ajax oculta el modal
 $(document).ajaxComplete(function () {
+    //Cuando se utiliza modal
     $("#my_loader").modal('hide');
+    //Cuando se utiliza divs    
+    $('.loading').hide(); 
 });
