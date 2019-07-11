@@ -81,6 +81,12 @@ function removeLocalStorage(nombre)
 
 //Iniciamos el documento
 $(document).ready(function () {
+    
+    if(location.pathname=="/admin_SCRD_pv/")
+    {
+        location.href = 'index.html';
+    }
+    
     //Verifico que no tenga ningun mensaje y el tipo
     var msg = getURLParameter('msg');
     var msg_tipo = getURLParameter('msg_tipo');
