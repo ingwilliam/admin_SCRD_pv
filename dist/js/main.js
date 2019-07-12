@@ -1,6 +1,7 @@
 //Definimos las variables del sitio
 var url_pv = "http://localhost/crud_SCRD_pv/api/";
 var url_pv_admin = "http://localhost/admin_SCRD_pv/";
+var url_pv_site = "http://localhost/site_SCRD_pv/";
 var name_local_storage = "token_pv";
 
 //funcion para extaer un parametro de la url
@@ -25,16 +26,20 @@ function form_edit(id)
 
 function form_edit_page(page,id)
 {
-    var redirect="";
+    var url="";
+    var name="";
     if(page==1)
     {
-        redirect="update";
+        url="update";
+        name="_self";
+        
     }
     if(page==2)
     {
-        redirect="publicar";
+        url=url_pv_site+"publicar";
+        name="_blank";
     }
-    location.href = redirect+".html?id=" + id;
+    window.open(url+".html?id=" + id, name);
 }
 
 /* Función para cargar alertas */

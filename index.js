@@ -3,6 +3,7 @@ var url_pv = "http://localhost/crud_SCRD_pv/api/";
 var url_pv_admin = "http://localhost/admin_SCRD_pv/";
 var name_local_storage = "token_pv";
 
+
 //funcion para extaer un parametro de la url
 function getURLParameter(sParam)
 {
@@ -81,6 +82,12 @@ function removeLocalStorage(nombre)
 
 //Iniciamos el documento
 $(document).ready(function () {
+    
+    if(location.pathname=="/admin_SCRD_pv/")
+    {
+        location.href = 'index.html';
+    }
+    
     //Verifico que no tenga ningun mensaje y el tipo
     var msg = getURLParameter('msg');
     var msg_tipo = getURLParameter('msg_tipo');
