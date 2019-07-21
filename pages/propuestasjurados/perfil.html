@@ -60,15 +60,20 @@
             </nav>
 
             <div id="page-wrapper">
-                <div class="loading centrado-porcentual"></div>                 
+                <div class="loading centrado-porcentual"></div>
+
+
+
+                <div id="">
+
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Información Basica</h1>
+                        <h1 class="page-header">Información Básica</h1>
                     </div>
                     <!-- /.col-lg-12 -->
-                    <div class="panel-body" style="text-align: right">                    
+                    <div class="panel-body" style="text-align: right">
                         <button type="button" class="btn btn-default btn-circle btn-lg" onclick="location.href = '../propuestas/propuestas_busqueda_convocatorias.html'"><i class="fa fa-arrow-left"></i>
-                        </button>                                                
+                        </button>
                     </div>
                 </div>
                 <!-- /.row -->
@@ -79,21 +84,185 @@
                                 Formulario para el registro de información
                             </div>
                             <div class="panel-body">
-                                <form id="formulario_principal" action="" class="formulario_principal" role="form" method="post">
+                                <form id="formulario_principal" action="" class="formulario_principal" role="form" method="post" style="display:none;">
                                     <div class="row">
-                                        <div class="col-lg-6">
-                                            Adicionar categoria pertenece
-                                        </div>
-                                        <div class="col-lg-6">
-                                            Adicionar perfil
-                                        </div>
-                                    </div>                                    
-                                    <div class="row">
-                                        <div class="col-lg-12" style="text-align: right">
-                                            <input type="hidden" id="id" name="id" />
-                                            <button type="submit" class="btn btn-default">Guardar</button>
+                                        <div class="col-lg-12">
+                                            <label>Categoria  <span class="icono_requerido">*</span></label>
+                                            <select class="form-control" name="">
+                                                <option value="">:: Seleccionar ::</option>
+                                            </select>
                                         </div>
                                     </div>
+
+
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Tipo de documento de identificación  <span class="icono_requerido">*</span></label>
+                                                    <select id='tipo_documento' name="tipo_documento" class="form-control" >
+                                                        <option value="">:: Seleccionar ::</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Número de documento de identificación <span class="icono_requerido">*</span></label>
+                                                    <input type="text" id="numero_documento" name="numero_documento" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Primer nombre <span class="icono_requerido">*</span></label>
+                                                    <input type="text" id="primer_nombre" name="primer_nombre" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Segundo nombre</label>
+                                                    <input type="text" id="segundo_nombre" name="segundo_nombre" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Primer apellido <span class="icono_requerido">*</span></label>
+                                                    <input type="text" id="primer_apellido" name="primer_apellido" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Segundo apellido</label>
+                                                    <input type="text" id="segundo_apellido" name="segundo_apellido" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Sexo <span class="icono_requerido">*</span></label>
+                                                    <select id='sexo' name="sexo" class="form-control" >
+                                                        <option value="">:: Seleccionar ::</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Orientación Sexual</label>
+                                                    <select id='orientacion_sexual' name="orientacion_sexual" class="form-control" >
+                                                        <option value="">:: Seleccionar ::</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Identidad de género</label>
+                                                    <select id='identidad_genero' name="identidad_genero" class="form-control" >
+                                                        <option value="">:: Seleccionar ::</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Grupo étnico</label>
+                                                    <select id='grupo_etnico' name="grupo_etnico" class="form-control" >
+                                                        <option value="">:: Seleccionar ::</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Fecha de nacimiento <span class="icono_requerido">*</span></label>
+                                                    <div class="input-group date calendario" data-date="" data-date-format="yyyy-mm-dd" data-link-format="yyyy-mm-dd">
+                                                        <input class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" size="16" type="text" value="" readonly>
+                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Ciudad de nacimiento</label>
+                                                    <input type="text" id="ciudad_nacimiento_name" name="ciudad_nacimiento_name" class="form-control">
+                                                    <input type="hidden" id="ciudad_nacimiento" name="ciudad_nacimiento" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Ciudad de residencia <span class="icono_requerido">*</span></label>
+                                                    <input type="text" id="ciudad_residencia_name" name="ciudad_residencia_name" class="form-control">
+                                                    <input type="hidden" id="ciudad_residencia" name="ciudad_residencia" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Barrio residencia</label>
+                                                    <input type="text" id="barrio_residencia_name" name="barrio_residencia_name" class="form-control">
+                                                    <input type="hidden" id="barrio_residencia" name="barrio_residencia" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Dirección de residencia <span class="icono_requerido">*</span></label>
+                                                    <input type="text" id="direccion_residencia" name="direccion_residencia" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Dirección correspondencia</label>
+                                                    <input type="text"  id="direccion_correspondencia" name="direccion_correspondencia" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Estrato<span class="icono_requerido">*</span></label>
+                                                    <select id='estrato' name="estrato" class="form-control" >
+                                                        <option value="">:: Seleccionar ::</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Teléfono fijo</label>
+                                                    <input type="text" id="numero_telefono" name="numero_telefono" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Número de celular personal</label>
+                                                    <input type="text"  id="numero_celular" name="numero_celular" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Correo electrónico <span class="icono_requerido">*</span></label>
+                                                    <input type="text" id="correo_electronico" name="correo_electronico" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12" style="text-align: right">
+                                                <input type="hidden" id="id" name="id" />
+                                                <input type="hidden" id="idp" name="idp" />
+                                                <input type="hidden" id="idc" name="idc" />
+                                                <button type="submit" class="btn btn-default">Guardar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </form>
                             </div>
                             <!-- /.panel-body -->

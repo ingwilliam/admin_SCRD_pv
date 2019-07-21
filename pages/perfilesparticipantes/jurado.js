@@ -210,7 +210,7 @@ function cargar_datos_formulario(token_actual) {
 
                 //$('#formulario_principal').loadJSON(json.participante);
               //  console.log(typeof json.participante.id);
-                if ( json.participante != null ) {
+                if ( json.participante) {
                   $("#idd").val(json.participante.id);
 
                   $('#numero_documento').val(json.participante.numero_documento);
