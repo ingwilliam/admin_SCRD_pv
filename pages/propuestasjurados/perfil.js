@@ -63,7 +63,7 @@ function cargar_datos_formulario(token_actual){
 
           $("#idp").val(json.participante.id);
           console.log("tipo-->"+json.participante.tipo);
-
+          $('#categoria').val(json.categoria);
           $('#numero_documento').val(json.participante.numero_documento);
           $('#primer_nombre').val(json.participante.primer_nombre);
           $('#segundo_nombre').val(json.participante.segundo_nombre);
@@ -258,6 +258,11 @@ function validator_form(token_actual) {
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
+            categoria:{
+              validators: {
+                  notEmpty: {message: 'La categoria es requerida'}
+              }
+            },
             tipo_documento: {
                 validators: {
                     notEmpty: {message: 'El tipo de documento de identificación es requerido'}
