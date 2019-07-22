@@ -101,7 +101,21 @@
                                                 <select id='requisito' name="requisito" class="form-control" >                                                                                                                                                            
                                                 </select>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
-                                        </div>                                                                                                                                                    
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Tipos de archivos permitidos<span class="icono_requerido">*</span></label>
+                                                <select id='archivos_permitidos' name="archivos_permitidos[]" class="form-control" multiple="multiple">                                                    
+                                                </select>                                                                                                
+                                            </div>                                                                                                                                                                                                                                                                                                        
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Tamaño máximo permitido<span class="icono_requerido">*</span></label>
+                                                <select id='tamano_permitido' name="tamano_permitido" class="form-control">                                                    
+                                                </select>                                                                                                
+                                            </div>                                                                                                                                                                                                                                                                                                        
+                                        </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Subsanable</label>
@@ -342,6 +356,29 @@
                                             if (json.requisitos.length > 0) {
                                                 $.each(json.requisitos, function (key, requisito) {
                                                     $("#requisito").append('<option value="' + requisito.id + '" >' + requisito.nombre + '</option>');
+                                                });
+                                            }
+                                            
+                                            //Cargo el select de archivos permitidos                                            
+                                            $('#archivos_permitidos').find('option').remove();
+                                            if (json.tipos_archivos_tecnicos.length > 0) {
+                                                $.each(json.tipos_archivos_tecnicos, function (key, archivo_permitido) {
+                                                    var selected = '';
+                                                    //Solo aplica cuando se carga para crear un nuevo registro
+                                                    if(json.convocatoriadocumento.id == null && archivo_permitido == 'pdf')
+                                                    {
+                                                        selected = 'selected="selected"';
+                                                    }
+                                                    $("#archivos_permitidos").append('<option value="' + archivo_permitido + '" '+selected+' >' + archivo_permitido + '</option>');
+                                                });
+                                            }
+                                            
+                                            //Cargo el select de tamaños permitidos                                            
+                                            $('#tamano_permitido').find('option').remove();
+                                            $("#tamano_permitido").append('<option value="">:: Seleccionar ::</option>');
+                                            if (json.tamanos_permitidos.length > 0) {
+                                                $.each(json.tamanos_permitidos, function (key, tamano_permitido) {
+                                                    $("#tamano_permitido").append('<option value="' + tamano_permitido + '" >' + tamano_permitido + '</option>');
                                                 });
                                             }
                                             
@@ -659,10 +696,33 @@
                                         $("#requisito").append('<option value="' + requisito.id + '" >' + requisito.nombre + '</option>');
                                     });
                                 }
+                                
+                                //Cargo el select de archivos permitidos                                            
+                                $('#archivos_permitidos').find('option').remove();
+                                if (json.tipos_archivos_tecnicos.length > 0) {
+                                    $.each(json.tipos_archivos_tecnicos, function (key, archivo_permitido) {
+                                        $("#archivos_permitidos").append('<option value="' + archivo_permitido + '" >' + archivo_permitido + '</option>');
+                                    });
+                                }
+
+                                //Cargo el select de tamaños permitidos                                            
+                                $('#tamano_permitido').find('option').remove();
+                                $("#tamano_permitido").append('<option value="">:: Seleccionar ::</option>');
+                                if (json.tamanos_permitidos.length > 0) {
+                                    $.each(json.tamanos_permitidos, function (key, tamano_permitido) {
+                                        $("#tamano_permitido").append('<option value="' + tamano_permitido + '" >' + tamano_permitido + '</option>');
+                                    });
+                                } 
 
                                 //Cargo el formulario con los datos
                                 $('#form_nuevo_documento').loadJSON(json.convocatoriadocumento);
                                 $("#requisito option[value='"+json.convocatoriadocumento.requisito+"']").prop('selected', true);
+                                $("#archivos_permitidos option:selected").removeAttr("selected");
+                                $("#archivos_permitidos option:selected").prop("selected", false);
+                                $.each(JSON.parse(json.convocatoriadocumento.archivos_permitidos), function(i,e){
+                                    $("#archivos_permitidos option[value='" + e + "']").prop("selected", true);
+                                });
+                                $("#tamano_permitido option[value='"+json.convocatoriadocumento.tamano_permitido+"']").prop('selected', true);                                
                                 $("#subsanable option[value='"+json.convocatoriadocumento.subsanable+"']").prop('selected', true);
                                 $("#obligatorio option[value='"+json.convocatoriadocumento.obligatorio+"']").prop('selected', true);
                                 $("#descripcion").jqteVal(json.convocatoriadocumento.descripcion);
