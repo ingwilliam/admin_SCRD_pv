@@ -318,13 +318,13 @@ $(document).ready(function () {
         $("#diferentes_categorias").on('change', function () {
             if ($(this).val() == "true")
             {                
-                $(".diferentes_categorias").attr("disabled", "disabled");                
+                $(".diferentes_categorias_disable").attr("disabled", "disabled");                
                 $(".diferentes_categorias_button").attr("disabled", "disabled");                                
                 $('.diferentes_categorias_none').css("display", "none");                
             } 
             else
             {
-                $(".diferentes_categorias").removeAttr("disabled");
+                $(".diferentes_categorias_disable").removeAttr("disabled");
                 $(".diferentes_categorias_button").removeAttr("disabled");
                 $('.diferentes_categorias_none').css("display", "block");
             }
@@ -436,20 +436,6 @@ $(document).ready(function () {
                         }
 
                     }
-
-                    if (json.convocatoria.diferentes_categorias == true)
-                    {                
-                        $(".diferentes_categorias").attr("disabled", "disabled");                
-                        $(".diferentes_categorias_button").attr("disabled", "disabled");                                
-                        $('.diferentes_categorias_none').css("display", "none");                
-                    } 
-                    else
-                    {
-                        $(".diferentes_categorias").removeAttr("disabled");
-                        $(".diferentes_categorias_button").removeAttr("disabled");
-                        $('.diferentes_categorias_none').css("display", "block");
-                    }
-
 
                     //Cargo el select de programas
                     $('#programa').find('option').remove();
@@ -847,6 +833,20 @@ $(document).ready(function () {
                         $(".class_bolsa_concursable").attr("disabled", "disabled");
                         $("input[name='numero_estimulos']").removeAttr("disabled");
                         $("#descripcion_bolsa").val("");
+                    }
+
+                    //Funcionalidad para habilitar solo campos para convocatoria especifica
+                    if (json.convocatoria.diferentes_categorias == true)
+                    {                
+                        $(".diferentes_categorias_disable").attr("disabled", "disabled");                
+                        $(".diferentes_categorias_button").attr("disabled", "disabled");                                
+                        $('.diferentes_categorias_none').css("display", "none");                
+                    } 
+                    else
+                    {
+                        $(".diferentes_categorias_disable").removeAttr("disabled");
+                        $(".diferentes_categorias_button").removeAttr("disabled");
+                        $('.diferentes_categorias_none').css("display", "block");
                     }
 
                     //Se realiza este set en cada text area html debido a que jste no es compatible con load json
