@@ -22,18 +22,20 @@
           //Verifica si el token actual tiene acceso de lectura
           permiso_lectura(token_actual, "Menu Participante");
           cargar_datos_formulario(token_actual);
-          //cargar_tabla(token_actual);
+          cargar_tabla(token_actual);
           validator_form(token_actual);
 
           //Si el nivel es superior a bachiller muestra los select areasconocimientos y nucleosbasicos
-          $('#niveleseducativos').change(function(){
-              $("#niveleseducativos").val() > 2? $("#niveleseducativosextra").show() : $("#niveleseducativosextra").hide() ;
+          $('#nivel_educacion').change(function(){
+              $("#nivel_educacion").val() > 2? $("#niveleseducativosextra").show() : $("#niveleseducativosextra").hide() ;
           });
 
             //cargar_select_nucleobasico
-          $('#areasconocimientos').change(function(){
-              cargar_select_nucleobasico(token_actual, $('#areasconocimientos').val() );
+          $('#area_conocimiento').change(function(){
+              cargar_select_nucleobasico(token_actual, $('#area_conocimiento').val() );
           });
+
+
 
         }
 
@@ -47,7 +49,7 @@
     $.ajax({
         type: 'GET',
         url: url_pv + 'PropuestasJurados/search_educacion_formal',
-        data: {"token": token_actual.token, "idc": $("#idc").val()},
+        data: {"token": token_actual.token, "idc": $("#idc").val(), "idregistro": $("#idregistro").val()},
     }).done(function (data) {
 
       switch (data) {
@@ -72,17 +74,17 @@
             //Cargos el select de nivel_educacion
             $('#niveleseducativos').find('option').remove();
             $("#niveleseducativos").append('<option value="">:: Seleccionar ::</option>');
-            if (json.niveleseducativos.length > 0) {
-                $.each(json.niveleseducativos, function (key, array) {
-                    $("#niveleseducativos").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
+            if (json.nivel_educacion.length > 0) {
+                $.each(json.nivel_educacion, function (key, array) {
+                    $("#nivel_educacion").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
                 });
             }
             //Cargos el select de areasconocimientos
-            $('#areasconocimientos').find('option').remove();
-            $("#areasconocimientos").append('<option value="">:: Seleccionar ::</option>');
-            if (json.areasconocimientos.length > 0) {
-                $.each(json.areasconocimientos, function (key, array) {
-                    $("#areasconocimientos").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
+            $('#area_conocimiento').find('option').remove();
+            $("#area_conocimiento").append('<option value="">:: Seleccionar ::</option>');
+            if (json.area_conocimiento.length > 0) {
+                $.each(json.area_conocimiento, function (key, array) {
+                    $("#area_conocimiento").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
                 });
             }
 
@@ -105,9 +107,26 @@
                 }
             });
 
-            $("#formulario_principal").show();
+            //Cargo el formulario con los datos
+            if( json.educacionformal ){
+              $("#graduado").removeClass();
+              $('#ciudad_name').val(json.ciudad_name);
+              $('.formulario_principal').loadJSON(json.educacionformal);
+              json.educacionformal.nivel_educacion > 2? $("#niveleseducativosextra").show() : $("#niveleseducativosextra").hide() ;
+              cargar_select_nucleobasico(token_actual, json.educacionformal.area_conocimiento, json.educacionformal.nucleo_basico );
 
-            cargar_tabla(token_actual);
+              //  console.log(json.educacionformal.graduado );
+              json.educacionformal.graduado ? $("#graduado").attr("checked", "checked") :  $("#graduado").removeAttr("checked");
+              $("#graduado").addClass("check_activar_"+json.educacionformal.graduado+"  activar_registro");
+
+            //  json.educacionformal.graduado ? $("#graduado").addClass("check_activar_true activar_registro") :  $("#graduado").addClass("check_activar_false activar_registro");
+
+              //$(".check_activar_t").attr("checked", "true");
+              //$(".check_activar_f").removeAttr("checked");
+
+            }
+
+            $("#formulario_principal").show();
 
           }else{
 
@@ -125,10 +144,9 @@
 
   }
 
-  function cargar_select_nucleobasico(token_actual, id_areasconocimientos){
+  function cargar_select_nucleobasico(token_actual, id_areasconocimientos, set_value){
 
 
-    // cargo los datos
     $.ajax({
         type: 'GET',
         url: url_pv + 'PropuestasJurados/select_nucleobasico',
@@ -152,13 +170,16 @@
           var json = JSON.parse(data);
 
           //Cargos el select de areasconocimientos
-          $('#nucleosbasicos').find('option').remove();
-          $("#nucleosbasicos").append('<option value="">:: Seleccionar ::</option>');
+          $('#nucleo_basico').find('option').remove();
+          $("#nucleo_basico").append('<option value="">:: Seleccionar ::</option>');
           if ( json != null && json.length > 0) {
               $.each(json, function (key, array) {
-                  $("#nucleosbasicos").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
+                  $("#nucleo_basico").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
               });
           }
+
+          $("#nucleo_basico").val(set_value);
+
           break;
         }
 
@@ -167,9 +188,8 @@
   }
 
   function cargar_tabla(token_actual){
-
-          //Cargar datos en la tabla actual
-              $('#table_list').DataTable({
+    //Cargar datos en la tabla actual
+    $('#table_list').DataTable({
                   "language": {
                       "url": "../../dist/libraries/datatables/js/spanish.json"
                   },
@@ -184,7 +204,7 @@
                     "drawCallback": function (settings) {
                        //$(".check_activar_t").attr("checked", "true");
                        //$(".check_activar_f").removeAttr("checked");
-                       //acciones_ronda(token_actual);
+                       acciones_registro(token_actual);
                       },
                   "columns": [
                       {"data": "Nivel",
@@ -204,7 +224,7 @@
                       },
                       {"data": "Graduado",
                         render: function ( data, type, row ) {
-                              return row.graduado;
+                              return (row.graduado == true? 'Si':'No');
                               },
                       },
 
@@ -228,14 +248,11 @@
 
   }
 
-
   function validator_form(token_actual) {
-
-      
 
       //Se debe colocar debido a que el calendario es un componente diferente
       $('.calendario').on('changeDate show', function (e) {
-          $('.formulario_principal').bootstrapValidator('revalidateField', 'fecha_nacimiento');
+          $('.formulario_principal').bootstrapValidator('revalidateField', 'fecha_graduacion');
       });
       //Validar el formulario
       $('.formulario_principal').bootstrapValidator({
@@ -245,7 +262,7 @@
               validating: 'glyphicon glyphicon-refresh'
           },
           fields: {
-              niveleseducativos:{
+              nivel_educacion:{
                 validators: {
                     notEmpty: {message: 'La categoria es requerida'}
                 }
@@ -265,7 +282,7 @@
                       notEmpty: {message: 'La cidudad es requerida'}
                   }
               },
-              fecha: {
+              fecha_graduacion: {
                   validators: {
                       notEmpty: {message: 'La fecha es requerida'}
                   }
@@ -320,12 +337,104 @@
 
             }else{
                 console.log("Actualizar");
+                console.log("Actualizar -->"+$("#idregistro").val());
+
+                $.ajax({
+                    type: 'PUT',
+                    url: url_pv + 'PropuestasJurados/edit_educacion_formal/' + $("#idregistro").val(),
+                    data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
+                }).done(function (result) {
+
+                  switch (result) {
+                    case 'error':
+                      notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                      break;
+                    case 'error_token':
+                      location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                      break;
+                    case 'acceso_denegado':
+                      notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                      break;
+                    case 'deshabilitado':
+                      notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                      cargar_datos_formulario(token_actual);
+                      break;
+                    default:
+                      notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
+                      cargar_datos_formulario(token_actual);
+                      break;
+                  }
+
+                }
+              );
+
             }
 
-
+          $("#idregistro").val(null);
+          $("#niveleseducativosextra").hide() ;
           $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
           //$form.bootstrapValidator('destroy', true);
           bv.resetForm();
+         cargar_tabla(token_actual);
       });
+
+  }
+
+  //Permite realizar acciones despues de cargar la tabla
+  function acciones_registro(token_actual) {
+
+    //Permite realizar la carga respectiva de cada registro
+    $(".btn_cargar").click(function () {
+        $("#idregistro").val( $(this).attr("title") );
+        // cargo los datos
+        cargar_datos_formulario(token_actual);
+    });
+
+    //Permite activar o eliminar una registro
+    $(".activar_registro").click(function () {
+
+        //Cambio el estado del check
+        var active = "false";
+
+        if ($(this).prop('checked')) {
+            active = "true";
+        }
+
+        //Peticion para inactivar el evento
+        $.ajax({
+            type: 'DELETE',
+            data: {"token": token_actual.token, "modulo": "Menu Participante", "active": active, "idc": $("#idc").val()},
+            url: url_pv + 'PropuestasJurados/delete_educacion_formal/' + $(this).attr("title")
+        }).done(function (result) {
+
+          switch (result) {
+            case 'Si':
+                notify("info", "ok", "Convocatorias:", "Se activó el registro con éxito.");
+                break;
+            case 'No':
+                  notify("info", "ok", "Convocatorias:", "Se desactivó el registro con éxito.");
+                  break;
+            case 'error':
+              notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+              break;
+            case 'error_token':
+              location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+              break;
+            case 'acceso_denegado':
+              notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+              break;
+            case 'deshabilitado':
+              notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+              cargar_datos_formulario(token_actual);
+              break;
+            default:
+              notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
+              cargar_datos_formulario(token_actual);
+              break;
+          }
+
+
+        });
+    });
 
   }

@@ -68,7 +68,7 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Información Básica</h1>
+                        <h1 class="page-header">Experiencia profesional</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                     <div class="panel-body" style="text-align: right">
@@ -86,16 +86,24 @@
                             <div class="panel-body">
                                 <form id="formulario_principal" action="" class="formulario_principal" role="form" method="post" style="display:none;">
                                     <div class="row">
-                                        <div class="col-lg-12">
+                                        <div class="col-lg-6">
                                           <div class="form-group">
-                                            <label>Categoria  <span class="icono_requerido">*</span></label>
+                                            <label>Tipo de entidad  <span class="icono_requerido">*</span></label>
                                             <select class="form-control" name="categoria" id="categoria">
                                                 <option value="">:: Seleccionar ::</option>
-                                                <option value="Experto con título">Experto con título</option>
-                                                <option value="Experto sin título">Experto sin título</option>
+                                                <option value="Experto con título">Pública</option>
+                                                <option value="Experto sin título">Privada</option>
+                                                <option value="Experto sin título">Mixta</option>
                                             </select>
                                           </div>
                                         </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Entidad<span class="icono_requerido">*</span></label>
+                                                <input type="text" id="primer_nombre" name="primer_nombre" class="form-control">
+                                            </div>
+                                        </div>
+
                                     </div>
 
                                     <div class="row">
@@ -327,7 +335,7 @@
 
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
-        <script src='perfil.js'></script>
+        <!--script src='perfil.js'></script-->
         <script src='../../dist/js/verificar_token.js'></script>
 
     </body>

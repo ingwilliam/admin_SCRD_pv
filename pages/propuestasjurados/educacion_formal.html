@@ -86,8 +86,8 @@
                                       <div class="col-lg-6">
                                           <div class="form-group">
                                               <label>Nivel de educación<span class="icono_requerido">*</span></label>
-                                              <select class="form-control" name="niveleseducativos" id="niveleseducativos">
-                                                  <option value="">:: Seleccionar ::</option>
+                                              <select class="form-control" name="nivel_educacion" id="nivel_educacion">
+                                                  <option >:: Seleccionar ::</option>
                                               </select>
                                           </div>
                                       </div>
@@ -102,7 +102,7 @@
                                       <div class="col-lg-6">
                                           <div class="form-group">
                                               <label>Área de conocimineto<span class="icono_requerido">*</span></label>
-                                              <select class="form-control" name="areasconocimientos" id="areasconocimientos">
+                                              <select class="form-control" name="area_conocimiento" id="area_conocimiento">
                                                   <option value="">:: Seleccionar ::</option>
                                               </select>
                                           </div>
@@ -110,8 +110,8 @@
                                       <div class="col-lg-6">
                                           <div class="form-group">
                                               <label>Núcleo básico<span class="icono_requerido">*</span></label>
-                                              <select class="form-control" name="nucleosbasicos" id="nucleosbasicos">
-                                                  <option value="">:: Seleccionar ::</option>
+                                              <select class="form-control" name="nucleo_basico" id="nucleo_basico">
+                                                  <option value="" >:: Seleccionar ::</option>
                                               </select>
                                           </div>
                                       </div>
@@ -136,7 +136,7 @@
                                         <div class="form-group">
                                             <label>Fecha de graduación <span class="icono_requerido">*</span></label>
                                             <div class="input-group date calendario" data-date="" data-date-format="yyyy-mm-dd" data-link-format="yyyy-mm-dd">
-                                                <input class="form-control" id="fecha" name="fecha" size="16" type="text" value="" readonly>
+                                                <input class="form-control" id="fecha_graduacion" name="fecha_graduacion" size="16" type="text" value="" readonly>
                                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                                             </div>
                                         </div>
@@ -144,7 +144,7 @@
                                       <div class="col-lg-6">
                                           <div class="form-group">
                                               <label>Graduado</label>
-                                              <input title="graduado" type="checkbox" id="graduado" name="graduado" value="" >
+                                              <input title="graduado" type="checkbox" id="graduado" name="graduado" >
                                           </div>
                                       </div>
                                   </div>
@@ -227,6 +227,7 @@
         <script src='../../dist/js/main.js'></script>
         <script src='educacion_formal.js'></script>
         <script src='../../dist/js/verificar_token.js'></script>
+        <script src='../../dist/js/jquery.loadJSON.js'></script>
 
     </body>
 </html>
