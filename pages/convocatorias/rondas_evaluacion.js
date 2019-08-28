@@ -773,7 +773,7 @@ function acciones_criterio(token_actual) {
         //Peticion para inactivar el evento
         $.ajax({
             type: 'DELETE',
-            data: {"token": token_actual.token, "modulo": "Rondas", "active": active},
+            data: {"token": token_actual.token, "modulo": "Rondas", "active": active, "convocatoria_ronda": $('#convocatoria_ronda').val()},
             url: url_pv + 'Convocatoriasrondascriterios/delete/' + $(this).attr("title")
         }).done(function (result) {
 
@@ -800,6 +800,11 @@ function acciones_criterio(token_actual) {
             case 'error_puntaje':
               notify("danger", "ok", "Convocatorias:", "La suma de los valores de los criterios sobrepasa el valor máximo permitido");
               break;
+            case 'error_puntaje':
+                notify("danger", "ok", "Convocatorias:", "La suma de los valores de los criterios sobrepasa el valor máximo permitido");
+                $(this).removeAttr("checked");
+                return false;
+                break;
             default:
               break;
           }
@@ -842,7 +847,7 @@ function acciones_criterio(token_actual) {
     });
 
     $("#puntaje_maximo").on("change",function(){
-      console.log("cabio!!!");
+      console.log("cambio!!!");
     })
 
 }

@@ -25,17 +25,17 @@
           cargar_tabla(token_actual);
           validator_form(token_actual);
 
+          //alert($('#nivel_educacion').val());
           //Si el nivel es superior a bachiller muestra los select areasconocimientos y nucleosbasicos
           $('#nivel_educacion').change(function(){
               $("#nivel_educacion").val() > 2? $("#niveleseducativosextra").show() : $("#niveleseducativosextra").hide() ;
+              //alert($('#nivel_educacion').val());
           });
 
             //cargar_select_nucleobasico
           $('#area_conocimiento').change(function(){
               cargar_select_nucleobasico(token_actual, $('#area_conocimiento').val() );
           });
-
-
 
         }
 
@@ -50,6 +50,7 @@
         type: 'GET',
         url: url_pv + 'PropuestasJurados/search_educacion_formal',
         data: {"token": token_actual.token, "idc": $("#idc").val(), "idregistro": $("#idregistro").val()},
+
     }).done(function (data) {
 
       switch (data) {
@@ -200,6 +201,7 @@
                   "ajax":{
                       url : url_pv+"PropuestasJurados/all_educacion_formal",
                       data: {"token": token_actual.token, "idc": $("#idc").val() },
+                      //async: false
                     },
                     "drawCallback": function (settings) {
                        //$(".check_activar_t").attr("checked", "true");
@@ -237,7 +239,8 @@
                       {"data": "aciones",
                                 render: function ( data, type, row ) {
                                             return '<button title="'+row.id+'" type="button" class="btn btn-warning btn_cargar" data-toggle="modal" data-target="#nueva_ronda\">'
-                                                +'<span class="glyphicon glyphicon-edit"></span></button>';
+                                                +'<span class="glyphicon glyphicon-edit"></span></button>'
+                                                +'<button title="'+row.file+'" type="button" class="btn btn-primary download_file"><span class="glyphicon glyphicon-download-alt"></span></button>';
                                             },
                       }
 
@@ -286,7 +289,18 @@
                   validators: {
                       notEmpty: {message: 'La fecha es requerida'}
                   }
-              }
+              },
+
+              /*archivo: {
+                  validators: {
+                      notEmpty: {message: 'El archivo es requerido'},
+                      file: {
+                          extension: 'pdf,doc,xls,docx,xlsx',
+                          type: 'application/pdf,application/msword,application/vnd.ms-excel,application/x-excel,application/excel,application/x-msexcel,,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                          message: 'El archivo seleccionado no es válido'
+                      }
+                  }
+              }*/
             }
 
       }).on('success.form.bv', function (e) {
@@ -298,19 +312,31 @@
           // Get the BootstrapValidator instance
           var bv = $form.data('bootstrapValidator');
 
-          if (typeof $("#idregistro").attr('value') == 'undefined') {
-                console.log("guardar");
+          var formData = new FormData(document.getElementById("formulario_principal"));
+          formData.append("modulo", "Menu Participante");
+          formData.append("token", token_actual.token);
+          formData.append("convocatoria", $("#id").attr('value'));
+          formData.append("anexos", "documentacion");
+
+          console.log("idregistro-->"+$("#idregistro").val());
+
+          if (typeof $("#idregistro").attr('value') == 'undefined' || $("#idregistro").val() =='' ) {
+                console.log("Guardar-->"+$("#idregistro").val());
 
                   $('#graduado').is(":checked") ? $('#graduado').val(true):$('#graduado').val(false);
-
                 //$("#id").val($("#idp").attr('value'));
                 //Se realiza la peticion con el fin de guardar el registro actual
                 $.ajax({
                     type: 'POST',
                     url: url_pv + 'PropuestasJurados/new_educacion_formal',
-                    data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
-                }).done(function (result) {
+                //    data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    async: false
 
+                }).done(function (result) {
 
                   switch (result) {
                     case 'error':
@@ -324,25 +350,34 @@
                       break;
                     case 'deshabilitado':
                       notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                      cargar_datos_formulario(token_actual);
+                      //cargar_datos_formulario(token_actual);
+                      break;
+                    case 'error_creo_alfresco':
+                      notify("danger", "remove", "Usuario:", "Se registró un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                      //cargar_datos_formulario(token_actual);
                       break;
                     default:
                       notify("success", "ok", "Convocatorias:", "Se agregó el registro con éxito.");
-                      cargar_datos_formulario(token_actual);
+                      //cargar_datos_formulario(token_actual);
                       break;
                   }
-
 
                 });
 
             }else{
-                console.log("Actualizar");
+
                 console.log("Actualizar -->"+$("#idregistro").val());
 
                 $.ajax({
-                    type: 'PUT',
+                    //type: 'PUT',
+                    type: 'POST',
                     url: url_pv + 'PropuestasJurados/edit_educacion_formal/' + $("#idregistro").val(),
-                    data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
+                    //data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    async: false
                 }).done(function (result) {
 
                   switch (result) {
@@ -357,11 +392,15 @@
                       break;
                     case 'deshabilitado':
                       notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                      cargar_datos_formulario(token_actual);
+                      //cargar_datos_formulario(token_actual);
                       break;
+                    case 'error_creo_alfresco':
+                        notify("danger", "remove", "Usuario:", "Se registró un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        //cargar_datos_formulario(token_actual);
+                        break;
                     default:
                       notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
-                      cargar_datos_formulario(token_actual);
+                      //cargar_datos_formulario(token_actual);
                       break;
                   }
 
@@ -375,7 +414,8 @@
           $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
           //$form.bootstrapValidator('destroy', true);
           bv.resetForm();
-         cargar_tabla(token_actual);
+          cargar_datos_formulario(token_actual);
+          cargar_tabla(token_actual);
       });
 
   }
@@ -435,6 +475,21 @@
 
 
         });
+    });
+
+    //desarcar archivo
+    $(".download_file").click(function () {
+      //Cargo el id file
+      var cod = $(this).attr('title');
+
+      $.AjaxDownloader({
+          url: url_pv + 'PropuestasJurados/download_file/',
+          data : {
+              cod   : cod,
+              token   : token_actual.token
+          }
+      });
+
     });
 
   }
