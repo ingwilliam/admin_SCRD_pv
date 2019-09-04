@@ -31,7 +31,7 @@ $(document).ready(function () {
             //Realizo la peticion para cargar el formulario
             $.ajax({
                 type: 'GET',
-                data: {"token": token_actual.token, "id": $("#id").attr('value'), "tipo_requisito": "Tecnicos"},
+                data: {"token": token_actual.token, "id": $("#id").attr('value'), "tipo_requisito": "Administrativos"},
                 url: url_pv + 'Convocatorias/search/'
             }).done(function (data) {
                 if (data == 'error_metodo')
@@ -76,6 +76,8 @@ $(document).ready(function () {
                                 
                                 //Asigno la modalidad con el fin de determinar si es para jurados
                                 $("#modalidad").attr('value', json.convocatoria.modalidad);
+                                
+                                
                             }
                         }
                     }
@@ -87,13 +89,13 @@ $(document).ready(function () {
 
             //Cargo el formulario, para crear o editar
             $("#cargar_formulario").click(function () {
-                var tipo_requisito="Tecnicos";
+                var tipo_requisito="Administrativos";
                 //Valido si la modalidad es de jurados
                 if($("#modalidad").val()==2)
                 {
-                    tipo_requisito="JuradosTecnicos";
-                }
-                //Realizo la peticion para cargar el formulario
+                    tipo_requisito="JuradosAdministrativos";
+                }                
+                //Realizo la peticion para cargar el formulario                                
                 $.ajax({
                     type: 'GET',
                     data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "id": $("#id_registro").attr('value'), "tipo_requisito": tipo_requisito},
@@ -180,16 +182,6 @@ function validator_form(token_actual) {
             requisito: {
                 validators: {
                     notEmpty: {message: 'El requisito es requerido'}
-                }
-            },
-            tamano_permitido: {
-                validators: {
-                    notEmpty: {message: 'El tamaño máximo es requerido'}
-                }
-            },
-            archivos_permitidos: {
-                validators: {
-                    notEmpty: {message: 'Los tipos de archivos son requeridos'}
                 }
             },
             descripcion: {
@@ -311,7 +303,7 @@ function cargar_tabla(token_actual)
         "lengthMenu": [20, 30, 40],
         "ajax": {
             url: url_pv + "Convocatoriasdocumentos/all",
-            data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "tipo_requisito": "Tecnicos"}
+            data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "tipo_requisito": "Administrativos"}
         },
         "drawCallback": function (settings) {
             $(".check_activar_t").attr("checked", "true");
@@ -437,7 +429,7 @@ function acciones_categoria(token_actual)
         //Realizo la peticion para cargar el formulario
         $.ajax({
             type: 'GET',
-            data: {"token": token_actual.token, "id": $(this).attr("title"), "tipo_requisito": "Tecnicos"},
+            data: {"token": token_actual.token, "id": $(this).attr("title"), "tipo_requisito": "Administrativos"},
             url: url_pv + 'Convocatoriasdocumentos/search/'
         }).done(function (data) {
             if (data == 'error_metodo')
@@ -477,7 +469,6 @@ function acciones_categoria(token_actual)
                             $("#tamano_permitido").append('<option value="' + tamano_permitido + '" >' + tamano_permitido + '</option>');
                         });
                     }
-
 
                     //Cargo el formulario con los datos
                     $('#form_nuevo_documento').loadJSON(json.convocatoriadocumento);
