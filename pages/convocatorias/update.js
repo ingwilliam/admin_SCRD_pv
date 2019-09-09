@@ -196,6 +196,19 @@ $(document).ready(function () {
                 }
             });
         });
+        
+        //Verifico que la modalidad sea jurado
+        $('#modalidad').on('change', function () {
+            var modalidad = $(this).val();
+            if(modalidad==2)
+            {             
+                $('.modalidad_jurados').css("display", "none");
+            }
+            else
+            {
+                $('.modalidad_jurados').css("display", "block");
+            }
+        });
 
         //Cargar Upz y Barrios
         $('#localidad').on('change', function () {
@@ -365,8 +378,7 @@ $(document).ready(function () {
             } else
             {
                 $("input[name='numero_estimulos']").removeAttr("disabled");
-                $(".class_bolsa_concursable").attr("disabled", "disabled");
-                $("#descripcion_bolsa").val("");
+                $(".class_bolsa_concursable").attr("disabled", "disabled");                
             }
         });
 
@@ -466,8 +478,14 @@ $(document).ready(function () {
                             {
                                 tipo_participante.descripcion = '';
                             }
-
-                            $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + JSON.stringify(tipo_participante).replace(/\"/g, "&quot;") + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                                        
+                            //Esta condicion es para que no muestre los perfiles en la tabla, con el fin de que l unico ingreso sea desde los check
+                            if(tipo_participante.active!=null){
+                                if(tipo_participante.active==true){
+                                    $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + JSON.stringify(tipo_participante).replace(/\"/g, "&quot;") + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                }
+                            }                                                        
+                                                        
                         });
                     }
 
@@ -831,8 +849,7 @@ $(document).ready(function () {
                     } else
                     {
                         $(".class_bolsa_concursable").attr("disabled", "disabled");
-                        $("input[name='numero_estimulos']").removeAttr("disabled");
-                        $("#descripcion_bolsa").val("");
+                        $("input[name='numero_estimulos']").removeAttr("disabled");                        
                     }
 
                     //Funcionalidad para habilitar solo campos para convocatoria especifica
@@ -849,6 +866,16 @@ $(document).ready(function () {
                         $('.diferentes_categorias_none').css("display", "block");
                     }
 
+                    //Valido si la modalidad es de jurados
+                    if(json.convocatoria.modalidad==2)
+                    {             
+                        $('.modalidad_jurados').css("display", "none");
+                    }
+                    else
+                    {
+                        $('.modalidad_jurados').css("display", "block");
+                    }
+                    
                     //Se realiza este set en cada text area html debido a que jste no es compatible con load json
                     $("#descripcion").jqteVal(json.convocatoria.descripcion);
                     $("#justificacion").jqteVal(json.convocatoria.justificacion);
@@ -1045,7 +1072,13 @@ function cargar_tabla_perfiles_participante(token_actual) {
                         {
                             checked = "checked='checked'";
                         }
-                        $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + JSON.stringify(tipo_participante).replace(/\"/g, "&quot;") + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                        
+                        //Esta condicion es para que no muestre los perfiles en la tabla, con el fin de que l unico ingreso sea desde los check
+                        if(tipo_participante.active!=null){
+                            if(tipo_participante.active==true){
+                                $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + JSON.stringify(tipo_participante).replace(/\"/g, "&quot;") + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                            }
+                        }
                     });
 
                     //para habilitar formulario de convocatoria participante
