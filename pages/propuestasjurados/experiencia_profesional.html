@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>::Información Basica::</title>
+        <title>::Experiencia profesional::</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -84,7 +84,8 @@
                                 Formulario para el registro de información
                             </div>
                             <div class="panel-body">
-                                <form id="formulario_principal" action="" class="formulario_principal" role="form" method="post" style="display:none;">
+                                <!--form id="formulario_principal" action="" class="formulario_principal" role="form" method="post" style="display:none;"-->
+                                  <form id="formulario_principal" action="" class="formulario_principal" role="form" method="post" enctype="multipart/form-data" style="display:none;">
                                     <div class="row">
                                         <div class="col-lg-6">
                                           <div class="form-group">
@@ -153,7 +154,7 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Correo Electrónico del Contacto</label>
+                                                <label>Correo electrónico del Contacto</label>
                                                 <input type="text" id="correo" name="correo" class="form-control">
                                             </div>
                                         </div>
@@ -182,8 +183,17 @@
                                                 <input type="text" id="direccion" name="direccion" class="form-control">
                                             </div>
                                         </div>
-
                                     </div>
+
+                                    <div class="row">
+                                      <div class="col-lg-12">
+                                          <div class="form-group">
+                                              <label>Anexo (pdf,doc,docx,xls,xlsx)<span class="icono_requerido">*</span></label>
+                                              <input type="file" name="archivo" >
+                                          </div>
+                                      </div>
+                                    </div>
+
                                     <div class="row">
                                         <div class="col-lg-12" style="text-align: right">
                                           <input type="hidden" id="id" name="id" />
@@ -261,6 +271,9 @@
         <!-- Datepicker animate -->
         <script src="../../dist/libraries/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
         <script src="../../dist/libraries/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.es.js" type="text/javascript"></script>
+
+        <!-- Descargar archivo -->
+        <script src="../../dist/libraries/ajaxdownloader/ajaxdownloader.min.js" type="text/javascript"></script>
 
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>

@@ -35,7 +35,7 @@
    // cargo los datos
    $.ajax({
        type: 'GET',
-       url: url_pv + 'PropuestasJurados/search_experiencia_jurado',
+       url: url_pv + 'PropuestasJurados/search_documento',
        data: {"token": token_actual.token, "idc": $("#idc").val(), "idregistro": $("#idregistro").val()},
 
    }).done(function (data) {
@@ -60,36 +60,18 @@
          if( json.usuario_perfil ){
 
            //Cargos el select de tipo_entidad
-           $('#ambito').find('option').remove();
-           $("#ambito").append('<option value="">:: Seleccionar ::</option>');
-           if (json.ambito.length > 0) {
-               $.each(json.ambito, function (key, array) {
-                   $("#ambito").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
+           $('#categoria_jurado').find('option').remove();
+           $("#categoria_jurado").append('<option value="">:: Seleccionar ::</option>');
+           if (json.tipo.length > 0) {
+               $.each(json.tipo, function (key, array) {
+                   $("#categoria_jurado").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
                });
            }
 
-           //Cargos el autocomplete de ciudad
-           $( "#ciudad_name" ).autocomplete({
-               source: json.ciudad,
-               minLength: 2,
-               select: function (event, ui) {
-                   $(this).val(ui.item ? ui.item : " ");
-                   $("#ciudad").val(ui.item.id);
-               },
-               change: function (event, ui) {
-                   if (!ui.item) {
-                       this.value = '';
-                       $('.formulario_principal').bootstrapValidator('revalidateField', 'ciudad_name');
-                       $("#ciudad").val("");
-                   }
-               //else { Return your label here }
-               }
-           });
 
            //Cargo el formulario con los datos
-           if( json.experienciajurado ){
-             $('#ciudad_name').val(json.ciudad_name);
-             $('.formulario_principal').loadJSON(json.experienciajurado);
+           if( json.documento ){
+             $('.formulario_principal').loadJSON(json.documento);
            }
 
            $("#formulario_principal").show();
@@ -122,7 +104,7 @@
                  "serverSide": true,
                  "lengthMenu": [10, 15, 20],
                  "ajax":{
-                     url : url_pv+"PropuestasJurados/all_experiencia_jurado",
+                     url : url_pv+"PropuestasJurados/all_documento",
                      data: {"token": token_actual.token, "idc": $("#idc").val() },
                      async: false
                    },
@@ -133,31 +115,9 @@
                      },
                  "columns": [
 
-                     {"data": "Nombre convocatoria",
+                     {"data": "Documento",
                        render: function ( data, type, row ) {
-                             return row.nombre;
-                             },
-                     },
-
-                     {"data": "Entidad",
-                       render: function ( data, type, row ) {
-                             return row.entidad;
-                             },
-                     },
-
-                     {"data": "Año",
-                       render: function ( data, type, row ) {
-                             return row.anio;
-                             },
-                     },
-                     {"data": "Ambito",
-                       render: function ( data, type, row ) {
-                             return row.ambito;
-                             },
-                     },
-                     {"data": "Ciudad",
-                       render: function ( data, type, row ) {
-                             return row.ciudad;
+                             return row.categoria_jurado;
                              },
                      },
                      {"data": "Seleccionar",
@@ -188,31 +148,10 @@
                validating: 'glyphicon glyphicon-refresh'
            },
            fields: {
-               nombre:{
+               documento:{
                  validators: {
-                     notEmpty: {message: 'El nombre de la convocatoria es requerido'}
+                     notEmpty: {message: 'El tipo de documento es requerido'}
                  }
-               },
-               entidad: {
-                   validators: {
-                       notEmpty: {message: 'La entidad es requerida'}
-                   }
-               },
-               anio: {
-                   validators: {
-                       notEmpty: {message: 'El año es requerido'},
-                       integer: {message: 'El año debe ser numérico'}
-                   }
-               },
-               ambito: {
-                   validators: {
-                       notEmpty: {message: 'El ambito es requerido'}
-                   }
-               },
-               ciudad_name: {
-                   validators: {
-                       notEmpty: {message: 'La cidudad es requerida'}
-                   }
                },
              }
 
@@ -235,14 +174,14 @@
 
            console.log("idregistro-->"+$("#idregistro").val());
 
-           if (typeof $("#idregistro").attr('value') == 'undefined' || $("#idregistro").val() =='' ) {
+           if (typeof $("#idregistro").attr('value') == 'undefined'  || $("#idregistro").val() =='' ) {
                  console.log("guardar");
 
                  //$("#id").val($("#idp").attr('value'));
                  //Se realiza la peticion con el fin de guardar el registro actual
                  $.ajax({
                      type: 'POST',
-                     url: url_pv + 'PropuestasJurados/new_experiencia_jurado',
+                     url: url_pv + 'PropuestasJurados/new_documento',
                      //data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token,
                      data: formData,
                      cache: false,
@@ -251,6 +190,7 @@
                      async: false
 
                  }).done(function (result) {
+
 
                    switch (result) {
                      case 'error':
@@ -264,7 +204,7 @@
                        break;
                      case 'deshabilitado':
                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                       //cargar_datos_formulario(token_actual);
+                      // cargar_datos_formulario(token_actual);
                        break;
                      case 'error_creo_alfresco':
                        notify("danger", "remove", "Usuario:", "Se registró un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
@@ -272,7 +212,7 @@
                        break;
                      default:
                        notify("success", "ok", "Convocatorias:", "Se agregó el registro con éxito.");
-                      // cargar_datos_formulario(token_actual);
+                       //cargar_datos_formulario(token_actual);
                        break;
                    }
 
@@ -286,7 +226,7 @@
 
                  $.ajax({
                      type: 'POST',
-                     url: url_pv + 'PropuestasJurados/edit_experiencia_jurado/' + $("#idregistro").val(),
+                     url: url_pv + 'PropuestasJurados/edit_documento/' + $("#idregistro").val(),
                      //data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token,
                      data: formData,
                      cache: false,
@@ -361,7 +301,7 @@
          $.ajax({
              type: 'DELETE',
              data: {"token": token_actual.token, "modulo": "Menu Participante", "active": active, "idc": $("#idc").val()},
-             url: url_pv + 'PropuestasJurados/delete_experiencia_jurado/' + $(this).attr("title")
+             url: url_pv + 'PropuestasJurados/delete_publicacion/' + $(this).attr("title")
          }).done(function (result) {
 
            switch (result) {

@@ -171,7 +171,8 @@
                      {"data": "aciones",
                                render: function ( data, type, row ) {
                                            return '<button title="'+row.id+'" type="button" class="btn btn-warning btn_cargar" data-toggle="modal" data-target="#nueva_ronda\">'
-                                               +'<span class="glyphicon glyphicon-edit"></span></button>';
+                                               +'<span class="glyphicon glyphicon-edit"></span></button>'
+                                               +'<button title="'+row.file+'" type="button" class="btn btn-primary download_file"><span class="glyphicon glyphicon-download-alt"></span></button>';
                                            },
                      }
 
@@ -233,7 +234,17 @@
            // Get the BootstrapValidator instance
            var bv = $form.data('bootstrapValidator');
 
-           if (typeof $("#idregistro").attr('value') == 'undefined') {
+           var formData = new FormData(document.getElementById("formulario_principal"));
+           formData.append("modulo", "Menu Participante");
+           formData.append("token", token_actual.token);
+           formData.append("convocatoria", $("#id").attr('value'));
+           formData.append("anexos", "documentacion");
+
+           console.log("formData-->"+formData);
+
+           console.log("idregistro-->"+$("#idregistro").val());
+
+           if (typeof $("#idregistro").attr('value') == 'undefined'  || $("#idregistro").val() =='' ) {
                  console.log("guardar");
 
                  //$("#id").val($("#idp").attr('value'));
@@ -241,7 +252,11 @@
                  $.ajax({
                      type: 'POST',
                      url: url_pv + 'PropuestasJurados/new_publicacion',
-                     data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token,
+                     //data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token,
+                     data: formData,
+                     cache: false,
+                     contentType: false,
+                     processData: false,
                      async: false
 
                  }).done(function (result) {
@@ -259,11 +274,15 @@
                        break;
                      case 'deshabilitado':
                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                       cargar_datos_formulario(token_actual);
+                      // cargar_datos_formulario(token_actual);
+                       break;
+                     case 'error_creo_alfresco':
+                       notify("danger", "remove", "Usuario:", "Se registró un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                       //cargar_datos_formulario(token_actual);
                        break;
                      default:
                        notify("success", "ok", "Convocatorias:", "Se agregó el registro con éxito.");
-                       cargar_datos_formulario(token_actual);
+                       //cargar_datos_formulario(token_actual);
                        break;
                    }
 
@@ -276,9 +295,13 @@
 
 
                  $.ajax({
-                     type: 'PUT',
+                     type: 'POST',
                      url: url_pv + 'PropuestasJurados/edit_publicacion/' + $("#idregistro").val(),
-                     data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token,
+                     //data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token,
+                     data: formData,
+                     cache: false,
+                     contentType: false,
+                     processData: false,
                      async: false
                  }).done(function (result) {
 
@@ -294,11 +317,15 @@
                        break;
                      case 'deshabilitado':
                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                       cargar_datos_formulario(token_actual);
+                       //cargar_datos_formulario(token_actual);
+                       break;
+                     case 'error_creo_alfresco':
+                       notify("danger", "remove", "Usuario:", "Se registró un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                       //cargar_datos_formulario(token_actual);
                        break;
                      default:
                        notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
-                       cargar_datos_formulario(token_actual);
+                       //cargar_datos_formulario(token_actual);
                        break;
                    }
 
@@ -314,6 +341,7 @@
            $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
            //$form.bootstrapValidator('destroy', true);
            bv.resetForm();
+           cargar_datos_formulario(token_actual);
            cargar_tabla(token_actual);
        });
 
@@ -374,6 +402,21 @@
 
 
          });
+     });
+
+     //desarcar archivo
+     $(".download_file").click(function () {
+       //Cargo el id file
+       var cod = $(this).attr('title');
+
+       $.AjaxDownloader({
+           url: url_pv + 'PropuestasJurados/download_file/',
+           data : {
+               cod   : cod,
+               token   : token_actual.token
+           }
+       });
+
      });
 
    }

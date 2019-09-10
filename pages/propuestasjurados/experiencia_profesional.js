@@ -179,7 +179,8 @@
                      {"data": "aciones",
                                render: function ( data, type, row ) {
                                            return '<button title="'+row.id+'" type="button" class="btn btn-warning btn_cargar" data-toggle="modal" data-target="#nueva_ronda\">'
-                                               +'<span class="glyphicon glyphicon-edit"></span></button>';
+                                               +'<span class="glyphicon glyphicon-edit"></span></button>'
+                                               +'<button title="'+row.file+'" type="button" class="btn btn-primary download_file"><span class="glyphicon glyphicon-download-alt"></span></button>';
                                            },
                      }
 
@@ -190,13 +191,17 @@
 
  }
 
-
  function validator_form(token_actual) {
 
        //Se debe colocar debido a que el calendario es un componente diferente
        $('.calendario').on('changeDate show', function (e) {
-           $('.formulario_principal').bootstrapValidator('revalidateField', 'fecha_graduacion');
+           $('.formulario_principal').bootstrapValidator('revalidateField', 'fecha_inicio');
        });
+
+       $('.calendario').on('changeDate show', function (e) {
+           $('.formulario_principal').bootstrapValidator('revalidateField', 'fecha_fin');
+       });
+
        //Validar el formulario
        $('.formulario_principal').bootstrapValidator({
            feedbackIcons: {
@@ -210,19 +215,9 @@
                      notEmpty: {message: 'El tipo es requerido'}
                  }
                },
-               Entidad: {
+               entidad: {
                    validators: {
-                       notEmpty: {message: 'La modalidad es requerida'}
-                   }
-               },
-               nombre: {
-                   validators: {
-                       notEmpty: {message: 'El nombre es requerido'}
-                   }
-               },
-               cargo: {
-                   validators: {
-                       notEmpty: {message: 'La institución es requerida'}
+                       notEmpty: {message: 'La entidad es requerida'}
                    }
                },
                fecha_inicio: {
@@ -235,15 +230,40 @@
                        notEmpty: {message: 'La fecha es requerida'}
                    }
                },
-               numero_hora: {
+               cargo: {
+                    validators: {
+                        notEmpty: {message: 'El cargo es requerido'}
+                    }
+                },
+               funcion: {
                    validators: {
-                       notEmpty: {message: 'La cantidad de horas es requerida'},
-                       integer: {message: 'Solo se admiten números'}
+                       notEmpty: {message: 'La funcion es requerida'},
+                   }
+               },
+               nombre: {
+                   validators: {
+                       notEmpty: {message: 'El nombre es requerido'},
+                   }
+               },
+               correo: {
+                   validators: {
+                       notEmpty: {message: 'El correo electrónico es requerido'},
+                       emailAddress: {message: 'No es un correo electrónico válido'},
+                   }
+               },
+               telefono: {
+                   validators: {
+                       notEmpty: {message: 'El telefono es requerido'},
                    }
                },
                ciudad_name: {
                    validators: {
                        notEmpty: {message: 'La cidudad es requerida'}
+                   }
+               },
+               direccion: {
+                   validators: {
+                       notEmpty: {message: 'La dirección es requerida'},
                    }
                },
              }
@@ -257,17 +277,29 @@
            // Get the BootstrapValidator instance
            var bv = $form.data('bootstrapValidator');
 
-           if (typeof $("#idregistro").attr('value') == 'undefined') {
+           var formData = new FormData(document.getElementById("formulario_principal"));
+           formData.append("modulo", "Menu Participante");
+           formData.append("token", token_actual.token);
+           formData.append("convocatoria", $("#id").attr('value'));
+           formData.append("anexos", "documentacion");
+
+           console.log("formData-->"+formData);
+
+           console.log("idregistro-->"+$("#idregistro").val());
+
+           if (typeof $("#idregistro").attr('value') == 'undefined' || $("#idregistro").val() =='' ) {
                  console.log("guardar");
-
-
 
                  //$("#id").val($("#idp").attr('value'));
                  //Se realiza la peticion con el fin de guardar el registro actual
                  $.ajax({
                      type: 'POST',
                      url: url_pv + 'PropuestasJurados/new_experiencia_laboral',
-                     data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token,
+                     //data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token,
+                     data: formData,
+                     cache: false,
+                     contentType: false,
+                     processData: false,
                      async: false
 
                  }).done(function (result) {
@@ -285,11 +317,15 @@
                        break;
                      case 'deshabilitado':
                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                       cargar_datos_formulario(token_actual);
+                       //cargar_datos_formulario(token_actual);
+                       break;
+                     case 'error_creo_alfresco':
+                       notify("danger", "remove", "Usuario:", "Se registró un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                       //cargar_datos_formulario(token_actual);
                        break;
                      default:
                        notify("success", "ok", "Convocatorias:", "Se agregó el registro con éxito.");
-                       cargar_datos_formulario(token_actual);
+                       //cargar_datos_formulario(token_actual);
                        break;
                    }
 
@@ -297,14 +333,16 @@
                  });
 
              }else{
-                 console.log("Actualizar");
                  console.log("Actualizar -->"+$("#idregistro").val());
 
-
                  $.ajax({
-                     type: 'PUT',
+                     type: 'POST',
                      url: url_pv + 'PropuestasJurados/edit_experiencia_laboral/' + $("#idregistro").val(),
-                     data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token,
+                     //data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token,
+                     data: formData,
+                     cache: false,
+                     contentType: false,
+                     processData: false,
                      async: false
                  }).done(function (result) {
 
@@ -320,11 +358,15 @@
                        break;
                      case 'deshabilitado':
                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                       cargar_datos_formulario(token_actual);
+                       //cargar_datos_formulario(token_actual);
+                       break;
+                     case 'error_creo_alfresco':
+                       notify("danger", "remove", "Usuario:", "Se registró un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                       //cargar_datos_formulario(token_actual);
                        break;
                      default:
                        notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
-                       cargar_datos_formulario(token_actual);
+                       //cargar_datos_formulario(token_actual);
                        break;
                    }
 
@@ -340,12 +382,13 @@
            $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
            //$form.bootstrapValidator('destroy', true);
            bv.resetForm();
+           cargar_datos_formulario(token_actual);
            cargar_tabla(token_actual);
        });
 
    }
 
-   //Permite realizar acciones despues de cargar la tabla
+//Permite realizar acciones despues de cargar la tabla
  function acciones_registro(token_actual) {
 
      //Permite realizar la carga respectiva de cada registro
@@ -400,6 +443,21 @@
 
 
          });
+     });
+
+     //desarcar archivo
+     $(".download_file").click(function () {
+       //Cargo el id file
+       var cod = $(this).attr('title');
+
+       $.AjaxDownloader({
+           url: url_pv + 'PropuestasJurados/download_file/',
+           data : {
+               cod   : cod,
+               token   : token_actual.token
+           }
+       });
+
      });
 
    }

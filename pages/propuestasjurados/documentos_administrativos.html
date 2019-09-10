@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>::Experiencia como jurado::</title>
+        <title>::Documentos::</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -62,13 +62,11 @@
             <div id="page-wrapper">
                 <div class="loading centrado-porcentual"></div>
 
-
-
                 <div id="">
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Experiencia como jurado</h1>
+                        <h1 class="page-header">Documentos</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                     <div class="panel-body" style="text-align: right">
@@ -86,55 +84,25 @@
                             <div class="panel-body">
                                 <!--form id="formulario_principal" action="" class="formulario_principal" role="form" method="post" style="display:none;"-->
                                   <form id="formulario_principal" action="" class="formulario_principal" role="form" method="post" enctype="multipart/form-data" style="display:none;">
+
                                   <div class="row">
-                                      <div class="col-lg-6">
-                                          <div class="form-group">
-                                              <label>Nombre de la convocatoria<span class="icono_requerido">*</span></label>
-                                              <input type="text" id="nombre" name="nombre" class="form-control">
-                                          </div>
-                                      </div>
-                                      <div class="col-lg-6">
-                                          <div class="form-group">
-                                              <label>Entidad</label>
-                                              <input type="text" id="entidad" name="entidad" class="form-control">
-                                          </div>
-                                      </div>
-                                  </div>
-
-                                    <div class="row">
-                                      <div class="col-lg-6">
-                                          <div class="form-group">
-                                              <label>Año<span class="icono_requerido">*</span></label>
-                                              <input type="text" id="anio" name="anio" class="form-control">
-                                          </div>
-                                      </div>
-                                      <div class="col-lg-6">
-                                          <div class="form-group">
-                                            <label>Ambito <span class="icono_requerido">*</span></label>
-                                            <select class="form-control" name="ambito" id="ambito">
-                                                <option value="">:: Seleccionar ::</option>
-                                            </select>
-                                          </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                          <label>Documento <span class="icono_requerido">*</span></label>
+                                          <select class="form-control" name="categoria_jurado" id="categoria_jurado">
+                                              <option value="">:: Seleccionar ::</option>
+                                          </select>
                                         </div>
-                                    </div>
-                                    <div class="row">
+                                      </div>
                                       <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Ciudad<span class="icono_requerido">*</span></label>
-                                                <input type="text" id="ciudad_name" name="ciudad_name" class="form-control">
-                                                <input type="hidden" id="ciudad" name="ciudad" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                      <div class="col-lg-12">
                                           <div class="form-group">
                                               <label>Anexo (pdf,doc,docx,xls,xlsx)<span class="icono_requerido">*</span></label>
                                               <input type="file" name="archivo" >
                                           </div>
                                       </div>
-                                    </div>
+
+                                  </div>
+
 
                                     <div class="row">
                                         <div class="col-lg-12" style="text-align: right">
@@ -154,11 +122,7 @@
                                   <table id="table_list" class="table" style="width: 100%;">
                                       <thead>
                                           <tr>
-                                              <th>Nombre convocatoria</th>
-                                              <th>Entidad</th>
-                                              <th>Año</th>
-                                              <th>Ambito</th>
-                                              <th>Ciudad</th>
+                                              <th>Documento</th>
                                               <th>Seleccionar</th>
                                               <th>Acciones</th>
                                           </tr>
@@ -217,7 +181,7 @@
 
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
-        <script src='experiencia_jurado.js'></script>
+        <script src='documentos_administrativos.js'></script>
         <script src='../../dist/js/verificar_token.js'></script>
         <script src='../../dist/js/jquery.loadJSON.js'></script>
 
