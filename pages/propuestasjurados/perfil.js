@@ -37,8 +37,6 @@ function cargar_datos_formulario(token_actual){
       data: {"token": token_actual.token, "idc": $("#idc").val()},
   }).done(function (data) {
 
-
-
     switch (data) {
       case 'error':
         notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
@@ -339,7 +337,7 @@ function validator_form(token_actual) {
 
                 switch (result) {
                   case 'error':
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    notify("danger", "ok", "Convocatorias:", "Se registró un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                     break;
                   case 'error_token':
                     location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
@@ -349,6 +347,10 @@ function validator_form(token_actual) {
                     break;
                   case 'deshabilitado':
                     notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                    cargar_datos_formulario(token_actual);
+                    break;
+                  case 'error_creo_alfresco':
+                    notify("danger", "remove", "Usuario:", "Se registró un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                     cargar_datos_formulario(token_actual);
                     break;
                   default:

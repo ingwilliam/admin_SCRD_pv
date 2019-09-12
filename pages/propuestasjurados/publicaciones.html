@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>::Experiencia profesional::</title>
+        <title>::Información Basica::</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -68,7 +68,7 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Experiencia profesional</h1>
+                        <h1 class="page-header">Publicaciones</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                     <div class="panel-body" style="text-align: right">
@@ -86,103 +86,55 @@
                             <div class="panel-body">
                                 <!--form id="formulario_principal" action="" class="formulario_principal" role="form" method="post" style="display:none;"-->
                                   <form id="formulario_principal" action="" class="formulario_principal" role="form" method="post" enctype="multipart/form-data" style="display:none;">
-                                    <div class="row">
-                                        <div class="col-lg-6">
+                                  <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Título de la publicación</label>
+                                            <input type="text" id="titulo" name="titulo" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Tema<span class="icono_requerido">*</span></label>
+                                            <input type="text" id="tema" name="tema" class="form-control">
+                                        </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                          <label>Tipo <span class="icono_requerido">*</span></label>
+                                          <select class="form-control" name="tipo" id="tipo">
+                                              <option value="">:: Seleccionar ::</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-6">
                                           <div class="form-group">
-                                            <label>Tipo de entidad  <span class="icono_requerido">*</span></label>
-                                            <select class="form-control" name="tipo_entidad" id="tipo_entidad">
+                                            <label>Formato <span class="icono_requerido">*</span></label>
+                                            <select class="form-control" name="formato" id="formato">
                                                 <option value="">:: Seleccionar ::</option>
-                                                <option value="Experto con título">Pública</option>
-                                                <option value="Experto sin título">Privada</option>
-                                                <option value="Experto sin título">Mixta</option>
                                             </select>
                                           </div>
                                         </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Entidad<span class="icono_requerido">*</span></label>
-                                                <input type="text" id="entidad" name="entidad" class="form-control">
-                                            </div>
-                                        </div>
 
-                                    </div>
-
+                                  </div>
                                     <div class="row">
                                       <div class="col-lg-6">
-                                          <div class="form-group">
-                                              <label>Fecha de inicio <span class="icono_requerido">*</span></label>
-                                              <div class="input-group date calendario" data-date="" data-date-format="yyyy-mm-dd" data-link-format="yyyy-mm-dd">
-                                                  <input class="form-control" id="fecha_inicio" name="fecha_inicio" size="16" type="text" value="" readonly>
-                                                  <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                                              </div>
-                                          </div>
-                                      </div>
-                                      <div class="col-lg-6">
-                                          <div class="form-group">
-                                              <label>Fecha de terminación <span class="icono_requerido">*</span></label>
-                                              <div class="input-group date calendario" data-date="" data-date-format="yyyy-mm-dd" data-link-format="yyyy-mm-dd">
-                                                  <input class="form-control" id="fecha_fin" name="fecha_fin" size="16" type="text" value="" readonly>
-                                                  <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                                              </div>
-                                          </div>
-                                      </div>
-                                    </div>
-
-
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Cargo/Rol<span class="icono_requerido">*</span></label>
-                                                <input type="text" id="cargo" name="cargo" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Funciones principales</label>
-                                                <input type="text" id="funcion" name="funcion" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Nombre de contacto de la Entidad <span class="icono_requerido">*</span></label>
-                                                <input type="text" id="nombre" name="nombre" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Correo electrónico del Contacto</label>
-                                                <input type="text" id="correo" name="correo" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                      <div class="col-lg-6">
-                                          <div class="form-group">
-                                              <label>Teléfono del Contacto</label>
-                                              <input type="text" id="telefono" name="telefono" class="form-control">
-                                          </div>
-                                      </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Ciudad de residencia <span class="icono_requerido">*</span></label>
+                                                <label>Ciudad<span class="icono_requerido">*</span></label>
                                                 <input type="text" id="ciudad_name" name="ciudad_name" class="form-control">
                                                 <input type="hidden" id="ciudad" name="ciudad" class="form-control">
                                             </div>
                                         </div>
 
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label>Dirección<span class="icono_requerido">*</span></label>
-                                                <input type="text" id="direccion" name="direccion" class="form-control">
-                                            </div>
-                                        </div>
+                                      <div class="col-lg-6">
+                                          <div class="form-group">
+                                              <label>Año<span class="icono_requerido">*</span></label>
+                                              <input type="text" id="anio" name="anio" class="form-control">
+                                          </div>
+                                      </div>
                                     </div>
 
                                     <div class="row">
@@ -212,13 +164,10 @@
                                   <table id="table_list" class="table" style="width: 100%;">
                                       <thead>
                                           <tr>
+                                              <th>Titulo</th>
+                                              <th>Tema</th>
+                                              <th>Tipo</th>
                                               <th>Ciudad</th>
-                                              <th>Tipo Entidad</th>
-                                              <th>Entidad</th>
-                                              <th>Cargo/Rol</th>
-                                              <th>Fecha de Inicio</th>
-                                              <th>Fecha de Terminación</th>
-                                              <th>Meses de Experiencia</th>
                                               <th>Seleccionar</th>
                                               <th>Acciones</th>
                                           </tr>
@@ -277,7 +226,7 @@
 
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
-        <script src='experiencia_profesional.js'></script>
+        <script src='publicaciones.js'></script>
         <script src='../../dist/js/verificar_token.js'></script>
         <script src='../../dist/js/jquery.loadJSON.js'></script>
 
