@@ -128,6 +128,10 @@
      //Cargar datos en la tabla actual
      $('#table_list_b').DataTable().clear().destroy();
 
+
+      $('#postular').removeProp('disabled');
+      $('#postular').removeAttr('disabled');
+
      $('#table_list_b').DataTable({
                    "language": {
                        "url": "../../dist/libraries/datatables/js/spanish.json"
@@ -197,8 +201,12 @@
 
      //Permite realizar la carga respectiva de cada registro
      $(".btn_cargar_b").click(function () {
+       $('#postular').removeProp('disabled');
+       $('#postular').removeAttr('disabled');
 
          $("#idregistro").val( $(this).attr("id") );
+
+         $("#lista_perfiles").find('div').remove();
 
          // cargo los datos
          cargar_datos_perfiles(token_actual);
@@ -207,6 +215,9 @@
    }
 
  function cargar_datos_perfiles(token_actual){
+    //$("#postular").attr("disabled","disabled");
+    $('#postular').removeProp('disabled');
+    $('#postular').removeAttr('disabled');
 
      // cargo los datos
      $.ajax({
@@ -262,6 +273,9 @@
                        );
                      });
 
+                     $('#postular').removeProp('disabled');
+                     $('#postular').removeAttr('disabled');
+
                }else{
                  $("#lista_perfiles").append(
                    '  <div class="row"> '
@@ -273,7 +287,9 @@
                 //$("#postular").prop("disabled");
                }
 
-
+               $('#postular').removeProp('disabled');
+               $('#postular').removeAttr('disabled');
+               
            break;
          }
 
