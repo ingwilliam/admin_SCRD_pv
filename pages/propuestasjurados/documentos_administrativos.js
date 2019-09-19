@@ -301,7 +301,7 @@
          $.ajax({
              type: 'DELETE',
              data: {"token": token_actual.token, "modulo": "Menu Participante", "active": active, "idc": $("#idc").val()},
-             url: url_pv + 'PropuestasJurados/delete_publicacion/' + $(this).attr("title")
+             url: url_pv + 'PropuestasJurados/delete_documento/' + $(this).attr("title")
          }).done(function (result) {
 
            switch (result) {
