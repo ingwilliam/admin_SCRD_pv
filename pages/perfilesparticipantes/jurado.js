@@ -87,6 +87,7 @@ function validator_form(token_actual) {
             }
         }
     }).on('success.form.bv', function (e) {
+
         // Prevent form submission
         e.preventDefault();
         // Get the form instance
@@ -95,7 +96,7 @@ function validator_form(token_actual) {
         // Get the BootstrapValidator instance
         var bv = $form.data('bootstrapValidator');
 
-        if (typeof $("#idd").attr('value') === 'undefined') {
+        if ( typeof $("#idd").attr('value') === 'undefined' || $("#idd").val() == null || $("#idd").val() == '') {
 
               //Se realiza la peticion con el fin de guardar el registro actual
               $.ajax({
@@ -209,8 +210,9 @@ function cargar_datos_formulario(token_actual) {
               var json = JSON.parse(data);
 
                 //$('#formulario_principal').loadJSON(json.participante);
-              //  console.log(typeof json.participante.id);
+               //console.log(typeof json.participante.id);
                 if ( json.participante) {
+
                   $("#idd").val(json.participante.id);
 
                   $('#numero_documento').val(json.participante.numero_documento);
@@ -220,14 +222,20 @@ function cargar_datos_formulario(token_actual) {
                   $('#segundo_apellido').val(json.participante.segundo_apellido);
                   $('#fecha_nacimiento').val(json.participante.fecha_nacimiento);
 
-                  $('#ciudad_nacimiento_name').val(json.participante.ciudad_nacimiento.label);
-                  $('#ciudad_nacimiento').val(json.participante.ciudad_nacimiento.id);
+                  if(json.participante.ciudad_nacimiento != null){
+                    $('#ciudad_nacimiento_name').val(json.participante.ciudad_nacimiento.label);
+                    $('#ciudad_nacimiento').val(json.participante.ciudad_nacimiento.id);
+                  }
 
-                  $('#ciudad_residencia_name').val(json.participante.ciudad_residencia.label);
-                  $('#ciudad_residencia').val(json.participante.ciudad_residencia.id);
+                  if(json.participante.ciudad_residencia != null){
+                    $('#ciudad_residencia_name').val(json.participante.ciudad_residencia.label);
+                    $('#ciudad_residencia').val(json.participante.ciudad_residencia.id);
+                  }
 
-                  $('#barrio_residencia_name').val(json.participante.barrio_residencia.label);
-                  $('#barrio_residencia').val(json.participante.barrio_residencia.id);
+                  if(json.participante.barrio_residencia != null ){
+                    $('#barrio_residencia_name').val(json.participante.barrio_residencia.label);
+                    $('#barrio_residencia').val(json.participante.barrio_residencia.id);
+                  }
 
                   $('#direccion_residencia').val(json.participante.direccion_residencia);
                   $('#direccion_correspondencia').val(json.participante.direccion_correspondencia);

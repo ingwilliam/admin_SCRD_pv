@@ -60,7 +60,7 @@ function cargar_datos_formulario(token_actual){
         if( json.participante ){
 
           $("#idp").val(json.participante.id);
-          console.log("tipo-->"+json.participante.tipo);
+          //console.log("tipo-->"+json.participante.tipo);
           $('#categoria').val(json.categoria);
           $('#numero_documento').val(json.participante.numero_documento);
           $('#primer_nombre').val(json.participante.primer_nombre);
@@ -69,15 +69,21 @@ function cargar_datos_formulario(token_actual){
           $('#segundo_apellido').val(json.participante.segundo_apellido);
           $('#fecha_nacimiento').val(json.participante.fecha_nacimiento);
 
-          $('#ciudad_nacimiento_name').val(json.participante.ciudad_nacimiento.label);
-          $('#ciudad_nacimiento').val(json.participante.ciudad_nacimiento.id);
+          if(json.participante.ciudad_nacimiento != null){
+            $('#ciudad_nacimiento_name').val(json.participante.ciudad_nacimiento.label);
+            $('#ciudad_nacimiento').val(json.participante.ciudad_nacimiento.id);
+          }
 
-          $('#ciudad_residencia_name').val(json.participante.ciudad_residencia.label);
-          $('#ciudad_residencia').val(json.participante.ciudad_residencia.id);
+          if(json.participante.ciudad_residencia != null){
+            $('#ciudad_residencia_name').val(json.participante.ciudad_residencia.label);
+            $('#ciudad_residencia').val(json.participante.ciudad_residencia.id);
+          }
 
-          $('#barrio_residencia_name').val(json.participante.barrio_residencia.label);
-          $('#barrio_residencia').val(json.participante.barrio_residencia.id);
-
+          if(json.participante.barrio_residencia != null ){
+            $('#barrio_residencia_name').val(json.participante.barrio_residencia.label);
+            $('#barrio_residencia').val(json.participante.barrio_residencia.id);
+          }
+          
           $('#direccion_residencia').val(json.participante.direccion_residencia);
           $('#direccion_correspondencia').val(json.participante.direccion_correspondencia);
           $('#numero_telefono').val(json.participante.numero_telefono);
@@ -242,7 +248,7 @@ function cargar_datos_formulario(token_actual){
 
 function validator_form(token_actual) {
 
-    console.log("Actualizar registro");
+
 
     //Se debe colocar debido a que el calendario es un componente diferente
     $('.calendario').on('changeDate show', function (e) {
@@ -326,6 +332,7 @@ function validator_form(token_actual) {
         var bv = $form.data('bootstrapValidator');
 
         if (typeof $("#idp").attr('value') !== 'undefined') {
+          //  console.log("Actualizar registro");
               $("#id").val($("#idp").attr('value'));
               //Se realiza la peticion con el fin de guardar el registro actual
               $.ajax({
