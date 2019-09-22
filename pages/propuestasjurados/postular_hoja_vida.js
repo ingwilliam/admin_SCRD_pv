@@ -24,22 +24,33 @@
          cargar_datos_formulario(token_actual);
 
          $("#postular").click(function(){
-
-
            if( $("#acepta").prop('checked') ){
-             if(confirm("Esta seguro de postular su hoja de vida registrada hasta el momento?")){
 
-               aceptar_terminos(token_actual);
+               $("#mensaje").show();
+               $("#bcancelar").show();
+               $("#baceptar").show();
 
-             }
+               $("#mensaje2").hide();
+               $("#aceptar").hide();
+
            }else{
-             alert("No ha aceptado los terminos de participación");
+
+                $("#mensaje").hide();
+                $("#bcancelar").hide();
+                $("#baceptar").hide();
+
+                $("#mensaje2").show();
+                $("#aceptar").show();
 
            }
 
          });
 
+          $("#baceptar").click(function(){
+            aceptar_terminos(token_actual);
+            $('#exampleModal').modal('toggle');
 
+          });
 
        }
 
@@ -47,9 +58,8 @@
 
  function cargar_datos_formulario(token_actual){
 
-
-  PDFObject.embed("http://192.168.56.101:8080/share/page/document-details?nodeRef=workspace://SpacesStore/bbbfa389-1067-4564-9c3c-878381e09cb5", "#documento");
-
+   var documento;
+   //PDFObject.embed("http://192.168.56.101:8080/share/page/context/mine/document-details?nodeRef=workspace://SpacesStore/8be63cb8-bb24-41e7-a7fa-e6e24e0ab0e0", "#documento");
 
   //datos de la propuesta
   $.ajax({
@@ -60,14 +70,20 @@
 
     var json = JSON.parse(data);
 
-    console.log(json);
+    documento = json.documento.id_alfresco;
 
-    if(json.estado == 7){
+    if(documento){
+
+    }
+
+    if(json.propuesta.estado == 7){
+
       $("#estado").hide();
       $("#terminos").show();
       $("#formulario_principal").show();
     }
-    if(json.estado == 8){
+
+    if(json.propuesta.estado == 8){
       $("#estado").show();
       $("#terminos").hide();
       $("#formulario_principal").hide();
@@ -77,10 +93,21 @@
   });
 
 
+  $(".download_file").click(function () {
+    //Cargo el id file
 
+    $.AjaxDownloader({
+        url: url_pv + 'PropuestasJurados/download_file/',
+        data : {
+            cod   : documento,
+            token   : token_actual.token
+        }
+    });
 
+  });
 
  }
+
 
  function aceptar_terminos(token_actual){
    //alert("modificando estado de la propuesta"+$("#idc").val());
@@ -91,6 +118,7 @@
        url: url_pv + 'PropuestasJurados/postular'
    }).done( function(result) {
 
+     cargar_datos_formulario(token_actual);
 
    });
 
