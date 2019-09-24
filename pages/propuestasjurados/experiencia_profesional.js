@@ -68,6 +68,15 @@
                });
            }
 
+           //Cargos el select de tipo_entidad
+           $('#linea').find('option').remove();
+           $("#linea").append('<option value="">:: Seleccionar ::</option>');
+           if (json.linea.length > 0) {
+               $.each(json.linea, function (key, array) {
+                   $("#linea").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
+               });
+           }
+
            //Cargos el autocomplete de ciudad
            $( "#ciudad_name" ).autocomplete({
                source: json.ciudad,
@@ -225,35 +234,21 @@
                        notEmpty: {message: 'La fecha es requerida'}
                    }
                },
-               fecha_fin: {
-                   validators: {
-                       notEmpty: {message: 'La fecha es requerida'}
-                   }
-               },
-               cargo: {
+
+               linea: {
                     validators: {
-                        notEmpty: {message: 'El cargo es requerido'}
+                        notEmpty: {message: 'La línea es requerida'}
                     }
                 },
                funcion: {
                    validators: {
-                       notEmpty: {message: 'La funcion es requerida'},
-                   }
-               },
-               nombre: {
-                   validators: {
-                       notEmpty: {message: 'El nombre es requerido'},
+                       notEmpty: {message: 'Las funciones son requeridas'},
                    }
                },
                correo: {
                    validators: {
                        notEmpty: {message: 'El correo electrónico es requerido'},
                        emailAddress: {message: 'No es un correo electrónico válido'},
-                   }
-               },
-               telefono: {
-                   validators: {
-                       notEmpty: {message: 'El telefono es requerido'},
                    }
                },
                ciudad_name: {

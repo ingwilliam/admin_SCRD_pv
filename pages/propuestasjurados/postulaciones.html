@@ -78,32 +78,42 @@
                 </div>
 
                 <!--Modal informacion perfiles-->
-                <div class="modal fade" id="perfil_info">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
+                <!-- Modal -->
+                <div class="modal fade" id="perfil_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalScrollableTitle">Perfiles</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
 
-                            <!-- cabecera del diálogo -->
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title">Perfiles</h4>
+                        <form id="form_nuevo_criterio" action="" class="form_nuevo_criterio" role="form" >
+
+                            <div id="lista_perfiles">
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12" style="text-align: right">
+                                  <!--button type="button" id="aceptar" class="btn btn-primary"  style="display:none;">Aceptar</button>
+                                  <button type="button" id="postular" class="btn btn-primary"  style="display:none;">Postular</button-->
+                                </div>
                             </div>
 
-                            <!-- cuerpo del diálogo -->
-                            <div class="modal-body">
-                                <form id="form_nuevo_criterio" action="" class="form_nuevo_criterio" role="form" >
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+                        <!--button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button--->
+                        <button type="button" id="aceptar" class="btn btn-primary"  style="display:none;">Cerrar</button>
 
-                                    <div id="lista_perfiles">
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-12" style="text-align: right">
-                                          <button type="button" id="postular" class="btn btn-default">Postular</button>
-                                        </div>
-                                    </div>
+                        <button type="button" id="cancelar" class="btn btn-secondary" data-dismiss="modal"  style="display:none;">Cancelar</button>
+                        <button type="button" id="postular" class="btn btn-primary"  style="display:none;">Postular</button>
 
-                                </form>
-                            </div>
-                        </div>
+                      </div>
                     </div>
+                  </div>
                 </div>
 
 
@@ -199,7 +209,7 @@
                                                     <th>Enfoque</th>
                                                     <th>Nombre</th>
                                                     <th>¿Activar?</th>
-                                                  
+
                                                 </tr>
                                               </thead>
                                           </table>

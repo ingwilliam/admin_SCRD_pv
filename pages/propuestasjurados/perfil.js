@@ -15,7 +15,7 @@
 
      //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
      if ($.isEmptyObject(token_actual)) {
-         location.href = '../../index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+         location.href = url_pv_admin+'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
      } else
      {
          //Verifica si el token actual tiene acceso de lectura
@@ -45,7 +45,7 @@ function cargar_datos_formulario(token_actual){
           notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
           break;
       case 'error_token':
-        location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
         break;
       case 'acceso_denegado':
         notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
@@ -55,6 +55,7 @@ function cargar_datos_formulario(token_actual){
         cargar_datos_formulario(token_actual);
         break;
       default:
+
         var json = JSON.parse(data);
 
         if( json.participante ){
@@ -83,7 +84,7 @@ function cargar_datos_formulario(token_actual){
             $('#barrio_residencia_name').val(json.participante.barrio_residencia.label);
             $('#barrio_residencia').val(json.participante.barrio_residencia.id);
           }
-          
+
           $('#direccion_residencia').val(json.participante.direccion_residencia);
           $('#direccion_correspondencia').val(json.participante.direccion_correspondencia);
           $('#numero_telefono').val(json.participante.numero_telefono);
@@ -232,8 +233,13 @@ function cargar_datos_formulario(token_actual){
 
         }else{
 
+          //console.log(notify());
+
           //window.location.href = url_pv_admin+"pages/perfilesparticipantes/jurado.html";
-          notify("danger", "ok", "Convocatorias:", "No tiene el perfil de participante para esta convocatoria");
+        //  notify("danger", "ok", "Convocatorias:", "No tiene el perfil de participante para esta convocatoria.");
+        //  location.href = url_pv_admin+"/perfilesparticipantes/jurado.html";
+          //location.href = url_pv_admin + 'pages/perfilesparticipantes/jurado.html?msg=No tiene el perfil de participante para esta convocatoria.&msg_tipo=danger';
+         window.location.href = url_pv_admin+"pages/perfilesparticipantes/jurado.html?msg=No tiene el perfil de participante para esta convocatoria. Debe registrar los datos del perfil.&msg_tipo=danger";
 
         }
 
@@ -347,7 +353,7 @@ function validator_form(token_actual) {
                     notify("danger", "ok", "Convocatorias:", "Se registró un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                     break;
                   case 'error_token':
-                    location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                     break;
                   case 'acceso_denegado':
                     notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
