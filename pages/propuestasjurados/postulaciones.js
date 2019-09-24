@@ -11,6 +11,10 @@
     $("#idc").val($("#id").val());
     $("#id").val(null);
 
+    $('#table_list_b').DataTable({
+       "responsive": true
+     });
+
      //Verifico si el token exite en el cliente y verifico que el token este activo en el servidor
      var token_actual = getLocalStorage(name_local_storage);
 
@@ -140,6 +144,7 @@
                    "destroy": true,
                    "serverSide": true,
                    "lengthMenu": [5,10],
+                   "responsive": true,
                    "ajax":{
                        url : url_pv+"PropuestasJurados/postulacion_search_convocatorias",
                        data: {"token": token_actual.token, "area": $("#area").val(), "idc": $("#idc").val() },
@@ -201,15 +206,16 @@
 
      //Permite realizar la carga respectiva de cada registro
      $(".btn_cargar_b").click(function () {
-       $('#postular').removeProp('disabled');
-       $('#postular').removeAttr('disabled');
-
          $("#idregistro").val( $(this).attr("id") );
 
          $("#lista_perfiles").find('div').remove();
 
          // cargo los datos
          cargar_datos_perfiles(token_actual);
+     });
+
+     $("#aceptar").click(function(){
+       $('#perfil_info').modal('toggle');
      });
 
    }
@@ -253,7 +259,7 @@
                          '  <div class="row"> <div class="col-lg-12">'
                          +'   <h4>Perfil '+(key+1)+'</h4></div>'
                          +'   <div class="col-lg-6"><div class="form-group">'
-                         +'       <label>Descripcion perfil</label>'
+                         +'       <label>Descripción perfil</label>'
                          +'       <textarea id="descripcion_perfil" name="descripcion_perfil" class="form-control" rows="3" readonly style="resize:none">'+perfil_jurado.descripcion_perfil+'</textarea>'
                          +'   </div></div>'
                          +'   <div class="col-lg-6"><div class="form-group">'
@@ -273,8 +279,10 @@
                        );
                      });
 
-                     $('#postular').removeProp('disabled');
-                     $('#postular').removeAttr('disabled');
+                     $("#postular").show();
+                     $("#cancelar").show();
+
+                     $("#aceptar").hide();
 
                }else{
                  $("#lista_perfiles").append(
@@ -283,13 +291,15 @@
                    +'</div>'
                  );
 
-                 $("#postular").attr("disabled","disabled");
-                //$("#postular").prop("disabled");
+                 $("#postular").hide();
+                  $("#cancelar").hide();
+                 $("#aceptar").show();
+
+
                }
 
-               $('#postular').removeProp('disabled');
-               $('#postular').removeAttr('disabled');
-               
+
+
            break;
          }
 
@@ -347,7 +357,9 @@
                      "destroy": true,
                      "serverSide": true,
                      "lengthMenu": [5,10,15],
-                      "bFilter":false,
+                     "bFilter":false,
+                     "info":     false,
+                     "responsive": true,
                      "ajax":{
                          url : url_pv+"PropuestasJurados/search_postulacion",
                          data: {"token": token_actual.token,  "idc": $("#idc").val() },

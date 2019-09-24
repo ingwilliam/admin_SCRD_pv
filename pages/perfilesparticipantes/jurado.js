@@ -88,6 +88,8 @@ function validator_form(token_actual) {
         }
     }).on('success.form.bv', function (e) {
 
+    //  alert("idd-->"+typeof $("#idd").attr('value')+" idd-->>"+$("#idd").val() )
+
         // Prevent form submission
         e.preventDefault();
         // Get the form instance
@@ -98,90 +100,89 @@ function validator_form(token_actual) {
 
         if ( typeof $("#idd").attr('value') === 'undefined' || $("#idd").val() == null || $("#idd").val() == '') {
 
+        //  alert("nuevo!!!");
               //Se realiza la peticion con el fin de guardar el registro actual
               $.ajax({
                   type: 'POST',
                   url: url_pv + 'Jurados/new',
                   data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
-              }).done(function (result) {
+              }).done(function (data) {
 
-                  if (result == 'error')
-                  {
-                      notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                  } else
-                  {
-                      if (result == 'error_token')
-                      {
-                          location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                      }
-                      else
-                      {
-                          if (result == 'acceso_denegado')
-                          {
-                              notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                          } else
-                          {
-                              if (isNaN(result)) {
-                                  notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                              } else
-                              {
-                                  notify("success", "ok", "Convocatorias:", "Se creó el registro con éxito.");
-                                  //Cargar datos de la tabla de rondas
-                                  //cargar_tabla_criterio($("#convocatoria_ronda").attr('value'),token_actual);
-                                  $("#idd").val(result);
-                                      cargar_datos_formulario(token_actual);
 
-                              }
-                          }
-                      }
-                  }
-
+                switch (data) {
+                  case 'error':
+                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    break;
+                  case 'error_metodo':
+                      notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                      break;
+                  case 'error_token':
+                    location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    break;
+                  case 'acceso_denegado':
+                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                    break;
+                  case 'deshabilitado':
+                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                    cargar_datos_formulario(token_actual);
+                    break;
+                  case 'error_duplicado':
+                      notify("danger", "remove", "Usuario:", "Ya existe un usuario registrado con el mismo documento de identificación.");
+                      cargar_datos_formulario(token_actual);
+                      break;
+                  default:
+                      notify("success", "ok", "Convocatorias:", "Se creó el registro con éxito.");
+                      //Cargar datos de la tabla de rondas
+                      //cargar_tabla_criterio($("#convocatoria_ronda").attr('value'),token_actual);
+                      $("#idd").val(data);
+                      cargar_datos_formulario(token_actual);
+                   break;
+                 }
 
               });
 
           }else{
-            //Realizo la peticion con el fin de editar el registro actual
 
-            //Se realiza la peticion con el fin de guardar el registro actual
+            //  alert("editado!!!");
+            //Realizo la peticion con el fin de editar el registro actual
             $.ajax({
                 type: 'POST',
                 url: url_pv + 'Jurados/edit/'+$("#idd").val(),
                 data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
-            }).done(function (result) {
+            }).done(function (data) {
 
-                if (result == 'error')
-                {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                } else
-                {
-                    if (result == 'error_token')
-                    {
+                    switch (data) {
+                      case 'error':
+                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        break;
+                      case 'error_metodo':
+                          notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                          break;
+                      case 'error_token':
                         location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                    }
-                    else
-                    {
-                        if (result == 'acceso_denegado')
-                        {
-                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                        } else
-                        {
-                            if (isNaN(result)) {
-                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                            } else
-                            {
-                                notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
-                                //Cargar datos de la tabla de rondas
-                                //cargar_tabla_criterio($("#convocatoria_ronda").attr('value'),token_actual);
-                                $("#idd").val(result);
-                                  cargar_datos_formulario(token_actual);
-                            }
-                        }
-                    }
-                }
+                        break;
+                      case 'acceso_denegado':
+                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                        break;
+                      case 'deshabilitado':
+                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                        cargar_datos_formulario(token_actual);
+                        break;
+                      case 'error_duplicado':
+                        notify("danger", "remove", "Usuario:", "Ya existe un usuario registrado con el mismo documento de identificación.");
+                        cargar_datos_formulario(token_actual);
+                        break;
+                      default:
+                        notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
+                        //Cargar datos de la tabla de rondas
+                        //cargar_tabla_criterio($("#convocatoria_ronda").attr('value'),token_actual);
+                        $("#idd").val(data);
+                        cargar_datos_formulario(token_actual);
+                       break;
+                     }
 
             });
           }
-
 
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         //$form.bootstrapValidator('destroy', true);
