@@ -18,7 +18,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'GET',
             data: {"token": token_actual.token, "id": $("#id").attr('value')},
-            url: url_pv + 'Personasnaturales/search/'
+            url: url_pv + 'Personasjuridicas/search/'
         }).done(function (data) {
             if (data == 'error_metodo')
             {
@@ -34,69 +34,16 @@ $(document).ready(function () {
                     
                     //Cargos el select de tipo de documento
                     $('#tipo_documento').find('option').remove();
-                    $("#tipo_documento").append('<option value="">:: Seleccionar ::</option>');
                     if (json.tipo_documento.length > 0) {
                         $.each(json.tipo_documento, function (key, array) {
-                            var selected = '';
-                            if(array.id == json.participante.tipo_documento)
+                            if(array.id==7)
                             {
-                                selected = 'selected="selected"';
-                            }
-                            $("#tipo_documento").append('<option value="' + array.id + '" '+selected+' >' + array.descripcion + '</option>');
+                                selected = 'selected="selected"';                                
+                                $("#tipo_documento").append('<option value="' + array.id + '" '+selected+' >' + array.descripcion + '</option>');
+                            }                            
                         });
                     }
-                    //Cargos el select de sexo
-                    $('#sexo').find('option').remove();
-                    $("#sexo").append('<option value="">:: Seleccionar ::</option>');
-                    if (json.sexo.length > 0) {
-                        $.each(json.sexo, function (key, array) {
-                            var selected = '';
-                            if(array.id == json.participante.sexo)
-                            {
-                                selected = 'selected="selected"';
-                            }
-                            $("#sexo").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-                        });
-                    }
-                    //Cargos el select de orientacion sexual
-                    $('#orientacion_sexual').find('option').remove();
-                    $("#orientacion_sexual").append('<option value="">:: Seleccionar ::</option>');
-                    if (json.orientacion_sexual.length > 0) {
-                        $.each(json.orientacion_sexual, function (key, array) {
-                            var selected = '';
-                            if(array.id == json.participante.orientacion_sexual)
-                            {
-                                selected = 'selected="selected"';
-                            }
-                            $("#orientacion_sexual").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-                        });
-                    }
-                    //Cargos el select de identidad genero
-                    $('#identidad_genero').find('option').remove();
-                    $("#identidad_genero").append('<option value="">:: Seleccionar ::</option>');
-                    if (json.orientacion_sexual.length > 0) {
-                        $.each(json.identidad_genero, function (key, array) {
-                            var selected = '';
-                            if(array.id == json.participante.identidad_genero)
-                            {
-                                selected = 'selected="selected"';
-                            }
-                            $("#identidad_genero").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-                        });
-                    }
-                    //Cargos el select de grupo etnico
-                    $('#grupo_etnico').find('option').remove();
-                    $("#grupo_etnico").append('<option value="">:: Seleccionar ::</option>');
-                    if (json.grupo_etnico.length > 0) {
-                        $.each(json.grupo_etnico, function (key, array) {
-                            var selected = '';
-                            if(array.id == json.participante.grupo_etnico)
-                            {
-                                selected = 'selected="selected"';
-                            }
-                            $("#grupo_etnico").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-                        });
-                    }
+                    
                     //Cargos el select de estrato
                     $('#estrato').find('option').remove();
                     $("#estrato").append('<option value="">:: Seleccionar ::</option>');
@@ -108,6 +55,20 @@ $(document).ready(function () {
                                 selected = 'selected="selected"';
                             }
                             $("#estrato").append('<option value="' + array + '" '+selected+' >' + array + '</option>');
+                        });
+                    }
+                    
+                    //Cargos el select de estrato
+                    $('#tipo_sede').find('option').remove();
+                    $("#tipo_sede").append('<option value="">:: Seleccionar ::</option>');
+                    if (json.tipo_sede.length > 0) {
+                        $.each(json.tipo_sede, function (key, array) {
+                            var selected = '';
+                            if(array == json.participante.tipo_sede)
+                            {
+                                selected = 'selected="selected"';
+                            }
+                            $("#tipo_sede").append('<option value="' + array + '" '+selected+' >' + array + '</option>');
                         });
                     }
                     
@@ -184,9 +145,11 @@ $(document).ready(function () {
                             $("#barrio_residencia_name").val(array.value);                            
                         }                        
                     });
-                    
+                                                            
                     //Cargo el formulario con los datos
                     $('#formulario_principal').loadJSON(json.participante);
+                    
+                    $("#cuenta_sede option[value='" + json.participante.cuenta_sede + "']").prop('selected', true);
                 }
 
             }
@@ -215,7 +178,7 @@ function validator_form(token_actual) {
             },
             numero_documento: {
                 validators: {
-                    notEmpty: {message: 'El número de documento de identificación es requerido'},
+                    notEmpty: {message: 'El número de Nit es requerido'},
                     numeric: {message: 'Debe ingresar solo numeros'}
                 }
             },
@@ -224,29 +187,31 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'El primer nombre es requerido'}
                 }
             },
-            primer_apellido: {
+            dv: {
                 validators: {
-                    notEmpty: {message: 'El primer apellido es requerido'}
+                    notEmpty: {message: 'El dv es requerido'},
+                    numeric: {message: 'Debe ingresar solo numeros'}
                 }
             },
-            fecha_nacimiento: {
+            numero_celular: {
                 validators: {
-                    notEmpty: {message: 'La fecha de nacimiento es requerida'}
-                }
-            },
-            sexo: {
-                validators: {
-                    notEmpty: {message: 'El sexo es requerido'}
+                    notEmpty: {message: 'El número de celular es requerido'},
+                    numeric: {message: 'Debe ingresar solo numeros'}
                 }
             },
             ciudad_residencia_name: {
                 validators: {
-                    notEmpty: {message: 'La ciudad de residencia es requerida'}
+                    notEmpty: {message: 'El municipio es requerido'}
                 }
             },
+            fecha_nacimiento: {
+                validators: {
+                    notEmpty: {message: 'La fecha de constitución es requerida'}
+                }
+            },            
             direccion_residencia: {
                 validators: {
-                    notEmpty: {message: 'La dirección de residencia es requerida'}
+                    notEmpty: {message: 'La dirección es requerida'}
                 }
             },
             estrato: {
@@ -254,9 +219,14 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'El estrato es requerido'}
                 }
             },
+            objeto_social: {
+                validators: {
+                    notEmpty: {message: 'El objeto social es requerido'}
+                }
+            },
             correo_electronico: {
                 validators: {
-                    notEmpty: {message: 'El correo electrónico es requerido'},
+                    notEmpty: {message: 'El correo electrónico de la entidad es requerido'},
                     emailAddress: {
                         message: 'El Correo electrónico no es una dirección de correo electrónico válida'
                     }
@@ -273,7 +243,7 @@ function validator_form(token_actual) {
         var bv = $form.data('bootstrapValidator');
 
         // Valido si el id existe, con el fin de eviarlo al metodo correcto
-        $('#formulario_principal').attr('action', url_pv + 'Personasnaturales/new');
+        $('#formulario_principal').attr('action', url_pv + 'Personasjuridicas/new');
         
 
         //Se realiza la peticion con el fin de guardar el registro actual
