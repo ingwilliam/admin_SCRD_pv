@@ -125,6 +125,15 @@ $(document).ready(function () {
                                         $("#requisito").append('<option value="' + requisito.id + '" >' + requisito.nombre + '</option>');
                                     });
                                 }
+                                
+                                //Cargo el select de los etapas                                
+                                $('#etapa').find('option').remove();
+                                $("#etapa").append('<option value="">:: Seleccionar ::</option>');
+                                if (json.etapas.length > 0) {
+                                    $.each(json.etapas, function (key, etapa) {                                        
+                                        $("#etapa").append('<option value="' + etapa + '" >' + etapa + '</option>');
+                                    });
+                                }
 
                                 //Cargo el select de archivos permitidos                                            
                                 $('#archivos_permitidos').find('option').remove();
@@ -184,6 +193,11 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'El requisito es requerido'}
                 }
             },
+            etapa: {
+                validators: {
+                    notEmpty: {message: 'La etapa es requerida'}
+                }
+            },
             descripcion: {
                 validators: {
                     notEmpty: {message: 'La descripción es requerida'}
@@ -232,7 +246,7 @@ function validator_form(token_actual) {
                                 notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                             } else
                             {
-                                notify("success", "ok", "Convocatorias:", "Se creó la categoría con éxito.");
+                                notify("success", "ok", "Convocatorias:", "Se creó el documento administrativo con éxito.");
                                 //Cargar datos de la tabla de categorias
                                 cargar_tabla(token_actual);
                             }
@@ -469,7 +483,16 @@ function acciones_categoria(token_actual)
                             $("#tamano_permitido").append('<option value="' + tamano_permitido + '" >' + tamano_permitido + '</option>');
                         });
                     }
-
+                    
+                    //Cargo el select de los etapas                                
+                    $('#etapa').find('option').remove();
+                    $("#etapa").append('<option value="">:: Seleccionar ::</option>');
+                    if (json.etapas.length > 0) {
+                        $.each(json.etapas, function (key, etapa) {                                        
+                            $("#etapa").append('<option value="' + etapa + '" >' + etapa + '</option>');
+                        });
+                    }
+                    
                     //Cargo el formulario con los datos
                     $('#form_nuevo_documento').loadJSON(json.convocatoriadocumento);
                     $("#requisito option[value='" + json.convocatoriadocumento.requisito + "']").prop('selected', true);
@@ -479,6 +502,7 @@ function acciones_categoria(token_actual)
                         $("#archivos_permitidos option[value='" + e + "']").prop("selected", true);
                     });
                     $("#tamano_permitido option[value='" + json.convocatoriadocumento.tamano_permitido + "']").prop('selected', true);
+                    $("#etapa option[value='" + json.convocatoriadocumento.etapa + "']").prop('selected', true);
                     $("#subsanable option[value='" + json.convocatoriadocumento.subsanable + "']").prop('selected', true);
                     $("#obligatorio option[value='" + json.convocatoriadocumento.obligatorio + "']").prop('selected', true);
                     $("#descripcion").jqteVal(json.convocatoriadocumento.descripcion);

@@ -400,6 +400,7 @@ $(document).ready(function () {
                 {
                     var json = JSON.parse(data);
 
+                    
                     //Verifico si es cobertura local
                     if (json.convocatoria.cobertura == 1)
                     {
@@ -830,6 +831,10 @@ $(document).ready(function () {
                     $("#mismos_jurados_categorias option[value='" + json.convocatoria.mismos_jurados_categorias + "']").prop('selected', true);
                     $("#seguimiento option[value='" + json.convocatoria.seguimiento + "']").prop('selected', true);
                     $("#convenio option[value='" + json.convocatoria.convenio + "']").prop('selected', true);
+                    $("#cronograma option[value='" + json.convocatoria.cronograma + "']").prop('selected', true);
+                    $("#presupuesto option[value='" + json.convocatoria.presupuesto + "']").prop('selected', true);
+                    $("#cerrada option[value='" + json.convocatoria.cerrada + "']").prop('selected', true);
+                    
                     if ($("#convenio").val() == "true")
                     {
                         $(".class_convenio").removeAttr("disabled");
