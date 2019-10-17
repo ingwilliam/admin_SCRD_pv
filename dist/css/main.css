@@ -125,3 +125,67 @@
     width: 102px !important;
     text-align: center;
 }
+
+.span_CPublicada{
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    width: 102px !important;
+    text-align: center;
+}
+
+.span_CAbierta{
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #2e6da4;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    width: 102px !important;
+    text-align: center;
+}
+
+.span_CAdjudicada{
+    color: #31708f;
+    background-color: #bce8f1;
+    border-color: #2e6da4;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    width: 102px !important;
+    text-align: center;
+}
+
+.span_CCerrada{
+    color: #ffffff;
+    background-color: #d9534f;
+    border-color: #2e6da4;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    width: 102px !important;
+    text-align: center;
+}
+
+.validar_acceso{
+    display: none;
+}
+
+.col-centrada{
+    
+}

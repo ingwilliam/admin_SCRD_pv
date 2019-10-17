@@ -67,62 +67,63 @@
                     <!-- /.col-lg-12 -->
                 </div>
                 <div class="row">
-                    <div class="panel-body" style="text-align: right">                    
-                        <button type="button" class="btn btn-primary btn-circle btn-lg" onclick="location.href = 'list.html'"><i class="fa fa-list"></i>
-                        </button>
-                        <button type="button" class="btn btn-success btn-circle btn-lg" onclick="location.href = 'create.html'"><i class="fa fa-file-o"></i>
-                        </button>                        
-                    </div>
-                    <!-- /.col-lg-12 -->
-                </div>
-                <div class="row">
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label>Año</label>
-                            <select id='anio' name="anio" class="form-control" tabindex="1">                                                    
+                            <select id='anio' name="anio" class="form-control" >                                                    
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
+                            <label>Tipo de programa <span class="icono_requerido">*</span></label>
+                            <select id='programa' name="programa" class="form-control" >                                                                                    
+                            </select>                                                
+                        </div>                                                                                                                                                                                                                                                                                                        
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
                             <label>Entidad</label>
-                            <select id='entidad' name="entidad" class="form-control" tabindex="1">                                                    
+                            <select id='entidad' name="entidad" class="form-control" >                                                    
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label>Area</label>
-                            <select id='area' name="area" class="form-control" tabindex="1">                                                    
+                            <select id='area' name="area" class="form-control" >                                                    
                             </select>
                         </div>
                     </div>                    
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label>Linea estrategica</label>
-                            <select id='linea_estrategica' name="linea_estrategica" class="form-control" tabindex="1">                                                    
+                            <select id='linea_estrategica' name="linea_estrategica" class="form-control" >                                                    
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label>Enfoque</label>
-                            <select id='enfoque' name="enfoque" class="form-control" tabindex="1">                                                    
+                            <select id='enfoque' name="enfoque" class="form-control" >                                                    
+                            </select>
+                        </div>
+                    </div>                                    
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <select id='estado' name="estado" class="form-control" >                                                    
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label>Nombre de la convocatoria <span class="icono_requerido">*</span></label>
-                            <input type="text" id="nombre" name="nombre" class="form-control">                                                
-                            <input type="hidden" id="estado" name="estado">                                                
+                            <input type="text" id="nombre" name="nombre" class="form-control">                                                                        
                         </div>                                                                                                                                                                                                                                                                                                        
                     </div>                    
                     <!-- /.col-lg-12 -->
                 </div>
-                <div class="row" id="filtros_estados_convocatorias">
-
-                </div>                
                 <!-- /.row -->
                 <div class="row">
                     <div class="col-lg-12">
@@ -137,16 +138,39 @@
                                             <thead>
                                                 <tr>
                                                     <th>Estado</th>
-                                                    <th>Año</th>                                                    
+                                                    <th>Año</th>
+                                                    <th>Tipo de programa</th>                                                    
                                                     <th>Entidad</th>
                                                     <th>Area</th>
                                                     <th>Linea</th>
                                                     <th>Enfoque</th>
-                                                    <th>Nombre</th>
-                                                    <th>Seleccionar</th>
+                                                    <th>Convocatoria</th>
+                                                    <th>Categoria</th>
+                                                    <th>Cronograma</th>
+                                                    <th>Ver</th>
                                                 </tr>
                                             </thead>
                                         </table>
+                                        <div class="modal fade" id="ver_cronograma">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <!-- Modal que se activa cuando se realiza cualquier peticion ajax -->
+                                                    <div class="loading centrado-porcentual"></div>
+                                                    <!-- cabecera del diálogo -->
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                        <h4 class="modal-title">Cronograma de la convocatoria</h4>                                                    
+                                                    </div>
+
+                                                    <!-- cuerpo del diálogo -->
+                                                    <div class="modal-body" style="height: 450px; overflow-y: auto;">                                                    
+                                                        <div id="table_cronogramas">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
 
                                     </div>
@@ -198,11 +222,10 @@
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
         <script src='propuestas_busqueda_convocatorias.js'></script>
-        <script src='../../dist/js/jquery.loadJSON.js'></script>
-        <script src='../../dist/js/verificar_token.js'></script>
+        <script src='../../dist/js/jquery.loadJSON.js'></script>        
 
         <!-- Text area editor html -->
         <script type="text/javascript" src="../../dist/libraries/jQuery-TE_v.1.4.0/jquery-te-1.4.0.min.js" charset="utf-8"></script>
-        
+
     </body>
 </html>
