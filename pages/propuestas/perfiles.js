@@ -63,17 +63,12 @@ $(document).ready(function () {
                                         } 
                                         else
                                         {
-                                            var html_table = "";
-                                            
-                                            $.each(json, function (key, participante) {
-                                                html_table = html_table+'<div class="col-lg-4 col-centrada">';                    
-                                                html_table = html_table+'<div class="panel panel-primary">';                    
-                                                html_table = html_table+'<div class="panel-heading">'+participante.tipo_participante+'</div>';
-                                                html_table = html_table+'<div class="panel-body"><p>'+participante.descripcion_perfil+'</p></div>';
-                                                html_table = html_table+'</div>';                        
-                                                html_table = html_table+'</div>';                        
-                                            });                    
-                                            $( "#cargar_tipos_participantes" ).html(html_table); 
+                                            $("#tipo_participante").append('<option value="">:: Seleccionar ::</option>');
+                                            if (json.length > 0) {
+                                                $.each(json, function (key, value) {
+                                                    $("#tipo_participante").append('<option value="' + value.id + '" title="' + value.terminos_condiciones + '" lang="' + value.condiciones_participacion + '">' + value.tipo_participante + '</option>');
+                                                });
+                                            }                                                                                        
                                         }
                                     }
                                 });
@@ -82,6 +77,81 @@ $(document).ready(function () {
                     }
                 }
             }
+        });
+        
+        
+        //Cargo los pdf deacuerdo al participante                                    
+        $('#tipo_participante').on('change', function () {
+            if($(this).val()!="")
+            {
+                $(".inactivo").css("display","block");
+                $("#terminos_condiciones_pdf").attr("src",$("#tipo_participante option:selected").attr("title"));
+                $("#condiciones_participacion_pdf").attr("src",$("#tipo_participante option:selected").attr("lang"));                                
+            }
+            else
+            {
+                $(".inactivo").css("display","none");                                         
+            }
+        });
+        
+        
+        //Validar el formulario
+        $('.form_validator').bootstrapValidator({
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                tipo_participante: {
+                    validators: {
+                        notEmpty: {message: 'El tipo participante es requerido'}
+                    }
+                },
+                terminos_condiciones: {
+                    validators: {
+                        notEmpty: {message: 'Los términos, las condiciones, el tratamiento de datos y la autorización de uso, son requeridos'}
+                    }
+                },
+                condiciones_participacion: {
+                    validators: {
+                        notEmpty: {message: 'Las condiciones generales de participación, son requeridas'}
+                    }
+                }
+            }
+        }).on('success.form.bv', function (e) {
+            // Prevent form submission
+            e.preventDefault();
+            // Get the form instance
+            var $form = $(e.target);
+
+            // Get the BootstrapValidator instance
+            var bv = $form.data('bootstrapValidator');
+            
+            var tipo_participante = $("#tipo_participante").val();
+            var id = $("#id").val();
+            
+            var redirect = "";
+            var m = "";
+            if (tipo_participante == 1)
+            {
+                redirect = "perfil_persona_natural";
+                m="pn";
+            }
+            if (tipo_participante == 2)
+            {
+                redirect = "perfil_persona_juridica";
+                m="pj";
+            }
+            if (tipo_participante == 3)
+            {
+                redirect = "perfil_agrupacion";
+                m="agr";
+            }
+
+            location.href = redirect + ".html?m=" + m + "&id="+id;           
+            
+            bv.resetForm();
         });
 
     }
