@@ -23,7 +23,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'GET',
             data: {"token": token_actual.token, "conv": $("#conv").attr('value'), "modulo": "Menu Participante"},
-            url: url_pv + 'Personasnaturales/buscar_participante/'
+            url: url_pv + 'Personasjuridicas/buscar_participante/'
         }).done(function (data) {
             if (data == 'error_metodo')
             {
@@ -54,69 +54,16 @@ $(document).ready(function () {
 
                                 //Cargos el select de tipo de documento
                                 $('#tipo_documento').find('option').remove();
-                                $("#tipo_documento").append('<option value="">:: Seleccionar ::</option>');
                                 if (json.tipo_documento.length > 0) {
                                     $.each(json.tipo_documento, function (key, array) {
-                                        var selected = '';
-                                        if (array.id == json.participante.tipo_documento)
+                                        if (array.id == 7)
                                         {
                                             selected = 'selected="selected"';
+                                            $("#tipo_documento").append('<option value="' + array.id + '" ' + selected + ' >' + array.descripcion + '</option>');
                                         }
-                                        $("#tipo_documento").append('<option value="' + array.id + '" ' + selected + ' >' + array.descripcion + '</option>');
                                     });
                                 }
-                                //Cargos el select de sexo
-                                $('#sexo').find('option').remove();
-                                $("#sexo").append('<option value="">:: Seleccionar ::</option>');
-                                if (json.sexo.length > 0) {
-                                    $.each(json.sexo, function (key, array) {
-                                        var selected = '';
-                                        if (array.id == json.participante.sexo)
-                                        {
-                                            selected = 'selected="selected"';
-                                        }
-                                        $("#sexo").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
-                                    });
-                                }
-                                //Cargos el select de orientacion sexual
-                                $('#orientacion_sexual').find('option').remove();
-                                $("#orientacion_sexual").append('<option value="">:: Seleccionar ::</option>');
-                                if (json.orientacion_sexual.length > 0) {
-                                    $.each(json.orientacion_sexual, function (key, array) {
-                                        var selected = '';
-                                        if (array.id == json.participante.orientacion_sexual)
-                                        {
-                                            selected = 'selected="selected"';
-                                        }
-                                        $("#orientacion_sexual").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
-                                    });
-                                }
-                                //Cargos el select de identidad genero
-                                $('#identidad_genero').find('option').remove();
-                                $("#identidad_genero").append('<option value="">:: Seleccionar ::</option>');
-                                if (json.orientacion_sexual.length > 0) {
-                                    $.each(json.identidad_genero, function (key, array) {
-                                        var selected = '';
-                                        if (array.id == json.participante.identidad_genero)
-                                        {
-                                            selected = 'selected="selected"';
-                                        }
-                                        $("#identidad_genero").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
-                                    });
-                                }
-                                //Cargos el select de grupo etnico
-                                $('#grupo_etnico').find('option').remove();
-                                $("#grupo_etnico").append('<option value="">:: Seleccionar ::</option>');
-                                if (json.grupo_etnico.length > 0) {
-                                    $.each(json.grupo_etnico, function (key, array) {
-                                        var selected = '';
-                                        if (array.id == json.participante.grupo_etnico)
-                                        {
-                                            selected = 'selected="selected"';
-                                        }
-                                        $("#grupo_etnico").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
-                                    });
-                                }
+
                                 //Cargos el select de estrato
                                 $('#estrato').find('option').remove();
                                 $("#estrato").append('<option value="">:: Seleccionar ::</option>');
@@ -128,6 +75,20 @@ $(document).ready(function () {
                                             selected = 'selected="selected"';
                                         }
                                         $("#estrato").append('<option value="' + array + '" ' + selected + ' >' + array + '</option>');
+                                    });
+                                }
+
+                                //Cargos el select de estrato
+                                $('#tipo_sede').find('option').remove();
+                                $("#tipo_sede").append('<option value="">:: Seleccionar ::</option>');
+                                if (json.tipo_sede.length > 0) {
+                                    $.each(json.tipo_sede, function (key, array) {
+                                        var selected = '';
+                                        if (array == json.participante.tipo_sede)
+                                        {
+                                            selected = 'selected="selected"';
+                                        }
+                                        $("#tipo_sede").append('<option value="' + array + '" ' + selected + ' >' + array + '</option>');
                                     });
                                 }
 
@@ -207,6 +168,8 @@ $(document).ready(function () {
 
                                 //Cargo el formulario con los datos
                                 $('#formulario_principal').loadJSON(json.participante);
+
+                                $("#cuenta_sede option[value='" + json.participante.cuenta_sede + "']").prop('selected', true);
                             }
                         }
 
@@ -238,7 +201,7 @@ function validator_form(token_actual) {
             },
             numero_documento: {
                 validators: {
-                    notEmpty: {message: 'El número de documento de identificación es requerido'},
+                    notEmpty: {message: 'El número de Nit es requerido'},
                     numeric: {message: 'Debe ingresar solo numeros'}
                 }
             },
@@ -247,29 +210,31 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'El primer nombre es requerido'}
                 }
             },
-            primer_apellido: {
+            dv: {
                 validators: {
-                    notEmpty: {message: 'El primer apellido es requerido'}
+                    notEmpty: {message: 'El dv es requerido'},
+                    numeric: {message: 'Debe ingresar solo numeros'}
                 }
             },
-            fecha_nacimiento: {
+            numero_celular: {
                 validators: {
-                    notEmpty: {message: 'La fecha de nacimiento es requerida'}
-                }
-            },
-            sexo: {
-                validators: {
-                    notEmpty: {message: 'El sexo es requerido'}
+                    notEmpty: {message: 'El número de celular es requerido'},
+                    numeric: {message: 'Debe ingresar solo numeros'}
                 }
             },
             ciudad_residencia_name: {
                 validators: {
-                    notEmpty: {message: 'La ciudad de residencia es requerida'}
+                    notEmpty: {message: 'El municipio es requerido'}
                 }
             },
+            fecha_nacimiento: {
+                validators: {
+                    notEmpty: {message: 'La fecha de constitución es requerida'}
+                }
+            },            
             direccion_residencia: {
                 validators: {
-                    notEmpty: {message: 'La dirección de residencia es requerida'}
+                    notEmpty: {message: 'La dirección es requerida'}
                 }
             },
             estrato: {
@@ -277,9 +242,14 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'El estrato es requerido'}
                 }
             },
+            objeto_social: {
+                validators: {
+                    notEmpty: {message: 'El objeto social es requerido'}
+                }
+            },
             correo_electronico: {
                 validators: {
-                    notEmpty: {message: 'El correo electrónico es requerido'},
+                    notEmpty: {message: 'El correo electrónico de la entidad es requerido'},
                     emailAddress: {
                         message: 'El Correo electrónico no es una dirección de correo electrónico válida'
                     }
@@ -311,7 +281,7 @@ function validator_form(token_actual) {
         var bv = $form.data('bootstrapValidator');
 
         // Valido si el id existe, con el fin de eviarlo al metodo correcto
-        $('#formulario_principal').attr('action', url_pv + 'Personasnaturales/editar_participante');
+        $('#formulario_principal').attr('action', url_pv + 'Personasjuridicas/editar_participante');
 
 
         modalConfirm(function (confirm) {
@@ -325,7 +295,7 @@ function validator_form(token_actual) {
 
                     if (result == 'error')
                     {
-                        notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        notify("danger", "ok", "Persona jurídica:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                     } else
                     {
                         if (result == 'error_token')
@@ -340,19 +310,19 @@ function validator_form(token_actual) {
                             {
                                 if (result == 'error_usuario_perfil')
                                 {
-                                    notify("danger", "ok", "Persona natural:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    notify("danger", "ok", "Persona jurídica:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                 } else
                                 {
                                     if (result == 'participante_existente')
                                     {
-                                        notify("danger", "ok", "Persona natural:", "El participante que intenta ingresar ya se encuentra registrado en la base de datos, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                        notify("danger", "ok", "Persona jurídica:", "El participante que intenta ingresar ya se encuentra registrado en la base de datos, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                     } else
                                     {
                                         if (isNaN(result)) {
-                                            notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                            notify("danger", "ok", "Persona jurídica:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                         } else
                                         {
-                                            location.href = url_pv_admin + 'pages/propuestas/propuesta.html?msg=Se actualizo con el éxito el participante como persona natural.&msg_tipo=success';                                                                                        
+                                            location.href = url_pv_admin + 'pages/propuestas/propuesta.html?msg=Se actualizo con el éxito el participante como persona natural.&msg_tipo=success';
                                         }
                                     }
                                 }
@@ -361,12 +331,11 @@ function validator_form(token_actual) {
                     }
 
                 });
-            }
-            else
+            } else
             {
-                $form.bootstrapValidator('disableSubmitButtons', false);        
+                $form.bootstrapValidator('disableSubmitButtons', false);
             }
-        });        
+        });
     });
 
 }

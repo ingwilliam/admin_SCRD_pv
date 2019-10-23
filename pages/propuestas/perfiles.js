@@ -66,7 +66,7 @@ $(document).ready(function () {
                                             $("#tipo_participante").append('<option value="">:: Seleccionar ::</option>');
                                             if (json.length > 0) {
                                                 $.each(json, function (key, value) {
-                                                    $("#tipo_participante").append('<option value="' + value.id + '" title="' + value.terminos_condiciones + '" lang="' + value.condiciones_participacion + '">' + value.tipo_participante + '</option>');
+                                                    $("#tipo_participante").append('<option value="' + value.id + '" title="' + value.terminos_condiciones + '" lang="' + value.condiciones_participacion + '" dir="' + value.acepto_terminos_condiciones + '">' + value.tipo_participante + '</option>');
                                                 });
                                             }                                                                                        
                                         }
@@ -87,6 +87,20 @@ $(document).ready(function () {
                 $(".inactivo").css("display","block");
                 $("#terminos_condiciones_pdf").attr("src",$("#tipo_participante option:selected").attr("title"));
                 $("#condiciones_participacion_pdf").attr("src",$("#tipo_participante option:selected").attr("lang"));                                
+                if($("#tipo_participante option:selected").attr("dir")=="true")
+                {
+                    $("#terminos_condiciones option[value='"+$("#tipo_participante option:selected").attr("dir")+"']").prop('selected', true);
+                    $("#condiciones_participacion option[value='"+$("#tipo_participante option:selected").attr("dir")+"']").prop('selected', true);                
+                }   
+                else
+                {
+                    $('#terminos_condiciones option').prop('selected', function() {
+                        return this.defaultSelected;
+                    });
+                    $('#condiciones_participacion option').prop('selected', function() {
+                        return this.defaultSelected;
+                    });                    
+                }
             }
             else
             {

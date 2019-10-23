@@ -54,57 +54,9 @@ function validator_form(token_actual) {
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
-            tipo_documento: {
-                validators: {
-                    notEmpty: {message: 'El tipo de documento de identificación es requerido'}
-                }
-            },
-            numero_documento: {
-                validators: {
-                    notEmpty: {message: 'El número de Nit es requerido'},
-                    numeric: {message: 'Debe ingresar solo numeros'}
-                }
-            },
             primer_nombre: {
                 validators: {
-                    notEmpty: {message: 'El primer nombre es requerido'}
-                }
-            },
-            dv: {
-                validators: {
-                    notEmpty: {message: 'El dv es requerido'},
-                    numeric: {message: 'Debe ingresar solo numeros'}
-                }
-            },
-            numero_celular: {
-                validators: {
-                    notEmpty: {message: 'El número de celular es requerido'},
-                    numeric: {message: 'Debe ingresar solo numeros'}
-                }
-            },
-            ciudad_residencia_name: {
-                validators: {
-                    notEmpty: {message: 'El municipio es requerido'}
-                }
-            },
-            fecha_nacimiento: {
-                validators: {
-                    notEmpty: {message: 'La fecha de constitución es requerida'}
-                }
-            },            
-            direccion_residencia: {
-                validators: {
-                    notEmpty: {message: 'La dirección es requerida'}
-                }
-            },
-            estrato: {
-                validators: {
-                    notEmpty: {message: 'El estrato es requerido'}
-                }
-            },
-            objeto_social: {
-                validators: {
-                    notEmpty: {message: 'El objeto social es requerido'}
+                    notEmpty: {message: 'El nombre de la agrupación es requerido'}
                 }
             },
             correo_electronico: {

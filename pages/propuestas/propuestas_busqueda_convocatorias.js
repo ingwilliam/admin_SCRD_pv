@@ -215,23 +215,21 @@ function form_tipo_convocatoria(page, id)
                                 var redirect = "";
                                 if (page == 1 || page == 3 || page == 4 || page == 5)
                                 {
-                                    redirect = "../propuestas/perfiles";
+                                    redirect = "/propuestas/perfiles";
                                 }
                                 if (page == 2)
                                 {
-                                    redirect = "../propuestasjurados/perfil";
+                                    redirect = "/propuestasjurados/perfil";
                                 }
 
-                                location.href = redirect + ".html?m=" + page + "&id=" + id;
+                                window.location.href = url_pv_admin + 'pages'+redirect+ ".html?m=" + page + "&id=" + id;                                
+                                
                             }
                         }
                     }
                 }
             }
-        });
-        
-        
-    
+        });                    
     }    
 }
 
