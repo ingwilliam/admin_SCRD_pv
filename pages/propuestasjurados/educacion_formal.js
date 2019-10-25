@@ -25,6 +25,9 @@
           cargar_tabla(token_actual);
           validator_form(token_actual);
 
+         $("#back_step").attr("onclick", " location.href = 'perfil.html?m=2&id="+  $("#idc").val()+"' ");
+         $("#next_step").attr("onclick", " location.href = 'educacion_no_formal.html?m=2&id="+  $("#idc").val()+"' ");
+
           //alert($('#nivel_educacion').val());
           //Si el nivel es superior a bachiller muestra los select areasconocimientos y nucleosbasicos
           $('#nivel_educacion').change(function(){
@@ -482,7 +485,7 @@
         });
     });
 
-    //desarcar archivo
+    //descargar archivo
     $(".download_file").click(function () {
       //Cargo el id file
       var cod = $(this).attr('title');

@@ -22,9 +22,15 @@
       {
           //Verifica si el token actual tiene acceso de lectura
           permiso_lectura(token_actual, "Menu Participante");
+
+
+         $("#back_step").attr("onclick", " location.href = 'educacion_formal.html?m=2&id="+  $("#idc").val()+"' ");
+         $("#next_step").attr("onclick", " location.href = 'experiencia_profesional.html?m=2&id="+  $("#idc").val()+"' ");
+
           cargar_datos_formulario(token_actual);
           cargar_tabla(token_actual);
           validator_form(token_actual);
+
 
       }
 

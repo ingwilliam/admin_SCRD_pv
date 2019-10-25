@@ -25,6 +25,8 @@
      {
          //Verifica si el token actual tiene acceso de lectura
          permiso_lectura(token_actual, "Menu Participante");
+         $("#back_step").attr("onclick", " location.href = 'postular_hoja_vida.html?m=2&id="+  $("#idc").val()+"' ");
+
          cargar_select_area(token_actual);
          validator_form(token_actual);
 
