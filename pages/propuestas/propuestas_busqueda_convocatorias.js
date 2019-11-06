@@ -16,17 +16,18 @@ $(document).ready(function () {
         $.ajax({
             type: 'GET',
             data: {"token": token_actual.token},
-            url: url_pv + 'PropuestasBusquedasConvocatorias/load_search'
+            url: url_pv + 'PropuestasBusquedasConvocatorias/formulario_convocatorias'
         }).done(function (data) {
             if (data == 'error_metodo')
             {
                 notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
             } else
             {
-                if (data == 'error')
+                if (data == 'error_token')
                 {
                     location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                } else
+                } 
+                else
                 {
                     var json = JSON.parse(data);
 
@@ -65,33 +66,18 @@ $(document).ready(function () {
                         });
                     }
 
-                    if (json.estados_convocatorias.length > 0) {
-                        $.each(json.estados_convocatorias, function (key, estado) {
-
-                            if (estado == "Publicada") {
-                                var style_class = 'panel-primary';
-                                var style_class_number = 'estados estado_'+estado;
-                                var icono_class = 'fa-eye';
-                            }
-                            if (estado == "Abierta") {
-                                var style_class = 'panel-green';
-                                var style_class_number = 'estados estado_'+estado;
-                                var icono_class = 'fa-check-circle';
-                            }
-                            if (estado == "Cerrada") {
-                                var style_class = 'panel-red';
-                                var style_class_number = 'estados estado_'+estado;
-                                var icono_class = 'fa-times-circle';
-                            }
-                            if (estado == "Adjudicada") {
-                                var style_class = 'panel-info';
-                                var style_class_number = 'estados estado_'+estado;
-                                var icono_class = 'fa-thumbs-o-up';
-                            }
-                            $("#filtros_estados_convocatorias").append('<div class="col-lg-2 col-md-6"><div class="panel ' + style_class + '"><div class="panel-heading"><div class="row"><div class="col-xs-3"><i class="fa ' + icono_class + ' fa-5x"></i></div><div class="col-xs-9 text-right"><div class="huge ' + style_class_number + '">0</div><div>' + estado + '</div></div></div></div><a href="javascript:void(0)" class="estado_filter" title="' + estado + '"><div class="panel-footer"><span class="pull-left">Filtrar convocatorias</span><span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span><div class="clearfix"></div></div></a></div></div>');
+                    $("#programa").append('<option value="">:: Seleccionar ::</option>');
+                    if (json.programas.length > 0) {
+                        $.each(json.programas, function (key, programa) {
+                            $("#programa").append('<option value="' + programa.id + '" >' + programa.nombre + '</option>');
                         });
-                        $("#filtros_estados_convocatorias").append('<div class="col-lg-2 col-md-6"><div class="panel panel-default"><div class="panel-heading"><div class="row"><div class="col-xs-3"><i class="fa fa-search fa-5x"></i></div><div class="col-xs-9 text-right"><div class="huge estados estado_total">0</div><div>Total</div></div></div></div><a href="javascript:void(0)" class="estado_filter" title=""><div class="panel-footer"><span class="pull-left">Filtrar convocatorias</span><span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span><div class="clearfix"></div></div></a></div></div>');
                     }
+
+                    $("#estado").append('<option value="">:: Seleccionar ::</option>');
+                    $("#estado").append('<option value="5">Publicada</option>');
+                    $("#estado").append('<option value="51">Abierta</option>');
+                    $("#estado").append('<option value="52">Cerrada</option>');
+                    $("#estado").append('<option value="6">Adjudicada</option>');
 
                 }
             }
@@ -107,7 +93,7 @@ $(document).ready(function () {
             "serverSide": true,
             "lengthMenu": [20, 30, 40],
             "ajax": {
-                url: url_pv + "PropuestasBusquedasConvocatorias/all",
+                url: url_pv + "PropuestasBusquedasConvocatorias/busqueda_convocatorias",
                 data: function (d) {
                     var params = new Object();
                     params.anio = $('#anio').val();
@@ -115,6 +101,7 @@ $(document).ready(function () {
                     params.area = $('#area').val();
                     params.linea_estrategica = $('#linea_estrategica').val();
                     params.enfoque = $('#enfoque').val();
+                    params.programa = $('#programa').val();
                     params.nombre = $('#nombre').val();
                     params.estado = $('#estado').val();
                     d.params = JSON.stringify(params);
@@ -122,32 +109,20 @@ $(document).ready(function () {
                 },
             },
             "drawCallback": function (settings) {
-                $(".estados").html("0");
-                var json = settings.json;
-                $(".estado_total").html(json["recordsTotal"]);
-                $.each(json["dataEstados"], function (key, value) {
-                    $(".estado_" + value["estado"]).html(value["total"]);
-                });
-
-                $('.estado_filter').click(function () {
-                    $("#estado").val($(this).attr("title"));
-                    dataTable.draw();
-                });
-
-                $(".check_activar_t").attr("checked", "true");
-                $(".check_activar_f").removeAttr("checked");
-                acciones_convocatoria(token_actual);
-
+                cargar_cronograma(token_actual);
             },
             "columns": [
                 {"data": "estado_convocatoria"},
                 {"data": "anio"},
+                {"data": "programa"},
                 {"data": "entidad"},
                 {"data": "area"},
                 {"data": "linea_estrategica"},
                 {"data": "enfoque"},
-                {"data": "nombre"},
-                {"data": "acciones"}
+                {"data": "convocatoria"},
+                {"data": "categoria"},
+                {"data": "ver_cronograma"},
+                {"data": "ver_convocatoria"},
             ]
         });
 
@@ -171,6 +146,14 @@ $(document).ready(function () {
             dataTable.draw();
         });
 
+        $('#programa').change(function () {
+            dataTable.draw();
+        });
+
+        $('#estado').change(function () {
+            dataTable.draw();
+        });
+
         $('#nombre').on('keyup', function () {
             if (this.value.length > 3)
             {
@@ -187,56 +170,104 @@ $(document).ready(function () {
     }
 });
 
-function acciones_convocatoria(token_actual)
+function form_tipo_convocatoria(page, id)
 {
-    //Permite activar o eliminar una categoria
-    $(".activar_categoria").click(function () {
+    //Verifico si el token exite en el cliente y verifico que el token este activo en el servidor                
+    var token_actual = getLocalStorage(name_local_storage);
 
-        var active = "false";
-        if ($(this).prop('checked')) {
-            active = "true";
-        }
-
-
+    //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
+    if ($.isEmptyObject(token_actual)) {
+        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+    } 
+    else
+    {
+        //Realizo la peticion para cargar el formulario
         $.ajax({
-            type: 'DELETE',
-            data: {"token": token_actual.token, "modulo": "Propuestas convocatorias", "active": active},
-            url: url_pv + 'PropuestasBusquedasConvocatorias/delete_categoria/' + $(this).attr("title")
+            type: 'POST',
+            data: {"token": token_actual.token},
+            url: url_pv + 'PropuestasBusquedasConvocatorias/validar_acceso/'+id
         }).done(function (data) {
-            if (data == 'ok')
+            if (data == 'error_metodo')
             {
-                if (active == "true")
-                {
-                    notify("info", "ok", "Convocatorias:", "Se activo la convocatoria con éxito.");
-                } else
-                {
-                    notify("info", "ok", "Convocatorias:", "Se elimino el convocatoria con éxito.");
-                }
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
             } else
             {
-                if (data == 'acceso_denegado')
+                if (data == 'error_token')
                 {
-                    notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
-                } else
+                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                } 
+                else
                 {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    if (data == 'error_fecha_cierre')
+                    {
+                        notify("danger", "ok", "Convocatorias:", "La convocatoria ya no se encuentra disponible para inscribir su propuesta.");
+                    } 
+                    else
+                    {
+                        if (data == 'error_fecha_apertura')
+                        {
+                            notify("danger", "ok", "Convocatorias:", "La convocatoria esta en estado publicada, por favor revisar la fecha de apertura en el cronograma de la convocatoria.");
+                        } 
+                        else
+                        {
+                            if (data == 'ingresar')
+                            {
+                                var redirect = "";
+                                if (page == 1 || page == 3 || page == 4 || page == 5)
+                                {
+                                    redirect = "/propuestas/perfiles";
+                                }
+                                if (page == 2)
+                                {
+                                    redirect = "/propuestasjurados/perfil";
+                                }
+
+                                window.location.href = url_pv_admin + 'pages'+redirect+ ".html?m=" + page + "&id=" + id;                                
+                                
+                            }
+                        }
+                    }
                 }
+            }
+        });                    
+    }    
+}
+
+function cargar_cronograma(token_actual)
+{
+    $(".cargar_cronograma").click(function () {
+        var title = $(this).attr("title");
+        
+        //Realizo la peticion para cargar el formulario
+        $.ajax({
+            type: 'POST',
+            data: {"token": token_actual.token},
+            url: url_pv + 'PropuestasBusquedasConvocatorias/cargar_cronograma/'+title
+        }).done(function (data) {
+            if (data == 'error_metodo')
+            {
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            } 
+            else
+            {
+                if (data == 'error_token')
+                {
+                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                } 
+                else
+                {
+                    var json = JSON.parse(data);               
+                    var html_table='';    
+                    $( "#table_cronogramas" ).html(html_table);
+                    html_table = html_table+'<table class="table table-hover table-bordered"><thead><tr><th>Tipo de evento</th><th>Fecha(s)</th><th>Descripción</th></tr></thead><tbody>';                    
+                    $.each(json, function (key2, evento) {                     
+                        html_table = html_table+'<tr><td>'+evento.tipo_evento+'</td><td>'+evento.fecha+'</td><td>'+evento.descripcion+'</td></tr>';                                                    
+                    });
+                    html_table = html_table+'</tbody></table>';                        
+
+                    $( "#table_cronogramas" ).html(html_table);
+                }                
             }
         });
     });
-}
-
-
-function form_tipo_convocatoria(page,id)
-{
-    var redirect="";
-    if( page==1 || page==3 || page==4 || page==5)
-    {
-        redirect="../propuestas/perfil";
-    }
-    if(page==2)
-    {
-        redirect="../propuestasjurados/perfil";
-    }
-    location.href = redirect+".html?m="+page+"&id=" + id;
 }

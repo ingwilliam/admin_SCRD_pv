@@ -5,14 +5,91 @@ $(document).ready(function () {
 
     //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
     if ($.isEmptyObject(token_actual)) {
-        location.href = url_pv_admin+'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
     } else
     {
         //Verifica si el token actual tiene acceso de lectura
-        permiso_lectura(token_actual, "Menu Participante");        
+        permiso_lectura(token_actual, "Menu Participante");
 
         //Valido formulario
         validator_form(token_actual);
+
+        //Peticion para buscar barrios
+        var json_barrio = function (request, response) {
+                $.ajax({
+                    type: 'GET',
+                    data: {"token": token_actual.token, "id": $("#id").attr('value'),q: request.term},
+                    url: url_pv + 'Barrios/autocompletar/',                                
+                    dataType: "jsonp",
+                    success: function (data) {
+                        response(data);
+                    }
+                });
+            };
+            
+        //Peticion para buscar ciudades
+        var json_ciudades = function (request, response) {
+                $.ajax({
+                    type: 'GET',
+                    data: {"token": token_actual.token, "id": $("#id").attr('value'),q: request.term},
+                    url: url_pv + 'Ciudades/autocompletar/',                                
+                    dataType: "jsonp",
+                    success: function (data) {
+                        response(data);
+                    }
+                });
+            };
+            
+        //Cargos el autocomplete de barrios
+        $("#barrio_residencia_name").autocomplete({
+            source: json_barrio,
+            minLength: 2,
+            select: function (event, ui) {
+                $(this).val(ui.item ? ui.item : " ");
+                $("#barrio_residencia").val(ui.item.id);
+            },
+            change: function (event, ui) {
+                if (!ui.item) {
+                    this.value = '';
+                    $("#barrio_residencia").val("");
+                }                
+            }
+        });
+
+        //Cargos el autocomplete de ciudad de nacimiento                    
+        $("#ciudad_nacimiento_name").autocomplete({
+            source: json_ciudades,
+            minLength: 2,
+            select: function (event, ui) {
+                $(this).val(ui.item ? ui.item : " ");
+                $("#ciudad_nacimiento").val(ui.item.id);
+            },
+            change: function (event, ui) {
+                if (!ui.item) {
+                    this.value = '';
+                    $("#ciudad_nacimiento").val("");
+                }
+                //else { Return your label here }
+            }
+        });
+        
+        //Cargos el autocomplete de ciudad de residencia
+        $("#ciudad_residencia_name").autocomplete({
+            source: json_ciudades,
+            minLength: 2,
+            select: function (event, ui) {
+                $(this).val(ui.item ? ui.item : " ");
+                $("#ciudad_residencia").val(ui.item.id);
+            },
+            change: function (event, ui) {
+                if (!ui.item) {
+                    this.value = '';
+                    $('.formulario_principal').bootstrapValidator('revalidateField', 'ciudad_residencia_name');
+                    $("#ciudad_residencia").val("");
+                }
+                //else { Return your label here }
+            }
+        });
 
         //Realizo la peticion para cargar el formulario
         $.ajax({
@@ -31,18 +108,18 @@ $(document).ready(function () {
                 } else
                 {
                     var json = JSON.parse(data);
-                    
+
                     //Cargos el select de tipo de documento
                     $('#tipo_documento').find('option').remove();
                     $("#tipo_documento").append('<option value="">:: Seleccionar ::</option>');
                     if (json.tipo_documento.length > 0) {
                         $.each(json.tipo_documento, function (key, array) {
                             var selected = '';
-                            if(array.id == json.participante.tipo_documento)
+                            if (array.id == json.participante.tipo_documento)
                             {
                                 selected = 'selected="selected"';
                             }
-                            $("#tipo_documento").append('<option value="' + array.id + '" '+selected+' >' + array.descripcion + '</option>');
+                            $("#tipo_documento").append('<option value="' + array.id + '" ' + selected + ' >' + array.descripcion + '</option>');
                         });
                     }
                     //Cargos el select de sexo
@@ -51,11 +128,11 @@ $(document).ready(function () {
                     if (json.sexo.length > 0) {
                         $.each(json.sexo, function (key, array) {
                             var selected = '';
-                            if(array.id == json.participante.sexo)
+                            if (array.id == json.participante.sexo)
                             {
                                 selected = 'selected="selected"';
                             }
-                            $("#sexo").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
+                            $("#sexo").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
                         });
                     }
                     //Cargos el select de orientacion sexual
@@ -64,11 +141,11 @@ $(document).ready(function () {
                     if (json.orientacion_sexual.length > 0) {
                         $.each(json.orientacion_sexual, function (key, array) {
                             var selected = '';
-                            if(array.id == json.participante.orientacion_sexual)
+                            if (array.id == json.participante.orientacion_sexual)
                             {
                                 selected = 'selected="selected"';
                             }
-                            $("#orientacion_sexual").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
+                            $("#orientacion_sexual").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
                         });
                     }
                     //Cargos el select de identidad genero
@@ -77,11 +154,11 @@ $(document).ready(function () {
                     if (json.orientacion_sexual.length > 0) {
                         $.each(json.identidad_genero, function (key, array) {
                             var selected = '';
-                            if(array.id == json.participante.identidad_genero)
+                            if (array.id == json.participante.identidad_genero)
                             {
                                 selected = 'selected="selected"';
                             }
-                            $("#identidad_genero").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
+                            $("#identidad_genero").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
                         });
                     }
                     //Cargos el select de grupo etnico
@@ -90,11 +167,11 @@ $(document).ready(function () {
                     if (json.grupo_etnico.length > 0) {
                         $.each(json.grupo_etnico, function (key, array) {
                             var selected = '';
-                            if(array.id == json.participante.grupo_etnico)
+                            if (array.id == json.participante.grupo_etnico)
                             {
                                 selected = 'selected="selected"';
                             }
-                            $("#grupo_etnico").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
+                            $("#grupo_etnico").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
                         });
                     }
                     //Cargos el select de estrato
@@ -103,88 +180,21 @@ $(document).ready(function () {
                     if (json.estrato.length > 0) {
                         $.each(json.estrato, function (key, array) {
                             var selected = '';
-                            if(array == json.participante.estrato)
+                            if (array == json.participante.estrato)
                             {
                                 selected = 'selected="selected"';
                             }
-                            $("#estrato").append('<option value="' + array + '" '+selected+' >' + array + '</option>');
+                            $("#estrato").append('<option value="' + array + '" ' + selected + ' >' + array + '</option>');
                         });
                     }
-                    
-                    //Cargos el autocomplete de ciudad de nacimiento                    
-                    $( "#ciudad_nacimiento_name" ).autocomplete({
-                        source: json.ciudad,
-                        minLength: 2,
-                        select: function (event, ui) {
-                            $(this).val(ui.item ? ui.item : " ");
-                            $("#ciudad_nacimiento").val(ui.item.id);                            
-                        },
 
-                        change: function (event, ui) {
-                            if (!ui.item) {
-                                this.value = '';                                
-                                $("#ciudad_nacimiento").val("");
-                            }
-                        //else { Return your label here }
-                        }
-                    });
+                    //Asigno el nombre de las barrio
+                    $("#barrio_residencia_name").val(json.barrio_residencia_name);                            
                     
                     //Asigno el nombre de las ciudades
-                    $.each(json.ciudad, function (key, array) {                        
-                        if(json.participante.ciudad_nacimiento==array.id)
-                        {
-                            $("#ciudad_nacimiento_name").val(array.value);                            
-                        }
-                        
-                        if(json.participante.ciudad_residencia==array.id)
-                        {
-                            $("#ciudad_residencia_name").val(array.value);                            
-                        }
-                    });
-                    
-                    //Cargos el autocomplete de ciudad de residencia
-                    $( "#ciudad_residencia_name" ).autocomplete({
-                        source: json.ciudad,
-                        minLength: 2,
-                        select: function (event, ui) {
-                            $(this).val(ui.item ? ui.item : " ");
-                            $("#ciudad_residencia").val(ui.item.id); 
-                        },
-                        change: function (event, ui) {
-                            if (!ui.item) {
-                                this.value = '';
-                                $('.formulario_principal').bootstrapValidator('revalidateField', 'ciudad_residencia_name');
-                                $("#ciudad_residencia").val("");
-                            }
-                        //else { Return your label here }
-                        }
-                    });
-                    
-                    //Cargos el autocomplete de barrios
-                    $( "#barrio_residencia_name" ).autocomplete({
-                        source: json.barrio,
-                        minLength: 2,
-                        select: function (event, ui) {
-                            $(this).val(ui.item ? ui.item : " ");
-                            $("#barrio_residencia").val(ui.item.id); 
-                        },
-                        change: function (event, ui) {
-                            if (!ui.item) {
-                                this.value = '';                                
-                                $("#barrio_residencia").val("");
-                            }
-                        //else { Return your label here }
-                        }
-                    });
-                    
-                    //Asigno el nombre de las ciudades
-                    $.each(json.barrio, function (key, array) {                        
-                        if(json.participante.barrio_residencia==array.id)
-                        {
-                            $("#barrio_residencia_name").val(array.value);                            
-                        }                        
-                    });
-                    
+                    $("#ciudad_nacimiento_name").val(json.ciudad_nacimiento_name);
+                    $("#ciudad_residencia_name").val(json.ciudad_residencia_name);                                        
+
                     //Cargo el formulario con los datos
                     $('#formulario_principal').loadJSON(json.participante);
                 }
@@ -274,7 +284,7 @@ function validator_form(token_actual) {
 
         // Valido si el id existe, con el fin de eviarlo al metodo correcto
         $('#formulario_principal').attr('action', url_pv + 'Personasnaturales/new');
-        
+
 
         //Se realiza la peticion con el fin de guardar el registro actual
         $.ajax({
@@ -286,48 +296,42 @@ function validator_form(token_actual) {
             if (result == 'error')
             {
                 notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-            } 
-            else
+            } else
             {
                 if (result == 'error_token')
                 {
                     location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                } 
-                else
+                } else
                 {
                     if (result == 'acceso_denegado')
                     {
                         notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                    } 
-                    else
+                    } else
                     {
                         if (result == 'error_usuario_perfil')
                         {
                             notify("danger", "ok", "Persona natural:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                        } 
-                        else
+                        } else
                         {
                             if (result == 'participante_existente')
                             {
                                 notify("danger", "ok", "Persona natural:", "El participante que intenta ingresar ya se encuentra registrado en la base de datos, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                            } 
-                            else
+                            } else
                             {
                                 if (isNaN(result)) {
                                     notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                } 
-                                else
+                                } else
                                 {
-                                    notify("success", "ok", "Persona natural:", "Se actualizo con el éxito el participante como persona natural.");                                    
+                                    notify("success", "ok", "Persona natural:", "Se actualizo con el éxito el participante como persona natural.");
                                 }
                             }
-                        }                                                
+                        }
                     }
-                }                                
+                }
             }
 
         });
-        
+
         //$form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);        
     });
 

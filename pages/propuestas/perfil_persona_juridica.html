@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>::Persona jurídica::</title>
+        <title>::Información del participante::</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -63,7 +63,7 @@
                 <div class="loading centrado-porcentual"></div>                 
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Perfil de la persona jurídica</h1>
+                        <h1 class="page-header">Información del participante</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -72,7 +72,7 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                Formulario para el registro de información
+                                Formulario para el registro de la persona jurídica
                             </div>
                             <div class="panel-body">
                                 <form id="formulario_principal" action="" class="formulario_principal" role="form" method="post">
@@ -213,10 +213,32 @@
                                     <div class="row">
                                         <div class="col-lg-12" style="text-align: right">
                                             <input type="hidden" id="id" name="id" />
+                                            <input type="hidden" id="conv" name="conv" />                                            
                                             <button type="submit" class="btn btn-default">Guardar</button>
                                         </div>
                                     </div>
                                 </form>
+                                
+                                
+                                
+                                
+                                <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal">
+                                    <div class="modal-dialog modal-sm">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Esta seguro que la información del participante esta correcta?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" id="modal-btn-si">Si</button>
+                                                <button type="button" class="btn btn-primary" id="modal-btn-no">No</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <!-- /.panel-body -->
                         </div>
@@ -266,6 +288,7 @@
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
         <script src='../../dist/js/jquery.loadJSON.js'></script>
-        <script src='persona_juridica.js'></script>
+        <script src='perfil_persona_juridica.js'></script>        
+
     </body>
 </html>
