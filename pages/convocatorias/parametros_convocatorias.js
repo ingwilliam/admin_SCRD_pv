@@ -20,13 +20,16 @@ $(document).ready(function () {
 
             //Limpio el formulario de los anexos
             $('#nuevo_evento').on('hidden.bs.modal', function () {
-                $("#descripcion").jqteVal('');
-                $("#nombre").val("");
+                $("#valores").val('');
+                $("#label").val("");
                 $("#orden").val("");
-                $("#tipo_documento option[value='']").prop("selected", true);
+                $("#tipo_parametro option[value='']").prop("selected", true);
                 $("#id_registro").val("");
             });
-            
+
+            //Agrego url para retornar
+            $(".regresar").attr("onclick", "location.href='update.html?id=" + $("#id").attr('value') + "'");
+
             //Realizo la peticion para cargar el formulario
             $.ajax({
                 type: 'GET',
@@ -45,7 +48,7 @@ $(document).ready(function () {
                     {
                         if (data == 'error_token')
                         {
-                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                            location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                         } else
                         {
                             var json = JSON.parse(data);
@@ -56,7 +59,7 @@ $(document).ready(function () {
                                 $('#convocatoria').find('option').remove();
 
                                 //Valido si la convocatoria tiene categorias                                            
-                                if (json.convocatoria.diferentes_categorias == true)
+                                if (json.convocatoria.tiene_categorias == true)
                                 {
                                     $(".diferentes_requisitos").css("display", "block");
                                     //Cargo el select de las categorias                                                
@@ -78,7 +81,6 @@ $(document).ready(function () {
             //Cargar datos de la tabla
             cargar_tabla(token_actual);
 
-
         } else
         {
             location.href = 'list.html?msg=Debe seleccionar una convocatoria, para poder continuar.&msg_tipo=danger';
@@ -98,14 +100,14 @@ function validator_form(token_actual) {
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
-            tipo_documento: {
+            tipo_parametro: {
                 validators: {
-                    notEmpty: {message: 'El tipo de documento es requerido'}
+                    notEmpty: {message: 'El tipo de parametro es requerido'}
                 }
             },
-            nombre: {
+            label: {
                 validators: {
-                    notEmpty: {message: 'La descripción es requerida'}
+                    notEmpty: {message: 'El nombre es requerido'}
                 }
             },
             orden: {
@@ -113,17 +115,7 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'El orden es requerido'},
                     numeric: {message: 'Debe ingresar solo numeros'}
                 }
-            },
-            archivo: {
-                validators: {
-                    notEmpty: {message: 'El archivo es requerido'},
-                    file: {
-                        extension: 'pdf,doc,xls,docx,xlsx',
-                        type: 'application/pdf,application/msword,application/vnd.ms-excel,application/x-excel,application/excel,application/x-msexcel,,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                        message: 'El archivo seleccionado no es válido'
-                    }
-                }
-            },
+            },            
         }
     }).on('success.form.bv', function (e) {
         // Prevent form submission
@@ -138,13 +130,13 @@ function validator_form(token_actual) {
         formData.append("modulo", "Convocatorias");
         formData.append("token", token_actual.token);
         formData.append("convocatoria_padre_categoria", $("#id").attr('value'));
-        formData.append("anexos", "avisos");
+        formData.append("anexos", "listados");
 
         if ($("#id_registro").val().length < 1) {
             //Se realiza la peticion con el fin de guardar el registro actual
             $.ajax({
                 type: 'POST',
-                url: url_pv + 'Convocatoriasanexos/new',
+                url: url_pv + 'Convocatoriaspropuestasparametros/new',
                 data: formData,
                 cache: false,
                 contentType: false,
@@ -175,7 +167,7 @@ function validator_form(token_actual) {
                                     notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                 } else
                                 {
-                                    notify("success", "ok", "Convocatorias:", "Se creó el documento con éxito.");
+                                    notify("success", "ok", "Convocatorias:", "Se creó el parametro con éxito.");
                                     //Cargar datos de la tabla de categorias
                                     cargar_tabla(token_actual);
                                 }
@@ -190,7 +182,7 @@ function validator_form(token_actual) {
             //Realizo la peticion con el fin de editar el registro actual
             $.ajax({
                 type: 'POST',
-                url: url_pv + 'Convocatoriasanexos/edit/' + $("#id_registro").attr('value'),
+                url: url_pv + 'Convocatoriaspropuestasparametros/edit/' + $("#id_registro").attr('value'),
                 data: formData,
                 cache: false,
                 contentType: false,
@@ -203,7 +195,7 @@ function validator_form(token_actual) {
                 {
                     if (result == 'error_token')
                     {
-                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+
                     } else
                     {
                         if (result == 'acceso_denegado')
@@ -221,7 +213,7 @@ function validator_form(token_actual) {
                                     notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                 } else
                                 {
-                                    notify("info", "ok", "Convocatorias:", "Se edito el documento con éxito.");
+                                    notify("info", "ok", "Convocatorias:", "Se edito el parametro con éxito.");
                                     cargar_tabla(token_actual);
                                 }
                             }
@@ -236,7 +228,7 @@ function validator_form(token_actual) {
         $("#descripcion").jqteVal('');
         $("#orden").val("");
         $("#nombre").val("");
-        $("#tipo_documento option[value='']").prop("selected", true);
+        $("#tipo_parametro option[value='']").prop("selected", true);
         $("#id_registro").val("");
         $('#nuevo_evento').modal('toggle');
     });
@@ -254,24 +246,22 @@ function cargar_tabla(token_actual)
         "serverSide": true,
         "lengthMenu": [10, 20, 30],
         "ajax": {
-            url: url_pv + "Convocatoriasanexos/all",
-            data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "anexos": "avisos"}
+            url: url_pv + "Convocatoriaspropuestasparametros/all",
+            data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "anexos": "listados"}
         },
         "drawCallback": function (settings) {
             $(".check_activar_t").attr("checked", "true");
             $(".check_activar_f").removeAttr("checked");
             acciones_categoria(token_actual);
             //Cargo el formulario, para crear o editar
-            cargar_formulario(token_actual);
-            //descarga el archivo
-            download_file(token_actual);
+            cargar_formulario(token_actual);            
         },
         "columns": [
             {"data": "convocatoria"},
             {"data": "categoria"},
-            {"data": "tipo_documento"},
-            {"data": "nombre"},
-            {"data": "descripcion"},
+            {"data": "tipo_parametro"},
+            {"data": "label"},
+            {"data": "valores"},
             {"data": "orden"},
             {"data": "activar_registro"},
             {"data": "acciones"}
@@ -299,8 +289,8 @@ function cargar_formulario(token_actual)
         //Realizo la peticion para cargar el formulario
         $.ajax({
             type: 'GET',
-            data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "id": $("#id_registro").attr('value'), "anexos": "avisos"},
-            url: url_pv + 'Convocatoriasanexos/search/'
+            data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "id": $("#id_registro").attr('value'), "anexos": "listados"},
+            url: url_pv + 'Convocatoriaspropuestasparametros/search/'
         }).done(function (data) {
             if (data == 'error_metodo')
             {
@@ -313,42 +303,25 @@ function cargar_formulario(token_actual)
                 } else
                 {
                     var json = JSON.parse(data);
-
-                    //Cargo el select de los requisitos
-                    $('#tipo_documento').find('option').remove();
-                    $("#tipo_documento").append('<option value="">:: Seleccionar ::</option>');
-                    if (json.tipo_documento.length > 0) {
-                        $.each(json.tipo_documento, function (key, registro) {
-                            $("#tipo_documento").append('<option value="' + registro + '">' + registro + '</option>');
+                    
+                    //Cargo el select de los tipo_parametro
+                    $('#tipo_parametro').find('option').remove();
+                    $("#tipo_parametro").append('<option value="">:: Seleccionar ::</option>');
+                    if (json.tipo_parametro.length > 0) {
+                        $.each(json.tipo_parametro, function (key, registro) {
+                            $("#tipo_parametro").append('<option value="' + registro + '">' + registro + '</option>');
                         });
                     }
 
                     //Cargo el formulario con los datos
-                    $('#form_nuevo_documento').loadJSON(json.convocatoriaanexo);
-                    $("#descripcion").jqteVal(json.convocatoriaanexo.descripcion);
+                    $('#form_nuevo_documento').loadJSON(json.convocatoriaspropuestasparametros);
+                    $("#obligatorio option[value='"+json.convocatoriaspropuestasparametros.obligatorio+"']").prop("selected", true);                    
+                    $("#valores").val(json.convocatoriaspropuestasparametros.valores);
 
 
                 }
             }
         });
-    });
-}
-
-//Funcion para descargar archivo
-function download_file(token_actual)
-{
-    $(".download_file").click(function () {
-        //Cargo el id file
-        var cod = $(this).attr('title');
-
-        $.AjaxDownloader({
-            url: url_pv + 'Convocatoriasanexos/download_file/',
-            data: {
-                cod: cod,
-                token: token_actual.token
-            }
-        });
-
     });
 }
 
@@ -403,16 +376,16 @@ function acciones_categoria(token_actual)
         $.ajax({
             type: 'DELETE',
             data: {"token": token_actual.token, "modulo": "Convocatorias", "active": active},
-            url: url_pv + 'Convocatoriasanexos/delete/' + $(this).attr("title")
+            url: url_pv + 'Convocatoriaspropuestasparametros/delete/' + $(this).attr("title")
         }).done(function (data) {
             if (data == 'Si' || data == 'No')
             {
                 if (data == 'Si')
                 {
-                    notify("info", "ok", "Convocatorias:", "Se activo el documento con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se activo el parametro con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se elimino el documento con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se elimino el parametro con éxito.");
                 }
             } else
             {

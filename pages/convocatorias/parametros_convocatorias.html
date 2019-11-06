@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>::Documentos Administrativos::</title>
+        <title>::Formulario de la propuesta::</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -63,14 +63,25 @@
                 <div class="loading centrado-porcentual"></div>             
                 <div class="row">                    
                     <div class="col-lg-12">                         
-                        <h1 class="page-header">Documentos Administrativos</h1>
-                    </div>
+                        <h1 class="page-header">Formulario de la propuesta</h1>
+                    </div>                    
                     <div class="panel-body" style="text-align: right">                    
                         <button type="button" class="btn btn-default btn-circle btn-lg regresar" onclick=""><i class="fa fa-arrow-left"></i></button>
                         <button type="button" class="btn btn-primary btn-circle btn-lg" onclick="location.href = 'list.html'"><i class="fa fa-list"></i></button>
-                        <button id="cargar_formulario" type="button" class="btn btn-success btn-circle btn-lg" data-toggle="modal" data-target="#nuevo_evento" ><i class="fa fa-file-o"></i></button>
+                        <button type="button" class="btn btn-success btn-circle btn-lg cargar_formulario" data-toggle="modal" data-target="#nuevo_evento" ><i class="fa fa-file-o"></i></button>
                     </div>
                     <!-- /.col-lg-12 -->
+                </div>
+                <div class="alert alert-info">
+                    <p>El formulario de la propuesta cuenta con variables fijas las cuales son:</p><br/>
+                    <ul>
+                        <li>Nombre de la propuesta</li>
+                        <li>Resumen de la propuesta</li>
+                        <li>Objetivo de la propuesta</li>
+                        <li>¿Su propuesta se desarrollara en Bogotá D.C.?</li>
+                    </ul>
+                    <br/>
+                    <p>Esta funcionalidad le permitirá adicionar variables al formulario de la propuesta</p>
                 </div>
                 <div class="modal fade" id="nuevo_evento">
                     <div class="modal-dialog">
@@ -80,14 +91,13 @@
                             <!-- cabecera del diálogo -->
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title">Documento Administrativo</h4>                                                    
+                                <h4 class="modal-title">Formulario de la propuesta</h4>                                                    
                             </div>
 
                             <!-- cuerpo del diálogo -->
                             <div class="modal-body">
                                 <input type="hidden" id="id" name="convocatoria_padre_categoria" />
-                                <input type="hidden" id="modalidad" name="modalidad" />
-                                <form id="form_nuevo_documento" action="" class="form_nuevo_documento" role="form" method="post">
+                                <form id="form_nuevo_documento" action="" class="form_nuevo_documento" role="form" method="post" enctype="multipart/form-data">
                                     <div class="row">
                                         <div class="col-lg-12 diferentes_requisitos">
                                             <div class="form-group">
@@ -95,65 +105,42 @@
                                                 <select id='convocatoria' name="convocatoria" class="form-control" >                                                                                                                                                            
                                                 </select>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
-                                        </div>                                                                                                                                                    
+                                        </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Requisito <span class="icono_requerido">*</span></label>
-                                                <select id='requisito' name="requisito" class="form-control" >                                                                                                                                                            
+                                                <label>Tipo parametro<span class="icono_requerido">*</span></label>
+                                                <select id='tipo_parametro' name="tipo_parametro" class="form-control">                                                    
+                                                    <option value="">:: Seleccionar ::</option>                                                    
                                                 </select>                                                
+                                            </div>                                        
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Nombre<span class="icono_requerido">*</span></label>
+                                                <input id="label" type="text" name="label" class="form-control">                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Etapa<span class="icono_requerido">*</span></label>
-                                                <select id='etapa' name="etapa" class="form-control">                                                    
-                                                </select>                                                                                                
+                                               <label>Valores <span class="icono_requerido">los valores deben estar separados por (,) ejemplo: CC,CE,TI</span></label>
+                                                <textarea id="valores" name="valores" class="form-control" rows="3"></textarea>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Tipos de archivos permitidos<span class="icono_requerido">*</span></label>
-                                                <select id='archivos_permitidos' name="archivos_permitidos[]" class="form-control" multiple="multiple">                                                    
-                                                </select>                                                                                                
-                                            </div>                                                                                                                                                                                                                                                                                                        
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label>Tamaño máximo permitido<span class="icono_requerido">*</span></label>
-                                                <select id='tamano_permitido' name="tamano_permitido" class="form-control">                                                    
-                                                </select>                                                                                                
-                                            </div>                                                                                                                                                                                                                                                                                                        
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label>Subsanable</label>
-                                                <select id="subsanable" name="subsanable" class="form-control" >                                                    
-                                                    <option value="true" selected="selected">Sí</option>
-                                                    <option value="false">No</option>
+                                                <label>Obligatorio</label>
+                                                <select id="obligatorio" name="obligatorio" class="form-control" >                                                    
+                                                    <option value="true">Sí</option>
+                                                    <option value="false"  selected="selected">No</option>
                                                 </select>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div> 
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Obligatorio</label>
-                                                <select id="obligatorio" name="obligatorio" class="form-control" >                                                    
-                                                    <option value="true" selected="selected">Sí</option>
-                                                    <option value="false">No</option>
-                                                </select>                                                
-                                            </div>                                                                                                                                                                                                                                                                                                        
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
                                                 <label>Orden<span class="icono_requerido">*</span></label>
-                                                <input type="text" name="orden" class="form-control" maxlength="9">                                                
+                                                <input id="orden" type="text" name="orden" class="form-control" maxlength="9">                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label>Descripción<span class="icono_requerido">*</span></label>
-                                                <textarea id="descripcion" name="descripcion" class="form-control textarea_html" rows="3"></textarea>                                                
-                                            </div>                                                                                                                                                                                                                                                                                                        
-                                        </div>
+                                        </div>                                                                                
                                     </div>                                    
                                     <div class="row">
                                         <div class="col-lg-12" style="text-align: right">                                            
@@ -170,21 +157,20 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                Documentos administrativos registrados
+                                Formulario de la propuesta registrada
                             </div>                             
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <table id="table_cronogramas" class="table_cronogramas table">
+                                        <table id="table_registros" class="table">
                                             <thead>
                                                 <tr>
                                                     <th>Convocatoria</th>
                                                     <th>Categoría</th>
-                                                    <th>Requisito</th>
-                                                    <th>Subsanable</th>
-                                                    <th>Obligatorio</th>
-                                                    <th>Orden</th>
-                                                    <th>Descripción</th>
+                                                    <th>Tipo parametro</th>
+                                                    <th>Nombre</th>
+                                                    <th>Valores</th>                                                    
+                                                    <th>Orden</th>                                                    
                                                     <th>¿Activo?</th>
                                                     <th>Acciones</th>
                                                 </tr>
@@ -235,13 +221,17 @@
         <script src="../../dist/libraries/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
         <script src="../../dist/libraries/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.es.js" type="text/javascript"></script>
         
+        <!-- Descargar archivo -->
+        <script src="../../dist/libraries/ajaxdownloader/ajaxdownloader.min.js" type="text/javascript"></script>
+        
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
-        <script src='documentos_administrativos.js'></script>
+        <script src='parametros_convocatorias.js'></script>
         <script src='../../dist/js/jquery.loadJSON.js'></script>
         <script src='../../dist/js/verificar_token.js'></script>
         
         <!-- Text area editor html -->
-        <script type="text/javascript" src="../../dist/libraries/jQuery-TE_v.1.4.0/jquery-te-1.4.0.min.js" charset="utf-8"></script>       
+        <script type="text/javascript" src="../../dist/libraries/jQuery-TE_v.1.4.0/jquery-te-1.4.0.min.js" charset="utf-8"></script>
+        
     </body>
 </html>

@@ -216,7 +216,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Teléfono fijo</label>
-                                                <input type="text" name="numero_documento" class="form-control">
+                                                <input type="text" name="numero_telefono" class="form-control">
                                             </div>
                                         </div>
                                     </div>
@@ -224,13 +224,13 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Número de celular personal</label>
-                                                <input type="text" name="numero_documento" class="form-control">
+                                                <input type="text" name="numero_celular" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Correo electrónico <span class="icono_requerido">*</span></label>
-                                                <input type="text" name="correo_electronico" class="form-control">
+                                                <input type="text" name="correo_electronico" class="form-control" readonly="readonly">
                                             </div>
                                         </div>
                                     </div>
@@ -303,8 +303,8 @@
 
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
-        <script src='persona_natural.js'></script>
-        <script src='../../dist/js/verificar_token.js'></script>
+        <script src='../../dist/js/jquery.loadJSON.js'></script>
+        <script src='persona_natural.js'></script>        
 
     </body>
 </html>
