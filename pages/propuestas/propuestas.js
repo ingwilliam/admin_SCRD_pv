@@ -16,9 +16,6 @@ $(document).ready(function () {
         //Verifica si el token actual tiene acceso de lectura
         permiso_lectura(token_actual, "Menu Participante");
 
-        //Valido formulario
-        validator_form(token_actual);
-
         //Realizo la peticion para cargar el formulario
         $.ajax({
             type: 'GET',
@@ -52,10 +49,10 @@ $(document).ready(function () {
                             {
                                 var json = JSON.parse(data);
 
-                                //Verifico si es bpgota                                
+                                //Verifico si es bogota                                
                                 if (json.propuesta.bogota)
                                 {
-                                    $(".class_descripcion_ejecucion").removeAttr("disabled");
+                                    $(".desarrollo_bogota").removeAttr("disabled");
 
                                     //Cargos el select de localidades
                                     $('#localidad').find('option').remove();
@@ -99,11 +96,28 @@ $(document).ready(function () {
                                         });
                                     }
 
+                                } else
+                                {
+                                    $(".desarrollo_bogota").attr("disabled", "disabled");
+                                }
+
+                                //Verifico si es premio
+                                if (json.propuesta.modalidad == 4)
+                                {
+                                    $(".es_premio").attr("disabled", "disabled");
+                                } else
+                                {
+                                    $(".es_premio").removeAttr("disabled");
                                 }
 
                                 //Cargo el formulario con los datos
                                 $('#formulario_principal').loadJSON(json.propuesta);
                                 $("#bogota option[value='" + json.propuesta.bogota + "']").prop('selected', true);
+                                $("#validator").attr("value",JSON.stringify(json.validator));
+                                
+                                //Valido formulario
+                                validator_form(token_actual);
+                                
                             }
                         }
 
@@ -134,8 +148,8 @@ $(document).ready(function () {
                     {
                         var json = JSON.parse(data);
                         $("#upz").append('<option value="">:: Seleccionar ::</option>');
-                        if(json!=null)
-                        {    
+                        if (json != null)
+                        {
                             if (json.length > 0) {
                                 $.each(json, function (key, value) {
                                     $("#upz").append('<option value="' + value.id + '">' + value.nombre + '</option>');
@@ -162,7 +176,7 @@ $(document).ready(function () {
                     {
                         var json = JSON.parse(data);
                         $("#barrio").append('<option value="">:: Seleccionar ::</option>');
-                        if(json!=null)
+                        if (json != null)
                         {
                             if (json.length > 0) {
                                 $.each(json, function (key, value) {
@@ -210,113 +224,181 @@ $(document).ready(function () {
     }
 });
 
+/*
+ * TENER EN CUENTA
+function crear_validadores() {
+    var options = {
+        fields: {
+            nombre: {
+                validators: {
+                    notEmpty: {message: 'El nombre de la propuesta es requerido'}
+                }
+            }
+        }
+    };
+    
+    var options = JSON.parse('{ \n\
+                                "fields": { \n\
+                                    "nombre": { \n\
+                                        "validators":{ \n\
+                                            "notEmpty":{ "message":"El nombre de la propuesta es requerido" }\n\
+                                            }\n\
+                                        }\n\
+                                    }\n\
+                                }');
+    
+    
+
+    var campo_resumen = {resumen: {
+            validators: {
+                notEmpty: {message: 'El resumen de la propuesta es requerido'}
+            }
+        }};
+    
+    var campo_objetivo = {objetivo: {
+            validators: {
+                notEmpty: {message: 'El objetivo de la propuesta es requerido'}
+            }
+        }};        
+
+    if ($("#modalidad").val() != 4)
+    {
+        options = {
+            fields: {
+                nombre: {
+                    validators: {
+                        notEmpty: {message: 'El nombre de la propuesta es requerido'}
+                    }
+                },
+                resumen: {
+                    validators: {
+                        notEmpty: {message: 'El resumen de la propuesta es requerido'}
+                    }
+                },
+                objetivo: {
+                    validators: {
+                        notEmpty: {message: 'El objetivo de la propuesta es requerido'}
+                    }
+                }
+            }
+        };
+    }
+
+    //alert(options.fields.nombre.validators.notEmpty.message);
+
+    return options;
+}
+*/
+
 function validator_form(token_actual) {
     //Se debe colocar debido a que el calendario es un componente diferente
     $('.calendario').on('changeDate show', function (e) {
         $('.formulario_principal').bootstrapValidator('revalidateField', 'fecha_nacimiento');
-    });
+    });   
+
     //Validar el formulario
-    $('.formulario_principal').bootstrapValidator({
-        feedbackIcons: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-            primer_nombre: {
-                validators: {
-                    notEmpty: {message: 'El nombre de la agrupación es requerido'}
-                }
-            },
-            correo_electronico: {
-                validators: {
-                    notEmpty: {message: 'El correo electrónico de la entidad es requerido'},
-                    emailAddress: {
-                        message: 'El Correo electrónico no es una dirección de correo electrónico válida'
-                    }
-                }
+    $('.formulario_principal').bootstrapValidator(JSON.parse($("#validator").val())).on('success.form.bv', function (e) {
+
+        var validar = false;
+
+        if ($("#bogota").val() == 'true')
+        {
+            if ($("#localidad").val() != "" || $("#upz").val() != "" || $("#barrio").val() != "")
+            {
+                validar = true;
+            } else
+            {
+                notify("danger", "ok", "Propuesta:", "Debe seleccionar una ubicación donde desarrollara su propuesta.");
+                validar = false;
             }
+        } else
+        {
+            validar = true;
         }
-    }).on('success.form.bv', function (e) {
-
-        $("#mi-modal").modal('show');
-
-        var modalConfirm = function (callback) {
-            $("#modal-btn-si").on("click", function () {
-                callback(true);
-                $("#mi-modal").modal('hide');
-            });
-
-            $("#modal-btn-no").on("click", function () {
-                callback(false);
-                $("#mi-modal").modal('hide');
-            });
-        };
 
         // Prevent form submission
         e.preventDefault();
         // Get the form instance
         var $form = $(e.target);
 
-        // Get the BootstrapValidator instance
-        var bv = $form.data('bootstrapValidator');
+        if (validar)
+        {
+            $("#mi-modal").modal('show');
 
-        // Valido si el id existe, con el fin de eviarlo al metodo correcto
-        $('#formulario_principal').attr('action', url_pv + 'Agrupaciones/editar_participante');
+            var modalConfirm = function (callback) {
+                $("#modal-btn-si").on("click", function () {
+                    callback(true);
+                    $("#mi-modal").modal('hide');
+                });
 
+                $("#modal-btn-no").on("click", function () {
+                    callback(false);
+                    $("#mi-modal").modal('hide');
+                });
+            };
 
-        modalConfirm(function (confirm) {
-            if (confirm) {
-                //Se realiza la peticion con el fin de guardar el registro actual
-                $.ajax({
-                    type: 'POST',
-                    url: $form.attr('action'),
-                    data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
-                }).done(function (result) {
+            // Get the BootstrapValidator instance
+            var bv = $form.data('bootstrapValidator');
 
-                    if (result == 'error')
-                    {
-                        notify("danger", "ok", "Agrupación:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                    } else
-                    {
-                        if (result == 'error_token')
+            // Valido si el id existe, con el fin de eviarlo al metodo correcto
+            $('#formulario_principal').attr('action', url_pv + 'Agrupaciones/editar_participante');
+
+            modalConfirm(function (confirm) {
+                if (confirm) {
+                    //Se realiza la peticion con el fin de guardar el registro actual
+                    $.ajax({
+                        type: 'POST',
+                        url: $form.attr('action'),
+                        data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
+                    }).done(function (result) {
+
+                        if (result == 'error')
                         {
-                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                            notify("danger", "ok", "Agrupación:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                         } else
                         {
-                            if (result == 'acceso_denegado')
+                            if (result == 'error_token')
                             {
-                                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                             } else
                             {
-                                if (result == 'error_usuario_perfil')
+                                if (result == 'acceso_denegado')
                                 {
-                                    notify("danger", "ok", "Agrupación:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                                 } else
                                 {
-                                    if (result == 'participante_existente')
+                                    if (result == 'error_usuario_perfil')
                                     {
-                                        notify("danger", "ok", "Agrupación:", "El participante que intenta ingresar ya se encuentra registrado en la base de datos, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                        notify("danger", "ok", "Agrupación:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                     } else
                                     {
-                                        if (isNaN(result)) {
-                                            notify("danger", "ok", "Agrupación:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                        if (result == 'participante_existente')
+                                        {
+                                            notify("danger", "ok", "Agrupación:", "El participante que intenta ingresar ya se encuentra registrado en la base de datos, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                         } else
                                         {
-                                            location.href = url_pv_admin + 'pages/propuestas/propuesta.html?msg=Se actualizo con el éxito el participante como persona natural.&msg_tipo=success';
+                                            if (isNaN(result)) {
+                                                notify("danger", "ok", "Agrupación:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                            } else
+                                            {
+                                                location.href = url_pv_admin + 'pages/propuestas/propuesta.html?msg=Se actualizo con el éxito el participante como persona natural.&msg_tipo=success';
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
 
-                });
-            } else
-            {
-                $form.bootstrapValidator('disableSubmitButtons', false);
-            }
-        });
+                    });
+                } else
+                {
+                    $form.bootstrapValidator('disableSubmitButtons', false);
+                }
+            });
+        } else
+        {
+            $form.bootstrapValidator('disableSubmitButtons', false);
+        }
     });
 
 }

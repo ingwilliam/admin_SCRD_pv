@@ -19,6 +19,66 @@ $(document).ready(function () {
         //Valido formulario
         validator_form(token_actual);
 
+        //Peticion para buscar barrios
+        var json_barrio = function (request, response) {
+                $.ajax({
+                    type: 'GET',
+                    data: {"token": token_actual.token, "id": $("#id").attr('value'),q: request.term},
+                    url: url_pv + 'Barrios/autocompletar/',                                
+                    dataType: "jsonp",
+                    success: function (data) {
+                        response(data);
+                    }
+                });
+            };
+        
+        //Peticion para buscar ciudades
+        var json_ciudades = function (request, response) {
+            $.ajax({
+                type: 'GET',
+                data: {"token": token_actual.token, "id": $("#id").attr('value'),q: request.term},
+                url: url_pv + 'Ciudades/autocompletar/',                                
+                dataType: "jsonp",
+                success: function (data) {
+                    response(data);
+                }
+            });
+        };
+        
+        //Cargos el autocomplete de barrios
+        $("#barrio_residencia_name").autocomplete({
+            source: json_barrio,
+            minLength: 2,
+            select: function (event, ui) {
+                $(this).val(ui.item ? ui.item : " ");
+                $("#barrio_residencia").val(ui.item.id);
+            },
+            change: function (event, ui) {
+                if (!ui.item) {
+                    this.value = '';
+                    $("#barrio_residencia").val("");
+                }                
+            }
+        });
+        
+        //Cargos el autocomplete de ciudad de residencia
+        $("#ciudad_residencia_name").autocomplete({
+            source: json_ciudades,
+            minLength: 2,
+            select: function (event, ui) {
+                $(this).val(ui.item ? ui.item : " ");
+                $("#ciudad_residencia").val(ui.item.id);
+            },
+            change: function (event, ui) {
+                if (!ui.item) {
+                    this.value = '';
+                    $('.formulario_principal').bootstrapValidator('revalidateField', 'ciudad_residencia_name');
+                    $("#ciudad_residencia").val("");
+                }
+                //else { Return your label here }
+            }
+        });
+
         //Realizo la peticion para cargar el formulario
         $.ajax({
             type: 'GET',
@@ -92,80 +152,12 @@ $(document).ready(function () {
                                     });
                                 }
 
-                                //Cargos el autocomplete de ciudad de nacimiento                    
-                                $("#ciudad_nacimiento_name").autocomplete({
-                                    source: json.ciudad,
-                                    minLength: 2,
-                                    select: function (event, ui) {
-                                        $(this).val(ui.item ? ui.item : " ");
-                                        $("#ciudad_nacimiento").val(ui.item.id);
-                                    },
-
-                                    change: function (event, ui) {
-                                        if (!ui.item) {
-                                            this.value = '';
-                                            $("#ciudad_nacimiento").val("");
-                                        }
-                                        //else { Return your label here }
-                                    }
-                                });
+                                //Asigno el nombre de las barrio
+                                $("#barrio_residencia_name").val(json.barrio_residencia_name);                            
 
                                 //Asigno el nombre de las ciudades
-                                $.each(json.ciudad, function (key, array) {
-                                    if (json.participante.ciudad_nacimiento == array.id)
-                                    {
-                                        $("#ciudad_nacimiento_name").val(array.value);
-                                    }
-
-                                    if (json.participante.ciudad_residencia == array.id)
-                                    {
-                                        $("#ciudad_residencia_name").val(array.value);
-                                    }
-                                });
-
-                                //Cargos el autocomplete de ciudad de residencia
-                                $("#ciudad_residencia_name").autocomplete({
-                                    source: json.ciudad,
-                                    minLength: 2,
-                                    select: function (event, ui) {
-                                        $(this).val(ui.item ? ui.item : " ");
-                                        $("#ciudad_residencia").val(ui.item.id);
-                                    },
-                                    change: function (event, ui) {
-                                        if (!ui.item) {
-                                            this.value = '';
-                                            $('.formulario_principal').bootstrapValidator('revalidateField', 'ciudad_residencia_name');
-                                            $("#ciudad_residencia").val("");
-                                        }
-                                        //else { Return your label here }
-                                    }
-                                });
-
-                                //Cargos el autocomplete de barrios
-                                $("#barrio_residencia_name").autocomplete({
-                                    source: json.barrio,
-                                    minLength: 2,
-                                    select: function (event, ui) {
-                                        $(this).val(ui.item ? ui.item : " ");
-                                        $("#barrio_residencia").val(ui.item.id);
-                                    },
-                                    change: function (event, ui) {
-                                        if (!ui.item) {
-                                            this.value = '';
-                                            $("#barrio_residencia").val("");
-                                        }
-                                        //else { Return your label here }
-                                    }
-                                });
-
-                                //Asigno el nombre de las ciudades
-                                $.each(json.barrio, function (key, array) {
-                                    if (json.participante.barrio_residencia == array.id)
-                                    {
-                                        $("#barrio_residencia_name").val(array.value);
-                                    }
-                                });
-
+                                $("#ciudad_residencia_name").val(json.ciudad_residencia_name);     
+                                
                                 //Cargo el formulario con los datos
                                 $('#formulario_principal').loadJSON(json.participante);
 
