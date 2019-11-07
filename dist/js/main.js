@@ -19,27 +19,108 @@ function getURLParameter(sParam)
     }
 }
 
+//Crear los parametros dinamicos
+function crearParametro(id, label, valores, tipo, obligatorio)
+{
+    var span_obligatorio='';
+    if(obligatorio==true)
+    {
+        span_obligatorio='<span class="icono_requerido">*</span>';
+    }
+        
+    var parametro;
+    switch (tipo) {
+        case 'Texto':
+            parametro='<div class="col-lg-6">';
+            parametro+='<div class="form-group">';
+            parametro+='<label>'+label+' '+span_obligatorio+'</label>';
+            parametro+='<input id="parametro_'+id+'" name="parametro['+id+']" type="text" class="form-control" value="">';
+            parametro+='</div>';
+            parametro+='</div>';
+            return(parametro);
+            break;
+        case 'Parrafo':
+            parametro='<div class="col-lg-6">';
+            parametro+='<div class="form-group">';
+            parametro+='<label>'+label+' '+span_obligatorio+'</label>';
+            parametro+='<textarea id="parametro_'+id+'" name="parametro['+id+']" class="form-control textarea_html" rows="3"></textarea>';
+            parametro+='</div>';
+            parametro+='</div>';
+            return(parametro);
+            break;
+        case 'Lista desplegable':
+            parametro='<div class="col-lg-6">';
+            parametro+='<div class="form-group">';
+            parametro+='<label>'+label+' '+span_obligatorio+'</label>';
+            parametro+='<select id="parametro_'+id+'" name="parametro['+id+']" class="form-control" >';
+            var array = valores.split(",");
+            parametro+='<option value="">:: Seleccionar ::</option>';            
+            for (var i in array) {
+                if (array.hasOwnProperty(i)) {                                        
+                    parametro+='<option value="'+array[i]+'">'+array[i]+'</option>';            
+                }
+            }            
+            parametro+='</select>';
+            parametro+='</div>';
+            parametro+='</div>';
+            return(parametro);
+            break;
+        case 'Fecha':
+            parametro='<div class="col-lg-6">';
+            parametro+='<div class="form-group">';
+            parametro+='<label>'+label+' '+span_obligatorio+'</label>';
+            parametro+='<div title="'+id+'" class="input-group date calendario" data-date="" data-date-format="yyyy-mm-dd" data-link-format="yyyy-mm-dd">';            
+            parametro+='<input id="parametro_'+id+'" name="parametro['+id+']" class="form-control" size="16" type="text" value="" readonly>';
+            parametro+='<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>';                    
+            parametro+='</div>';                                            
+            parametro+='</div>';
+            parametro+='</div>';
+            return(parametro);
+        case 'Título':
+            parametro='<div class="col-lg-12">';
+            parametro+='<div class="form-group">';
+            parametro+='<h1>'+label+'</h1>';            
+            parametro+='</div>';
+            parametro+='</div>';
+            return(parametro);
+        case 'Mensaje':
+            parametro='<div class="col-lg-12">';
+            parametro+='<div class="form-group">';
+            parametro+='<p>'+label+'</p>';            
+            parametro+='</div>';
+            parametro+='</div>';
+            return(parametro);
+        case 'Salto de línea':
+            parametro='<div class="col-lg-12">';
+            parametro+='<div class="form-group">';
+            parametro+='<br/><br/>';            
+            parametro+='</div>';
+            parametro+='</div>';
+            return(parametro);        
+    }
+}
+
 function form_edit(id)
 {
     location.href = "form.html?id=" + id;
 }
 
-function form_edit_page(page,id)
+function form_edit_page(page, id)
 {
-    var url="";
-    var name="";
-    if(page==1)
+    var url = "";
+    var name = "";
+    if (page == 1)
     {
-        url="update";
-        name="_self";
-        
+        url = "update";
+        name = "_self";
+
     }
-    if(page==2)
+    if (page == 2)
     {
-        url=url_pv_site+"publicar";
-        name="_blank";
+        url = url_pv_site + "publicar";
+        name = "_blank";
     }
-    window.open(url+".html?id=" + id, name);
+    window.open(url + ".html?id=" + id, name);
 }
 
 /* Función para cargar alertas */
@@ -184,24 +265,23 @@ $(document).ready(function () {
         //Cargamos el menu principal
         $.ajax({
             type: 'POST',
-            data: {"token": token_actual.token,"id":getURLParameter('id'),"m":getURLParameter('m')},
+            data: {"token": token_actual.token, "id": getURLParameter('id'), "m": getURLParameter('m')},
             url: url_pv + 'Administrador/menu'
         }).done(function (result) {
             if (result == 'error_token')
             {
                 location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-            } 
-            else
+            } else
             {
-                $("#menu_principal").html(result);            
-            }                
+                $("#menu_principal").html(result);
+            }
         });
     }
-    
+
     $('.calendario').datetimepicker({
-        language:  'es',
+        language: 'es',
         weekStart: 1,
-        todayBtn:  1,
+        todayBtn: 1,
         autoclose: 1,
         todayHighlight: 1,
         startView: 2,
@@ -215,12 +295,12 @@ $(document).ajaxStart(function () {
     //Cuando se utiliza modal
     $('#my_loader').modal();
     //Cuando se utiliza divs
-    $('.loading').show();          
+    $('.loading').show();
 });
 //Al completar cualquier peticion de ajax oculta el modal
 $(document).ajaxComplete(function () {
     //Cuando se utiliza modal
     $("#my_loader").modal('hide');
     //Cuando se utiliza divs    
-    $('.loading').hide(); 
+    $('.loading').hide();
 });

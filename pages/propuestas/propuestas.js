@@ -113,7 +113,29 @@ $(document).ready(function () {
                                 //Cargo el formulario con los datos
                                 $('#formulario_principal').loadJSON(json.propuesta);
                                 $("#bogota option[value='" + json.propuesta.bogota + "']").prop('selected', true);
-                                $("#validator").attr("value",JSON.stringify(json.validator));
+                                
+                                //Cargo los parametros dinamicos
+                                var parametros="";
+                                var columna=1;
+                                for (var i in json.parametros) {
+                                    if (json.parametros.hasOwnProperty(i)) {                                        
+                                        if(columna==1)
+                                        {
+                                            parametros+='<div class="row">';
+                                        }
+                                        parametros+=crearParametro(json.parametros[i].id, json.parametros[i].label, json.parametros[i].valores, json.parametros[i].tipo_parametro, json.parametros[i].obligatorio);
+                                        if(columna==2)
+                                        {
+                                            parametros+='</div>';
+                                            columna=0;
+                                        }
+                                        columna++;
+                                    }
+                                }
+                                $("#dinamico").html(parametros);                                
+                                
+                                //Cargo los parametros obligatorios
+                                $("#validator").attr("value",JSON.stringify(json.validator));                                                                
                                 
                                 //Valido formulario
                                 validator_form(token_actual);
@@ -291,9 +313,21 @@ function crear_validadores() {
 */
 
 function validator_form(token_actual) {
+    
+    $('.calendario').datetimepicker({
+        language: 'es',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    });
+        
     //Se debe colocar debido a que el calendario es un componente diferente
-    $('.calendario').on('changeDate show', function (e) {
-        $('.formulario_principal').bootstrapValidator('revalidateField', 'fecha_nacimiento');
+    $('.calendario').on('changeDate show', function (e) {        
+        $('.formulario_principal').bootstrapValidator('revalidateField', $("#parametro_"+$(this).attr("title")));
     });   
 
     //Validar el formulario
@@ -341,20 +375,20 @@ function validator_form(token_actual) {
             var bv = $form.data('bootstrapValidator');
 
             // Valido si el id existe, con el fin de eviarlo al metodo correcto
-            $('#formulario_principal').attr('action', url_pv + 'Agrupaciones/editar_participante');
+            $('#formulario_principal').attr('action', url_pv + 'Propuestas/editar_propuesta');
 
             modalConfirm(function (confirm) {
                 if (confirm) {
                     //Se realiza la peticion con el fin de guardar el registro actual
                     $.ajax({
                         type: 'POST',
-                        url: $form.attr('action'),
-                        data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
+                        url: $form.attr('action'),                        
+                        data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token +"&m="+getURLParameter('m'),
                     }).done(function (result) {
 
                         if (result == 'error')
                         {
-                            notify("danger", "ok", "Agrupación:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                         } else
                         {
                             if (result == 'error_token')
@@ -367,24 +401,13 @@ function validator_form(token_actual) {
                                     notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                                 } else
                                 {
-                                    if (result == 'error_usuario_perfil')
-                                    {
-                                        notify("danger", "ok", "Agrupación:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    if (isNaN(result)) {
+                                        notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                     } else
                                     {
-                                        if (result == 'participante_existente')
-                                        {
-                                            notify("danger", "ok", "Agrupación:", "El participante que intenta ingresar ya se encuentra registrado en la base de datos, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                        } else
-                                        {
-                                            if (isNaN(result)) {
-                                                notify("danger", "ok", "Agrupación:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                            } else
-                                            {
-                                                location.href = url_pv_admin + 'pages/propuestas/propuesta.html?msg=Se actualizo con el éxito el participante como persona natural.&msg_tipo=success';
-                                            }
-                                        }
-                                    }
+                                    notify("success", "ok", "Propuesta:", "Se actualizo con el éxito la propuesta.");                                    
+                                    //setTimeout(function(){location.href = url_pv_admin + 'pages/propuestas/integrantes.html?m='+getURLParameter('m')+'&id='+$("#conv").attr('value');}, 1800);                                            
+                                    }                                    
                                 }
                             }
                         }
