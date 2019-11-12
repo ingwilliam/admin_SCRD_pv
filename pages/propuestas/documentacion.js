@@ -62,19 +62,18 @@ $(document).ready(function () {
                                         
                                         var html_table='';                    
                                         $.each(json.administrativos, function (key2, documento) {     
-                                            html_table = html_table+'<tr><td>'+documento.orden+'</td><td>'+documento.requisito+'</td><td>'+documento.descripcion+'</td><td>'+documento.archivos_permitidos+'</td><td>'+documento.tamano_permitido+' MB</td><td><button title="'+documento.id+'" type="button" class="btn btn-success btn_tecnico_documento" data-toggle="modal" data-target="#cargar_documento"><span class="glyphicon glyphicon-open"></span></button></td><td><button title="'+documento.id+'" type="button" class="btn btn-primary btn_tecnico_link" data-toggle="modal" data-target="#cargar_link"><span class="glyphicon glyphicon-link"></span></button></td></tr>';                       
+                                            html_table = html_table+'<tr><td>'+documento.orden+'</td><td>'+documento.requisito+'</td><td>'+documento.descripcion+'</td><td>'+documento.archivos_permitidos+'</td><td>'+documento.tamano_permitido+' MB</td><td><button title="'+documento.id+'" type="button" onclick="btn_tecnico_documento(\''+documento.archivos_permitidos+'\',\''+documento.tamano_permitido+'\')" class="btn btn-success" data-toggle="modal" data-target="#cargar_documento"><span class="glyphicon glyphicon-open"></span></button></td><td><button title="'+documento.id+'" type="button" class="btn btn-primary btn_tecnico_link" data-toggle="modal" data-target="#cargar_link"><span class="glyphicon glyphicon-link"></span></button></td></tr>';                       
                                         });
                                                                                 
                                         $( "#tabla_administrativos" ).append(html_table);  
                                         
                                         html_table='';                    
                                         $.each(json.tecnicos, function (key2, documento) {     
-                                            html_table = html_table+'<tr><td>'+documento.orden+'</td><td>'+documento.requisito+'</td><td>'+documento.descripcion+'</td><td>'+documento.archivos_permitidos+'</td><td>'+documento.tamano_permitido+' MB</td><td><button title="'+documento.id+'" type="button" class="btn btn-success btn_tecnico_documento" data-toggle="modal" data-target="#cargar_documento"><span class="glyphicon glyphicon-open"></span></button></td><td><button title="'+documento.id+'" type="button" class="btn btn-primary btn_tecnico_link" data-toggle="modal" data-target="#cargar_link"><span class="glyphicon glyphicon-link"></span></button></td></tr>';                       
+                                            html_table = html_table+'<tr><td>'+documento.orden+'</td><td>'+documento.requisito+'</td><td>'+documento.descripcion+'</td><td>'+documento.archivos_permitidos+'</td><td>'+documento.tamano_permitido+' MB</td><td><button title="'+documento.id+'" type="button" onclick="btn_tecnico_documento(\''+documento.archivos_permitidos+'\',\''+documento.tamano_permitido+'\')" class="btn btn-success" data-toggle="modal" data-target="#cargar_documento"><span class="glyphicon glyphicon-open"></span></button></td><td><button title="'+documento.id+'" type="button" class="btn btn-primary btn_tecnico_link" data-toggle="modal" data-target="#cargar_link"><span class="glyphicon glyphicon-link"></span></button></td></tr>';                       
                                         });
                                                                                 
                                         $( "#tabla_tecnicos" ).append(html_table);  
                                         
-                                                                                
                                     }
                                 }
                             }
@@ -86,3 +85,61 @@ $(document).ready(function () {
         });
     }
 });
+
+function btn_tecnico_documento(permitido,tamano){
+
+    $("#archivos_permitidos").html(permitido);        
+    
+    var extensiones= permitido.split(',');
+    
+    $('input[type="file"]').change(function (evt) {
+        var f = evt.target.files[0];
+        var reader = new FileReader();
+
+        // Cierre para capturar la información del archivo.
+        reader.onload = function (fileLoadedEvent) {
+            var srcData = fileLoadedEvent.target.result; // <--- data: base64
+            var srcName = f.name;
+            var srcSize = f.size;
+            var srcType = f.type;
+            var ext = srcName.split('.');
+            // ahora obtenemos el ultimo valor despues el punto
+            // obtenemos el length por si el archivo lleva nombre con mas de 2 puntos
+            srcExt = ext[ext.length-1];
+            if(extensiones.includes( srcExt ))
+            {
+                //mb -> bytes
+                permitidotamano=tamano*1000*1000;
+                if(srcSize>permitidotamano)
+                {
+                    notify("danger", "ok", "Documentación:", "El tamaño del archivo excede el permitido ("+tamano+" MB)");
+                }
+                else
+                {
+                    
+                }                
+            }
+            else
+            {
+                notify("danger", "ok", "Documentación:", "Archivo no permitido");
+            }
+                    
+        };
+         // Leer en el archivo como una URL de datos.                
+        reader.readAsDataURL(f);
+    });
+    
+    
+    
+    $( "form.formulario_documento" ).submit(function(){
+        var retrunform = false;
+        
+        alert("a");
+        
+        
+        return retrunform;
+    });
+    
+    
+    
+}
