@@ -3,6 +3,7 @@ $(document).ready(function () {
     //Verifico si el token exite en el cliente y verifico que el token este activo en el servidor
     var token_actual = getLocalStorage(name_local_storage);
 
+
     //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
     if ($.isEmptyObject(token_actual)) {
           location.href = url_pv_admin+'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
@@ -41,7 +42,7 @@ $(document).ready(function () {
         });
 
         $("#optionsRadiosInline1").click(function () {
-          $('#evaluar').show();
+        //  $('#evaluar').show();
         });
 
         $("#optionsRadiosInline2").click(function () {
@@ -49,6 +50,13 @@ $(document).ready(function () {
           //$('#evaluar').toggle();
 
         });
+
+        $(".guardar_aplica_perfil").click(function(){
+
+          evaluar_perfil(token_actual, $(".btn_cargar").attr("id"));
+
+        });
+
 
 
     }
@@ -194,8 +202,9 @@ function cargar_select_categorias(token_actual, convocatoria){
 }
 
 function cargar_tabla(token_actual){
+
  //var data = JSON.stringify( $("#formulario_busqueda_banco").serializeArray() );
-var data =  $("#formulario_busqueda_banco").serializeArray();
+  var data =  $("#formulario_busqueda_banco").serializeArray();
   $('#table_list').DataTable({
                 "language": {
                     "url": "../../dist/libraries/datatables/js/spanish.json"
@@ -205,6 +214,7 @@ var data =  $("#formulario_busqueda_banco").serializeArray();
                 "serverSide": true,
                 "lengthMenu": [10, 15, 20],
                 "responsive": true,
+                "searching":false,
                 "ajax":{
                     url : url_pv+"Juradospreseleccion/all_preseleccionados",
                     data:
@@ -212,21 +222,26 @@ var data =  $("#formulario_busqueda_banco").serializeArray();
                               "convocatoria": $('#convocatorias').val(),
                               "filtros" : data
                             },
-
-
-
                     //async: false
                   },
-                  "drawCallback": function (settings) {
+                "drawCallback": function (settings) {
                      //$(".check_activar_t").attr("checked", "true");
                      //$(".check_activar_f").removeAttr("checked");
                      acciones_registro(token_actual);
 
                     },
+                "rowCallback": function( row, data, index ) {
+                      if ( data["aplica_perfil"] ){
+                          $('td', row).css('background-color', '#dcf4dc');
+                      }
+                      else if ( !data["aplica_perfil"]){
+                          $('td', row).css('background-color', '#f4dcdc');
+                      }
+                  },
                 "columns": [
-                      {"data": "Postulado",
-                    render: function ( data, type, row ) {
-                            return row.postulado;
+                    {"data": "Postulado",
+                      render: function ( data, type, row ) {
+                            return (row.postulado)? "Si":"No";
                           },
                     },
 
@@ -286,6 +301,7 @@ function acciones_registro(token_actual){
     //$('#evaluar').modal('toggle');
 
      cargar_datos_basicos(token_actual,$(this).attr("id") );
+     cargar_tabla_documentos(token_actual, $(this).attr("id"));
      cargar_tabla_educacion_formal(token_actual, $(this).attr("id"));
      cargar_tabla_educacion_no_formal(token_actual, $(this).attr("id"));
      cargar_tabla_experiencia(token_actual, $(this).attr("id"));
@@ -293,10 +309,87 @@ function acciones_registro(token_actual){
      cargar_tabla_reconocimiento(token_actual, $(this).attr("id"));
      cargar_tabla_publicaciones(token_actual, $(this).attr("id"));
      cargar_criterios_evaluacion(token_actual,  $(this).attr("id") );
+     cargar_datos_convocatoria(token_actual,  $(this).attr("id"));
 
   });
 
+
+
 }
+
+function cargar_datos_convocatoria(token_actual, participante){
+  $("#perfiles_jurados").html("");
+
+  $.ajax({
+      type: 'GET',
+      url: url_pv + 'Juradospreseleccion/search_convocatoria_propuesta',
+      data: {"token": token_actual.token, "idc":  $('#convocatorias').val(), "participante":participante},
+  }).done(function (data) {
+
+    switch (data) {
+      case 'error':
+        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        break;
+      case 'error_metodo':
+          notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+          break;
+      case 'error_token':
+        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        break;
+      case 'acceso_denegado':
+        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+        break;
+      case 'deshabilitado':
+        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+        cargar_datos_formulario(token_actual);
+        break;
+      default:
+
+        var json = JSON.parse(data);
+
+
+          $.each(json.participantes	, function (key, perfil) {
+
+
+                $("#perfiles_jurados").append('<div class="well"><div class="row">'
+                                            +' <div class="col-lg-12">'
+                                            +'  <h4>Perfil '+(key+1)+'</h4>'
+                                            +' </div>'
+                                            +' <div class="col-lg-12">'
+                                            +'  <h5><b>Descripción:</h5></b> '+perfil.descripcion_perfil
+                                            +' </div>'
+                                            +' <div class="col-lg-6">'
+                                            + ' <h5><b>Formación profesional:</h5></b> '+perfil.formacion_profesional
+                                            +' </div>'
+                                            +' <div class="col-lg-6">'
+                                            + ' <h5><b>Formación de postgrado:</h5></b> '+perfil.formacion_postgrado
+                                            +' </div>'
+                                            +' <div class="col-lg-6">'
+                                            +'  <h5><b>Nivel educativo:</h5></b> '+perfil.nivel_educativo
+                                            +' </div>'
+                                            +' <div class="col-lg-6">'
+                                            + ' <h5><b>Area de conocimiento:</h5></b> '+perfil.area_conocimiento
+                                            +' </div>'
+                                            +' <div class="col-lg-6">'
+                                            +'  <h5><b>Campo de experiencia:</h5></b>'+perfil.campo_experiencia
+                                            +' </div>'
+                                            +' <div class="col-lg-6">'
+                                            +'  <h5><b>Area del perfíl:</h5></b> '+perfil.area_perfil
+                                            +' </div>'
+                                            +' <div class="col-lg-6">'
+                                            +'  <h5><b>Reside en bogota:</h5></b> '+perfil.reside_bogota
+                                            +' </div>'
+
+                                            +' </div></div>');
+
+
+          });
+
+        break;
+      }
+    });
+}
+
 
 //carga información básica del participante seleccionado
 function cargar_datos_basicos(token_actual, participante){
@@ -354,189 +447,10 @@ function cargar_datos_basicos(token_actual, participante){
           $('#nombres2').html(json.participante.primer_nombre+' '+json.participante.segundo_nombre);
           $('#apellidos2').html(json.participante.primer_apellido+' '+json.participante.segundo_apellido);
           $('#perfil2').html(json.perfil);
-          //$('<p>'+json.participante.tipo_documento+'</p>').appendTo('#tipo_documento');
-/*
-          $("#idp").val(json.participante.id);
-          //console.log("tipo-->"+json.participante.tipo);
-          $('#categoria').val(json.categoria);
-          $('#numero_documento').val(json.participante.numero_documento);
-          $('#primer_nombre').val(json.participante.primer_nombre);
-          $('#segundo_nombre').val(json.participante.segundo_nombre);
-          $('#primer_apellido').val(json.participante.primer_apellido);
-          $('#segundo_apellido').val(json.participante.segundo_apellido);
-          $('#fecha_nacimiento').val(json.participante.fecha_nacimiento);
 
-          if(json.participante.ciudad_nacimiento != null){
-            $('#ciudad_nacimiento_name').val(json.participante.ciudad_nacimiento.label);
-            $('#ciudad_nacimiento').val(json.participante.ciudad_nacimiento.id);
-          }
-
-          if(json.participante.ciudad_residencia != null){
-            $('#ciudad_residencia_name').val(json.participante.ciudad_residencia.label);
-            $('#ciudad_residencia').val(json.participante.ciudad_residencia.id);
-          }
-
-          if(json.participante.barrio_residencia != null ){
-            $('#barrio_residencia_name').val(json.participante.barrio_residencia.label);
-            $('#barrio_residencia').val(json.participante.barrio_residencia.id);
-          }
-
-          $('#direccion_residencia').val(json.participante.direccion_residencia);
-          $('#direccion_correspondencia').val(json.participante.direccion_correspondencia);
-          $('#numero_telefono').val(json.participante.numero_telefono);
-          $('#numero_celular').val(json.participante.numero_celular);
-          $('#correo_electronico').val(json.participante.correo_electronico);
-
-
-          //Cargos el select de tipo de documento
-          $('#tipo_documento').find('option').remove();
-          $("#tipo_documento").append('<option value="">:: Seleccionar ::</option>');
-          if (json.tipo_documento.length > 0) {
-              $.each(json.tipo_documento, function (key, array) {
-                  var selected = '';
-                  if(json.participante != null  && array.id == json.participante.tipo_documento)
-                  {
-                      selected = 'selected="selected"';
-                  }
-                  $("#tipo_documento").append('<option value="' + array.id + '" '+selected+' >' + array.descripcion + '</option>');
-              });
-          }
-
-
-          //Cargos el select de sexo
-          $('#sexo').find('option').remove();
-          $("#sexo").append('<option value="">:: Seleccionar ::</option>');
-          if (json.sexo.length > 0) {
-              $.each(json.sexo, function (key, array) {
-                  var selected = '';
-                  if( json.participante != null  && array.id == json.participante.sexo)
-                  {
-                      selected = 'selected="selected"';
-                  }
-                  $("#sexo").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-              });
-          }
-          //Cargos el select de orientacion sexual
-          $('#orientacion_sexual').find('option').remove();
-          $("#orientacion_sexual").append('<option value="">:: Seleccionar ::</option>');
-          if (json.orientacion_sexual.length > 0) {
-              $.each(json.orientacion_sexual, function (key, array) {
-                  var selected = '';
-                  if(json.participante != null  &&  array.id == json.participante.orientacion_sexual)
-                  {
-                      selected = 'selected="selected"';
-                  }
-                  $("#orientacion_sexual").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-              });
-          }
-          //Cargos el select de identidad genero
-          $('#identidad_genero').find('option').remove();
-          $("#identidad_genero").append('<option value="">:: Seleccionar ::</option>');
-          if (json.orientacion_sexual.length > 0) {
-              $.each(json.identidad_genero, function (key, array) {
-                  var selected = '';
-                  if(json.participante != null  &&  array.id == json.participante.identidad_genero)
-                  {
-                      selected = 'selected="selected"';
-                  }
-                  $("#identidad_genero").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-              });
-          }
-          //Cargos el select de grupo etnico
-          $('#grupo_etnico').find('option').remove();
-          $("#grupo_etnico").append('<option value="">:: Seleccionar ::</option>');
-          if (json.grupo_etnico.length > 0) {
-              $.each(json.grupo_etnico, function (key, array) {
-                  var selected = '';
-                  if( json.participante != null  &&  array.id == json.participante.grupo_etnico)
-                  {
-                      selected = 'selected="selected"';
-                  }
-                  $("#grupo_etnico").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-              });
-          }
-          //Cargos el select de estrato
-          $('#estrato').find('option').remove();
-          $("#estrato").append('<option value="">:: Seleccionar ::</option>');
-          if (json.estrato.length > 0) {
-              $.each(json.estrato, function (key, array) {
-                  var selected = '';
-                  if(json.participante != null  &&  array == json.participante.estrato)
-                  {
-                      selected = 'selected="selected"';
-                  }
-                  $("#estrato").append('<option value="' + array + '" '+selected+' >' + array + '</option>');
-              });
-          }
-
-          //Cargos el autocomplete de ciudad de nacimiento
-          //$("#ciudad_nacimiento_name").val(json.ciudad[json.participante.ciudad_nacimiento].label);
-          $( "#ciudad_nacimiento_name" ).autocomplete({
-              source: json.ciudad,
-              minLength: 2,
-              select: function (event, ui) {
-                  $(this).val(ui.item ? ui.item : " ");
-                  $("#ciudad_nacimiento").val(ui.item.id);
-              },
-
-              change: function (event, ui) {
-                  if (!ui.item) {
-                      this.value = '';
-                      $("#ciudad_nacimiento").val("");
-                  }
-              //else { Return your label here }
-              }
-          });
-
-          //Cargos el autocomplete de ciudad de residencia
-
-          $( "#ciudad_residencia_name" ).autocomplete({
-              source: json.ciudad,
-              minLength: 2,
-              select: function (event, ui) {
-                  $(this).val(ui.item ? ui.item : " ");
-                  $("#ciudad_residencia").val(ui.item.id);
-              },
-              change: function (event, ui) {
-                  if (!ui.item) {
-                      this.value = '';
-                      $('.formulario_principal').bootstrapValidator('revalidateField', 'ciudad_residencia_name');
-                      $("#ciudad_residencia").val("");
-                  }
-              //else { Return your label here }
-              }
-          });
-
-          //Cargos el autocomplete de barrios
-
-          $( "#barrio_residencia_name" ).autocomplete({
-              source: json.barrio,
-              minLength: 2,
-              select: function (event, ui) {
-                  $(this).val(ui.item ? ui.item : " ");
-                  $("#barrio_residencia").val(ui.item.id);
-              },
-              change: function (event, ui) {
-                  if (!ui.item) {
-                      this.value = '';
-                      $("#barrio_residencia").val("");
-                  }
-              //else { Return your label here }
-              }
-          });
-
-            $("#formulario_principal").show();
-*/
         }else{
 
-          //console.log(notify());
-
-          //window.location.href = url_pv_admin+"pages/perfilesparticipantes/jurado.html";
-        //  notify("danger", "ok", "Convocatorias:", "No tiene el perfil de participante para esta convocatoria.");
-        //  location.href = url_pv_admin+"/perfilesparticipantes/jurado.html";
-          //location.href = url_pv_admin + 'pages/perfilesparticipantes/jurado.html?msg=No tiene el perfil de participante para esta convocatoria.&msg_tipo=danger';
-        // window.location.href = url_pv_admin+"pages/perfilesparticipantes/jurado.html?msg=No tiene el perfil de participante para esta convocatoria. Debe registrar los datos del perfil.&msg_tipo=danger";
-
+      
         }
 
         break;
@@ -547,6 +461,70 @@ function cargar_datos_basicos(token_actual, participante){
     );
 
 }
+
+//carga información de la educacion formal
+function cargar_tabla_documentos(token_actual, participante){
+  //Cargar datos en la tabla documentos
+  $('#table_documentos').DataTable({
+                "language": {
+                    "url": "../../dist/libraries/datatables/js/spanish.json"
+                },
+                "processing": true,
+                "destroy": true,
+                "serverSide": true,
+                "lengthMenu": [10, 15, 20],
+                "responsive": true,
+                "searching":false,
+                "ajax":{
+                    url : url_pv+"Juradospreseleccion/all_documento",
+                    data: {"token": token_actual.token, "idc":$('#convocatorias').val(), "participante":participante },
+                    //async: false
+                  },
+                  "drawCallback": function (settings) {
+                     //$(".check_activar_t").attr("checked", "true");
+                     //$(".check_activar_f").removeAttr("checked");
+                     acciones_registro_documento(token_actual);
+                    },
+                "columns": [
+
+                    {"data": "Documento",
+                      render: function ( data, type, row ) {
+                            return row.categoria_jurado;
+                            },
+                    },
+                    {"data": "aciones",
+                              render: function ( data, type, row ) {
+                                          return '<button id="'+ row.file+'" title="'+( row.file == null ? "No se ha cargado archivo": "Descargar archivo")+'" type="button" class="btn btn-primary download_file_documento">'
+                                              + ( row.file == null ? '<span class="glyphicon glyphicon-ban-circle" title="No se ha cargado archivo"></span>':'<span class="glyphicon glyphicon-download-alt"></span>')
+                                              + '</button>';
+                                          },
+                    }
+
+                ]
+            });
+
+}
+
+//Permite realizar acciones despues de cargar la tabla educacion formal
+function acciones_registro_documento(token_actual) {
+
+  //descargar archivo
+  $(".download_file_documento").click(function () {
+    //Cargo el id file
+    var cod = $(this).attr('id');
+
+    $.AjaxDownloader({
+        url: url_pv + 'PropuestasJurados/download_file/',
+        data : {
+            cod   : cod,
+            token   : token_actual.token
+        }
+    });
+
+  });
+
+}
+
 
 //carga información de la educacion formal
 function cargar_tabla_educacion_formal(token_actual, participante){
@@ -566,11 +544,35 @@ function cargar_tabla_educacion_formal(token_actual, participante){
                     data: {"token": token_actual.token, "idc":$('#convocatorias').val(), "participante":participante },
                     //async: false
                   },
-                  "drawCallback": function (settings) {
+                "drawCallback": function (settings) {
                      //$(".check_activar_t").attr("checked", "true");
                      //$(".check_activar_f").removeAttr("checked");
                      acciones_registro_educacion_formal(token_actual);
                     },
+                "rowCallback": function( row, data, index ) {
+
+                          $('#contenidox').html(" <div class='row'><div class='col-lg-6'>"
+                                              +"    <h5><b>Titulo: </b><div id='titulo'>"+data["titulo"]+" </div></h5>"
+                                              +"  </div>"
+                                              +"  <div class='col-lg-6'>"
+                                              +"    <h5><b>Institución: </b><div id='institucion'>"+data["institucion"]+" </div></h5>"
+                                              +"  </div>"
+                                              +"  <div class='col-lg-6'>"
+                                              +"    <h5><b>Ciudad: </b><div id='ciudad'>"+data["ciudad"]+" </div></h5>"
+                                              +"  </div>"
+                                              +"  <div class='col-lg-6'>"
+                                              +"    <h5><b>Número de semestres: </b><div id='numero_semestres'>"+data["numero_semestres"]+" </div></h5>"
+                                              +"  </div>"
+                                              +"  <div class='col-lg-6'>"
+                                              +"    <h5><b>Graduado: </b><div id='graduado'>"+ ( (data["graduado"])? "Si" : "No" )+" </div></h5>"
+                                              +"  </div>"
+                                              +"  <div class='col-lg-6'>"
+                                              +"    <h5><b>Fecha de graduación: </b><div id='fecha_graduacion'>"+data["fecha_graduacion"] +" </div></h5>"
+                                              +"  </div>"
+                                              +"</div>");
+
+
+                      },
                 "columns": [
                     {"data": "Nivel",
                       render: function ( data, type, row ) {
@@ -615,28 +617,9 @@ function acciones_registro_educacion_formal(token_actual) {
   //Permite realizar la carga respectiva de cada registro
     $(".btn_cargar_educacion_formal").click(function (data) {
 
-      /*$.ajax({
-          type: 'GET',
-          url: url_pv + 'Juradospreseleccion/all_educacion_formal',
-          data: "&modulo=Menu Participante&token=" + token_actual.token+"&idc="+$('#convocatorias').val()+"&participante="+participante
-      }).done(function (data) {
-
-        });
-        */
-      //  $('#vermasModalLabel').html("Educación formal");
-
-      $('#contenidox').html(" <div class='row'><div class='col-lg-6'>"
-                          +"    <h5><b>Titulo: </b><div id='titulo'>"+$(this).attr("id")+" </div></h5>"
-                          +"  </div>"
-                          +"  <div class='col-lg-6'>"
-                          +"    <h5><b>Número de documento de identificación: </b><div id='numero_documento'> </div></h5>"
-                          +"  </div></div>");
-
            $('#vermas').show();
            $('#table_eformal').toggle();
-    /*  $("#idregistro").val( $(this).attr("title") );
-      // cargo los datos
-      cargar_datos_formulario(token_actual);*/
+
     });
 
     $("#vermas_back").click(function () {
@@ -644,54 +627,6 @@ function acciones_registro_educacion_formal(token_actual) {
       $('#table_eformal').show();
     });
 
-
-  //Permite activar o eliminar una registro
-  /*$(".activar_registro").click(function () {
-
-      //Cambio el estado del check
-      var active = "false";
-
-      if ($(this).prop('checked')) {
-          active = "true";
-      }
-
-      //Peticion para inactivar el evento
-      $.ajax({
-          type: 'DELETE',
-          data: {"token": token_actual.token, "modulo": "Menu Participante", "active": active, "idc": $("#idc").val()},
-          url: url_pv + 'PropuestasJurados/delete_educacion_formal/' + $(this).attr("title")
-      }).done(function (result) {
-
-        switch (result) {
-          case 'Si':
-              notify("info", "ok", "Convocatorias:", "Se activó el registro con éxito.");
-              break;
-          case 'No':
-                notify("info", "ok", "Convocatorias:", "Se desactivó el registro con éxito.");
-                break;
-          case 'error':
-            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-            break;
-          case 'error_token':
-            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-            break;
-          case 'acceso_denegado':
-            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-            break;
-          case 'deshabilitado':
-            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-            cargar_datos_formulario(token_actual);
-            break;
-          default:
-            notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
-            cargar_datos_formulario(token_actual);
-            break;
-        }
-
-
-      });
-  });
-  */
   //descargar archivo
   $(".download_file_educacion_formal").click(function () {
     //Cargo el id file
@@ -733,6 +668,36 @@ function cargar_tabla_educacion_no_formal(token_actual, participante){
                      //$(".check_activar_f").removeAttr("checked");
                      acciones_registro_educacion_no_formal(token_actual);
                     },
+                  "rowCallback": function( row, data, index ) {
+
+                              $('#contenido_enf').html(" <div class='row'><div class='col-lg-6'>"
+                                                  +"    <h5><b>Tipo: </b><div id='tipo'>"+data["tipo"]+" </div></h5>"
+                                                  +"  </div>"
+                                                  +"  <div class='col-lg-6'>"
+                                                  +"    <h5><b>Modalidad: </b><div id='modalidad'>"+data["modalidad"]+" </div></h5>"
+                                                  +"  </div>"
+                                                  +"  <div class='col-lg-6'>"
+                                                  +"    <h5><b>Nombre: </b><div id='nombre'>"+data["nombre"]+" </div></h5>"
+                                                  +"  </div>"
+                                                  +"  <div class='col-lg-6'>"
+                                                  +"    <h5><b>Institución: </b><div id='institucion'>"+data["institucion"]+" </div></h5>"
+                                                  +"  </div>"
+                                                  +"  <div class='col-lg-6'>"
+                                                  +"    <h5><b>Fecha de inicio: </b><div id='fecha_inicio'>"+ data["fecha_inicio"]+" </div></h5>"
+                                                  +"  </div>"
+                                                  +"  <div class='col-lg-6'>"
+                                                  +"    <h5><b>Fecha de finalización: </b><div id='fecha_fin'>"+ data["fecha_fin"]+" </div></h5>"
+                                                  +"  </div>"
+                                                  +"  <div class='col-lg-6'>"
+                                                  +"    <h5><b>Número de horas: </b><div id='numero_hora'>"+ data["numero_hora"]+" </div></h5>"
+                                                  +"  </div>"
+                                                  +"  <div class='col-lg-6'>"
+                                                  +"    <h5><b>Ciudad: </b><div id='ciudad'>"+data["ciudad"] +" </div></h5>"
+                                                  +"  </div>"
+                                                  +"</div>");
+
+
+                          },
                 "columns": [
                     {"data": "Tipo",
                       render: function ( data, type, row ) {
@@ -799,29 +764,9 @@ function acciones_registro_educacion_no_formal(token_actual) {
 
   //Permite realizar la carga respectiva de cada registro
     $(".btn_cargar_educacion_no_formal").click(function () {
-
-      /*$.ajax({
-          type: 'GET',
-          url: url_pv + 'Juradospreseleccion/all_educacion_formal',
-          data: "&modulo=Menu Participante&token=" + token_actual.token+"&idc="+$('#convocatorias').val()+"&participante="+participante
-      }).done(function (data) {
-
-        });
-        */
-      //  $('#vermasModalLabel').html("Educación formal");
-
-      $('#contenido_enf').html(" <div class='row'><div class='col-lg-6'>"
-                          +"    <h5><b>Titulo: </b><div id='titulo'>"+$(this).attr("id")+" </div></h5>"
-                          +"  </div>"
-                          +"  <div class='col-lg-6'>"
-                          +"    <h5><b>Número de documento de identificación: </b><div id='numero_documento'> </div></h5>"
-                          +"  </div></div>");
-
            $('#vermas_enf').show();
            $('#table_enformal').toggle();
-    /*  $("#idregistro").val( $(this).attr("title") );
-      // cargo los datos
-      cargar_datos_formulario(token_actual);*/
+
     });
 
     $("#vermas_back_enf").click(function () {
@@ -829,54 +774,6 @@ function acciones_registro_educacion_no_formal(token_actual) {
       $('#table_enformal').show();
     });
 
-
-  //Permite activar o eliminar una registro
-  /*$(".activar_registro").click(function () {
-
-      //Cambio el estado del check
-      var active = "false";
-
-      if ($(this).prop('checked')) {
-          active = "true";
-      }
-
-      //Peticion para inactivar el evento
-      $.ajax({
-          type: 'DELETE',
-          data: {"token": token_actual.token, "modulo": "Menu Participante", "active": active, "idc": $("#idc").val()},
-          url: url_pv + 'PropuestasJurados/delete_educacion_formal/' + $(this).attr("title")
-      }).done(function (result) {
-
-        switch (result) {
-          case 'Si':
-              notify("info", "ok", "Convocatorias:", "Se activó el registro con éxito.");
-              break;
-          case 'No':
-                notify("info", "ok", "Convocatorias:", "Se desactivó el registro con éxito.");
-                break;
-          case 'error':
-            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-            break;
-          case 'error_token':
-            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-            break;
-          case 'acceso_denegado':
-            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-            break;
-          case 'deshabilitado':
-            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-            cargar_datos_formulario(token_actual);
-            break;
-          default:
-            notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
-            cargar_datos_formulario(token_actual);
-            break;
-        }
-
-
-      });
-  });
-  */
   //descargar archivo
   $(".download_file_educacion_no_formal").click(function () {
     //Cargo el id file
@@ -893,6 +790,7 @@ function acciones_registro_educacion_no_formal(token_actual) {
   });
 
 }
+
 
 //carga información de la experiencia disciplinar
 function cargar_tabla_experiencia(token_actual, participante){
@@ -916,6 +814,39 @@ function cargar_tabla_experiencia(token_actual, participante){
                      //$(".check_activar_t").attr("checked", "true");
                      //$(".check_activar_f").removeAttr("checked");
                      acciones_registro_experiencia(token_actual);
+                    },
+                  "rowCallback": function( row, data, index ) {
+                    $('#contenido_experiencia').html(" <div class='row'><div class='col-lg-6'>"
+                                        +"    <h5><b>Ciudad: </b><div id='titulo'>"+data["ciudad"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Tipo de entidad: </b><div id='tipo_entidad'>"+data["tipo_entidad"]+"</div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Entidad: </b><div id='entidad'>"+data["entidad"]+"</div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Funciones: </b><div id='funcion'>"+data["funcion"]+"</div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Fecha de inicio: </b><div id='fecha_inicio'>"+data["fecha_inicio"]+"</div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Fecha de finalización: </b><div id='fecha_fin'>"+data["fecha_fin"]+"</div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Nombre: </b><div id='nombre'>"+data["nombre"]+"</div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>correo: </b><div id='correo'>"+data["correo"]+"</div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Teléfono: </b><div id='telefono'>"+data["telefono"]+"</div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Dirección: </b><div id='direccion'>"+data["direccion"]+"</div></h5>"
+                                        +"  </div>"
+                                        +"</div>");
                     },
                 "columns": [
                     {"data": "Ciudad",
@@ -979,29 +910,9 @@ function acciones_registro_experiencia(token_actual) {
 
   //Permite realizar la carga respectiva de cada registro
     $(".btn_cargar_experiencia").click(function () {
-
-      /*$.ajax({
-          type: 'GET',
-          url: url_pv + 'Juradospreseleccion/all_educacion_formal',
-          data: "&modulo=Menu Participante&token=" + token_actual.token+"&idc="+$('#convocatorias').val()+"&participante="+participante
-      }).done(function (data) {
-
-        });
-        */
-      //  $('#vermasModalLabel').html("Educación formal");
-
-      $('#contenido_experiencia').html(" <div class='row'><div class='col-lg-6'>"
-                          +"    <h5><b>Titulo: </b><div id='titulo'>"+$(this).attr("id")+" </div></h5>"
-                          +"  </div>"
-                          +"  <div class='col-lg-6'>"
-                          +"    <h5><b>Número de documento de identificación: </b><div id='numero_documento'> </div></h5>"
-                          +"  </div></div>");
-
            $('#vermas_experiencia').show();
            $('#row_experiencia').toggle();
-    /*  $("#idregistro").val( $(this).attr("title") );
-      // cargo los datos
-      cargar_datos_formulario(token_actual);*/
+
     });
 
     $("#vermas_back_experiencia").click(function () {
@@ -1010,53 +921,6 @@ function acciones_registro_experiencia(token_actual) {
     });
 
 
-  //Permite activar o eliminar una registro
-  /*$(".activar_registro").click(function () {
-
-      //Cambio el estado del check
-      var active = "false";
-
-      if ($(this).prop('checked')) {
-          active = "true";
-      }
-
-      //Peticion para inactivar el evento
-      $.ajax({
-          type: 'DELETE',
-          data: {"token": token_actual.token, "modulo": "Menu Participante", "active": active, "idc": $("#idc").val()},
-          url: url_pv + 'PropuestasJurados/delete_educacion_formal/' + $(this).attr("title")
-      }).done(function (result) {
-
-        switch (result) {
-          case 'Si':
-              notify("info", "ok", "Convocatorias:", "Se activó el registro con éxito.");
-              break;
-          case 'No':
-                notify("info", "ok", "Convocatorias:", "Se desactivó el registro con éxito.");
-                break;
-          case 'error':
-            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-            break;
-          case 'error_token':
-            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-            break;
-          case 'acceso_denegado':
-            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-            break;
-          case 'deshabilitado':
-            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-            cargar_datos_formulario(token_actual);
-            break;
-          default:
-            notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
-            cargar_datos_formulario(token_actual);
-            break;
-        }
-
-
-      });
-  });
-  */
   //descargar archivo
   $(".download_file_experiencia").click(function () {
     //Cargo el id file
@@ -1073,6 +937,7 @@ function acciones_registro_experiencia(token_actual) {
   });
 
 }
+
 
 //carga información de la experiencia como jurado
 function cargar_tabla_experiencia_jurado(token_actual, participante){
@@ -1097,6 +962,24 @@ function cargar_tabla_experiencia_jurado(token_actual, participante){
                      //$(".check_activar_t").attr("checked", "true");
                      //$(".check_activar_f").removeAttr("checked");
                      acciones_registro_experiencia_jurado(token_actual);
+                    },
+                  "rowCallback": function( row, data, index ) {
+                    $('#contenido_experiencia_jurado').html(" <div class='row'><div class='col-lg-6'>"
+                                        +"    <h5><b>Nombre: </b><div id='nombre'>"+data["nombre"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Entidad: </b><div id='entidad'>"+data["entidad"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Año: </b><div id='anio'>"+data["anio"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Ambito: </b><div id='ambito'>"+data["ambito"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Ciudad: </b><div id='ciudad'>"+data["ciudad"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"</div>");
                     },
                 "columns": [
 
@@ -1148,29 +1031,9 @@ function acciones_registro_experiencia_jurado(token_actual) {
 
   //Permite realizar la carga respectiva de cada registro
     $(".btn_cargar_experiencia_jurado").click(function () {
-
-      /*$.ajax({
-          type: 'GET',
-          url: url_pv + 'Juradospreseleccion/all_educacion_formal',
-          data: "&modulo=Menu Participante&token=" + token_actual.token+"&idc="+$('#convocatorias').val()+"&participante="+participante
-      }).done(function (data) {
-
-        });
-        */
-      //  $('#vermasModalLabel').html("Educación formal");
-
-      $('#contenido_experiencia_jurado').html(" <div class='row'><div class='col-lg-6'>"
-                          +"    <h5><b>Titulo: </b><div id='titulo'>"+$(this).attr("id")+" </div></h5>"
-                          +"  </div>"
-                          +"  <div class='col-lg-6'>"
-                          +"    <h5><b>Número de documento de identificación: </b><div id='numero_documento'> </div></h5>"
-                          +"  </div></div>");
-
            $('#vermas_experiencia_jurado').show();
            $('#row_experiencia_jurado').toggle();
-    /*  $("#idregistro").val( $(this).attr("title") );
-      // cargo los datos
-      cargar_datos_formulario(token_actual);*/
+
     });
 
     $("#vermas_back_experiencia_jurado").click(function () {
@@ -1178,54 +1041,6 @@ function acciones_registro_experiencia_jurado(token_actual) {
       $('#row_experiencia_jurado').show();
     });
 
-
-  //Permite activar o eliminar una registro
-  /*$(".activar_registro").click(function () {
-
-      //Cambio el estado del check
-      var active = "false";
-
-      if ($(this).prop('checked')) {
-          active = "true";
-      }
-
-      //Peticion para inactivar el evento
-      $.ajax({
-          type: 'DELETE',
-          data: {"token": token_actual.token, "modulo": "Menu Participante", "active": active, "idc": $("#idc").val()},
-          url: url_pv + 'PropuestasJurados/delete_educacion_formal/' + $(this).attr("title")
-      }).done(function (result) {
-
-        switch (result) {
-          case 'Si':
-              notify("info", "ok", "Convocatorias:", "Se activó el registro con éxito.");
-              break;
-          case 'No':
-                notify("info", "ok", "Convocatorias:", "Se desactivó el registro con éxito.");
-                break;
-          case 'error':
-            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-            break;
-          case 'error_token':
-            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-            break;
-          case 'acceso_denegado':
-            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-            break;
-          case 'deshabilitado':
-            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-            cargar_datos_formulario(token_actual);
-            break;
-          default:
-            notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
-            cargar_datos_formulario(token_actual);
-            break;
-        }
-
-
-      });
-  });
-  */
   //descargar archivo
   $(".download_file_experiencia_jurado").click(function () {
     //Cargo el id file
@@ -1268,6 +1083,24 @@ function cargar_tabla_reconocimiento(token_actual, participante){
                      //$(".check_activar_f").removeAttr("checked");
                      acciones_registro_reconocimiento(token_actual);
                     },
+                  "rowCallback": function( row, data, index ) {
+                    $('#contenido_reconocimiento').html(" <div class='row'><div class='col-lg-6'>"
+                                        +"    <h5><b>Nombre: </b><div id='nombre'>"+data["nombre"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Institucion: </b><div id='institucion'>"+data["institucion"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Tipo: </b><div id='tipo'>"+data["tipo"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Año: </b><div id='anio'>"+data["anio"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Ciudad: </b><div id='ciudad'>"+data["ciudad"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"</div>");
+                    },
                 "columns": [
 
                     {"data": "Nombre",
@@ -1318,28 +1151,9 @@ function acciones_registro_reconocimiento(token_actual) {
   //Permite realizar la carga respectiva de cada registro
     $(".btn_cargar_reconocimiento").click(function () {
 
-      /*$.ajax({
-          type: 'GET',
-          url: url_pv + 'Juradospreseleccion/all_educacion_formal',
-          data: "&modulo=Menu Participante&token=" + token_actual.token+"&idc="+$('#convocatorias').val()+"&participante="+participante
-      }).done(function (data) {
-
-        });
-        */
-      //  $('#vermasModalLabel').html("Educación formal");
-
-      $('#contenido_reconocimiento').html(" <div class='row'><div class='col-lg-6'>"
-                          +"    <h5><b>Titulo: </b><div id='titulo'>"+$(this).attr("id")+" </div></h5>"
-                          +"  </div>"
-                          +"  <div class='col-lg-6'>"
-                          +"    <h5><b>Número de documento de identificación: </b><div id='numero_documento'> </div></h5>"
-                          +"  </div></div>");
-
            $('#vermas_reconocimiento').show();
            $('#row_reconocimiento').toggle();
-    /*  $("#idregistro").val( $(this).attr("title") );
-      // cargo los datos
-      cargar_datos_formulario(token_actual);*/
+
     });
 
     $("#vermas_back_reconocimiento").click(function () {
@@ -1348,53 +1162,6 @@ function acciones_registro_reconocimiento(token_actual) {
     });
 
 
-  //Permite activar o eliminar una registro
-  /*$(".activar_registro").click(function () {
-
-      //Cambio el estado del check
-      var active = "false";
-
-      if ($(this).prop('checked')) {
-          active = "true";
-      }
-
-      //Peticion para inactivar el evento
-      $.ajax({
-          type: 'DELETE',
-          data: {"token": token_actual.token, "modulo": "Menu Participante", "active": active, "idc": $("#idc").val()},
-          url: url_pv + 'PropuestasJurados/delete_educacion_formal/' + $(this).attr("title")
-      }).done(function (result) {
-
-        switch (result) {
-          case 'Si':
-              notify("info", "ok", "Convocatorias:", "Se activó el registro con éxito.");
-              break;
-          case 'No':
-                notify("info", "ok", "Convocatorias:", "Se desactivó el registro con éxito.");
-                break;
-          case 'error':
-            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-            break;
-          case 'error_token':
-            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-            break;
-          case 'acceso_denegado':
-            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-            break;
-          case 'deshabilitado':
-            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-            cargar_datos_formulario(token_actual);
-            break;
-          default:
-            notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
-            cargar_datos_formulario(token_actual);
-            break;
-        }
-
-
-      });
-  });
-  */
   //descargar archivo
   $(".download_file_reconocimiento").click(function () {
     //Cargo el id file
@@ -1437,6 +1204,24 @@ function cargar_tabla_reconocimiento(token_actual, participante){
                      //$(".check_activar_f").removeAttr("checked");
                      acciones_registro_reconocimiento(token_actual);
                     },
+                  "rowCallback": function( row, data, index ) {
+                    $('#contenido_reconocimiento').html(" <div class='row'><div class='col-lg-6'>"
+                                        +"    <h5><b>Nombre: </b><div id='nombre'>"+data["nombre"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Institución: </b><div id='institucion'>"+data["institucion"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Tipo: </b><div id='tipo'>"+data["tipo"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Año: </b><div id='anio'>"+data["anio"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Ciudad: </b><div id='ciudad'>"+data["ciudad"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"</div>");
+                    },
                 "columns": [
 
                     {"data": "Nombre",
@@ -1486,29 +1271,9 @@ function acciones_registro_reconocimiento(token_actual) {
 
   //Permite realizar la carga respectiva de cada registro
     $(".btn_cargar_reconocimiento").click(function () {
+      $('#vermas_reconocimiento').show();
+      $('#row_reconocimiento').toggle();
 
-      /*$.ajax({
-          type: 'GET',
-          url: url_pv + 'Juradospreseleccion/all_educacion_formal',
-          data: "&modulo=Menu Participante&token=" + token_actual.token+"&idc="+$('#convocatorias').val()+"&participante="+participante
-      }).done(function (data) {
-
-        });
-        */
-      //  $('#vermasModalLabel').html("Educación formal");
-
-      $('#contenido_reconocimiento').html(" <div class='row'><div class='col-lg-6'>"
-                          +"    <h5><b>Titulo: </b><div id='titulo'>"+$(this).attr("id")+" </div></h5>"
-                          +"  </div>"
-                          +"  <div class='col-lg-6'>"
-                          +"    <h5><b>Número de documento de identificación: </b><div id='numero_documento'> </div></h5>"
-                          +"  </div></div>");
-
-           $('#vermas_reconocimiento').show();
-           $('#row_reconocimiento').toggle();
-    /*  $("#idregistro").val( $(this).attr("title") );
-      // cargo los datos
-      cargar_datos_formulario(token_actual);*/
     });
 
     $("#vermas_back_reconocimiento").click(function () {
@@ -1516,54 +1281,6 @@ function acciones_registro_reconocimiento(token_actual) {
       $('#row_reconocimiento').show();
     });
 
-
-  //Permite activar o eliminar una registro
-  /*$(".activar_registro").click(function () {
-
-      //Cambio el estado del check
-      var active = "false";
-
-      if ($(this).prop('checked')) {
-          active = "true";
-      }
-
-      //Peticion para inactivar el evento
-      $.ajax({
-          type: 'DELETE',
-          data: {"token": token_actual.token, "modulo": "Menu Participante", "active": active, "idc": $("#idc").val()},
-          url: url_pv + 'PropuestasJurados/delete_educacion_formal/' + $(this).attr("title")
-      }).done(function (result) {
-
-        switch (result) {
-          case 'Si':
-              notify("info", "ok", "Convocatorias:", "Se activó el registro con éxito.");
-              break;
-          case 'No':
-                notify("info", "ok", "Convocatorias:", "Se desactivó el registro con éxito.");
-                break;
-          case 'error':
-            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-            break;
-          case 'error_token':
-            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-            break;
-          case 'acceso_denegado':
-            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-            break;
-          case 'deshabilitado':
-            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-            cargar_datos_formulario(token_actual);
-            break;
-          default:
-            notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
-            cargar_datos_formulario(token_actual);
-            break;
-        }
-
-
-      });
-  });
-  */
   //descargar archivo
   $(".download_file_reconocimiento").click(function () {
     //Cargo el id file
@@ -1604,6 +1321,30 @@ function cargar_tabla_publicaciones(token_actual, participante){
                      //$(".check_activar_t").attr("checked", "true");
                      //$(".check_activar_f").removeAttr("checked");
                      acciones_registro_publicaciones(token_actual);
+                    },
+                  "rowCallback": function( row, data, index ) {
+                    $('#contenido_publicaciones').html(" <div class='row'><div class='col-lg-6'>"
+                                        +"    <h5><b>Titulo: </b><div id='titulo'>"+data["titulo"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Tema: </b><div id='tema'>"+data["tema"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Tipo: </b><div id='tipo'>"+data["tipo"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Formato: </b><div id='formato'>"+data["formato"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Medio: </b><div id='medio'>"+data["medio"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Ciudad: </b><div id='ciudad'>"+data["ciudad"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"  <div class='col-lg-6'>"
+                                        +"    <h5><b>Año: </b><div id='anio'>"+data["anio"]+" </div></h5>"
+                                        +"  </div>"
+                                        +"</div>");
                     },
                 "columns": [
 
@@ -1647,26 +1388,8 @@ function acciones_registro_publicaciones(token_actual) {
 
   //Permite realizar la carga respectiva de cada registro
     $(".btn_cargar_publicaciones").click(function () {
-
-      /*$.ajax({
-          type: 'GET',
-          url: url_pv + 'Juradospreseleccion/all_educacion_formal',
-          data: "&modulo=Menu Participante&token=" + token_actual.token+"&idc="+$('#convocatorias').val()+"&participante="+participante
-      }).done(function (data) {
-
-        });
-        */
-      //  $('#vermasModalLabel').html("Educación formal");
-
-      $('#contenido_publicaciones').html(" <div class='row'><div class='col-lg-6'>"
-                          +"    <h5><b>Titulo: </b><div id='titulo'>"+$(this).attr("id")+" </div></h5>"
-                          +"  </div>"
-                          +"  <div class='col-lg-6'>"
-                          +"    <h5><b>Número de documento de identificación: </b><div id='numero_documento'> </div></h5>"
-                          +"  </div></div>");
-
-           $('#vermas_publicaciones').show();
-           $('#row_publicaciones').toggle();
+      $('#vermas_publicaciones').show();
+      $('#row_publicaciones').toggle();
     /*  $("#idregistro").val( $(this).attr("title") );
       // cargo los datos
       cargar_datos_formulario(token_actual);*/
@@ -1677,54 +1400,6 @@ function acciones_registro_publicaciones(token_actual) {
       $('#row_publicaciones').show();
     });
 
-
-  //Permite activar o eliminar una registro
-  /*$(".activar_registro").click(function () {
-
-      //Cambio el estado del check
-      var active = "false";
-
-      if ($(this).prop('checked')) {
-          active = "true";
-      }
-
-      //Peticion para inactivar el evento
-      $.ajax({
-          type: 'DELETE',
-          data: {"token": token_actual.token, "modulo": "Menu Participante", "active": active, "idc": $("#idc").val()},
-          url: url_pv + 'PropuestasJurados/delete_educacion_formal/' + $(this).attr("title")
-      }).done(function (result) {
-
-        switch (result) {
-          case 'Si':
-              notify("info", "ok", "Convocatorias:", "Se activó el registro con éxito.");
-              break;
-          case 'No':
-                notify("info", "ok", "Convocatorias:", "Se desactivó el registro con éxito.");
-                break;
-          case 'error':
-            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-            break;
-          case 'error_token':
-            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-            break;
-          case 'acceso_denegado':
-            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-            break;
-          case 'deshabilitado':
-            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-            cargar_datos_formulario(token_actual);
-            break;
-          default:
-            notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
-            cargar_datos_formulario(token_actual);
-            break;
-        }
-
-
-      });
-  });
-  */
   //descargar archivo
   $(".download_file_publicaciones").click(function () {
     //Cargo el id file
@@ -1743,9 +1418,10 @@ function acciones_registro_publicaciones(token_actual) {
 }
 
 
-//carga información de la experiencia como jurado
+//carga información de los criterios de evaluacion de las rondas
 function cargar_criterios_evaluacion(token_actual, participante){
   $("#criterios").empty();
+
   //Cargar datos en la tabla actual
   $.ajax({
       type: 'GET',
@@ -1774,70 +1450,96 @@ function cargar_criterios_evaluacion(token_actual, participante){
         //cargar_datos_formulario(token_actual);
         break;
       default:
-        //notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
         //cargar_datos_formulario(token_actual);
           var json = JSON.parse(data);
 
 
-           /*  if (json.tipo_documento.length > 0) {
-                  $.each(json.tipo_documento, function (key, array) {
-                      var selected = '';
-                      if(json.participante != null  && array.id == json.participante.tipo_documento)
-                      {
-                          selected = 'selected="selected"';
-                      }
-                      $("#tipo_documento").append('<option value="' + array.id + '" '+selected+' >' + array.descripcion + '</option>');
-                  });
-              }*/
-            //  console.log("array criterios-->"+json[0].criterios);
+          //ronda
+          $.each(json, function (r, ronda){
 
-                //console.log("xxxx-->"+json[0].criterios.["Nivel académico"]);
+            $("#id_ronda").val(json[r].ronda.id);
 
-               //if ( json[0].criterios.length > 0) {
-               $.each(json, function (k, o){
+            //Se establece los valores de la evaluación del perfil
+            //alert(typeof json[r].perfil.aplica_perfil);
 
+            $("nput[name=option_aplica_perfil][value=true]").removeAttr('checked');
+            $("input[name=option_aplica_perfil][value=false]").removeAttr('checked');
 
+            if( json[r].postulacion.aplica_perfil ){
+                $("input[name=option_aplica_perfil][value=true]").attr('checked', 'checked');
+            }else if( (!json[r].postulacion.aplica_perfil) || (json[r].postulacion.aplica_perfil === null) ){
+                $("input[name=option_aplica_perfil][value=false]").attr('checked', 'checked');
+            }
 
-                   $.each(json[k].criterios, function (key, array) {
-                     //console.log("key-->"+key);
-                     //console.log("arraysss-->"+Object.keys(array));
+            $("#descripcion_evaluacion").val(json[r].postulacion.descripcion_evaluacion);
 
-                     $("#criterios").append('<div class="row">'
+            $("#id_jurados_postulados").val(json[r].postulacion.id);
+
+            //grupo
+            $.each(json[r].criterios, function (key, array) {
+              //console.log("key-->"+key);
+              //console.log("arraysss-->"+Object.keys(array));
+
+              $("#criterios").append('<div class="row">'
                                             +' <div class="col-lg-12"> <h5><b>'+Object.keys(array)+'</b><div id="perfil2"> </div></h5></div>'
                                             +'</div>');
 
-                       $.each(array[Object.keys(array)], function (k, a) {
-                          //console.log("-->>"+a.id);
-                        //  console.log("min"+a.puntaje_minimo+'-max'+a.puntaje_maximo);
+              //criterio
+              $.each(array[Object.keys(array)], function (k, a) {
 
-                          select ='    <select class="form-control"><option selected>::Sin calificar::</option>';
-                          for(i = a.puntaje_minimo; i<= a.puntaje_maximo;i++){
-                            select=select+'<option value='+i+' >'+i+'</option>';
-                          }
-                            select=select+'</select>';
+              //  key.push(a.id);
+                //console.log("-->>"+a.id);
+                //  console.log("min"+a.puntaje_minimo+'-max'+a.puntaje_maximo);
 
-                          $("#criterios").append('<div class="row">'
+                //se construye las opciones del componente select
+                select ='<select id="'+a.id+'" name="'+a.id+'" class="form-control '+r+key+'"'
+                                  + ( a.exclusivo ? ' onchange=" limpiar( this, '+r+key+' ) "': "")
+                                  +' >'
+                        +        '<option value="null">::Sin calificar::</option>';
+
+                for(i = a.puntaje_minimo; i<= a.puntaje_maximo;i++){
+                  select=select+'<option '+ ((a.evaluacion.puntaje == i)? 'selected': '') +' value='+i+' >'+i+'</option>';
+                }
+
+                select=select+'</select>';
+
+                //Se construye los radio
+                $("#criterios").append('<div class="row">'
                                                 // +' <div class="col-lg-12"> <h5><b>'+key+'</b><div id="perfil2"> sssssss</div></h5></div>'
-                                                +' <div class="col-lg-6">'
-
-                                                +' <input type="radio" name="optionsRadios'+a.grupo_criterio+'" id="optionsRadios1" value="option1" checked=""> '+a.descripcion_criterio
-
+                                                +' <div class="col-lg-6" >'
+                                              /*  + ( a.exclusivo ?
+                                                  '  <input type="radio" name="optionsRadios'+a.grupo_criterio+'" id="optionsRadios1" value="option1"> '
+                                                  : "checkbox" )*/
+                                                +    a.descripcion_criterio //+" - "+a.exclusivo
                                                 +' </div>'
                                                 +' <div class="col-lg-6">'
                                                 +'  <div class="form-group">'
-                                                +select
+                                                +     select
                                                 +'  </div>'
                                                 +' </div>'
                                                 +'</div>');
+              //append
+
                        });
+              //$.each(array[Object.keys(array)], function (k, a)
+             });
+
+             $("#criterios").append('<div class="col-lg-12" style="text-align: right"><button type="button" class="btn btn-default '+( (json[r].postulacion.estado == 11) ? "disabled":' guardar_evaluacion_'+$("#id_ronda").val() )+'">Guardar</button></div>');
+
+          });
 
 
 
-                   });
+            $(".guardar_evaluacion_"+$("#id_ronda").val() ).click(function(){
 
-              });
-               //}
+              evaluar_criterios(token_actual, participante);
+            });
 
+            $("#baceptar").click(function(){
+              evaluar_criterios(token_actual, participante);
+              $('#alertModal').modal('toggle');
+
+            });
 
         break;
     }
@@ -1846,398 +1548,113 @@ function cargar_criterios_evaluacion(token_actual, participante){
 
 }
 
+//Restablece los componentes select cuyo grupo de criterios sean exclusivos
+function limpiar(criterio, key){
+  //console.log(" limpiar()");
 
+  $("."+key).each(function(c,v) {
 
+    if ( $("."+key)[c].id != criterio.id ){
+      //console.log(" id-->"+$("."+key)[c].value);
+      $("."+key)[c].selectedIndex = 0;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-function validator_form(token_actual) {
-
-    //Se debe colocar debido a que el calendario es un componente diferente
-    $('.calendario').on('changeDate show', function (e) {
-        $('.formulario_principal').bootstrapValidator('revalidateField', 'fecha_nacimiento');
-    });
-    //Validar el formulario
-    $('.formulario_principal').bootstrapValidator({
-        feedbackIcons: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-            tipo_documento: {
-                validators: {
-                    notEmpty: {message: 'El tipo de documento de identificación es requerido'}
-                }
-            },
-            numero_documento: {
-                validators: {
-                    notEmpty: {message: 'El número de documento de identificación es requerido'},
-                    numeric: {message: 'Debe ingresar solo numeros'}
-                }
-            },
-            primer_nombre: {
-                validators: {
-                    notEmpty: {message: 'El primer nombre es requerido'}
-                }
-            },
-            primer_apellido: {
-                validators: {
-                    notEmpty: {message: 'El primer apellido es requerido'}
-                }
-            },
-            fecha_nacimiento: {
-                validators: {
-                    notEmpty: {message: 'La fecha de nacimiento es requerida'}
-                }
-            },
-            sexo: {
-                validators: {
-                    notEmpty: {message: 'El sexo es requerido'}
-                }
-            },
-            ciudad_residencia_name: {
-                validators: {
-                    notEmpty: {message: 'La ciudad de residencia es requerida'}
-                }
-            },
-            direccion_residencia: {
-                validators: {
-                    notEmpty: {message: 'La dirección de residencia es requerida'}
-                }
-            },
-            estrato: {
-                validators: {
-                    notEmpty: {message: 'El estrato es requerido'}
-                }
-            },
-            correo_electronico: {
-                validators: {
-                    notEmpty: {message: 'El correo electrónico es requerido'},
-                    emailAddress: {
-                        message: 'El Correo electrónico no es una dirección de correo electrónico válida'
-                    }
-                }
-            }
-        }
-    }).on('success.form.bv', function (e) {
-
-    //  alert("idd-->"+typeof $("#idd").attr('value')+" idd-->>"+$("#idd").val() )
-
-        // Prevent form submission
-        e.preventDefault();
-        // Get the form instance
-        var $form = $(e.target);
-
-        // Get the BootstrapValidator instance
-        var bv = $form.data('bootstrapValidator');
-
-        if ( typeof $("#idd").attr('value') === 'undefined' || $("#idd").val() == null || $("#idd").val() == '') {
-
-        //  alert("nuevo!!!");
-              //Se realiza la peticion con el fin de guardar el registro actual
-              $.ajax({
-                  type: 'POST',
-                  url: url_pv + 'Jurados/new',
-                  data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
-              }).done(function (data) {
-
-
-                switch (data) {
-                  case 'error':
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                    break;
-                  case 'error_metodo':
-                      notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                      break;
-                  case 'error_token':
-                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                    break;
-                  case 'acceso_denegado':
-                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                    break;
-                  case 'deshabilitado':
-                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                    cargar_datos_formulario(token_actual);
-                    break;
-                  case 'error_duplicado':
-                      notify("danger", "remove", "Usuario:", "Ya existe un usuario registrado con el mismo documento de identificación.");
-                      cargar_datos_formulario(token_actual);
-                      break;
-                  default:
-                      notify("success", "ok", "Convocatorias:", "Se creó el registro con éxito.");
-                      //Cargar datos de la tabla de rondas
-                      //cargar_tabla_criterio($("#convocatoria_ronda").attr('value'),token_actual);
-                      $("#idd").val(data);
-                      cargar_datos_formulario(token_actual);
-                   break;
-                 }
-
-              });
-
-          }else{
-
-            //  alert("editado!!!");
-            //Realizo la peticion con el fin de editar el registro actual
-            $.ajax({
-                type: 'POST',
-                url: url_pv + 'Jurados/edit/'+$("#idd").val(),
-                data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
-            }).done(function (data) {
-
-                    switch (data) {
-                      case 'error':
-                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                        break;
-                      case 'error_metodo':
-                          notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                          break;
-                      case 'error_token':
-                        location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                        break;
-                      case 'acceso_denegado':
-                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                        break;
-                      case 'deshabilitado':
-                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                        cargar_datos_formulario(token_actual);
-                        break;
-                      case 'error_duplicado':
-                        notify("danger", "remove", "Usuario:", "Ya existe un usuario registrado con el mismo documento de identificación.");
-                        cargar_datos_formulario(token_actual);
-                        break;
-                      default:
-                        notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
-                        //Cargar datos de la tabla de rondas
-                        //cargar_tabla_criterio($("#convocatoria_ronda").attr('value'),token_actual);
-                        $("#idd").val(data);
-                        cargar_datos_formulario(token_actual);
-                       break;
-                     }
-
-            });
-          }
-
-        $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
-        //$form.bootstrapValidator('destroy', true);
-        bv.resetForm();
-    });
+ });
 
 }
 
-function cargar_datos_formulario(token_actual) {
-  //Realizo la peticion para cargar el formulario
+//Guarda la evaluación del perfil del jurado
+function evaluar_perfil(token_actual, participante){
+
+  //  alert("guardando\nparticipante:"+participante);
+
+
   $.ajax({
-      type: 'GET',
-      data: {"token": token_actual.token, "id": $("#id").attr('value')},
-      url: url_pv + 'Juradospreseleccion/search/'
+      type: 'PUT',
+      url: url_pv + 'Juradospreseleccion/evaluar_perfil',
+      data: $("#form_aplica_perfil").serialize()
+            + "&modulo=Jurados&token="+ token_actual.token
+            + "&idc="+ $('#convocatorias').val()
+            + "&participante="+participante
   }).done(function (data) {
-      if (data == 'error_metodo')
-      {
-          notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-      } else
-      {
-          if (data == 'error_token')
-          {
-              location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-          } else
-          {
-              var json = JSON.parse(data);
-
-                //$('#formulario_principal').loadJSON(json.participante);
-               //console.log(typeof json.participante.id);
-                if ( json.participante) {
-
-                  $("#idd").val(json.participante.id);
-
-                  $('#numero_documento').val(json.participante.numero_documento);
-                  $('#primer_nombre').val(json.participante.primer_nombre);
-                  $('#segundo_nombre').val(json.participante.segundo_nombre);
-                  $('#primer_apellido').val(json.participante.primer_apellido);
-                  $('#segundo_apellido').val(json.participante.segundo_apellido);
-                  $('#fecha_nacimiento').val(json.participante.fecha_nacimiento);
-
-                  if(json.participante.ciudad_nacimiento != null){
-                    $('#ciudad_nacimiento_name').val(json.participante.ciudad_nacimiento.label);
-                    $('#ciudad_nacimiento').val(json.participante.ciudad_nacimiento.id);
-                  }
-
-                  if(json.participante.ciudad_residencia != null){
-                    $('#ciudad_residencia_name').val(json.participante.ciudad_residencia.label);
-                    $('#ciudad_residencia').val(json.participante.ciudad_residencia.id);
-                  }
-
-                  if(json.participante.barrio_residencia != null ){
-                    $('#barrio_residencia_name').val(json.participante.barrio_residencia.label);
-                    $('#barrio_residencia').val(json.participante.barrio_residencia.id);
-                  }
-
-                  $('#direccion_residencia').val(json.participante.direccion_residencia);
-                  $('#direccion_correspondencia').val(json.participante.direccion_correspondencia);
-                  $('#numero_telefono').val(json.participante.numero_telefono);
-                  $('#numero_celular').val(json.participante.numero_celular);
-                  $('#correo_electronico').val(json.participante.correo_electronico);
-
-                }
-
-              //Cargos el select de tipo de documento
-              $('#tipo_documento').find('option').remove();
-              $("#tipo_documento").append('<option value="">:: Seleccionar ::</option>');
-              if (json.tipo_documento.length > 0) {
-                  $.each(json.tipo_documento, function (key, array) {
-                      var selected = '';
-                      if(json.participante != null  && array.id == json.participante.tipo_documento)
-                      {
-                          selected = 'selected="selected"';
-                      }
-                      $("#tipo_documento").append('<option value="' + array.id + '" '+selected+' >' + array.descripcion + '</option>');
-                  });
-              }
 
 
-              //Cargos el select de sexo
-              $('#sexo').find('option').remove();
-              $("#sexo").append('<option value="">:: Seleccionar ::</option>');
-              if (json.sexo.length > 0) {
-                  $.each(json.sexo, function (key, array) {
-                      var selected = '';
-                      if( json.participante != null  && array.id == json.participante.sexo)
-                      {
-                          selected = 'selected="selected"';
-                      }
-                      $("#sexo").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-                  });
-              }
-              //Cargos el select de orientacion sexual
-              $('#orientacion_sexual').find('option').remove();
-              $("#orientacion_sexual").append('<option value="">:: Seleccionar ::</option>');
-              if (json.orientacion_sexual.length > 0) {
-                  $.each(json.orientacion_sexual, function (key, array) {
-                      var selected = '';
-                      if(json.participante != null  &&  array.id == json.participante.orientacion_sexual)
-                      {
-                          selected = 'selected="selected"';
-                      }
-                      $("#orientacion_sexual").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-                  });
-              }
-              //Cargos el select de identidad genero
-              $('#identidad_genero').find('option').remove();
-              $("#identidad_genero").append('<option value="">:: Seleccionar ::</option>');
-              if (json.orientacion_sexual.length > 0) {
-                  $.each(json.identidad_genero, function (key, array) {
-                      var selected = '';
-                      if(json.participante != null  &&  array.id == json.participante.identidad_genero)
-                      {
-                          selected = 'selected="selected"';
-                      }
-                      $("#identidad_genero").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-                  });
-              }
-              //Cargos el select de grupo etnico
-              $('#grupo_etnico').find('option').remove();
-              $("#grupo_etnico").append('<option value="">:: Seleccionar ::</option>');
-              if (json.grupo_etnico.length > 0) {
-                  $.each(json.grupo_etnico, function (key, array) {
-                      var selected = '';
-                      if( json.participante != null  &&  array.id == json.participante.grupo_etnico)
-                      {
-                          selected = 'selected="selected"';
-                      }
-                      $("#grupo_etnico").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-                  });
-              }
-              //Cargos el select de estrato
-              $('#estrato').find('option').remove();
-              $("#estrato").append('<option value="">:: Seleccionar ::</option>');
-              if (json.estrato.length > 0) {
-                  $.each(json.estrato, function (key, array) {
-                      var selected = '';
-                      if(json.participante != null  &&  array == json.participante.estrato)
-                      {
-                          selected = 'selected="selected"';
-                      }
-                      $("#estrato").append('<option value="' + array + '" '+selected+' >' + array + '</option>');
-                  });
-              }
+    switch (data) {
+      case 'error':
+        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        break;
+      case 'error_metodo':
+          notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+          break;
+      case 'error_token':
+        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        break;
+      case 'acceso_denegado':
+        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+        break;
+      case 'deshabilitado':
+        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+        //cargar_datos_formulario(token_actual);
+        break;
+      case 'error_duplicado':
+          notify("danger", "remove", "Usuario:", "Ya existe un usuario registrado con el mismo documento de identificación.");
+          //cargar_datos_formulario(token_actual);
+          break;
+      default:
+          notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
+          cargar_tabla(token_actual);
+       break;
+     }
 
-              //Cargos el autocomplete de ciudad de nacimiento
-              //$("#ciudad_nacimiento_name").val(json.ciudad[json.participante.ciudad_nacimiento].label);
-              $( "#ciudad_nacimiento_name" ).autocomplete({
-                  source: json.ciudad,
-                  minLength: 2,
-                  select: function (event, ui) {
-                      $(this).val(ui.item ? ui.item : " ");
-                      $("#ciudad_nacimiento").val(ui.item.id);
-                  },
-
-                  change: function (event, ui) {
-                      if (!ui.item) {
-                          this.value = '';
-                          $("#ciudad_nacimiento").val("");
-                      }
-                  //else { Return your label here }
-                  }
-              });
-
-              //Cargos el autocomplete de ciudad de residencia
-
-              $( "#ciudad_residencia_name" ).autocomplete({
-                  source: json.ciudad,
-                  minLength: 2,
-                  select: function (event, ui) {
-                      $(this).val(ui.item ? ui.item : " ");
-                      $("#ciudad_residencia").val(ui.item.id);
-                  },
-                  change: function (event, ui) {
-                      if (!ui.item) {
-                          this.value = '';
-                          $('.formulario_principal').bootstrapValidator('revalidateField', 'ciudad_residencia_name');
-                          $("#ciudad_residencia").val("");
-                      }
-                  //else { Return your label here }
-                  }
-              });
-
-              //Cargos el autocomplete de barrios
-
-              $( "#barrio_residencia_name" ).autocomplete({
-                  source: json.barrio,
-                  minLength: 2,
-                  select: function (event, ui) {
-                      $(this).val(ui.item ? ui.item : " ");
-                      $("#barrio_residencia").val(ui.item.id);
-                  },
-                  change: function (event, ui) {
-                      if (!ui.item) {
-                          this.value = '';
-                          $("#barrio_residencia").val("");
-                      }
-                  //else { Return your label here }
-                  }
-              });
+  });
 
 
-          }
 
-      }
+}
+
+//Guarda la evaluación de los criterios evaluados
+function evaluar_criterios(token_actual, participante){
+
+    //alert("guardando\nparticipante:"+participante);
+
+  $.ajax({
+      type: 'POST',
+      url: url_pv + 'Juradospreseleccion/evaluar_criterios',
+      data: $("#criterios").serialize()
+            + "&modulo=Jurados&token="+ token_actual.token
+            + "&idc="+ $('#convocatorias').val()
+            + "&participante="+participante
+            + "&ronda="+$("#id_ronda").val()
+  }).done(function (data) {
 
 
-  }
+    switch (data) {
+      case 'error':
+        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        break;
+      case 'error_metodo':
+        notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        break;
+      case 'error_token':
+        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        break;
+      case 'acceso_denegado':
+        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+        break;
+      case 'deshabilitado':
+        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+        break;
+      case 'error_duplicado':
+        notify("danger", "remove", "Usuario:", "Ya existe un usuario registrado con el mismo documento de identificación.");
+        break;
+      default:
+        notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
+        cargar_tabla(token_actual);
+       break;
+     }
 
-);
+  });
 
 
-  //validator_form(token_actual);
 
 }

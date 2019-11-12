@@ -211,7 +211,6 @@
          $("#idregistro").val( $(this).attr("id") );
 
          $("#lista_perfiles").find('div').remove();
-
          // cargo los datos
          cargar_datos_perfiles(token_actual);
      });
@@ -256,29 +255,38 @@
 
                if (json.length > 0) {
 
-                   $.each(json, function (key, perfil_jurado) {
-                       $("#lista_perfiles").append(
-                         '  <div class="row"> <div class="col-lg-12">'
-                         +'   <h4>Perfil '+(key+1)+'</h4></div>'
-                         +'   <div class="col-lg-6"><div class="form-group">'
-                         +'       <label>Descripción perfil</label>'
-                         +'       <textarea id="descripcion_perfil" name="descripcion_perfil" class="form-control" rows="3" readonly style="resize:none">'+perfil_jurado.descripcion_perfil+'</textarea>'
-                         +'   </div></div>'
-                         +'   <div class="col-lg-6"><div class="form-group">'
-                         +'       <label>Experiencia</label>'
-                         +'       <textarea id="descripcion_perfil" name="descripcion_perfil" class="form-control" rows="3" readonly style="resize:none">'+perfil_jurado.campo_experiencia+'</textarea>'
-                         +'   </div></div>'
-                         +'   <div class="col-lg-6"><div class="form-group">'
-                         +'       <label>Formación profesional</label>'
-                         +'       <textarea id="descripcion_perfil" name="descripcion_perfil" class="form-control" rows="1" readonly style="resize:none">'+(perfil_jurado.formacion_profesional==true? 'Si' : 'No')+'</textarea>'
-                         +'   </div></div>'
-                         +'   <div class="col-lg-6"><div class="form-group">'
-                         +'       <label>Residir en Bogotá</label>'
-                         +'       <textarea id="descripcion_perfil" name="descripcion_perfil" class="form-control" rows="1" readonly style="resize:none">'+(perfil_jurado.reside_bogota==true? 'Si' : 'No')+'</textarea>'
-                         +'   </div></div>'
-                         +'</div>'
+                   $.each(json, function (key, perfil) {
+                       $("#lista_perfiles").append('<div class="well"><div class="row">'
+                                                   +' <div class="col-lg-12">'
+                                                   +'  <h4>Perfil '+(key+1)+'</h4>'
+                                                   +' </div>'
+                                                   +' <div class="col-lg-12">'
+                                                   +'  <h5><b>Descripción:</h5></b> '+perfil.descripcion_perfil
+                                                   +' </div>'
+                                                   +' <div class="col-lg-6">'
+                                                   + ' <h5><b>Formación profesional:</h5></b> '+perfil.formacion_profesional
+                                                   +' </div>'
+                                                   +' <div class="col-lg-6">'
+                                                   + ' <h5><b>Formación de postgrado:</h5></b> '+perfil.formacion_postgrado
+                                                   +' </div>'
+                                                   +' <div class="col-lg-6">'
+                                                   +'  <h5><b>Nivel educativo:</h5></b> '+perfil.nivel_educativo
+                                                   +' </div>'
+                                                   +' <div class="col-lg-6">'
+                                                   + ' <h5><b>Area de conocimiento:</h5></b> '+perfil.area_conocimiento
+                                                   +' </div>'
+                                                   +' <div class="col-lg-6">'
+                                                   +'  <h5><b>Campo de experiencia:</h5></b>'+perfil.campo_experiencia
+                                                   +' </div>'
+                                                   +' <div class="col-lg-6">'
+                                                   +'  <h5><b>Area del perfíl:</h5></b> '+perfil.area_perfil
+                                                   +' </div>'
+                                                   +' <div class="col-lg-6">'
+                                                   +'  <h5><b>Reside en bogota:</h5></b> '+perfil.reside_bogota
+                                                   +' </div>'
+                                                   +' </div></div>');
 
-                       );
+
                      });
 
                      $("#postular").show();

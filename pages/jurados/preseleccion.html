@@ -111,14 +111,14 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <!--div class="col-lg-6">
                                         <div class="form-group">
                                             <label>Categorias</label>
                                             <select id='categorias' name="categorias" class="form-control" >
                                                 <option value="">:: Seleccionar ::</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div-->
                                   </div>
 
                                   <div class="row">
@@ -408,17 +408,33 @@
                   <div class="panel-body">
                               <!-- Nav tabs -->
                               <ul class="nav nav-tabs">
-                                  <li class="active"><a href="#hoja_de_vida" data-toggle="tab" aria-expanded="true">Ver hoja de vida</a>
+                                  <li class="active"><a href="#perfil_convocatoria" data-toggle="tab" aria-expanded="true">Perfil de la convocatoria</a>
                                   </li>
-                                  <li class=""><a href="#profile" data-toggle="tab" aria-expanded="false">Puntuación</a>
+                                  <li class=""><a href="#hoja_de_vida" data-toggle="tab" aria-expanded="false">Ver hoja de vida</a>
                                   </li>
-                                  <li class=""><a href="#messages" data-toggle="tab" aria-expanded="false">Perfil de la convocatoria</a>
+                                  <li class=""><a href="#puntuacion" data-toggle="tab" aria-expanded="false">Puntuación</a>
                                   </li>
                               </ul>
 
                               <!-- Tab panes -->
                               <div class="tab-content">
-                                  <div class="tab-pane fade active in" id="hoja_de_vida">
+
+                                  <div class="tab-pane fade active in" id="perfil_convocatoria">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                          <h4 class="panel-title">Perfiles de la convocatoria  </h4>
+                                        </div>
+                                        <div class="panel-body" id="perfiles_jurados">
+                                          <div class="row">
+                                              <div class="col-lg-12">
+                                              </div>
+                                          </div>
+                                        </div>
+                                    </div>
+
+                                  </div>
+
+                                  <div class="tab-pane fade" id="hoja_de_vida">
                                     <!-- Accordion -->
                                     <div class="panel-group" id="accordion">
 
@@ -478,22 +494,7 @@
                                                       <h5><b>Correo electrónico: </b><div id="correo_electronico"> </div></h5>
                                                   </div>
                                               </div>
-                                              <div class="row">
-                                                  <div class="col-lg-6">
-                                                    <h5><b>Ciudad: </b><div id="ciudad"> </div></h5>
-                                                  </div>
-                                                  <div class="col-lg-6">
-                                                      <h5><b>Barrio: </b><div id="barrio"> </div></h5>
-                                                  </div>
-                                              </div>
-                                              <div class="row">
-                                                  <div class="col-lg-6">
-                                                    <h5><b>Dirección de residencia: </b><div id="direccion_residencia"> </div></h5>
-                                                  </div>
-                                                  <div class="col-lg-6">
-                                                      <h5><b>Correo electrónico: </b><div id="correo_electronico"> </div></h5>
-                                                  </div>
-                                              </div>
+
                                               <div class="row">
                                                   <div class="col-lg-12">
                                                       <h5><b>Perfil: </b><div id="perfil"> </div></h5>
@@ -511,6 +512,20 @@
                                           </div>
                                           <div id="collapse2" class="panel-collapse collapse" aria-expanded="false">
                                               <div class="panel-body">
+                                                <!-- tabla experiencia laboral-->
+                                                <div class="row" id="table_docs">
+                                                    <div class="col-lg-12">
+                                                        <table id="table_documentos" class="table" style="width: 100%;">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Documento</th>
+                                                                    <th>Acciones</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
 
                                               </div>
                                           </div>
@@ -585,7 +600,7 @@
                                                 <div id="vermas_enf" class="row" style="display: none;">
                                                     <div class="col-lg-12">
                                                       <div id="contenido_enf" >
-                                                          sss
+
                                                       </div>
                                                       <button type="button" id="vermas_back_enf" class="btn btn-default btn-circle"><i class="glyphicon glyphicon-arrow-left "></i>
                                                         </button>
@@ -748,69 +763,76 @@
                                     </div>
                                     <!-- Accordion -->
                                   </div>
-                                  <div class="tab-pane fade" id="profile">
+
+                                  <div class="tab-pane fade" id="puntuacion">
 
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                           <h4 class="panel-title">Jurado  </h4>
                                         </div>
                                         <div class="panel-body">
-                                          <div class="row">
-                                              <div class="col-lg-6">
-                                                <h5><b>Nombres: </b><div id="nombres2"> </div></h5>
-                                              </div>
-                                              <div class="col-lg-6">
-                                                  <h5><b>Apellidos: </b><div id="apellidos2"> </div></h5>
-                                              </div>
-                                          </div>
-                                          <div class="row">
-                                              <div class="col-lg-12">
-                                                  <h5><b>Perfil: </b><div id="perfil2"> </div></h5>
-                                              </div>
-                                          </div>
-                                          <div class="row">
-                                              <div class="col-lg-12">
-
-                                                <div class="form-group">
-                                                  <label>Aplica el perfil para la convocatoria?</label>
-                                                  <label class="radio-inline">
-                                                      <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="si" >Si
-                                                  </label>
-                                                  <label class="radio-inline">
-                                                      <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="no" checked="">No
-                                                  </label>
-
-                                              </div>
-
+                                          <form role="form" id="form_aplica_perfil">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                  <h5><b>Nombres: </b><div id="nombres2"> </div></h5>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <h5><b>Apellidos: </b><div id="apellidos2"> </div></h5>
+                                                </div>
                                             </div>
-                                          </div>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <h5><b>Perfil: </b><div id="perfil2"> </div></h5>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12">
 
-                                          <div class="row">
-                                              <div class="col-lg-12">
-                                                <div class="form-group">
-                                                    <label>Por qué?</label>
-                                                    <textarea class="form-control" rows="3"></textarea>
+                                                  <div class="form-group">
+                                                    <label>Aplica el perfil para la convocatoria?</label>
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="option_aplica_perfil" id="optionsRadiosInline1" value="true">Si
+                                                    </label>
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="option_aplica_perfil" id="optionsRadiosInline2" value="false">No
+                                                    </label>
+
                                                 </div>
 
+                                              </div>
                                             </div>
-                                          </div>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                  <div class="form-group">
+                                                      <label>Por qué?</label>
+                                                      <textarea class="form-control" rows="3" id="descripcion_evaluacion" name="descripcion_evaluacion"></textarea>
+                                                  </div>
 
+                                              </div>
+                                            </div>
+                                            <div class="col-lg-12" style="text-align: right">
+                                              <button type="button" class="btn btn-default guardar_aplica_perfil">Guardar</button>
+                                              <input type="hidden" id="id_jurados_postulados">
+                                              <input type="hidden" id="id_ronda">
+                                            </div>
+                                          </form>
                                         </div>
-                                      </div>
+                                    </div>
 
-                                      <div class="panel panel-default" id="evaluar" >
+                                    <div class="panel panel-default" id="evaluar" >
                                           <div class="panel-heading">
                                             <h4 class="panel-title">Evaluar</h4>
                                           </div>
-                                          <div class="panel-body" id="criterios">                                  
+                                          <div class="panel-body" >
+                                            <form role="form" id="criterios">
 
+
+                                            </form>
 
                                           </div>
-                                        </div>
-                                  </div>
-                                  <div class="tab-pane fade" id="messages">
-                                      <h4>Perfil de la convocatoria</h4>
-                                      <p></p>
+
+                                    </div>
+
                                   </div>
 
                               </div>
@@ -864,58 +886,28 @@
         <!-- Modal -->
 
 
-        <!---->
-        <div class="modal fade" id="example2Modal" tabindex="-1" role="dialog" aria-labelledby="example2ModalLabel">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="example2ModalLabel">New message</h4>
-              </div>
-              <div class="modal-body">
-                <div class="panel-body">
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs">
-                                <li class=""><a href="#home" data-toggle="tab" aria-expanded="false">Home</a>
-                                </li>
-                                <li class=""><a href="#profile" data-toggle="tab" aria-expanded="false">Profile</a>
-                                </li>
-                                <li class="active"><a href="#messages" data-toggle="tab" aria-expanded="true">Messages</a>
-                                </li>
-                                <li><a href="#settings" data-toggle="tab">Settings</a>
-                                </li>
-                            </ul>
+        <!-- Modal -->
+          <div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <!--h5 class="modal-title" id="exampleModalLabel">Modal title</h5-->
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div id="mensaje" >Esta seguro de inscribir su hoja de vida registrada hasta el momento?</div>
 
-                            <!-- Tab panes -->
-                            <div class="tab-content">
-                                <div class="tab-pane fade" id="home">
-                                    <h4>Home Tab</h4>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                </div>
-                                <div class="tab-pane fade" id="profile">
-                                    <h4>Profile Tab</h4>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                </div>
-                                <div class="tab-pane fade active in" id="messages">
-                                    <h4>Messages Tab</h4>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                </div>
-                                <div class="tab-pane fade" id="settings">
-                                    <h4>Settings Tab</h4>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                </div>
-                            </div>
-                    </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Send message</button>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal" id="bcancelar" >Cancelar</button>
+                  <button type="button" class="btn btn-primary" id="baceptar" >Aceptar</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <!---->
-
+          <!-- Modal -->
 
         <!-- jQuery -->
         <script src="../../vendor/jquery/jquery.min.js"></script>
