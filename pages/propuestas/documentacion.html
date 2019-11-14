@@ -143,6 +143,13 @@
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
+                <div class="row">
+                    <div class="col-lg-12" style="text-align: right">
+                        <button type="button" id="inscribir_propuesta" class="btn btn-danger">Inscribir Propuesta</button>
+                    </div>                    
+                    <!-- /.col-lg-12 -->
+                </div>
+                <br/><br/>
                 <div class="modal fade" id="cargar_documento">
                     <div class="modal-dialog">
                         <div class="modal-content">                                                        
@@ -151,7 +158,7 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 <h4 class="modal-title">Formulario de la documentación</h4>                                                    
                             </div>
-
+                            <div class="loading centrado-porcentual"></div>             
                             <!-- cuerpo del diálogo -->
                             <div class="modal-body">
                                 <form id="formulario_documento" action="" class="formulario_documento" role="form" method="post" enctype="multipart/form-data">                                    
@@ -160,6 +167,9 @@
                                             <div class="form-group">
                                                 <label>Archivo (<span id="archivos_permitidos"></span>)<span class="icono_requerido">*</span></label>
                                                 <input type="file" id="archivo" name="archivo" class="validar">                                                
+                                                <input type="hidden" id="documento" name="documento" /> 
+                                                <input type="hidden" id="permitidos" name="permitidos" /> 
+                                                <input type="hidden" id="tamano" name="tamano" />
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
                                     </div>                                                                        
@@ -184,6 +194,71 @@
                     </div>
                 </div>
                 
+                <div class="modal fade" id="cargar_link">
+                    <div class="modal-dialog">
+                        <div class="modal-content">                                                        
+                            <!-- cabecera del diálogo -->
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Formulario de la documentación</h4>                                                    
+                            </div>
+                            <div class="loading centrado-porcentual"></div>             
+                            <!-- cuerpo del diálogo -->
+                            <div class="modal-body">
+                                <form id="formulario_link" action="" class="formulario_link" role="form" method="post">                                    
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <div class="form-group">
+                                                    <label>link</label>
+                                                    <input type="text" id="link" name="link" class="form-control">
+                                                </div>
+                                            </div>                                                                                                                                                                                                                                                                                                        
+                                        </div>
+                                    </div>    
+                                    <div class="row">
+                                        <div class="col-lg-12" style="text-align: right">
+                                            <button type="submit" class="btn btn-default">Guardar</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Link</th>                                                        
+                                                        <th>Eliminar</th>                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tabla_link">                                                
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Esta seguro de inscribir su propuesta?</p>
+                                <p>Si no esta seguro, genere el reporte de inscripción de su propuesta, con el fin de que pueda ver la información ingresada en la plataforma</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" id="modal-btn-si">Si</button>
+                                <button type="button" class="btn btn-primary" id="modal-btn-no">No</button>
+                                <button type="button" class="btn btn-success" id="modal-btn-reporte">Generar reporte</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
             </div>
             <!-- /#page-wrapper -->
