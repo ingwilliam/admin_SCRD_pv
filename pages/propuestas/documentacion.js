@@ -252,13 +252,13 @@ $(document).ready(function () {
 
             $("#modal-btn-reporte").on("click", function () {
                 callback(false);                
-                window.open("http://www.google.com", '_blank');
+                window.open("http://localhost/report_SCRD/reporte_propuesta_inscrita.php", '_blank');
             });
         };
 
         modalConfirm(function (confirm) {
             if (confirm) {
-                alert("enviar");
+                notify("success", "ok", "Convocatorias:", "Felicitaciones, su propuesta quedo inscrita con el código 64-10.");
             }
         });
 
