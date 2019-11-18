@@ -53,7 +53,7 @@ $(document).ready(function () {
 
         $(".guardar_aplica_perfil").click(function(){
 
-          evaluar_perfil(token_actual, $(".btn_cargar").attr("id"));
+          evaluar_perfil(token_actual, $("#id_jurados_postulados").val());
 
         });
 
@@ -279,7 +279,7 @@ function cargar_tabla(token_actual){
                     },*/
                     {"data": "aciones",
                               render: function ( data, type, row ) {
-                                          return '<button id="'+row.id+'" title="Evaluar la hoja de vida " type="button" class="btn btn-primary btn_cargar" data-toggle="modal" data-target="#evaluar">'
+                                          return '<button id="'+row.id_postulacion+'" title="Evaluar la hoja de vida " type="button" class="btn btn-primary btn_cargar" data-toggle="modal" data-target="#evaluar">'
                                               +'<span class="glyphicon glyphicon-check"></span></button>' ;
                                           },
                     }
@@ -450,7 +450,7 @@ function cargar_datos_basicos(token_actual, participante){
 
         }else{
 
-      
+
         }
 
         break;
@@ -1426,7 +1426,7 @@ function cargar_criterios_evaluacion(token_actual, participante){
   $.ajax({
       type: 'GET',
       url: url_pv + 'Juradospreseleccion/criterios_evaluacion',
-      data: "&modulo=Menu Participante&token=" + token_actual.token+"&idc="+$('#convocatorias').val()+"&participante="+participante
+      data: "&modulo=Menu Participante&token=" + token_actual.token+"&idc="+$('#convocatorias').val()+"&postulacion="+participante
   }).done(function (data) {
 
     switch (data) {
@@ -1462,7 +1462,7 @@ function cargar_criterios_evaluacion(token_actual, participante){
             //Se establece los valores de la evaluación del perfil
             //alert(typeof json[r].perfil.aplica_perfil);
 
-            $("nput[name=option_aplica_perfil][value=true]").removeAttr('checked');
+            $("input[name=option_aplica_perfil][value=true]").removeAttr('checked');
             $("input[name=option_aplica_perfil][value=false]").removeAttr('checked');
 
             if( json[r].postulacion.aplica_perfil ){
@@ -1564,7 +1564,7 @@ function limpiar(criterio, key){
 }
 
 //Guarda la evaluación del perfil del jurado
-function evaluar_perfil(token_actual, participante){
+function evaluar_perfil(token_actual, postulacion){
 
   //  alert("guardando\nparticipante:"+participante);
 
@@ -1575,7 +1575,7 @@ function evaluar_perfil(token_actual, participante){
       data: $("#form_aplica_perfil").serialize()
             + "&modulo=Jurados&token="+ token_actual.token
             + "&idc="+ $('#convocatorias').val()
-            + "&participante="+participante
+            + "&postulacion="+postulacion
   }).done(function (data) {
 
 

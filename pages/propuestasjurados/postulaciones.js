@@ -7,13 +7,8 @@
  /*Cesar Britto*/
  $(document).ready(function () {
 
-
     $("#idc").val($("#id").val());
     $("#id").val(null);
-
-    $('#table_list_b').DataTable({
-       "responsive": true
-     });
 
      //Verifico si el token exite en el cliente y verifico que el token este activo en el servidor
      var token_actual = getLocalStorage(name_local_storage);
@@ -26,6 +21,8 @@
          //Verifica si el token actual tiene acceso de lectura
          permiso_lectura(token_actual, "Menu Participante");
          $("#back_step").attr("onclick", " location.href = 'postular_hoja_vida.html?m=2&id="+  $("#idc").val()+"' ");
+
+         verificar_estado_propuesta(token_actual);
 
          cargar_select_area(token_actual);
          validator_form(token_actual);
@@ -45,6 +42,51 @@
        }
 
  });
+
+
+  function verificar_estado_propuesta(token_actual){
+
+   //datos de la propuesta
+   $.ajax({
+       type: 'GET',
+       data: {"token": token_actual.token, "modulo": "Menu Participante", "idc": $("#idc").val()},
+       url: url_pv + 'PropuestasJurados/propuesta'
+   }).done(function (data) {
+
+     var json = JSON.parse(data);
+
+     if(json.propuesta.estado == 7){
+
+       $("#busqueda_convocatorias").hide();
+       $("#listado_postulaciones").hide();
+       $("#estado").show();
+
+     }
+
+     if(json.propuesta.estado == 8){
+       $("#busqueda_convocatorias").show();
+       $("#listado_postulaciones").show();
+       $("#estado").hide();
+     }
+
+   });
+
+
+   $(".download_file").click(function () {
+     //Cargo el id file
+
+     $.AjaxDownloader({
+         url: url_pv + 'PropuestasJurados/download_file/',
+         data : {
+             cod   : documento,
+             token   : token_actual.token
+         }
+     });
+
+   });
+
+  }
+
 
  function cargar_select_area(token_actual){
 
@@ -130,10 +172,9 @@
    }
 
  function cargar_tabla_b(token_actual){
-     console.log("idconvocatoria-->"+$("#idc").val() );
+     //console.log("idconvocatoria-->"+$("#idc").val() );
      //Cargar datos en la tabla actual
      $('#table_list_b').DataTable().clear().destroy();
-
 
       $('#postular').removeProp('disabled');
       $('#postular').removeAttr('disabled');
@@ -264,25 +305,28 @@
                                                    +'  <h5><b>Descripción:</h5></b> '+perfil.descripcion_perfil
                                                    +' </div>'
                                                    +' <div class="col-lg-6">'
-                                                   + ' <h5><b>Formación profesional:</h5></b> '+perfil.formacion_profesional
+                                                   + ' <h5><b>Formación profesional:</h5></b> '+(perfil.formacion_profesional?"Si":"No")
                                                    +' </div>'
                                                    +' <div class="col-lg-6">'
-                                                   + ' <h5><b>Formación de postgrado:</h5></b> '+perfil.formacion_postgrado
+                                                   + ' <h5><b>Formación de postgrado:</h5></b> '+(perfil.formacion_postgrado? "Si":"No")
                                                    +' </div>'
                                                    +' <div class="col-lg-6">'
-                                                   +'  <h5><b>Nivel educativo:</h5></b> '+perfil.nivel_educativo
+                                                   +'  <h5><b>Nivel educativo:</h5></b> '+( (perfil.nivel_educativo=='null')?"N/D":perfil.nivel_educativo)
                                                    +' </div>'
                                                    +' <div class="col-lg-6">'
-                                                   + ' <h5><b>Area de conocimiento:</h5></b> '+perfil.area_conocimiento
+                                                   + ' <h5><b>Area de conocimiento:</h5></b> '+ ( (perfil.area_conocimiento=='null')?"N/D":perfil.area_conocimiento)
                                                    +' </div>'
                                                    +' <div class="col-lg-6">'
                                                    +'  <h5><b>Campo de experiencia:</h5></b>'+perfil.campo_experiencia
                                                    +' </div>'
                                                    +' <div class="col-lg-6">'
-                                                   +'  <h5><b>Area del perfíl:</h5></b> '+perfil.area_perfil
+                                                   +'  <h5><b>Area del perfíl:</h5></b> '+( (perfil.area_perfil=='null')?"N/D":perfil.area_perfil )
                                                    +' </div>'
                                                    +' <div class="col-lg-6">'
-                                                   +'  <h5><b>Reside en bogota:</h5></b> '+perfil.reside_bogota
+                                                   +'  <h5><b>Reside en bogota:</h5></b> '+( perfil.reside_bogota ? "Si":"No")
+                                                   +' </div>'
+                                                   +' <div class="col-lg-12 btn btn-outline btn-default" style="text-align: right">'
+                                                   +'   <input type="radio" name="perfilesRadios" id="optionsRadios'+(key+1)+'" value="'+perfil.id+'" > Seleccionar'
                                                    +' </div>'
                                                    +' </div></div>');
 
@@ -324,7 +368,13 @@
       $.ajax({
           type: 'POST',
           url: url_pv + 'PropuestasJurados/new_postulacion',
-          data: {"token": token_actual.token, "modulo":"Menu Participante", "idc": $("#idc").val(), "idregistro": $("#idregistro").val()},
+          data: {
+            "token": token_actual.token,
+            "modulo":"Menu Participante",
+            "idc": $("#idc").val(),
+            "idregistro": $("#idregistro").val(),
+            "perfil": $("input:radio[name=perfilesRadios]:checked").val(),
+          },
       }).done(function (result) {
 
         switch (result) {
@@ -342,7 +392,7 @@
               //cargar_tabla_p(token_actual);
             break;
           case 'error_limite':
-            notify("danger", "remove", "Usuario:", "Se cumplió el máximo de postulaciones");
+            notify("danger", "remove", "Usuario:", "Se cumplió el máximo de postulaciones activas.");
             ///  cargar_tabla_p(token_actual);
             break;
           default:
@@ -446,13 +496,13 @@
 
          switch (result) {
            case 'Si':
-               notify("info", "ok", "Convocatorias:", "Se activó el registro con éxito.");
+               notify("info", "ok", "Usuario:", "Se activó el registro con éxito.");
                break;
            case 'No':
-                 notify("info", "ok", "Convocatorias:", "Se desactivó el registro con éxito.");
+                 notify("info", "ok", "Usuario:", "Se desactivó el registro con éxito.");
                  break;
            case 'error':
-             notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+             notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
              break;
            case 'error_token':
              location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
@@ -463,8 +513,12 @@
            case 'deshabilitado':
              notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
              break;
+           case 'error_limite':
+             cargar_tabla_p(token_actual);
+             notify("danger", "remove", "Usuario:", "Se cumplió el máximo de postulaciones activas.");             
+             break;
            default:
-             notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
+             notify("success", "ok", "Usuario:", "Se actualizó el registro con éxito.");
              cargar_tabla_p(token_actual);
              break;
          }
