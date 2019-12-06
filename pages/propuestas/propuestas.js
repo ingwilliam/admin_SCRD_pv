@@ -29,17 +29,17 @@ $(document).ready(function () {
             {
                 if (data == 'error_token')
                 {
-                    //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                 } else
                 {
                     if (data == 'crear_perfil')
                     {
-                        //location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_natural.html?msg=Para poder inscribir la propuesta debe crear el perfil de persona natural.&msg_tipo=danger';
+                        location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_natural.html?msg=Para poder inscribir la propuesta debe crear el perfil de persona natural.&msg_tipo=danger';
                     } else
                     {
                         if (data == 'error_participante_propuesta')
                         {
-                            //location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_natural.html?msg=Se registro un error al importar el participante, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co.&msg_tipo=danger';
+                            location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_natural.html?msg=Se registro un error al importar el participante, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co.&msg_tipo=danger';
                         } else
                         {
                             if (data == 'acceso_denegado')
@@ -53,52 +53,52 @@ $(document).ready(function () {
                                 if (json.propuesta.bogota)
                                 {
                                     $(".desarrollo_bogota").removeAttr("disabled");
-
-                                    //Cargos el select de localidades
-                                    $('#localidad').find('option').remove();
-                                    $("#localidad").append('<option value="">:: Seleccionar ::</option>');
-                                    if (json.localidades.length > 0) {
-                                        $.each(json.localidades, function (key, localidad) {
-                                            var selected = '';
-                                            if (localidad.id == json.propuesta.localidad)
-                                            {
-                                                selected = 'selected="selected"';
-                                            }
-                                            $("#localidad").append('<option value="' + localidad.id + '" ' + selected + ' >' + localidad.nombre + '</option>');
-                                        });
-                                    }
-
-                                    //Cargos el select de upzs
-                                    $('#upz').find('option').remove();
-                                    $("#upz").append('<option value="">:: Seleccionar ::</option>');
-                                    if (json.upzs.length > 0) {
-                                        $.each(json.upzs, function (key, upz) {
-                                            var selected = '';
-                                            if (upz.id == json.propuesta.upz)
-                                            {
-                                                selected = 'selected="selected"';
-                                            }
-                                            $("#upz").append('<option value="' + upz.id + '" ' + selected + ' >' + upz.nombre + '</option>');
-                                        });
-                                    }
-
-                                    //Cargo los select de barrios
-                                    $('#barrio').find('option').remove();
-                                    $("#barrio").append('<option value="">:: Seleccionar ::</option>');
-                                    if (json.barrios.length > 0) {
-                                        $.each(json.barrios, function (key, barrio) {
-                                            var selected = '';
-                                            if (barrio.id == json.propuesta.barrio)
-                                            {
-                                                selected = 'selected="selected"';
-                                            }
-                                            $("#barrio").append('<option value="' + barrio.id + '" ' + selected + ' >' + barrio.nombre + '</option>');
-                                        });
-                                    }
-
                                 } else
                                 {
                                     $(".desarrollo_bogota").attr("disabled", "disabled");
+                                }
+
+
+                                //Cargos el select de localidades
+                                $('#localidad').find('option').remove();
+                                $("#localidad").append('<option value="">:: Seleccionar ::</option>');
+                                if (json.localidades.length > 0) {
+                                    $.each(json.localidades, function (key, localidad) {
+                                        var selected = '';
+                                        if (localidad.id == json.propuesta.localidad)
+                                        {
+                                            selected = 'selected="selected"';
+                                        }
+                                        $("#localidad").append('<option value="' + localidad.id + '" ' + selected + ' >' + localidad.nombre + '</option>');
+                                    });
+                                }
+
+                                //Cargos el select de upzs
+                                $('#upz').find('option').remove();
+                                $("#upz").append('<option value="">:: Seleccionar ::</option>');
+                                if (json.upzs.length > 0) {
+                                    $.each(json.upzs, function (key, upz) {
+                                        var selected = '';
+                                        if (upz.id == json.propuesta.upz)
+                                        {
+                                            selected = 'selected="selected"';
+                                        }
+                                        $("#upz").append('<option value="' + upz.id + '" ' + selected + ' >' + upz.nombre + '</option>');
+                                    });
+                                }
+
+                                //Cargo los select de barrios
+                                $('#barrio').find('option').remove();
+                                $("#barrio").append('<option value="">:: Seleccionar ::</option>');
+                                if (json.barrios.length > 0) {
+                                    $.each(json.barrios, function (key, barrio) {
+                                        var selected = '';
+                                        if (barrio.id == json.propuesta.barrio)
+                                        {
+                                            selected = 'selected="selected"';
+                                        }
+                                        $("#barrio").append('<option value="' + barrio.id + '" ' + selected + ' >' + barrio.nombre + '</option>');
+                                    });
                                 }
 
                                 //Verifico si es premio
@@ -110,14 +110,58 @@ $(document).ready(function () {
                                     $(".es_premio").removeAttr("disabled");
                                 }
 
+                                //Cargo los parametros dinamicos
+                                var parametros = "";
+                                var columna = 1;
+                                for (var i in json.parametros) {
+                                    if (json.parametros.hasOwnProperty(i)) {
+                                        if (columna == 1)
+                                        {
+                                            parametros += '<div class="row">';
+                                        }
+                                        parametros += crearParametro(json.parametros[i].id, json.parametros[i].label, json.parametros[i].valores, json.parametros[i].tipo_parametro, json.parametros[i].obligatorio);
+                                        if (columna == 2)
+                                        {
+                                            parametros += '</div>';
+                                            columna = 0;
+                                        }
+                                        columna++;
+                                    }
+                                }
+                                $("#dinamico").html(parametros);
+
+                                //Cargo los parametros obligatorios
+                                $("#validator").attr("value", JSON.stringify(json.validator));
+
+
+                                //Cargo el select de medios que se entero                                
+                                if (json.medio_se_entero.length > 0) {
+                                    $.each(json.medio_se_entero, function (key, medio) {
+                                        var selected = '';
+                                        if (medio == json.propuesta.porque_medio)
+                                        {
+                                            selected = 'selected="selected"';
+                                        }
+                                        $("#porque_medio").append('<option value="' + medio + '" >' + medio + '</option>');
+                                    });
+                                }
+
+                                //Set los valores del medio que se entero
+                                $("#porque_medio option:selected").removeAttr("selected");
+                                $("#porque_medio option:selected").prop("selected", false);
+                                $.each(JSON.parse(json.propuesta.porque_medio), function (i, e) {
+                                    $("#porque_medio option[value='" + e + "']").prop("selected", true);
+                                });
+
+
                                 //Cargo el formulario con los datos
                                 $('#formulario_principal').loadJSON(json.propuesta);
+
                                 $("#bogota option[value='" + json.propuesta.bogota + "']").prop('selected', true);
-                                $("#validator").attr("value",JSON.stringify(json.validator));
-                                
+
                                 //Valido formulario
                                 validator_form(token_actual);
-                                
+
                             }
                         }
 
@@ -221,80 +265,106 @@ $(document).ready(function () {
             });
         });
 
+        //Cargar Barrios
+        $('#bogota').on('change', function () {
+            var bogota = $(this).val();
+            //Verifico si es bogota                                
+            if (bogota=="true")
+            {
+                $(".desarrollo_bogota").removeAttr("disabled");
+            } else
+            {
+                $(".desarrollo_bogota").attr("disabled", "disabled");
+            }
+        });
+
+
     }
 });
 
 /*
  * TENER EN CUENTA
-function crear_validadores() {
-    var options = {
-        fields: {
-            nombre: {
-                validators: {
-                    notEmpty: {message: 'El nombre de la propuesta es requerido'}
-                }
-            }
-        }
-    };
-    
-    var options = JSON.parse('{ \n\
-                                "fields": { \n\
-                                    "nombre": { \n\
-                                        "validators":{ \n\
-                                            "notEmpty":{ "message":"El nombre de la propuesta es requerido" }\n\
-                                            }\n\
-                                        }\n\
-                                    }\n\
-                                }');
-    
-    
-
-    var campo_resumen = {resumen: {
-            validators: {
-                notEmpty: {message: 'El resumen de la propuesta es requerido'}
-            }
-        }};
-    
-    var campo_objetivo = {objetivo: {
-            validators: {
-                notEmpty: {message: 'El objetivo de la propuesta es requerido'}
-            }
-        }};        
-
-    if ($("#modalidad").val() != 4)
-    {
-        options = {
-            fields: {
-                nombre: {
-                    validators: {
-                        notEmpty: {message: 'El nombre de la propuesta es requerido'}
-                    }
-                },
-                resumen: {
-                    validators: {
-                        notEmpty: {message: 'El resumen de la propuesta es requerido'}
-                    }
-                },
-                objetivo: {
-                    validators: {
-                        notEmpty: {message: 'El objetivo de la propuesta es requerido'}
-                    }
-                }
-            }
-        };
-    }
-
-    //alert(options.fields.nombre.validators.notEmpty.message);
-
-    return options;
-}
-*/
+ function crear_validadores() {
+ var options = {
+ fields: {
+ nombre: {
+ validators: {
+ notEmpty: {message: 'El nombre de la propuesta es requerido'}
+ }
+ }
+ }
+ };
+ 
+ var options = JSON.parse('{ \n\
+ "fields": { \n\
+ "nombre": { \n\
+ "validators":{ \n\
+ "notEmpty":{ "message":"El nombre de la propuesta es requerido" }\n\
+ }\n\
+ }\n\
+ }\n\
+ }');
+ 
+ 
+ 
+ var campo_resumen = {resumen: {
+ validators: {
+ notEmpty: {message: 'El resumen de la propuesta es requerido'}
+ }
+ }};
+ 
+ var campo_objetivo = {objetivo: {
+ validators: {
+ notEmpty: {message: 'El objetivo de la propuesta es requerido'}
+ }
+ }};        
+ 
+ if ($("#modalidad").val() != 4)
+ {
+ options = {
+ fields: {
+ nombre: {
+ validators: {
+ notEmpty: {message: 'El nombre de la propuesta es requerido'}
+ }
+ },
+ resumen: {
+ validators: {
+ notEmpty: {message: 'El resumen de la propuesta es requerido'}
+ }
+ },
+ objetivo: {
+ validators: {
+ notEmpty: {message: 'El objetivo de la propuesta es requerido'}
+ }
+ }
+ }
+ };
+ }
+ 
+ //alert(options.fields.nombre.validators.notEmpty.message);
+ 
+ return options;
+ }
+ */
 
 function validator_form(token_actual) {
+
+    $('.calendario').datetimepicker({
+        language: 'es',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    });
+
     //Se debe colocar debido a que el calendario es un componente diferente
     $('.calendario').on('changeDate show', function (e) {
-        $('.formulario_principal').bootstrapValidator('revalidateField', 'fecha_nacimiento');
-    });   
+        $('.formulario_principal').bootstrapValidator('revalidateField', $("#parametro_" + $(this).attr("title")));
+    });
 
     //Validar el formulario
     $('.formulario_principal').bootstrapValidator(JSON.parse($("#validator").val())).on('success.form.bv', function (e) {
@@ -341,7 +411,7 @@ function validator_form(token_actual) {
             var bv = $form.data('bootstrapValidator');
 
             // Valido si el id existe, con el fin de eviarlo al metodo correcto
-            $('#formulario_principal').attr('action', url_pv + 'Agrupaciones/editar_participante');
+            $('#formulario_principal').attr('action', url_pv + 'Propuestas/editar_propuesta');
 
             modalConfirm(function (confirm) {
                 if (confirm) {
@@ -349,12 +419,12 @@ function validator_form(token_actual) {
                     $.ajax({
                         type: 'POST',
                         url: $form.attr('action'),
-                        data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
+                        data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token + "&m=" + getURLParameter('m'),
                     }).done(function (result) {
 
                         if (result == 'error')
                         {
-                            notify("danger", "ok", "Agrupación:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                         } else
                         {
                             if (result == 'error_token')
@@ -367,23 +437,14 @@ function validator_form(token_actual) {
                                     notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                                 } else
                                 {
-                                    if (result == 'error_usuario_perfil')
-                                    {
-                                        notify("danger", "ok", "Agrupación:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    if (isNaN(result)) {
+                                        notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                     } else
                                     {
-                                        if (result == 'participante_existente')
-                                        {
-                                            notify("danger", "ok", "Agrupación:", "El participante que intenta ingresar ya se encuentra registrado en la base de datos, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                        } else
-                                        {
-                                            if (isNaN(result)) {
-                                                notify("danger", "ok", "Agrupación:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                            } else
-                                            {
-                                                location.href = url_pv_admin + 'pages/propuestas/propuesta.html?msg=Se actualizo con el éxito el participante como persona natural.&msg_tipo=success';
-                                            }
-                                        }
+                                        notify("success", "ok", "Propuesta:", "Se actualizo con el éxito la propuesta.");
+                                        setTimeout(function () {
+                                            location.href = url_pv_admin + 'pages/propuestas/integrantes.html?m=' + getURLParameter('m') + '&id=' + $("#conv").attr('value');
+                                        }, 1800);
                                     }
                                 }
                             }
