@@ -484,7 +484,7 @@ function acciones_ronda(token_actual) {
         });
 
 
-        validator_form(token_actual)
+        validator_form(token_actual);
 
     });
 
