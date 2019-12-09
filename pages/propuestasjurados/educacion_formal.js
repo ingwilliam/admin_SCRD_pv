@@ -25,6 +25,9 @@
           cargar_tabla(token_actual);
           validator_form(token_actual);
 
+         $("#back_step").attr("onclick", " location.href = 'perfil.html?m=2&id="+  $("#idc").val()+"' ");
+         $("#next_step").attr("onclick", " location.href = 'educacion_no_formal.html?m=2&id="+  $("#idc").val()+"' ");
+
           //alert($('#nivel_educacion').val());
           //Si el nivel es superior a bachiller muestra los select areasconocimientos y nucleosbasicos
           $('#nivel_educacion').change(function(){
@@ -163,7 +166,7 @@
             notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
             break;
         case 'error_token':
-          location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+          location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
           break;
         case 'acceso_denegado':
           notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -482,7 +485,7 @@
         });
     });
 
-    //desarcar archivo
+    //descargar archivo
     $(".download_file").click(function () {
       //Cargo el id file
       var cod = $(this).attr('title');
