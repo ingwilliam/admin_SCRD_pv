@@ -166,7 +166,7 @@
             notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
             break;
         case 'error_token':
-          location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+          location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
           break;
         case 'acceso_denegado':
           notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");

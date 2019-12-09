@@ -79,14 +79,16 @@
 
     }
 
-    if(json.propuesta.estado == 7){
+    //9	jurados	Registrado
+    if(json.propuesta.estado == 9){
 
       $("#estado").hide();
       $("#terminos").show();
       $("#formulario_principal").show();
     }
 
-    if(json.propuesta.estado == 8){
+    //10	jurados	Inscrito
+    if(json.propuesta.estado == 10){
       $("#estado").show();
       $("#terminos").hide();
       $("#formulario_principal").hide();

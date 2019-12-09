@@ -446,6 +446,7 @@ function cargar_datos_basicos(token_actual, postulacion, participante){
           $('#nombres2').html(json.participante.primer_nombre+' '+json.participante.segundo_nombre);
           $('#apellidos2').html(json.participante.primer_apellido+' '+json.participante.segundo_apellido);
           $('#propuesta_resumen').html(json.propuesta_resumen);
+          $('#propuesta_resumen_perfil').html(json.propuesta_resumen);
 
           if(json.postulacion_perfil){
 
@@ -466,18 +467,18 @@ function cargar_datos_basicos(token_actual, postulacion, participante){
                                                   ( (json.postulacion_perfil.nivel_educativo == 'null')? 'N/D': json.postulacion_perfil.nivel_educativo )
                                             +' </div>'
                                             +' <div class="col-lg-6">'
-                                            + ' <h5><b>Area de conocimiento:</h5></b> '+
+                                            + ' <h5><b>Área de conocimiento:</h5></b> '+
                                               ( (json.postulacion_perfil.area_conocimiento == 'null')? 'N/D': json.postulacion_perfil.area_conocimiento )
                                             +' </div>'
                                             +' <div class="col-lg-6">'
                                             +'  <h5><b>Campo de experiencia:</h5></b>'+json.postulacion_perfil.campo_experiencia
                                             +' </div>'
                                             +' <div class="col-lg-6">'
-                                            +'  <h5><b>Area del perfíl:</h5></b> '+
+                                            +'  <h5><b>Área del perfíl:</h5></b> '+
                                               ( (json.postulacion_perfil.area_perfil == 'null')? 'N/D': json.postulacion_perfil.area_perfil )
                                             +' </div>'
                                             +' <div class="col-lg-6">'
-                                            +'  <h5><b>Reside en bogota:</h5></b> '+
+                                            +'  <h5><b>Reside en Bogotá:</h5></b> '+
                                               (json.postulacion_perfil.reside_bogota? 'Si': 'No')
                                             +' </div>'
 
