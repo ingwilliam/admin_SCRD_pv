@@ -22,6 +22,9 @@
          permiso_lectura(token_actual, "Menu Participante");
          cargar_datos_formulario(token_actual);
          validator_form(token_actual);
+
+         $("#next_step").attr("onclick", " location.href = 'educacion_formal.html?m=2&id="+  $("#idc").val()+"' ");
+
      }
 
  });
@@ -90,6 +93,7 @@ function cargar_datos_formulario(token_actual){
           $('#numero_telefono').val(json.participante.numero_telefono);
           $('#numero_celular').val(json.participante.numero_celular);
           $('#correo_electronico').val(json.participante.correo_electronico);
+          $('#resumen').val(json.perfil);
 
 
           //Cargos el select de tipo de documento
@@ -327,6 +331,8 @@ function validator_form(token_actual) {
                     }
                 }
             }
+
+
         }
     }).on('success.form.bv', function (e) {
         // Prevent form submission

@@ -21,6 +21,9 @@
      {
          //Verifica si el token actual tiene acceso de lectura
          permiso_lectura(token_actual, "Menu Participante");
+
+         $("#back_step").attr("onclick", " location.href = 'documentos_administrativos.html?m=2&id="+  $("#idc").val()+"' ");
+         $("#next_step").attr("onclick", " location.href = 'postulaciones.html?m=2&id="+  $("#idc").val()+"' ");
          cargar_datos_formulario(token_actual);
 
          $("#postular").click(function(){
@@ -76,14 +79,16 @@
 
     }
 
-    if(json.propuesta.estado == 7){
+    //9	jurados	Registrado
+    if(json.propuesta.estado == 9){
 
       $("#estado").hide();
       $("#terminos").show();
       $("#formulario_principal").show();
     }
 
-    if(json.propuesta.estado == 8){
+    //10	jurados	Inscrito
+    if(json.propuesta.estado == 10){
       $("#estado").show();
       $("#terminos").hide();
       $("#formulario_principal").hide();

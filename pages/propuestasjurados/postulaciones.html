@@ -62,18 +62,15 @@
             <div id="page-wrapper">
                 <div class="loading centrado-porcentual"></div>
 
-
-
-                <div id="">
-
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">Mis postulaciones</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                     <div class="panel-body" style="text-align: right">
-                        <button type="button" class="btn btn-default btn-circle btn-lg" onclick="location.href = '../propuestas/propuestas_busqueda_convocatorias.html'"><i class="fa fa-arrow-left"></i>
-                        </button>
+                      <button type="button" class="btn btn-default btn-circle btn-lg" onclick="" id="back_step"><i class="fa fa-arrow-left"></i>
+                      </button>
+
                     </div>
                 </div>
 
@@ -117,115 +114,120 @@
                 </div>
 
 
-                <!-- /.row -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                Búsqueda de convocatorias
-                            </div>
-                            <div class="panel-body">
-                                <!--form id="formulario_principal" action="" class="formulario_principal" role="form" method="post" style="display:none;"-->
-                                <form id="formulario_principal" action="" class="formulario_principal" role="form" style="display:none;">
-                                  <div class="row">
+                <div class="row" style="display:none;" id="estado" name="estado">
+                  <div class="col-lg-12">
+                      <div class="panel panel-info">
+                          <div class="panel-heading">
+                              Estado de la postulación
+                          </div>
+                          <div class="panel-body">
+                              <h2 >Su hoja de vida no está inscrita, para postularse a una convocatoria debe inscribir su hoja de vida</h2>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <!-- /.row -->
+              <div class="row" id="busqueda_convocatorias">
+                  <div class="col-lg-12">
+                      <div class="panel panel-default">
+                          <div class="panel-heading">
+                              Búsqueda de convocatorias
+                          </div>
+                          <div class="panel-body">
+
+                              <!--form id="formulario_principal" action="" class="formulario_principal" role="form" method="post" style="display:none;"-->
+                              <form id="formulario_principal" action="" class="formulario_principal" role="form" style="display:none;">
+                                <div class="row">
+
+                                  <div class="col-lg-6">
+                                      <div class="form-group">
+                                        <label>Área <span class="icono_requerido">*</span></label>
+                                        <select class="form-control" name="area" id="area">
+                                            <option>:: Seleccionar ::</option>
+                                        </select>
+                                      </div>
+                                    </div>
 
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                          <label>Área <span class="icono_requerido">*</span></label>
-                                          <select class="form-control" name="area" id="area">
-                                              <option>:: Seleccionar ::</option>
-                                          </select>
+                                            <label>Palabra clave</label>
+                                            <input type="text" id="pclave" name="pclave" class="form-control">
                                         </div>
-                                      </div>
+                                    </div>
 
-                                      <div class="col-lg-6">
-                                          <div class="form-group">
-                                              <label>Palabra clave</label>
-                                              <input type="text" id="pclave" name="pclave" class="form-control">
-                                          </div>
-                                      </div>
-
-                                  </div>
-                                  <div class="row">
-                                      <div class="col-lg-12" style="text-align: right">
-                                        <button type="submit" class="btn btn-default">Buscar</button>
-                                        <input type="hidden" id="id" name="id" />
-                                        <input type="hidden" id="idc" name="idc" />
-                                        <input type="hidden" id="idregistro" name="idregistro" />
-                                      </div>
-                                  </div>
-                                  <!-- tabla rersultado busqueda-->
-                                  <div class="row">
-                                      <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <label>Resultado de la búsqueda</label>
-                                          <table id="table_list_b" class="table" style="width: 100%;">
-                                              <thead>
-                                                  <tr>
-                                                      <th>Tipo programa</th>
-                                                      <th>Entidad</th>
-                                                      <th>Area</th>
-                                                      <th>Linea</th>
-                                                      <th>Enfoque</th>
-                                                      <th>Nombre</th>
-                                                      <th>Acciones</th>
-                                                  </tr>
-                                              </thead>
-                                          </table>
-                                          </div>
-                                      </div>
-                                  </div>
-                                </form>
-
-                          </div>
-
-                        </div>
-                            <!-- /.panel-body -->
-                      </div>
-                        <!-- /.panel -->
-                </div>
-
-
-
-
-                <div class="row">
-                        <div class="col-lg-12">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    Mis postulaciones
                                 </div>
-                                <div class="panel-body">
-
-                                  <!-- tabla experiencia laboral-->
-                                  <div class="row">
-                                      <div class="col-lg-12">
-                                          <table id="table_list_p" class="table" style="width: 100%;">
-                                              <thead>
+                                <div class="row">
+                                    <div class="col-lg-12" style="text-align: right">
+                                      <button type="submit" class="btn btn-default">Buscar</button>
+                                      <input type="hidden" id="id" name="id" />
+                                      <input type="hidden" id="idc" name="idc" />
+                                      <input type="hidden" id="idregistro" name="idregistro" />
+                                    </div>
+                                </div>
+                                <!-- tabla rersultado busqueda-->
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                      <div class="form-group">
+                                          <label>Resultado de la búsqueda</label>
+                                        <table id="table_list_b" class="table" style="width: 100%;">
+                                            <thead>
                                                 <tr>
                                                     <th>Tipo programa</th>
                                                     <th>Entidad</th>
-                                                    <th>Area</th>
-                                                    <th>Linea</th>
+                                                    <th>Área</th>
+                                                    <th>Línea</th>
                                                     <th>Enfoque</th>
                                                     <th>Nombre</th>
-                                                    <th>¿Activar?</th>
-
+                                                    <th>Acciones</th>
                                                 </tr>
-                                              </thead>
-                                          </table>
-                                      </div>
-                                  </div>
+                                            </thead>
+                                        </table>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                                <!-- /.panel-body -->
+                              </form>
+
                         </div>
-                </div>
 
+                      </div>
+                          <!-- /.panel-body -->
+                    </div>
+                      <!-- /.panel -->
+              </div>
 
+              <div class="row" id="listado_postulaciones">
+                      <div class="col-lg-12">
+                          <div class="panel panel-default">
+                              <div class="panel-heading">
+                                  Mis postulaciones
+                              </div>
+                              <div class="panel-body">
 
-                    <!-- /.col-lg-12 -->
-                </div>
-                <!-- /.row -->
+                                <!-- tabla experiencia laboral-->
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <table id="table_list_p" class="table" style="width: 100%;">
+                                            <thead>
+                                              <tr>
+                                                  <th>Tipo programa</th>
+                                                  <th>Entidad</th>
+                                                  <th>Área</th>
+                                                  <th>Línea</th>
+                                                  <th>Enfoque</th>
+                                                  <th>Nombre</th>
+                                                  <th>¿Activar?</th>
+
+                                              </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                              </div>
+                          </div>
+                              <!-- /.panel-body -->
+                      </div>
+              </div>
+              <!-- /.row -->
             </div>
             <!-- /#page-wrapper -->
 

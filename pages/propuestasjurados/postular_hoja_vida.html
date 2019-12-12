@@ -75,26 +75,40 @@
                     </div>
                     <!-- /.col-lg-12 -->
                     <div class="panel-body" style="text-align: right">
-                        <button type="button" class="btn btn-default btn-circle btn-lg" onclick="location.href = '../propuestas/propuestas_busqueda_convocatorias.html'"><i class="fa fa-arrow-left"></i>
-                        </button>
+                      <button type="button" class="btn btn-default btn-circle btn-lg" onclick="" id="back_step"><i class="fa fa-arrow-left"></i>
+                      </button>
+                      <button type="button" class="btn btn-default btn-circle btn-lg" onclick="" id="next_step"><i class="fa fa-arrow-right"></i>
+                      </button>
                     </div>
                 </div>
                 <!-- /.row -->
-                <div class="row">
+
+                <div class="row" id="estado" name="estado"  style="display:none;">
+                  <div class="col-lg-12">
+                      <div class="panel panel-info">
+                          <div class="panel-heading">
+                                Términos y condiciones
+                          </div>
+                          <div class="panel-body">
+                              <h2 >Su hoja de vida está inscrita</h2>
+                          </div>
+
+                      </div>
+                  </div>
+                </div>
+
+
+
+
+
+                <!--row-->
+                <div class="row" id="terminos" name="terminos">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 Términos y condiciones
                             </div>
                             <div class="panel-body">
-
-                              <div class="row" style="display:none;" id="estado" name="estado">
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                      <h2 >Su hoja de vida está inscrita</h2>
-                                    </div>
-                                </div>
-                              </div>
 
                               <!-- Modal -->
                                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -121,7 +135,7 @@
                                 </div>
                                 <!-- Modal -->
 
-                              <div class="row" style="display:none;" id="terminos" name="terminos">
+                              <div class="row" >
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                       <label for="documento" >Leer los términos y condiciones de la convocatorias</label>
