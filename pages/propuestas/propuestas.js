@@ -441,9 +441,26 @@ function validator_form(token_actual) {
                                         notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                     } else
                                     {
-                                        notify("success", "ok", "Propuesta:", "Se actualizo con el éxito la propuesta.");
+                                        notify("success", "ok", "Propuesta:", "Se actualizó con el éxito la propuesta.");
+                                        
+                                        var redirect="";
+                                        if(getURLParameter('m')=="pn")
+                                        {
+                                            redirect="documentacion.html";
+                                        }
+                                        if(getURLParameter('m')=="pj")
+                                        {
+                                            redirect="junta.html";
+                                        }
+                                        if(getURLParameter('m')=="agr")
+                                        {
+                                            redirect="integrantes.html";
+                                        }
+                                        
+                                        
+                                        
                                         setTimeout(function () {
-                                            location.href = url_pv_admin + 'pages/propuestas/integrantes.html?m=' + getURLParameter('m') + '&id=' + $("#conv").attr('value');
+                                            location.href = url_pv_admin + 'pages/propuestas/'+redirect+'?m=' + getURLParameter('m') + '&id=' + $("#conv").attr('value');
                                         }, 1800);
                                     }
                                 }

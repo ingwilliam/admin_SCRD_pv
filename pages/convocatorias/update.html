@@ -129,7 +129,7 @@
                                         </div>                                                                                                            
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Justificación de la convocatoria <span class="icono_requerido">*</span></label>
+                                                <label>Justificación de la convocatoria <span class="icono_requerido">*</span> <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="El funcionario debe ingresar la justificación del por qué es importante crear la convocatoria, si utilizo algún dato estadístico o el por que es importante publicarla. (Esta variable no es publica es de uso interno)"><i class="fa fa-question"></i></button></label>
                                                 <textarea id="justificacion" name="justificacion" class="form-control textarea_html" rows="3"></textarea>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>                                                                                                                                                    
@@ -228,7 +228,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>¿Las categorías manejan diferentes requisitos y/o fechas?</label>
-                                                <select disabled="disabled" id='diferentes_categorias' name="diferentes_categorias_disable" class="form-control tiene_categorias" >                                                    
+                                                <select disabled="disabled" id='diferentes_categorias' name="diferentes_categorias" class="form-control tiene_categorias" >                                                    
                                                     <option value="true">Sí</option>
                                                     <option value="false" selected="selected">No</option>
                                                 </select>                                                
@@ -274,7 +274,9 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Esta convocatoria es cerrada?</label>
+                                                <label>Esta convocatoria es cerrada?
+                                                <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Solo aplica para convocatorias, las cuales los participantes son invitados por parte de las entidades."><i class="fa fa-question"></i></button>                                                
+                                                </label>
                                                 <select id='cerrada' name="cerrada" class="form-control" >                                                    
                                                     <option value="true">Sí</option>
                                                     <option value="false" selected="selected">No</option>
@@ -283,7 +285,9 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Habilitar cronograma para las propuestas?</label>
+                                                <label>Habilitar cronograma para las propuestas?
+                                                <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Esta variable permite que el participante pueda diligenciar el cronograma directamente en la plataforma."><i class="fa fa-question"></i></button>
+                                                </label>
                                                 <select id='cronograma' name="cronograma" class="form-control" >                                                    
                                                     <option value="true">Sí</option>
                                                     <option value="false" selected="selected">No</option>
@@ -294,7 +298,9 @@
                                     <div class="row">                                        
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Habilitar presupuesto para las propuestas?</label>
+                                                <label>Habilitar presupuesto para las propuestas?
+                                                <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Esta variable permite que el participante pueda diligenciar el presupuesto directamente en la plataforma."><i class="fa fa-question"></i></button>
+                                                </label>
                                                 <select id='presupuesto' name="presupuesto" class="form-control" >                                                    
                                                     <option value="true">Sí</option>
                                                     <option value="false" selected="selected">No</option>
@@ -303,7 +309,7 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Máximo de propuestas permitidas</label>
+                                                <label>Máximo de propuestas permitidas <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Esta variable permite que un participante pueda inscribir mas de una propuesta en la misma convocatoria."><i class="fa fa-question"></i></button></label>
                                                 <select id='propuestas_permitidas' name="propuestas_permitidas" class="form-control" >                                                    
                                                     <option value="1" selected="selected">1</option>
                                                     <option value="2">2</option>
@@ -671,7 +677,7 @@
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
                                                                 <label>Nivel de formación de posgrado</label>
-                                                                <select id="nivel_educativo" class="form-control validacion_general" name="nivel_educativo[]" multiple="multiple">                                                                                                                        
+                                                                <select id="nivel_educativo" class="form-control" name="nivel_educativo[]" multiple="multiple">                                                                                                                        
                                                                 </select>
                                                             </div>                                                                                                                                                                                                                                                                                                        
                                                         </div>
@@ -839,8 +845,7 @@
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
         <script src='update.js'></script>
-        <script src='../../dist/js/jquery.loadJSON.js'></script>
-        <script src='../../dist/js/verificar_token.js'></script>
+        <script src='../../dist/js/jquery.loadJSON.js'></script>        
 
         <!-- Text area editor html -->
         <script type="text/javascript" src="../../dist/libraries/jQuery-TE_v.1.4.0/jquery-te-1.4.0.min.js" charset="utf-8"></script>        

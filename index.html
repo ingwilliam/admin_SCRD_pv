@@ -219,19 +219,25 @@
                                         notify("danger", "ok", "Login:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                     } else
                                     {
-                                        if (data == 'error')
+                                        if (data == 'error_usuario')
                                         {
                                             notify("danger", "ok", "Login:", "El usuario no se encuentra registrado, por favor registrarse");
                                         } else
-                                        {                                            
-                                            var json = JSON.parse(data);  
-                                            if (typeof json.usuario !== 'undefined') {
-                                                setLocalStorage(name_local_storage,data);
-                                                location.href='pages/index/index.html?msg=Bienvenido(a) '+json.usuario+' al Sistema de Convocatorias&msg_tipo=success';
-                                            }
-                                            else
+                                        {
+                                            if (data == 'error_clave')
                                             {
-                                                notify("danger", "ok", "Login:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                notify("danger", "ok", "Login:", "El password no es el correcto");
+                                            } else
+                                            {
+                                                var json = JSON.parse(data);  
+                                                if (typeof json.usuario !== 'undefined') {
+                                                    setLocalStorage(name_local_storage,data);
+                                                    location.href='pages/index/index.html?msg=Bienvenido(a) '+json.usuario+' al Sistema de Convocatorias&msg_tipo=success';
+                                                }
+                                                else
+                                                {
+                                                    notify("danger", "ok", "Login:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                }
                                             }
                                         }
                                     }

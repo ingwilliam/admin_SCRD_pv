@@ -283,61 +283,67 @@
                     // Get the BootstrapValidator instance
                     var bv = $form.data('bootstrapValidator');
 
-                    $.ajax({
-                        // En data puedes utilizar un objeto JSON, un array o un query string
-                        data: $form.serialize(),
-                        //Cambiar a type: POST si necesario
-                        type: "POST",
-                        // URL a la que se enviará la solicitud Ajax
-                        url: $form.attr('action'),
-                    })
-                            .done(function (data, textStatus, jqXHR) {
-                                if (console && console.log) {
-                                    if (data == 'error_metodo')
-                                    {
-                                        notify("danger", "ok", "Login:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                    } else
-                                    {
-                                        if (data == 'robot')
+                    if ($('#terminos_condiciones').prop('checked')) {
+                        $.ajax({
+                            // En data puedes utilizar un objeto JSON, un array o un query string
+                            data: $form.serialize(),
+                            //Cambiar a type: POST si necesario
+                            type: "POST",
+                            // URL a la que se enviará la solicitud Ajax
+                            url: $form.attr('action'),
+                        })
+                                .done(function (data, textStatus, jqXHR) {
+                                    if (console && console.log) {
+                                        if (data == 'error_metodo')
                                         {
-                                            notify("danger", "ok", "Login:", "No valido ¡no soy un robot!");
+                                            notify("danger", "ok", "Login:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                         } else
                                         {
-                                            if (data == 'error')
+                                            if (data == 'robot')
                                             {
-                                                notify("danger", "ok", "Login:", "Se registro un error al crear el usuario, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                notify("danger", "ok", "Login:", "No valido ¡no soy un robot!");
                                             } else
                                             {
-                                                if (data == 'error_perfil')
+                                                if (data == 'error')
                                                 {
-                                                    notify("danger", "ok", "Login:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                    notify("danger", "ok", "Login:", "Se registro un error al crear el usuario, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                                 } else
                                                 {
-                                                    if (data == 'error_username')
+                                                    if (data == 'error_perfil')
                                                     {
-                                                        notify("danger", "ok", "Usuarios:", "El email ya se encuentra registrado");
+                                                        notify("danger", "ok", "Login:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                                     } else
                                                     {
-                                                        if (data == 'error_email')
+                                                        if (data == 'error_username')
                                                         {
-                                                            notify("danger", "ok", "Login:", "Se registro un error al enviar contraseña, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                            notify("danger", "ok", "Usuarios:", "El email ya se encuentra registrado");
                                                         } else
                                                         {
-                                                            notify("success", "ok", "Login:", "Se creo el usuario con éxito, por favor revisar su bandeja de entrada con el fin de confirmar el registro.");
+                                                            if (data == 'error_email')
+                                                            {
+                                                                notify("danger", "ok", "Login:", "Se registro un error al enviar contraseña, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                            } else
+                                                            {
+                                                                notify("success", "ok", "Login:", "Se creo el usuario con éxito, por favor revisar su bandeja de entrada con el fin de confirmar el registro.");
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
                                         }
-                                    }
 
-                                }
-                            })
-                            .fail(function (jqXHR, textStatus, errorThrown) {
-                                if (console && console.log) {
-                                    notify("danger", "ok", "Login:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co " + textStatus);
-                                }
-                            });
+                                    }
+                                })
+                                .fail(function (jqXHR, textStatus, errorThrown) {
+                                    if (console && console.log) {
+                                        notify("danger", "ok", "Login:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co " + textStatus);
+                                    }
+                                });
+                    } else
+                    {
+                        notify("danger", "ok", "Login:", "Debe aceptar términos y condiciones.");
+                    }
+
 
                     //$form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
                     bv.resetForm();

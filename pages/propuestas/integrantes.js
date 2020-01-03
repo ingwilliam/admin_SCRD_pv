@@ -82,6 +82,16 @@ $(document).ready(function () {
             select: function (event, ui) {
                 $(this).val(ui.item ? ui.item : " ");
                 $("#ciudad_residencia").val(ui.item.id);
+                
+                //Valido para que muestre solo los barrios de bogota                    
+                if(ui.item.id==151)
+                {
+                    $("#barrio_residencia_name").css("display","block");
+                }
+                else
+                {
+                    $("#barrio_residencia_name").css("display","none");
+                }
             },
             change: function (event, ui) {
                 if (!ui.item) {
@@ -411,9 +421,19 @@ function cargar_formulario(token_actual)
                     $("#ciudad_nacimiento_name").val(json.ciudad_nacimiento_name);
                     $("#ciudad_residencia_name").val(json.ciudad_residencia_name);
                     
-                    
                     //Cargo el formulario con los datos
                     $('#formulario_principal').loadJSON(json.participante);                                        
+                    
+                    //Valido para que muestre solo los barrios de bogota
+                    if($("#ciudad_residencia").val()==151)
+                    {
+                        $("#barrio_residencia_name").css("display","block");
+                    }
+                    else
+                    {
+                        $("#barrio_residencia_name").css("display","none");
+                    }
+                
                     $('#nuevo_integrante').modal('toggle');
                 }
             }

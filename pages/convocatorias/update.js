@@ -1,5 +1,7 @@
 
 $(document).ready(function () {
+    
+    $('[data-toggle="tooltip"]').tooltip()
 
     //Verifico si el token exite en el cliente y verifico que el token este activo en el servidor                
     var token_actual = getLocalStorage(name_local_storage);

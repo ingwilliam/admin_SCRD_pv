@@ -362,7 +362,7 @@ function validator_form(token_actual) {
                                             notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                         } else
                                         {
-                                            notify("success", "ok", "Persona natural:", "Se actualizo con el éxito el participante como persona natural.");                                    
+                                            notify("success", "ok", "Persona natural:", "Se actualizó con éxito el participante como persona natural.");                                    
                                             setTimeout(function(){location.href = url_pv_admin + 'pages/propuestas/propuestas.html?m=pn&id='+$("#conv").attr('value');}, 1800);                                            
                                         }
                                     }
