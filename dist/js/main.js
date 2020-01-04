@@ -257,6 +257,9 @@ $(document).ready(function () {
     //Asignamos el valor a input id
     $("#id").attr('value', getURLParameter('id'));
 
+    //crear tooltip 
+    $('[data-toggle="tooltip"]').tooltip();
+    $('.btn_tooltip').tooltip();
 
     //Verifico si el token exite en el cliente y verifico que el token este activo en el servidor
     //Si el token no esta activo o se presenta un error se elimina la variable del session storage
