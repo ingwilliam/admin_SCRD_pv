@@ -101,12 +101,12 @@ $(document).ready(function () {
                 {
                     if (data == 'crear_perfil')
                     {
-                        location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_natural.html?msg=Para poder inscribir la propuesta debe crear el perfil de persona natural.&msg_tipo=danger';
+                        location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_juridica.html?msg=Para poder inscribir la propuesta debe crear el perfil de persona jurídica.&msg_tipo=danger';
                     } else
                     {
                         if (data == 'error_participante_propuesta')
                         {
-                            location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_natural.html?msg=Se registro un error al importar el participante, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co.&msg_tipo=danger';
+                            location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_juridica.html?msg=Se registro un error al importar el participante, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co.&msg_tipo=danger';
                         } else
                         {
                             if (data == 'acceso_denegado')
@@ -318,7 +318,7 @@ function validator_form(token_actual) {
                                             notify("danger", "ok", "Persona jurídica:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                         } else
                                         {
-                                            notify("success", "ok", "Persona natural:", "Se actualizo con el éxito el participante como persona jurídica.");                                    
+                                            notify("success", "ok", "Persona jurídica:", "Se actualizo con el éxito el participante como persona jurídica.");                                    
                                             setTimeout(function(){location.href = url_pv_admin + 'pages/propuestas/propuestas.html?m=pj&id='+$("#conv").attr('value');}, 1800);                                                                                                                                    
                                         }
                                     }
