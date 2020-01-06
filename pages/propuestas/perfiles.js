@@ -10,7 +10,7 @@ $(document).ready(function () {
     {
 
         //Verifica si el token actual tiene acceso de lectura
-        permiso_lectura(token_actual, "Propuestas convocatorias");
+        permiso_lectura(token_actual, "Menu Participante");
 
         //Realizo la peticion para validar acceso a la convocatoria
         $.ajax({
