@@ -16,30 +16,30 @@ $(document).ready(function () {
 
         //Peticion para buscar barrios
         var json_barrio = function (request, response) {
-                $.ajax({
-                    type: 'GET',
-                    data: {"token": token_actual.token, "id": $("#id").attr('value'),q: request.term},
-                    url: url_pv + 'Barrios/autocompletar/',                                
-                    dataType: "jsonp",
-                    success: function (data) {
-                        response(data);
-                    }
-                });
-            };
-            
+            $.ajax({
+                type: 'GET',
+                data: {"token": token_actual.token, "id": $("#id").attr('value'), q: request.term},
+                url: url_pv + 'Barrios/autocompletar/',
+                dataType: "jsonp",
+                success: function (data) {
+                    response(data);
+                }
+            });
+        };
+
         //Peticion para buscar ciudades
         var json_ciudades = function (request, response) {
-                $.ajax({
-                    type: 'GET',
-                    data: {"token": token_actual.token, "id": $("#id").attr('value'),q: request.term},
-                    url: url_pv + 'Ciudades/autocompletar/',                                
-                    dataType: "jsonp",
-                    success: function (data) {
-                        response(data);
-                    }
-                });
-            };
-            
+            $.ajax({
+                type: 'GET',
+                data: {"token": token_actual.token, "id": $("#id").attr('value'), q: request.term},
+                url: url_pv + 'Ciudades/autocompletar/',
+                dataType: "jsonp",
+                success: function (data) {
+                    response(data);
+                }
+            });
+        };
+
         //Cargos el autocomplete de barrios
         $("#barrio_residencia_name").autocomplete({
             source: json_barrio,
@@ -52,7 +52,7 @@ $(document).ready(function () {
                 if (!ui.item) {
                     this.value = '';
                     $("#barrio_residencia").val("");
-                }                
+                }
             }
         });
 
@@ -72,7 +72,7 @@ $(document).ready(function () {
                 //else { Return your label here }
             }
         });
-        
+
         //Cargos el autocomplete de ciudad de residencia
         $("#ciudad_residencia_name").autocomplete({
             source: json_ciudades,
@@ -99,7 +99,7 @@ $(document).ready(function () {
         }).done(function (data) {
             if (data == 'error_metodo')
             {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Persona natural:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
             } else
             {
                 if (data == 'error_token')
@@ -189,11 +189,11 @@ $(document).ready(function () {
                     }
 
                     //Asigno el nombre de las barrio
-                    $("#barrio_residencia_name").val(json.barrio_residencia_name);                            
-                    
+                    $("#barrio_residencia_name").val(json.barrio_residencia_name);
+
                     //Asigno el nombre de las ciudades
                     $("#ciudad_nacimiento_name").val(json.ciudad_nacimiento_name);
-                    $("#ciudad_residencia_name").val(json.ciudad_residencia_name);                                        
+                    $("#ciudad_residencia_name").val(json.ciudad_residencia_name);
 
                     //Cargo el formulario con los datos
                     $('#formulario_principal').loadJSON(json.participante);
@@ -292,44 +292,48 @@ function validator_form(token_actual) {
             url: $form.attr('action'),
             data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
         }).done(function (result) {
-
-            if (result == 'error')
+            if (result == 'error_metodo')
             {
-                notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Persona natural:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
             } else
             {
-                if (result == 'error_token')
+                if (result == 'error')
                 {
-                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                 } else
                 {
-                    if (result == 'acceso_denegado')
+                    if (result == 'error_token')
                     {
-                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                     } else
                     {
-                        if (result == 'error_usuario_perfil')
+                        if (result == 'acceso_denegado')
                         {
-                            notify("danger", "ok", "Persona natural:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                         } else
                         {
-                            if (result == 'participante_existente')
+                            if (result == 'error_usuario_perfil')
                             {
-                                notify("danger", "ok", "Persona natural:", "El participante que intenta ingresar ya se encuentra registrado en la base de datos, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                notify("danger", "ok", "Persona natural:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                             } else
                             {
-                                if (isNaN(result)) {
-                                    notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                if (result == 'participante_existente')
+                                {
+                                    notify("danger", "ok", "Persona natural:", "El participante que intenta ingresar ya se encuentra registrado en la base de datos, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                 } else
                                 {
-                                    notify("success", "ok", "Persona natural:", "Se actualizo con el éxito el participante como persona natural.");
+                                    if (isNaN(result)) {
+                                        notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+                                        notify("success", "ok", "Persona natural:", "Se actualizo con el éxito el participante como persona natural.");
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-
         });
 
         //$form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);        

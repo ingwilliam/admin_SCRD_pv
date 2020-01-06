@@ -357,19 +357,25 @@ function validator_form(token_actual) {
                                     notify("danger", "ok", "Persona natural:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                 } else
                                 {
-                                    if (result == 'participante_existente')
+                                    if (result == 'no_existente_participante')
                                     {
-                                        notify("danger", "ok", "Persona natural:", "El participante que intenta ingresar ya se encuentra registrado en la base de datos, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                        location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_natural.html?msg=Para poder inscribir la propuesta debe crear el perfil de persona natural.&msg_tipo=danger';
                                     } else
                                     {
-                                        if (isNaN(result)) {
-                                            notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                        if (result == 'participante_existente')
+                                        {
+                                            notify("danger", "ok", "Persona natural:", "El participante que intenta ingresar ya se encuentra registrado en la base de datos, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                         } else
                                         {
-                                            notify("success", "ok", "Persona natural:", "Se actualizó con éxito el participante como persona natural.");                                    
-                                            setTimeout(function(){location.href = url_pv_admin + 'pages/propuestas/propuestas.html?m=pn&id='+$("#conv").attr('value');}, 1800);                                            
+                                            if (isNaN(result)) {
+                                                notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                            } else
+                                            {
+                                                notify("success", "ok", "Persona natural:", "Se actualizó con éxito el participante como persona natural.");                                    
+                                                setTimeout(function(){location.href = url_pv_admin + 'pages/propuestas/propuestas.html?m=pn&id='+$("#conv").attr('value');}, 1800);                                            
+                                            }
                                         }
-                                    }
+                                    }                                    
                                 }
                             }
                         }
