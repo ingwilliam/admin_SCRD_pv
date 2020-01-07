@@ -3,25 +3,25 @@ $(document).ready(function () {
     //Verifico si el token exite en el cliente y verifico que el token este activo en el servidor                
     var token_actual = getLocalStorage(name_local_storage);
 
-    var href_regresar="";
+    var href_regresar = "";
     //Creando link de navegación
-    if(getURLParameter('m')=="agr")
+    if (getURLParameter('m') == "agr")
     {
-        href_regresar="integrantes.html?m="+getURLParameter('m')+"&id="+getURLParameter('id')+"";        
+        href_regresar = "integrantes.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "";
     }
-    
-    if(getURLParameter('m')=="pn")
+
+    if (getURLParameter('m') == "pn")
     {
-        href_regresar="propuestas.html?m="+getURLParameter('m')+"&id="+getURLParameter('id')+"";        
+        href_regresar = "propuestas.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "";
     }
-    
-    if(getURLParameter('m')=="pj")
+
+    if (getURLParameter('m') == "pj")
     {
-        href_regresar="junta.html?m="+getURLParameter('m')+"&id="+getURLParameter('id')+"";        
+        href_regresar = "junta.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "";
     }
-    
-    $("#link_regresar").attr("onclick","location.href = '"+href_regresar+"'");    
-    
+
+    $("#link_regresar").attr("onclick", "location.href = '" + href_regresar + "'");
+
     //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
     if ($.isEmptyObject(token_actual)) {
         location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
@@ -79,8 +79,8 @@ $(document).ready(function () {
                                     {
                                         var json = JSON.parse(data);
 
-                                        $("#propuesta").attr("value",json.propuesta);
-                                        $("#participante").attr("value",json.participante);
+                                        $("#propuesta").attr("value", json.propuesta);
+                                        $("#participante").attr("value", json.participante);
 
                                         var html_table = '';
                                         $.each(json.administrativos, function (key2, documento) {
@@ -270,20 +270,25 @@ $(document).ready(function () {
             });
 
             $("#modal-btn-reporte").on("click", function () {
-                callback(false);                
-                window.open(url_pv_report + "/reporte_propuesta_inscrita.php?token="+token_actual.token+"&id="+$("#propuesta").attr('value'), '_blank');
+                callback(false);
+                window.open(url_pv_report + "/reporte_propuesta_inscrita.php?token=" + token_actual.token + "&id=" + $("#propuesta").attr('value'), '_blank');
             });
         };
 
         modalConfirm(function (confirm) {
             if (confirm) {
                 //Se realiza la peticion con el fin de guardar el registro actual
-                    $.ajax({
-                        type: 'POST',
-                        url: url_pv + 'Propuestas/inscribir_propuesta',
-                        data: "conv="+$("#conv").attr('value')+"&modulo=Menu Participante&token=" + token_actual.token + "&m=" + getURLParameter('m')+"&id="+$("#propuesta").val(),
-                    }).done(function (result) {
+                $.ajax({
+                    type: 'POST',
+                    url: url_pv + 'Propuestas/inscribir_propuesta',
+                    data: "conv=" + $("#conv").attr('value') + "&modulo=Menu Participante&token=" + token_actual.token + "&m=" + getURLParameter('m') + "&id=" + $("#propuesta").val(),
+                }).done(function (result) {
 
+                    if (result == 'error_estado')
+                    {
+                        notify("danger", "ok", "Propuesta:", "Su propuesta no esta en estado registrada, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    } else
+                    {
                         if (result == 'error')
                         {
                             notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
@@ -302,8 +307,7 @@ $(document).ready(function () {
                                     if (result == 'error_fecha_cierre')
                                     {
                                         notify("danger", "ok", "Convocatorias:", "La convocatoria ya no se encuentra disponible para inscribir su propuesta.");
-                                    } 
-                                    else
+                                    } else
                                     {
                                         if (isNaN(result)) {
                                             notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
@@ -311,12 +315,13 @@ $(document).ready(function () {
                                         {
                                             notify("success", "ok", "Convocatorias:", "Felicitaciones, su propuesta quedo inscrita en la plataforma.");
                                         }
-                                    }                                    
+                                    }
                                 }
                             }
                         }
+                    }
 
-                    });                
+                });
             }
         });
 

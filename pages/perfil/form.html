@@ -169,7 +169,7 @@
                                     //location.href = '../../index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                                 } else
                                 {
-                                    permiso_lectura(token_actual, "Menu Participante");
+                                    permiso_lectura(token_actual, "Mi perfil");
 
                                     //Establesco la accion del formulario
                                     $('#form_validator').attr('action', url_pv + 'Usuarios/edit_perfil');
@@ -313,7 +313,7 @@
                                     $.ajax({
                                         type: 'PUT',
                                         url: url_pv + 'Usuarios/edit_perfil/' + $("#id").attr('value'),
-                                        data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
+                                        data: $form.serialize() + "&modulo=Mi perfil&token=" + token_actual.token
                                     }).done(function (result) {
                                         if (result == 'error_registro')
                                         {
