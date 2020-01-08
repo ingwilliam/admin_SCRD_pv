@@ -210,20 +210,26 @@ function form_tipo_convocatoria(page, id)
                         } 
                         else
                         {
-                            if (data == 'ingresar')
+                            if (data == 'error_maximo')
                             {
-                                var redirect = "";
-                                if (page == 1 || page == 3 || page == 4 || page == 5)
+                                notify("danger", "ok", "Convocatorias:", "Ya tiene el máximo de propuestas guardadas permitidas para esta convocatoria, para visualizar sus propuestas por favor ingrese al menú Mis propuestas.");
+                            } 
+                            else
+                            {    
+                                if (data == 'ingresar')
                                 {
-                                    redirect = "/propuestas/perfiles";
-                                }
-                                if (page == 2)
-                                {
-                                    redirect = "/propuestasjurados/perfil";
-                                }
+                                    var redirect = "";
+                                    if (page == 1 || page == 3 || page == 4 || page == 5)
+                                    {
+                                        redirect = "/propuestas/perfiles";
+                                    }
+                                    if (page == 2)
+                                    {
+                                        redirect = "/propuestasjurados/perfil";
+                                    }
 
-                                window.location.href = url_pv_admin + 'pages'+redirect+ ".html?m=" + page + "&id=" + id;                                
-                                
+                                    window.location.href = url_pv_admin + 'pages'+redirect+ ".html?m=" + page + "&id=" + id+ "&p=0";
+                                }
                             }
                         }
                     }
