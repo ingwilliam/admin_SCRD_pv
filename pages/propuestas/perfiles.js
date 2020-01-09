@@ -41,16 +41,16 @@ $(document).ready(function () {
                             } else
                             {
                                 if (data == 'error_maximo')
-                                {                                    
+                                {
                                     location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=Ya tiene el máximo de propuestas guardadas permitidas para esta convocatoria, para visualizar sus propuestas por favor ingrese al menú Mis propuestas.&msg_tipo=danger';
                                 } else
                                 {
                                     if (data == 'error_propuesta')
-                                    {                                    
+                                    {
                                         location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=El código de la propuesta no es valido.&msg_tipo=danger';
                                     } else
                                     {
-                                    
+
                                         if (data == 'ingresar')
                                         {
                                             $(".validar_acceso").css("display", "block");
@@ -159,23 +159,71 @@ $(document).ready(function () {
 
                 var redirect = "";
                 var m = "";
+                var controller = "";
+                var redirect_perfil = "";
                 if (tipo_participante == 1)
                 {
                     redirect = "perfil_persona_natural";
                     m = "pn";
+                    controller = "Personasnaturales";
+                    redirect_perfil = "persona_natural";
                 }
                 if (tipo_participante == 2)
                 {
                     redirect = "perfil_persona_juridica";
                     m = "pj";
+                    controller = "Personasjuridicas";
+                    redirect_perfil = "persona_juridica";
                 }
                 if (tipo_participante == 3)
                 {
                     redirect = "perfil_agrupacion";
                     m = "agr";
+                    controller = "Agrupaciones";
+                    redirect_perfil = "agrupacion";
                 }
 
-                location.href = redirect + ".html?m=" + m + "&id=" + id+"&p=" + getURLParameter('p');
+                //Realizo la peticion para cargar el formulario
+                $.ajax({
+                    type: 'GET',
+                    data: {"token": token_actual.token, "conv": $("#id").val(), "modulo": "Menu Participante", "p": getURLParameter('p')},
+                    url: url_pv + controller + '/crear_propuesta_' + m + '/'
+                }).done(function (data) {
+                    if (data == 'error_metodo')
+                    {
+                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    } else
+                    {
+                        if (data == 'error_token')
+                        {
+                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                        } else
+                        {
+                            if (data == 'acceso_denegado')
+                            {
+                                notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
+                            } else
+                            {
+                                if (data == 'crear_perfil')
+                                {
+                                    location.href = url_pv_admin + 'pages/perfilesparticipantes/'+redirect_perfil+'.html?msg=Para poder inscribir la propuesta debe crear el perfil ('+m+').&msg_tipo=danger';
+                                } else
+                                {
+                                    if (data == 'error_participante_propuesta')
+                                    {
+                                        location.href = url_pv_admin + 'pages/perfilesparticipantes/'+redirect_perfil+'.html?msg=Se registro un error al importar el participante, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co.&msg_tipo=danger';
+                                    } else
+                                    {
+                                        var json = JSON.parse(data);
+                                        
+                                        location.href = redirect + ".html?m=" + m + "&id=" + id + "&p=" + json;                                        
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                });
 
                 bv.resetForm();
             });

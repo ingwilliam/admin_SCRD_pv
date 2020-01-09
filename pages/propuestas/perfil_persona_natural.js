@@ -4,8 +4,8 @@ $(document).ready(function () {
     var token_actual = getLocalStorage(name_local_storage);
 
     //Creando link de navegación
-    $("#link_terminos").attr("onclick", "location.href = 'perfiles.html?m=1&id=" + $("#id").val() + "'");
-    $("#link_propuestas").attr("onclick", "location.href = 'propuestas.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "'");
+    $("#link_terminos").attr("onclick", "location.href = 'perfiles.html?m=1&id=" + $("#id").val() + "&p=" + getURLParameter('p') + "'");
+    $("#link_propuestas").attr("onclick", "location.href = 'propuestas.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p') + "'");
 
     //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
     if ($.isEmptyObject(token_actual)) {
@@ -58,6 +58,9 @@ $(document).ready(function () {
                                             //Asignamos el valor a input conv
                                             $("#conv").attr('value', getURLParameter('id'));
 
+                                            //disabled todos los componentes
+                                            $("#formulario_principal input,select,button[type=submit]").attr("disabled","disabled");   
+                                            
                                             //Verifica si el token actual tiene acceso de lectura
                                             permiso_lectura(token_actual, "Menu Participante");
 
@@ -157,22 +160,30 @@ $(document).ready(function () {
                                                         location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                                                     } else
                                                     {
-                                                        if (data == 'crear_perfil')
+                                                        if (data == 'acceso_denegado')
                                                         {
-                                                            location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_natural.html?msg=Para poder inscribir la propuesta debe crear el perfil de persona natural.&msg_tipo=danger';
+                                                            notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
                                                         } else
                                                         {
-                                                            if (data == 'error_participante_propuesta')
+                                                            if (data == 'crear_perfil')
                                                             {
-                                                                location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_natural.html?msg=Se registro un error al importar el participante, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co.&msg_tipo=danger';
+                                                                location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_natural.html?msg=Para poder inscribir la propuesta debe crear el perfil de persona natural.&msg_tipo=danger';
                                                             } else
                                                             {
-                                                                if (data == 'acceso_denegado')
-                                                                {
-                                                                    notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
+                                                                if (data == 'error_participante_propuesta')
+                                                                {                                                                    
+                                                                    location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=El código de la propuesta no es valido.&msg_tipo=danger';
                                                                 } else
                                                                 {
+
                                                                     var json = JSON.parse(data);
+
+                                                                    //elimino disabled todos los componentes
+                                                                    if(json.estado==7)
+                                                                    {
+                                                                        $("#formulario_principal input,select,button[type=submit]").removeAttr("disabled");   
+                                                                    }
+                                                                    
 
                                                                     //Cargos el select de tipo de documento
                                                                     $('#tipo_documento').find('option').remove();
@@ -424,7 +435,7 @@ function validator_form(token_actual) {
                                             } else
                                             {
                                                 notify("success", "ok", "Persona natural:", "Se actualizó con éxito el participante como persona natural.");
-                                                //setTimeout(function(){location.href = url_pv_admin + 'pages/propuestas/propuestas.html?m=pn&id='+$("#conv").attr('value');}, 1800);                                            
+                                                setTimeout(function(){location.href = url_pv_admin + 'pages/propuestas/propuestas.html?m=pn&id='+$("#conv").attr('value')+'&p='+getURLParameter('p');}, 1800);                                            
                                             }
                                         }
                                     }
