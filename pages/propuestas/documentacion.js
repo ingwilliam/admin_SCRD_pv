@@ -363,8 +363,8 @@ $(document).ready(function () {
                                                                             if (isNaN(result)) {
                                                                                 notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                                                             } else
-                                                                            {
-                                                                                notify("success", "ok", "Convocatorias:", "Felicitaciones, su propuesta quedo inscrita en la plataforma.");
+                                                                            {                                                                                
+                                                                                location.href = url_pv_admin + 'pages/propuestas/mis_propuestas.html?msg=Felicitaciones, su propuesta quedo inscrita en la plataforma.&msg_tipo=success';                                                                                                                                                                
                                                                             }
                                                                         }
                                                                     }

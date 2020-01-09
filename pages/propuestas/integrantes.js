@@ -459,7 +459,7 @@ function cargar_tabla(token_actual)
         "lengthMenu": [10, 20, 30],
         "ajax": {
             url: url_pv + "Personasnaturales/cargar_tabla_integrantes",
-            data: {"token": token_actual.token, "propuesta": $("#propuesta").attr('value'), "participante": $("#participante").attr('value'), "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "m": getURLParameter('p'), "tipo": $("#tipo").attr('value')}
+            data: {"token": token_actual.token, "participante": $("#participante").attr('value'), "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "p": getURLParameter('p'), "tipo": $("#tipo").attr('value')}
         },
         "drawCallback": function (settings) {
             //Cargo el formulario, para crear o editar
