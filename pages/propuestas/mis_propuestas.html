@@ -63,7 +63,7 @@
                 <div class="loading centrado-porcentual"></div>   
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Búsqueda de propuestas</h1>
+                        <h1 class="page-header">Mis propuestas</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>                
@@ -82,25 +82,7 @@
                             </select>
                         </div>
                     </div>
-                </div>                
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Convocatoria</label>
-                            <select id='convocatoria' name="convocatoria" class="form-control selectpicker" data-live-search="true">                                                    
-                                <option value="">:: Seleccionar ::</option>
-                            </select>                           
-                        </div>
-                    </div>                    
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Categoria</label>
-                            <select id='categoria' name="categoria" class="form-control" disabled="disabled" > 
-                                <option value="">:: Seleccionar ::</option>
-                            </select>
-                        </div>
-                    </div>                                                                                                   
-                </div>                      
+                </div>                                                      
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
@@ -146,174 +128,27 @@
                                                     <th>Código</th>
                                                     <th>Tipo participante</th>                                                    
                                                     <th>Participante</th>                                                    
-                                                    <th>Ver propuesta</th>
-                                                    <th>Ver reporte</th>                                                                                                        
+                                                    <th>Acciones</th>
+                                                    <th>Reporte de inscrito</th>                                                    
                                                 </tr>
                                             </thead>
                                         </table>
-                                        <div class="modal fade" id="ver_propuesta">
-                                            <input type="hidden" id="propuesta" value="" />
-                                            <div class="modal-dialog" style="width: 800px;  margin: auto;">
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="anular_propuesta">
+                                            <div class="modal-dialog modal-sm">
                                                 <div class="modal-content">
-                                                    <!-- Modal que se activa cuando se realiza cualquier peticion ajax -->
-                                                    <div class="loading centrado-porcentual"></div>
-                                                    <!-- cabecera del diálogo -->
                                                     <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                        <h4 class="modal-title">Información de la propuesta</h4>                                                    
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
                                                     </div>
-                                                    <!-- cuerpo del diálogo -->                                                    
-                                                    <div class="modal-body" style="height: 450px; overflow-y: auto;">                                                                                                            
-                                                        <div class="row">
-                                                            <div class="col-lg-12">
-                                                                <h4>Propuesta</h4>
-                                                                <table id="info_propuesta" class="table table-bordered table-striped">                                    
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <th colspan="1">Código</th>
-                                                                            <td colspan="3" id="codigo_propuesta"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>Nombre de la convocatoria</th>
-                                                                            <td id="nombre_convocatoria"></td>
-                                                                            <th>Categoría de laconvocatoria</th>
-                                                                            <td id="nombre_categoria"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>Nombre del participante</th>
-                                                                            <td id="nombre_participante"></td>
-                                                                            <th>Tipo de participante</th>
-                                                                            <td id="tipo_participante"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>Estado</th>
-                                                                            <td id="nombre_estado"></td>
-                                                                            <th>Nombre de la propuesta</th>
-                                                                            <td id="nombre_propuesta"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th colspan="1">Resumen de la propuesta</th>
-                                                                            <td colspan="3" id="resumen_propuesta"></td>
-                                                                        </tr>        
-                                                                        <tr>
-                                                                            <th colspan="1">Objetivo de la propuesta</th>
-                                                                            <td colspan="3" id="objetivo_propuesta"></td>
-                                                                        </tr>        
-                                                                        <tr>
-                                                                            <th>¿Su propuesta sedesarrolla en Bogotá D.C.?</th>
-                                                                            <td id="desarrollo_bogota"></td>
-                                                                            <th>Localidad</th>
-                                                                            <td id="nombre_localidad"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>Upz</th>
-                                                                            <td id="nombre_upz"></td>
-                                                                            <th>Barrio</th>
-                                                                            <td id="nombre_barrio"></td>
-                                                                        </tr>                                                                                                        
-                                                                    </tbody>
-                                                                </table>      
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-lg-12">
-                                                                <h4>Documentación administrativa</h4>
-                                                                <table class="table">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>N°</th>
-                                                                            <th>Requisito</th>
-                                                                            <th>Descripción</th>
-                                                                            <th>Tipos de archivos permitidos</th>
-                                                                            <th>Tamaño máximo permitido</th>
-                                                                            <th>Archivos cargados</th>
-                                                                            <th>Links cargados</th>                                                    
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody id="tabla_administrativos">                                                
-                                                                    </tbody>
-                                                                </table>                                                                
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-lg-12">
-                                                                <h4>Documentación técnica</h4>
-                                                                <table class="table">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>N°</th>
-                                                                            <th>Requisito</th>
-                                                                            <th>Descripción</th>
-                                                                            <th>Tipos de archivos permitidos</th>
-                                                                            <th>Tamaño máximo permitido</th>
-                                                                            <th>Archivos cargados</th>
-                                                                            <th>Links cargados</th>                                                    
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody id="tabla_tecnicos">                                                
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="modal fade" id="cargar_documento">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">                                                        
-                                                    <!-- cabecera del diálogo -->
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                        <h4 class="modal-title">Documentación Cargada</h4>                                                    
-                                                    </div>
-                                                    <div class="loading centrado-porcentual"></div>             
-                                                    <!-- cuerpo del diálogo -->
-                                                    <div class="modal-body">                                                        
-                                                        <div class="row">
-                                                            <div class="col-lg-12">
-                                                                <table class="table">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Archivo</th>
-                                                                            <th>Ver Archivo</th>                                                                                                                                        
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody id="tabla_archivos">                                                
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="modal fade" id="cargar_link">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">                                                        
-                                                    <!-- cabecera del diálogo -->
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                        <h4 class="modal-title">Links cargados</h4>                                                    
-                                                    </div>
-                                                    <div class="loading centrado-porcentual"></div>             
-                                                    <!-- cuerpo del diálogo -->
                                                     <div class="modal-body">
-                                                        <div class="row">
-                                                            <div class="col-lg-12">
-                                                                <table class="table">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Link</th>                                                                                                                                                                                             
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody id="tabla_link">                                                
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
+                                                        <p>Esta seguro de anular la propuesra?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <input type="hidden" id="id_propuesta" />
+                                                        <button type="button" class="btn btn-default" id="modal-btn-si">Si</button>
+                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -366,7 +201,7 @@
 
         <!-- Descargar archivo -->
         <script src="../../dist/libraries/ajaxdownloader/ajaxdownloader.min.js" type="text/javascript"></script>
-                
+
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
         <script src='mis_propuestas.js'></script>

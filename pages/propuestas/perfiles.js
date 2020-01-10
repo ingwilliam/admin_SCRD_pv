@@ -14,6 +14,12 @@ $(document).ready(function () {
             //Verifica si el token actual tiene acceso de lectura
             permiso_lectura(token_actual, "Menu Participante");
 
+            if(getURLParameter('p')>0)
+            {                
+                //disabled todos los componentes
+                $("#formulario_principal button[type=submit]").css("display","none");   
+            }
+
             //Realizo la peticion para validar acceso a la convocatoria
             $.ajax({
                 type: 'POST',
