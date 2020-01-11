@@ -247,7 +247,7 @@ function validator_form(token_actual) {
 
             if (result == 'error')
             {
-                notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Persona jurídica:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
             } 
             else
             {
@@ -265,22 +265,22 @@ function validator_form(token_actual) {
                     {
                         if (result == 'error_usuario_perfil')
                         {
-                            notify("danger", "ok", "Persona natural:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            notify("danger", "ok", "Persona jurídica:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                         } 
                         else
                         {
                             if (result == 'participante_existente')
                             {
-                                notify("danger", "ok", "Persona natural:", "El participante que intenta ingresar ya se encuentra registrado en la base de datos, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                notify("danger", "ok", "Persona jurídica:", "El participante que intenta ingresar ya se encuentra registrado en la base de datos, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                             } 
                             else
                             {
                                 if (isNaN(result)) {
-                                    notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    notify("danger", "ok", "Persona jurídica:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                 } 
                                 else
                                 {
-                                    notify("success", "ok", "Persona natural:", "Se actualizo con el éxito el participante como persona natural.");                                    
+                                    notify("success", "ok", "Persona jurídica:", "Se actualizo con el éxito el participante como persona jurídica.");                                    
                                 }
                             }
                         }                                                

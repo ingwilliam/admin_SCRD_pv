@@ -238,7 +238,7 @@ function acciones_convocatoria(token_actual)
                     notify("info", "ok", "Convocatorias:", "Se activo la convocatoria con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se elimino el convocatoria con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se inactivó la convocatoria con éxito.");
                 }
             } else
             {
