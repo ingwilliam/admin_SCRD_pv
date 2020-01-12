@@ -65,6 +65,12 @@
                     <div class="col-lg-12">
                         <h1 class="page-header">Información de la propuesta</h1>
                     </div>
+                    <div class="panel-body" style="text-align: right">                    
+                        <button type="button" id="link_participante" class="btn btn-default btn-circle btn-lg" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa fa-arrow-left"></i>
+                        </button>
+                        <button type="button" id="link_integrantes" class="btn btn-default btn-circle btn-lg" data-toggle="tooltip" data-placement="top" title="Siguiente"><i class="fa fa-arrow-right"></i>
+                        </button>                        
+                    </div>
                     <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
@@ -174,7 +180,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>¿En la ejecución de la propuesta o proyecto participarán menores de edad?</label>
-                                                <select name="ejecucion_menores_edad" class="form-control" >                                                    
+                                                <select id="ejecucion_menores_edad" name="ejecucion_menores_edad" class="form-control" >                                                    
                                                     <option value="true">Sí</option>
                                                     <option value="false" selected="selected">No</option>
                                                 </select>                                                

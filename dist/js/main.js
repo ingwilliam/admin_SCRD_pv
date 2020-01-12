@@ -21,12 +21,18 @@ function getURLParameter(sParam)
 }
 
 //Crear los parametros dinamicos
-function crearParametro(id, label, valores, tipo, obligatorio)
+function crearParametro(id, label, valores, tipo, obligatorio, estado_propuesta)
 {
     var span_obligatorio='';
     if(obligatorio==true)
     {
         span_obligatorio='<span class="icono_requerido">*</span>';
+    }
+    
+    var disabled= 'disabled="disabled"';
+    if(estado_propuesta == 7)
+    {
+        disabled = '';
     }
         
     var parametro;
@@ -35,7 +41,7 @@ function crearParametro(id, label, valores, tipo, obligatorio)
             parametro='<div class="col-lg-6">';
             parametro+='<div class="form-group">';
             parametro+='<label>'+label+' '+span_obligatorio+'</label>';
-            parametro+='<input id="parametro_'+id+'" name="parametro['+id+']" type="text" class="form-control" value="">';
+            parametro+='<input id="parametro_'+id+'" name="parametro['+id+']" type="text" class="form-control" value="" '+disabled+'>';
             parametro+='</div>';
             parametro+='</div>';
             return(parametro);
@@ -44,7 +50,7 @@ function crearParametro(id, label, valores, tipo, obligatorio)
             parametro='<div class="col-lg-6">';
             parametro+='<div class="form-group">';
             parametro+='<label>'+label+' '+span_obligatorio+'</label>';
-            parametro+='<textarea id="parametro_'+id+'" name="parametro['+id+']" class="form-control textarea_html" rows="3"></textarea>';
+            parametro+='<textarea id="parametro_'+id+'" name="parametro['+id+']" class="form-control textarea_html" rows="3" '+disabled+'></textarea>';
             parametro+='</div>';
             parametro+='</div>';
             return(parametro);
@@ -53,7 +59,7 @@ function crearParametro(id, label, valores, tipo, obligatorio)
             parametro='<div class="col-lg-6">';
             parametro+='<div class="form-group">';
             parametro+='<label>'+label+' '+span_obligatorio+'</label>';
-            parametro+='<select id="parametro_'+id+'" name="parametro['+id+']" class="form-control" >';
+            parametro+='<select id="parametro_'+id+'" name="parametro['+id+']" class="form-control" '+disabled+'>';
             var array = valores.split(",");
             parametro+='<option value="">:: Seleccionar ::</option>';            
             for (var i in array) {
@@ -71,7 +77,7 @@ function crearParametro(id, label, valores, tipo, obligatorio)
             parametro+='<div class="form-group">';
             parametro+='<label>'+label+' '+span_obligatorio+'</label>';
             parametro+='<div title="'+id+'" class="input-group date calendario" data-date="" data-date-format="yyyy-mm-dd" data-link-format="yyyy-mm-dd">';            
-            parametro+='<input id="parametro_'+id+'" name="parametro['+id+']" class="form-control" size="16" type="text" value="" readonly>';
+            parametro+='<input id="parametro_'+id+'" name="parametro['+id+']" class="form-control" size="16" type="text" value="" readonly '+disabled+'>';
             parametro+='<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>';                    
             parametro+='</div>';                                            
             parametro+='</div>';
@@ -257,6 +263,9 @@ $(document).ready(function () {
     //Asignamos el valor a input id
     $("#id").attr('value', getURLParameter('id'));
 
+    //crear tooltip 
+    $('[data-toggle="tooltip"]').tooltip();
+    $('.btn_tooltip').tooltip();
 
     //Verifico si el token exite en el cliente y verifico que el token este activo en el servidor
     //Si el token no esta activo o se presenta un error se elimina la variable del session storage
@@ -266,7 +275,7 @@ $(document).ready(function () {
         //Cargamos el menu principal
         $.ajax({
             type: 'POST',
-            data: {"token": token_actual.token, "id": getURLParameter('id'), "m": getURLParameter('m')},
+            data: {"token": token_actual.token, "id": getURLParameter('id'), "m": getURLParameter('m'), "p": getURLParameter('p')},
             url: url_pv + 'Administrador/menu'
         }).done(function (result) {
             if (result == 'error_token')
