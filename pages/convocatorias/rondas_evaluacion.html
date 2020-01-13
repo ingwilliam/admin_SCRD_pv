@@ -69,11 +69,11 @@
                         <h1 class="page-header">Convocatorias</h1>
                     </div>
                     <div class="panel-body" style="text-align: right">
-                        <button type="button" class="btn btn-default btn-circle btn-lg" onclick="location.href = 'list.html'"><i class="fa fa-arrow-left"></i>
+                        <button type="button" class="btn btn-default btn-circle btn-lg" onclick="location.href = 'list.html'" title="Atrás"  data-toggle="tooltip" data-placement="top" ><i class="fa fa-arrow-left"></i>
                         </button>
-                        <button type="button" class="btn btn-primary btn-circle btn-lg" onclick="location.href = 'list.html'"><i class="fa fa-list"></i>
+                        <button type="button" class="btn btn-primary btn-circle btn-lg" onclick="location.href = 'list.html'" data-toggle="tooltip" data-placement="top" title="Listado de convovcatorias"><i class="fa fa-list"></i>
                         </button>
-                        <button type="button" class="btn btn-success btn-circle btn-lg" data-toggle="modal" data-target="#nueva_ronda" id="b_nueva_ronda" ><i class="fa fa-file-o"></i>
+                        <button type="button" class="btn btn-success btn-circle btn-lg" data-toggle="tooltip" data-placement="top"  data-target="#nueva_ronda" id="b_nueva_ronda" title="Crear ronda de evaluación" onclick="$('#nueva_ronda').modal('show')"><i class="fa fa-file-o"></i>
                         </button>
                     </div>
                     <!-- /.col-lg-12 -->
@@ -98,7 +98,12 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
 
-                                                <label>Categoría <span class="icono_requerido">*</span></label>
+                                                <label>Categoría <span class="icono_requerido">*</span>
+                                                  <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top"
+                                                  title="Si la ronda a crear pertenece a una categoría de la convocatoria, se selecciona la categoria. En caso contrario no se selecciona.">
+                                                    <i class="fa fa-question"></i>
+                                                  </button>
+                                                </label>
                                                 <select id='select_categoria' name="select_categoria" class="form-control" >
                                                     <option value="">:: Seleccionar ::</option>
                                                 </select>
@@ -118,7 +123,12 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label>Nombre de ronda <span class="icono_requerido">*</span></label>
+                                                    <label>Nombre de ronda <span class="icono_requerido">*</span>
+                                                      <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top"
+                                                      title="Es el nombre con el cual se identificará la ronda. Emjemplo: Ronda de selección">
+                                                        <i class="fa fa-question"></i>
+                                                      </button>
+                                                    </label>
                                                     <input id="nombre_ronda" type="text" name="nombre_ronda" class="form-control">
                                                 </div>
                                             </div>
@@ -127,7 +137,12 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Descripción  de ronda <span class="icono_requerido">*</span></label>
+                                                <label>Descripción  de ronda <span class="icono_requerido">*</span>
+                                                  <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top"
+                                                  title="Descripción corta sobre la ronda de evaluación">
+                                                    <i class="fa fa-question"></i>
+                                                  </button>
+                                                </label>
                                                 <textarea id="descripcion_ronda" name="descripcion_ronda" class="form-control " rows="3"></textarea>
                                             </div>
                                         </div>
@@ -224,7 +239,13 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                           <div class="form-group col-lg-6">
-                                              <label>Grupo<span class="icono_requerido">*</span></label>
+                                              <label>
+                                                Grupo<span class="icono_requerido">*</span>
+                                                <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top"
+                                                title="Es el grupo al cual pertenecen el criterio de evaluación. Ejemplo: Grupo 'Nivel Académico', Criterio 'Pregrado' ">
+                                                  <i class="fa fa-question"></i>
+                                                </button>
+                                              </label>
                                               <!--input id="grupo_criterio" type="text" name="grupo_criterio" class="form-control"-->
                                               <textarea class="form-control" rows="3" id="grupo_criterio" name="grupo_criterio" class="form-control"></textarea>
                                           </div>
@@ -238,11 +259,21 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                           <div class="form-group col-lg-6">
-                                              <label>Puntaje mínimo<span class="icono_requerido">*</span></label>
+                                              <label>Puntaje mínimo<span class="icono_requerido">*</span>
+                                                <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top"
+                                                title="Es el valor mínimo del rango de evaluación del criterio">
+                                                  <i class="fa fa-question"></i>
+                                                </button>
+                                              </label>
                                               <input id="puntaje_minimo" type="text" name="puntaje_minimo" class="form-control">
                                           </div>
                                           <div class="form-group col-lg-6">
-                                              <label>Puntaje máximo<span class="icono_requerido">*</span></label>
+                                              <label>Puntaje máximo<span class="icono_requerido">*</span>
+                                                <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top"
+                                                title="Es el valor máximo del rango de evaluación del criterio">
+                                                  <i class="fa fa-question"></i>
+                                                </button>
+                                              </label>
                                               <input id="puntaje_maximo" type="text" name="puntaje_maximo" class="form-control">
                                           </div>
                                         </div>
@@ -251,7 +282,12 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="form-group col-lg-6">
-                                                <label>Orden<span class="icono_requerido">*</span></label>
+                                                <label>Orden<span class="icono_requerido">*</span>
+                                                  <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top"
+                                                  title="Es el orden en el cual debe aparecer el criterio en el formulario de evaluación">
+                                                    <i class="fa fa-question"></i>
+                                                  </button>
+                                                </label>
                                                 <input id="orden" type="text" name="orden" class="form-control">
                                             </div>
                                             <!--div class="form-group col-lg-6">
@@ -263,6 +299,10 @@
                                             <div class="form-group col-lg-6" >
                                               <label class="checkbox">
                                                 Exclusivo?
+                                                <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top"
+                                                title="Si la opción es marcada, quiere decir que solo se tendrá en cuenta para la evaluación el criterio evaluado, los demás criterios del grupo se excluyen.">
+                                                  <i class="fa fa-question"></i>
+                                                </button>
                                               </label>
                                               <input type="checkbox" id="exclusivo" name="exclusivo" value="true" >
 
@@ -314,7 +354,6 @@
                             <div class="panel-body">
 
                                 <form id="form_validator" action="" class="form_validator" role="form" method="post">
-
 
                                     <!-- tabla -->
                                     <div class="row">
