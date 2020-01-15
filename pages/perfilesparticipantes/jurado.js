@@ -234,7 +234,7 @@ function cargar_datos_formulario(token_actual) {
   //Realizo la peticion para cargar el formulario
   $.ajax({
       type: 'GET',
-      data: {"token": token_actual.token, "id": $("#id").attr('value')},
+      data: {"token": token_actual.token, "id": $("#idd").attr('value')},
       url: url_pv + 'Jurados/search/'
   }).done(function (data) {
       if (data == 'error_metodo')
@@ -445,7 +445,7 @@ function validator_form(token_actual) {
             //  alert("editado!!!");
             //Realizo la peticion con el fin de editar el registro actual
             $.ajax({
-                type: 'POST',
+                type: 'PUT',
                 url: url_pv + 'Jurados/edit/'+$("#idd").val(),
                 data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
             }).done(function (data) {
