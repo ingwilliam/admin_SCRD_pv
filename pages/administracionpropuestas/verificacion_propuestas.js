@@ -10,12 +10,12 @@ $(document).ready(function () {
     {
 
         //Verifica si el token actual tiene acceso de lectura
-        permiso_lectura(token_actual, "Búsqueda de propuestas");
+        permiso_lectura(token_actual, "Verificación de propuestas");
 
         //Realizo la peticion para cargar el formulario
         $.ajax({
             type: 'GET',
-            data: {"token": token_actual.token, "modulo": "Búsqueda de propuestas"},
+            data: {"token": token_actual.token, "modulo": "Verificación de propuestas"},
             url: url_pv + 'Convocatorias/modulo_buscador_propuestas'
         }).done(function (data) {
             if (data == 'error_metodo')
@@ -52,7 +52,10 @@ $(document).ready(function () {
                         if (json.entidades.length > 0) {
                             //var selected;
                             $.each(json.estados_propuestas, function (key, estado_propuesta) {
-                                $("#estado_propuesta").append('<option value="' + estado_propuesta.id + '" >' + estado_propuesta.nombre + '</option>');
+                                if (estado_propuesta.id != 7)
+                                {
+                                    $("#estado_propuesta").append('<option value="' + estado_propuesta.id + '" >' + estado_propuesta.nombre + '</option>');
+                                }
                             });
                         }
                     }
@@ -67,58 +70,7 @@ $(document).ready(function () {
                 if ($("#busqueda").val() == "0")
                 {
                     //Cargar datos en la tabla actual
-                    $('#table_list').DataTable({
-                        "language": {
-                            "url": "../../dist/libraries/datatables/js/spanish.json"
-                        },
-                        "searching": false,
-                        "processing": true,
-                        "serverSide": true,
-                        "ordering": false,
-                        "lengthMenu": [20, 30, 40],
-                        "ajax": {
-                            url: url_pv + "PropuestasBusquedas/buscar_propuestas",
-                            data: function (d) {
-                                var params = new Object();
-                                params.anio = $('#anio').val();
-                                params.entidad = $('#entidad').val();
-                                params.convocatoria = $("#id_convocatoria").val();
-                                params.categoria = $('#categoria').val();
-                                params.codigo = $('#codigo').val();
-                                params.estado = $('#estado_propuesta').val();
-                                d.params = JSON.stringify(params);
-                                d.token = token_actual.token;
-                                d.modulo = "Búsqueda de propuestas";
-                            },
-                        },
-                        "columnDefs": [{
-                        "targets": 0,
-                        "render": function (data, type, row, meta) {
-                                    var categoria = row.convocatoria;
-                                    if (row.categoria != "") {
-                                        row.convocatoria = row.categoria;
-                                        row.categoria = categoria;
-                                    }
-                                    return row.estado;
-                                }
-                            }
-                        ],
-                        "drawCallback": function (settings) {
-                            cargar_propuesta(token_actual);
-                        },
-                        "columns": [
-                            {"data": "estado"},
-                            {"data": "anio"},
-                            {"data": "entidad"},
-                            {"data": "convocatoria"},
-                            {"data": "categoria"},
-                            {"data": "propuesta"},
-                            {"data": "codigo"},
-                            {"data": "participante"},
-                            {"data": "ver_reporte"},
-                            {"data": "ver_propuesta"}
-                        ]
-                    });
+                    cargar_tabla(token_actual);
 
                     $("#busqueda").attr("value", "1");
                 } else
@@ -151,7 +103,7 @@ $(document).ready(function () {
                         $.ajax({
                             type: 'POST',
                             data: {"token": token_actual.token},
-                            url: url_pv + 'PropuestasBusquedas/validar_acceso/' + $("#id_convocatoria").val()
+                            url: url_pv + 'PropuestasVerificacion/validar_acceso/' + $("#id_convocatoria").val()
                         }).done(function (data) {
                             if (data == 'error_metodo')
                             {
@@ -173,58 +125,7 @@ $(document).ready(function () {
                                             if ($("#busqueda").val() == "0")
                                             {
                                                 //Cargar datos en la tabla actual
-                                                $('#table_list').DataTable({
-                                                    "language": {
-                                                        "url": "../../dist/libraries/datatables/js/spanish.json"
-                                                    },
-                                                    "searching": false,
-                                                    "processing": true,
-                                                    "serverSide": true,
-                                                    "ordering": false,
-                                                    "lengthMenu": [20, 30, 40],
-                                                    "ajax": {
-                                                        url: url_pv + "PropuestasBusquedas/buscar_propuestas",
-                                                        data: function (d) {
-                                                            var params = new Object();
-                                                            params.anio = $('#anio').val();
-                                                            params.entidad = $('#entidad').val();
-                                                            params.convocatoria = $("#id_convocatoria").val();
-                                                            params.categoria = $('#categoria').val();
-                                                            params.codigo = $('#codigo').val();
-                                                            params.estado = $('#estado_propuesta').val();
-                                                            d.params = JSON.stringify(params);
-                                                            d.token = token_actual.token;
-                                                            d.modulo = "Búsqueda de propuestas";
-                                                        },
-                                                    },
-                                                    "columnDefs": [{
-                                                    "targets": 0,
-                                                    "render": function (data, type, row, meta) {
-                                                                var categoria = row.convocatoria;
-                                                                if (row.categoria != "") {
-                                                                    row.convocatoria = row.categoria;
-                                                                    row.categoria = categoria;
-                                                                }
-                                                                return row.estado;
-                                                            }
-                                                        }
-                                                    ],
-                                                    "drawCallback": function (settings) {
-                                                        cargar_propuesta(token_actual);
-                                                    },
-                                                    "columns": [
-                                                        {"data": "estado"},
-                                                        {"data": "anio"},
-                                                        {"data": "entidad"},
-                                                        {"data": "convocatoria"},
-                                                        {"data": "categoria"},
-                                                        {"data": "propuesta"},
-                                                        {"data": "codigo"},
-                                                        {"data": "participante"},
-                                                        {"data": "ver_reporte"},
-                                                        {"data": "ver_propuesta"}
-                                                    ]
-                                                });
+                                                cargar_tabla(token_actual);
 
                                                 $("#busqueda").attr("value", "1");
                                             } else
@@ -264,8 +165,8 @@ $(document).ready(function () {
                 {
                     $.ajax({
                         type: 'GET',
-                        data: {"modulo": "Búsqueda de propuestas", "token": token_actual.token, "anio": $("#anio").val(), "entidad": $("#entidad").val()},
-                        url: url_pv + 'PropuestasBusquedas/select_convocatorias'
+                        data: {"modulo": "Verificación de propuestas", "token": token_actual.token, "anio": $("#anio").val(), "entidad": $("#entidad").val()},
+                        url: url_pv + 'PropuestasVerificacion/select_convocatorias'
                     }).done(function (data) {
                         if (data == 'error_metodo')
                         {
@@ -315,8 +216,8 @@ $(document).ready(function () {
             {
                 $.ajax({
                     type: 'GET',
-                    data: {"modulo": "Búsqueda de propuestas", "token": token_actual.token, "conv": $("#convocatoria").val()},
-                    url: url_pv + 'PropuestasBusquedas/select_categorias'
+                    data: {"modulo": "Verificación de propuestas", "token": token_actual.token, "conv": $("#convocatoria").val()},
+                    url: url_pv + 'PropuestasVerificacion/select_categorias'
                 }).done(function (data) {
                     if (data == 'error_metodo')
                     {
@@ -351,75 +252,157 @@ $(document).ready(function () {
     }
 });
 
-function cargar_propuesta(token_actual)
-{
-    $("#info_propuesta").focus();
+function cargar_tabla(token_actual) {
+    $('#table_list').DataTable({
+        "language": {
+            "url": "../../dist/libraries/datatables/js/spanish.json"
+        },
+        "searching": false,
+        "processing": true,
+        "serverSide": true,
+        "ordering": false,
+        "lengthMenu": [20, 30, 40],
+        "ajax": {
+            url: url_pv + "PropuestasVerificacion/buscar_propuestas",
+            data: function (d) {
+                var params = new Object();
+                params.anio = $('#anio').val();
+                params.entidad = $('#entidad').val();
+                params.convocatoria = $("#id_convocatoria").val();
+                params.categoria = $('#categoria').val();
+                params.codigo = $('#codigo').val();
+                params.estado = $('#estado_propuesta').val();
+                d.params = JSON.stringify(params);
+                d.token = token_actual.token;
+                d.modulo = "Verificación de propuestas";
+            },
+        },
+        "columnDefs": [{
+                "targets": 0,
+                "render": function (data, type, row, meta) {
+                    //Verificar cual es la categoria padre
+                    var categoria = row.convocatoria;
+                    if (row.categoria != "") {
+                        row.convocatoria = row.categoria;
+                        row.categoria = categoria;
+                    }
 
-    $(".cargar_propuesta").click(function () {
-        var title = $(this).attr("title");
+                    //Iconos de verificacion de documentación
+                    var icon_admin = '<button type="button" class="btn btn-danger btn-circle btn_tooltip" title="El funcionario no ha terminado de revisar los documentos administrativos."><span class="fa fa-times"></span></button>';
+                    var icon_tecni = '<button type="button" class="btn btn-danger btn-circle btn_tooltip" title="El funcionario no ha terminado de revisar los documentos técnicos."><span class="fa fa-times"></span></button>';
+                    if (row.verificacion_administrativos) {
+                        icon_admin = '<button type="button" class="btn btn-success btn-circle btn_tooltip" title="El funcionario ya termino de revisar los documentos administrativos."><span class="fa fa-check"></span></button>'
+                    }
+                    if (row.verificacion_tecnicos) {
+                        icon_tecni = '<button type="button" class="btn btn-success btn-circle btn_tooltip" title="El funcionario ya termino de revisar los documentos técnicos."><span class="fa fa-check"></span></button>';
+                    }
+                    $('.btn_tooltip').tooltip();
+                    row.verificacion_administrativos = icon_admin;
+                    row.verificacion_tecnicos = icon_tecni;
 
-        $("#propuesta").attr('value', title);
+                    //Iconos de numero de verificacion
+                    row.btn_verificacion_1 = '<button type="button" lang="' + row.id_propuesta + '" class="btn btn-primary btn_tooltip cargar_verificacion_1" data-toggle="modal" data-target="#verificacion_1" title="Es la primera verificación, la cual consiste en revisar los documentos administrativos y técnicos, con el fin de Habilitar, Rechazar o Subsanar."><span class="fa fa-eye"></span></button>';
+                    ;
+                    row.btn_verificacion_2 = '<button type="button" lang="' + row.id_propuesta + '" class="btn btn-primary btn_tooltip" title="Es la segunda verificación, la cual consiste en revisar los documentos administrativos que subsano el participante con el fin de Habilitar o Rechazar."><span class="fa fa-eye"></span></button>';
+                    ;
+                    return row.estado;
+                }
+            }
+        ],
+        "drawCallback": function (settings) {
+            $('.btn_tooltip').tooltip();
+            $('.cargar_verificacion_1').click(function () {
+                cargar_verificacion_1(token_actual, $(this).attr("lang"));
+            });            
+        },
+        "columns": [
+            {"data": "estado"},
+            {"data": "anio"},
+            {"data": "entidad"},
+            {"data": "convocatoria"},
+            {"data": "categoria"},
+            {"data": "propuesta"},
+            {"data": "codigo"},
+            {"data": "participante"},
+            {"data": "verificacion_administrativos"},
+            {"data": "verificacion_tecnicos"},
+            {"data": "btn_verificacion_1"},
+            {"data": "btn_verificacion_2"},
+            {"data": "btn_ver_documentacion"},
+        ]
+    });
+}
 
-        //Realizo la peticion para cargar el formulario
-        $.ajax({
-            type: 'POST',
-            data: {"token": token_actual.token},
-            url: url_pv + 'PropuestasBusquedas/cargar_propuesta/' + title
-        }).done(function (data) {
-            if (data == 'error_metodo')
+function cargar_verificacion_1(token_actual, propuesta) {
+    //Realizo la peticion para cargar el formulario
+    $.ajax({
+        type: 'POST',
+        data: {"token": token_actual.token},
+        url: url_pv + 'PropuestasVerificacion/cargar_propuesta/' + propuesta
+    }).done(function (data) {
+        if (data == 'error_metodo')
+        {
+            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        } else
+        {
+            if (data == 'error_token')
             {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
             } else
             {
-                if (data == 'error_token')
+                if (data == 'error_propuesta')
                 {
-                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    notify("danger", "ok", "Convocatorias:", "El código de la propuesta es incorrecto.");
                 } else
                 {
                     var json = JSON.parse(data);
 
-                    $('#info_propuesta').loadJSON(json.propuesta);
-                    $(".tr_eliminar").remove();
-                    $('#info_propuesta tbody').append(json.propuesta_dinamico);
-
+                    $('#info_propuesta_verificacion_1').loadJSON(json.propuesta);
+                    
                     var html_table = '';
                     $.each(json.administrativos, function (key2, documento) {
-                        html_table = html_table + '<tr><td>' + documento.orden + '</td><td>' + documento.requisito + '</td><td>' + documento.descripcion + '</td><td>' + documento.archivos_permitidos + '</td><td>' + documento.tamano_permitido + ' MB</td><td><button title="' + documento.id + '" lang="' + documento.archivos_permitidos + '" dir="' + documento.tamano_permitido + '" type="button" class="btn btn-success btn_tecnico_documento" data-toggle="modal" data-target="#cargar_documento"><span class="glyphicon glyphicon-search"></span></button></td><td><button title="' + documento.id + '"  type="button" class="btn btn-primary btn_tecnico_link" data-toggle="modal" data-target="#cargar_link"><span class="glyphicon glyphicon-search"></span></button></td></tr>';
+                        html_table = html_table + '<tr>';
+                        html_table = html_table + '<td>'+documento.orden+' '+documento.requisito+'</td>';
+                        html_table = html_table + '<td>archivos y links</td>';
+                        html_table = html_table + '<td>';  
+                        html_table = html_table + '         <div class="row">';
+                        html_table = html_table + '             <div class="col-lg-12">';
+                        html_table = html_table + '                 <div class="form-group">';
+                        html_table = html_table + '                     <label> Resultado de la verificación</label>';
+                        html_table = html_table + '                     <select name="recurso_no_pecuniario" class="form-control" >';
+                        html_table = html_table + '                         <option value="">:: Seleccionar ::</option>';                        
+                        html_table = html_table + '                     </select>';
+                        html_table = html_table + '                 </div>';
+                        html_table = html_table + '             </div>';                        
+                        html_table = html_table + '         </div>';
+                        html_table = html_table + '         <div class="row">';
+                        html_table = html_table + '             <div class="col-lg-12">';
+                        html_table = html_table + '                 <div class="form-group">';
+                        html_table = html_table + '                     <label>Observaciones</label>';
+                        html_table = html_table + '                     <textarea class="form-control textarea_html" rows="3"></textarea>';
+                        html_table = html_table + '                 </div>';
+                        html_table = html_table + '             </div>';                        
+                        html_table = html_table + '         </div>';
+                        html_table = html_table + '</td>';
+                        html_table = html_table + '</tr>';                                                                     
                     });
 
-                    $('#tabla_administrativos tr').remove();
-                    $("#tabla_administrativos").append(html_table);
-
-                    html_table = '';
-                    $.each(json.tecnicos, function (key2, documento) {
-                        html_table = html_table + '<tr><td>' + documento.orden + '</td><td>' + documento.requisito + '</td><td>' + documento.descripcion + '</td><td>' + documento.archivos_permitidos + '</td><td>' + documento.tamano_permitido + ' MB</td><td><button title="' + documento.id + '" lang="' + documento.archivos_permitidos + '" dir="' + documento.tamano_permitido + '" type="button" class="btn btn-success btn_tecnico_documento" data-toggle="modal" data-target="#cargar_documento"><span class="glyphicon glyphicon-search"></span></button></td><td><button title="' + documento.id + '"  type="button" class="btn btn-primary btn_tecnico_link" data-toggle="modal" data-target="#cargar_link"><span class="glyphicon glyphicon-search"></span></button></td></tr>';
-                    });
-
-                    $('#tabla_tecnicos tr').remove();
-                    $("#tabla_tecnicos").append(html_table);
-
-                    $(".btn_tecnico_documento").click(function () {
-                        var documento = $(this).attr("title");
-                        cargar_tabla_archivos(token_actual, documento);
-                    });
-
-                    $(".btn_tecnico_link").click(function () {
-                        var documento = $(this).attr("title");
-                        cargar_tabla_link(token_actual, documento);
-                    });
-
+                    $('#doc_administrativos_verificacion_1 tr').remove();
+                    $("#doc_administrativos_verificacion_1").append(html_table);                    
+                    
                 }
             }
-        });
+        }
     });
 }
+
 
 function cargar_tabla_archivos(token_actual, documento) {
     //Realizo la peticion para cargar el formulario
     $.ajax({
         type: 'GET',
-        data: {documento: documento, "token": token_actual.token, modulo: "Búsqueda de propuestas", propuesta: $("#propuesta").attr('value')},
-        url: url_pv + 'PropuestasBusquedas/buscar_archivos'
+        data: {documento: documento, "token": token_actual.token, modulo: "Verificación de propuestas", propuesta: $("#propuesta").attr('value')},
+        url: url_pv + 'PropuestasVerificacion/buscar_archivos'
     }).done(function (data) {
         if (data == 'error_metodo')
         {
@@ -462,8 +445,8 @@ function cargar_tabla_link(token_actual, documento) {
     //Realizo la peticion para cargar el formulario
     $.ajax({
         type: 'GET',
-        data: {documento: documento, "token": token_actual.token, modulo: "Búsqueda de propuestas", propuesta: $("#propuesta").attr('value')},
-        url: url_pv + 'PropuestasBusquedas/buscar_link'
+        data: {documento: documento, "token": token_actual.token, modulo: "Verificación de propuestas", propuesta: $("#propuesta").attr('value')},
+        url: url_pv + 'PropuestasVerificacion/buscar_link'
     }).done(function (data) {
         if (data == 'error_metodo')
         {
@@ -518,7 +501,7 @@ function download_file(cod)
             data: {
                 cod: cod,
                 token: token_actual.token,
-                modulo: "Búsqueda de propuestas"
+                modulo: "Verificación de propuestas"
             }
         });
     }
