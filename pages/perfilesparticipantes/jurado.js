@@ -6,15 +6,313 @@ $(document).ready(function () {
     //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
     if ($.isEmptyObject(token_actual)) {
         location.href = url_pv_admin+'../../index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-    } else
-    {
+    } else{
+    	    	
         //Verifica si el token actual tiene acceso de lectura
         permiso_lectura(token_actual, "Menu Participante");
+        
+        // Cargar datos formulario
+        cargar_select_tipodocumentos(token_actual);
+        cargar_select_sexo(token_actual);
+        cargar_select_orientacion(token_actual);
+        cargar_select_identidad(token_actual);
+        cargar_select_grupos(token_actual);
+        cargar_select_estratos(token_actual);
+        
+        //Peticion para buscar ciudades
+        var json_ciudades = function (request, response) {
+            $.ajax({
+                type: 'GET',
+                data: {"token": token_actual.token, "id": $("#id").attr('value'), q: request.term},
+                url: url_pv + 'Ciudades/autocompletar/',
+                dataType: "jsonp",
+                success: function (data) {
+                    response(data);
+                }
+            });
+        };
+        
+        
+        //Cargos el autocomplete de ciudad de residencia
+
+        $( "#ciudad_residencia_name" ).autocomplete({
+            source: json_ciudades,
+            minLength: 2,
+            select: function (event, ui) {
+                $(this).val(ui.item ? ui.item : " ");
+                $("#ciudad_residencia").val(ui.item.id);
+            },
+            change: function (event, ui) {
+                if (!ui.item) {
+                    this.value = '';
+                    $('.formulario_principal').bootstrapValidator('revalidateField', 'ciudad_residencia_name');
+                    $("#ciudad_residencia").val("");
+                }
+            //else { Return your label here }
+            }
+        });
+        
+        //Cargos el autocomplete de ciudad de nacimiento
+        //$("#ciudad_nacimiento_name").val(json.ciudad[json.participante.ciudad_nacimiento].label);
+        $( "#ciudad_nacimiento_name" ).autocomplete({
+            source: json_ciudades,
+            minLength: 2,
+            select: function (event, ui) {
+                $(this).val(ui.item ? ui.item : " ");
+                $("#ciudad_nacimiento").val(ui.item.id);
+            },
+
+            change: function (event, ui) {
+                if (!ui.item) {
+                    this.value = '';
+                    $("#ciudad_nacimiento").val("");
+                }
+            //else { Return your label here }
+            }
+        });
+        
+        //Peticion para buscar barrios
+        var json_barrio = function (request, response) {
+            $.ajax({
+                type: 'GET',
+                data: {"token": token_actual.token, "id": $("#id").attr('value'), q: request.term},
+                url: url_pv + 'Barrios/autocompletar/',
+                dataType: "jsonp",
+                success: function (data) {
+                    response(data);
+                }
+            });
+        };
+        
+        //Cargos el autocomplete de barrios
+        $("#barrio_residencia_name").autocomplete({
+            source: json_barrio,
+            minLength: 2,
+            select: function (event, ui) {
+                $(this).val(ui.item ? ui.item : " ");
+                $("#barrio_residencia").val(ui.item.id);
+            },
+            change: function (event, ui) {
+                if (!ui.item) {
+                    this.value = '';
+                    $("#barrio_residencia").val("");
+                }
+            }
+        });
+        
         cargar_datos_formulario(token_actual);
         validator_form(token_actual);
     }
 
 });
+
+function cargar_select_tipodocumentos(token_actual){
+	
+	 $.ajax({
+	      type: 'GET',
+	      data: {"token": token_actual.token},
+	      url: url_pv + 'Tiposdocumentos/select/'
+	  }).done(function (data) {
+		  var json = JSON.parse(data);
+		  //Cargos el select de tipo de documento
+		    $('#tipo_documento').find('option').remove();
+		    $("#tipo_documento").append('<option value="">:: Seleccionar ::</option>');
+		    if (json.length > 0) {
+		        $.each(json, function (key, array) {
+		            $("#tipo_documento").append('<option value="' + array.id + '" >' + array.descripcion + '</option>');
+		        });
+		    }
+		  
+	  });
+	
+	
+
+}
+
+function cargar_select_sexo(token_actual){
+	 $.ajax({
+	      type: 'GET',
+	      data: {"token": token_actual.token},
+	      url: url_pv + 'Sexos/select/'
+	  }).done(function (data) {
+		  var json = JSON.parse(data);
+		  		  
+		    //Cargos el select de sexo
+          $('#sexo').find('option').remove();
+          $("#sexo").append('<option value="">:: Seleccionar ::</option>');
+          if (json.length > 0) {
+              $.each(json, function (key, array) {
+                $("#sexo").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
+              });
+          }
+		  
+	  });
+}
+
+function cargar_select_orientacion(token_actual){
+	 $.ajax({
+	      type: 'GET',
+	      data: {"token": token_actual.token},
+	      url: url_pv + 'Orientacionessexuales/select/'
+	  }).done(function (data) {
+		  var json = JSON.parse(data);
+		  //Cargos el select de orientacion sexual
+          $('#orientacion_sexual').find('option').remove();
+          $("#orientacion_sexual").append('<option value="">:: Seleccionar ::</option>');
+          if (json.length > 0) {
+              $.each(json, function (key, array) {                
+                  $("#orientacion_sexual").append('<option value="' + array.id + '"  >' + array.nombre + '</option>');
+              });
+          }
+		  
+		  
+	  });
+}
+
+function cargar_select_identidad(token_actual){
+	 $.ajax({
+	      type: 'GET',
+	      data: {"token": token_actual.token},
+	      url: url_pv + 'Identidadesgeneros/select/'
+	  }).done(function (data) {
+		  var json = JSON.parse(data);		 
+
+          //Cargos el select de identidad genero
+          $('#identidad_genero').find('option').remove();
+          $("#identidad_genero").append('<option value="">:: Seleccionar ::</option>');
+          if (json.length > 0) {
+              $.each(json, function (key, array) {             
+                 
+                  $("#identidad_genero").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
+              });
+          }
+		  
+	  });
+}
+
+function cargar_select_grupos(token_actual){
+	 $.ajax({
+	      type: 'GET',
+	      data: {"token": token_actual.token},
+	      url: url_pv + 'Gruposetnicos/select/'
+	  }).done(function (data) {
+		  var json = JSON.parse(data);		 
+
+		  $('#grupo_etnico').find('option').remove();
+          $("#grupo_etnico").append('<option value="">:: Seleccionar ::</option>');
+          if (json.length > 0) {
+              $.each(json, function (key, array) {
+                 
+                  $("#grupo_etnico").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
+              });
+          }
+		  
+	  });
+}
+
+function cargar_select_estratos(token_actual){
+	 $.ajax({
+	      type: 'GET',
+	      data: {"token": token_actual.token},
+	      url: url_pv + 'Estratos/select/'
+	  }).done(function (data) {
+		  var json = JSON.parse(data);		 
+
+		  //Cargos el select de estrato
+          $('#estrato').find('option').remove();
+          $("#estrato").append('<option value="">:: Seleccionar ::</option>');
+          if (json.length > 0) {
+              $.each(json, function (key, array) {
+                 
+                  $("#estrato").append('<option value="' + array + '" >' + array + '</option>');
+              });
+          }
+	  });
+}
+
+function cargar_datos_formulario(token_actual) {
+  //Realizo la peticion para cargar el formulario
+  $.ajax({
+      type: 'GET',
+      data: {"token": token_actual.token, "id": $("#idd").attr('value')},
+      url: url_pv + 'Jurados/search/'
+  }).done(function (data) {
+      if (data == 'error_metodo')
+      {
+          notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+      } else
+      {
+          if (data == 'error_token')
+          {
+              location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+          } else
+          {
+              var json = JSON.parse(data);
+
+                
+               //console.log(typeof json.participante.id);
+                if ( json.participante) {
+                    
+                   $('#formulario_principal').loadJSON(json.participante);
+
+                  $("#idd").val(json.participante.id);
+                  /*$("#tipo_documento").val(json.participante.tipo_documento);
+                  $('#numero_documento').val(json.participante.numero_documento);
+                  $('#primer_nombre').val(json.participante.primer_nombre);
+                  $('#segundo_nombre').val(json.participante.segundo_nombre);
+                  $('#primer_apellido').val(json.participante.primer_apellido);
+                  $('#segundo_apellido').val(json.participante.segundo_apellido);
+                  $("#sexo").val(json.participante.sexo);
+                  $("#orientacion_sexual").val(json.participante.orientacion_sexual);
+                  $("#identidad_genero").val(json.participante.identidad_genero);
+                  $('#fecha_nacimiento').val(json.participante.fecha_nacimiento);
+                  $('#estrato').val(json.participante.estrato);
+                  */
+
+                  if(json.participante.ciudad_nacimiento != null){
+                    $('#ciudad_nacimiento_name').val(json.ciudad_nacimiento_name);                   
+                  }
+
+                  if(json.participante.ciudad_residencia != null){                  
+                    $("#ciudad_residencia_name").val(json.ciudad_residencia_name);    
+                   }
+
+                  if(json.participante.barrio_residencia != null ){
+                    $("#barrio_residencia_name").val(json.barrio_residencia_name);
+                  }
+
+                  $('#direccion_residencia').val(json.participante.direccion_residencia);
+                  $('#direccion_correspondencia').val(json.participante.direccion_correspondencia);
+                  $('#numero_telefono').val(json.participante.numero_telefono);
+                  $('#numero_celular').val(json.participante.numero_celular);
+                  $('#correo_electronico').val(json.participante.correo_electronico);
+
+                }          
+             
+             
+            
+
+             
+
+            
+
+              
+
+
+          }
+
+      }
+
+
+  }
+
+);
+
+
+  //validator_form(token_actual);
+
+}
+
 
 function validator_form(token_actual) {
 
@@ -23,6 +321,7 @@ function validator_form(token_actual) {
     $('.calendario').on('changeDate show', function (e) {
         $('.formulario_principal').bootstrapValidator('revalidateField', 'fecha_nacimiento');
     });
+    
     //Validar el formulario
     $('.formulario_principal').bootstrapValidator({
         feedbackIcons: {
@@ -86,7 +385,7 @@ function validator_form(token_actual) {
                 }
             }
         }
-    }).on('success.form.bv', function (e) {
+     }).on('success.form.bv', function (e) {
 
     //  alert("idd-->"+typeof $("#idd").attr('value')+" idd-->>"+$("#idd").val() )
 
@@ -146,7 +445,7 @@ function validator_form(token_actual) {
             //  alert("editado!!!");
             //Realizo la peticion con el fin de editar el registro actual
             $.ajax({
-                type: 'POST',
+                type: 'PUT',
                 url: url_pv + 'Jurados/edit/'+$("#idd").val(),
                 data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
             }).done(function (data) {
@@ -191,209 +490,8 @@ function validator_form(token_actual) {
 
 }
 
-function cargar_datos_formulario(token_actual) {
-  //Realizo la peticion para cargar el formulario
-  $.ajax({
-      type: 'GET',
-      data: {"token": token_actual.token, "id": $("#id").attr('value')},
-      url: url_pv + 'Jurados/search/'
-  }).done(function (data) {
-      if (data == 'error_metodo')
-      {
-          notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-      } else
-      {
-          if (data == 'error_token')
-          {
-              location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-          } else
-          {
-              var json = JSON.parse(data);
-
-                //$('#formulario_principal').loadJSON(json.participante);
-               //console.log(typeof json.participante.id);
-                if ( json.participante) {
-
-                  $("#idd").val(json.participante.id);
-
-                  $('#numero_documento').val(json.participante.numero_documento);
-                  $('#primer_nombre').val(json.participante.primer_nombre);
-                  $('#segundo_nombre').val(json.participante.segundo_nombre);
-                  $('#primer_apellido').val(json.participante.primer_apellido);
-                  $('#segundo_apellido').val(json.participante.segundo_apellido);
-                  $('#fecha_nacimiento').val(json.participante.fecha_nacimiento);
-
-                  if(json.participante.ciudad_nacimiento != null){
-                    $('#ciudad_nacimiento_name').val(json.participante.ciudad_nacimiento.label);
-                    $('#ciudad_nacimiento').val(json.participante.ciudad_nacimiento.id);
-                  }
-
-                  if(json.participante.ciudad_residencia != null){
-                    $('#ciudad_residencia_name').val(json.participante.ciudad_residencia.label);
-                    $('#ciudad_residencia').val(json.participante.ciudad_residencia.id);
-                  }
-
-                  if(json.participante.barrio_residencia != null ){
-                    $('#barrio_residencia_name').val(json.participante.barrio_residencia.label);
-                    $('#barrio_residencia').val(json.participante.barrio_residencia.id);
-                  }
-
-                  $('#direccion_residencia').val(json.participante.direccion_residencia);
-                  $('#direccion_correspondencia').val(json.participante.direccion_correspondencia);
-                  $('#numero_telefono').val(json.participante.numero_telefono);
-                  $('#numero_celular').val(json.participante.numero_celular);
-                  $('#correo_electronico').val(json.participante.correo_electronico);
-
-                }
-
-              //Cargos el select de tipo de documento
-              $('#tipo_documento').find('option').remove();
-              $("#tipo_documento").append('<option value="">:: Seleccionar ::</option>');
-              if (json.tipo_documento.length > 0) {
-                  $.each(json.tipo_documento, function (key, array) {
-                      var selected = '';
-                      if(json.participante != null  && array.id == json.participante.tipo_documento)
-                      {
-                          selected = 'selected="selected"';
-                      }
-                      $("#tipo_documento").append('<option value="' + array.id + '" '+selected+' >' + array.descripcion + '</option>');
-                  });
-              }
 
 
-              //Cargos el select de sexo
-              $('#sexo').find('option').remove();
-              $("#sexo").append('<option value="">:: Seleccionar ::</option>');
-              if (json.sexo.length > 0) {
-                  $.each(json.sexo, function (key, array) {
-                      var selected = '';
-                      if( json.participante != null  && array.id == json.participante.sexo)
-                      {
-                          selected = 'selected="selected"';
-                      }
-                      $("#sexo").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-                  });
-              }
-              //Cargos el select de orientacion sexual
-              $('#orientacion_sexual').find('option').remove();
-              $("#orientacion_sexual").append('<option value="">:: Seleccionar ::</option>');
-              if (json.orientacion_sexual.length > 0) {
-                  $.each(json.orientacion_sexual, function (key, array) {
-                      var selected = '';
-                      if(json.participante != null  &&  array.id == json.participante.orientacion_sexual)
-                      {
-                          selected = 'selected="selected"';
-                      }
-                      $("#orientacion_sexual").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-                  });
-              }
-              //Cargos el select de identidad genero
-              $('#identidad_genero').find('option').remove();
-              $("#identidad_genero").append('<option value="">:: Seleccionar ::</option>');
-              if (json.orientacion_sexual.length > 0) {
-                  $.each(json.identidad_genero, function (key, array) {
-                      var selected = '';
-                      if(json.participante != null  &&  array.id == json.participante.identidad_genero)
-                      {
-                          selected = 'selected="selected"';
-                      }
-                      $("#identidad_genero").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-                  });
-              }
-              //Cargos el select de grupo etnico
-              $('#grupo_etnico').find('option').remove();
-              $("#grupo_etnico").append('<option value="">:: Seleccionar ::</option>');
-              if (json.grupo_etnico.length > 0) {
-                  $.each(json.grupo_etnico, function (key, array) {
-                      var selected = '';
-                      if( json.participante != null  &&  array.id == json.participante.grupo_etnico)
-                      {
-                          selected = 'selected="selected"';
-                      }
-                      $("#grupo_etnico").append('<option value="' + array.id + '" '+selected+' >' + array.nombre + '</option>');
-                  });
-              }
-              //Cargos el select de estrato
-              $('#estrato').find('option').remove();
-              $("#estrato").append('<option value="">:: Seleccionar ::</option>');
-              if (json.estrato.length > 0) {
-                  $.each(json.estrato, function (key, array) {
-                      var selected = '';
-                      if(json.participante != null  &&  array == json.participante.estrato)
-                      {
-                          selected = 'selected="selected"';
-                      }
-                      $("#estrato").append('<option value="' + array + '" '+selected+' >' + array + '</option>');
-                  });
-              }
-
-              //Cargos el autocomplete de ciudad de nacimiento
-              //$("#ciudad_nacimiento_name").val(json.ciudad[json.participante.ciudad_nacimiento].label);
-              $( "#ciudad_nacimiento_name" ).autocomplete({
-                  source: json.ciudad,
-                  minLength: 2,
-                  select: function (event, ui) {
-                      $(this).val(ui.item ? ui.item : " ");
-                      $("#ciudad_nacimiento").val(ui.item.id);
-                  },
-
-                  change: function (event, ui) {
-                      if (!ui.item) {
-                          this.value = '';
-                          $("#ciudad_nacimiento").val("");
-                      }
-                  //else { Return your label here }
-                  }
-              });
-
-              //Cargos el autocomplete de ciudad de residencia
-
-              $( "#ciudad_residencia_name" ).autocomplete({
-                  source: json.ciudad,
-                  minLength: 2,
-                  select: function (event, ui) {
-                      $(this).val(ui.item ? ui.item : " ");
-                      $("#ciudad_residencia").val(ui.item.id);
-                  },
-                  change: function (event, ui) {
-                      if (!ui.item) {
-                          this.value = '';
-                          $('.formulario_principal').bootstrapValidator('revalidateField', 'ciudad_residencia_name');
-                          $("#ciudad_residencia").val("");
-                      }
-                  //else { Return your label here }
-                  }
-              });
-
-              //Cargos el autocomplete de barrios
-
-              $( "#barrio_residencia_name" ).autocomplete({
-                  source: json.barrio,
-                  minLength: 2,
-                  select: function (event, ui) {
-                      $(this).val(ui.item ? ui.item : " ");
-                      $("#barrio_residencia").val(ui.item.id);
-                  },
-                  change: function (event, ui) {
-                      if (!ui.item) {
-                          this.value = '';
-                          $("#barrio_residencia").val("");
-                      }
-                  //else { Return your label here }
-                  }
-              });
 
 
-          }
 
-      }
-
-
-  }
-
-);
-
-
-  //validator_form(token_actual);
-
-}
