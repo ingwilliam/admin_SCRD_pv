@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>::Búsqueda de propuestas::</title>
+        <title>::Verificación de propuestas::</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -63,7 +63,7 @@
                 <div class="loading centrado-porcentual"></div>   
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Búsqueda de propuestas</h1>
+                        <h1 class="page-header">Verificación de propuestas</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>                
@@ -134,7 +134,7 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <table id="table_list" class="table">
+                                        <table id="table_list" class="table" style="font-size: 12px">
                                             <thead>
                                                 <tr>
                                                     <th>Estado</th>
@@ -145,14 +145,85 @@
                                                     <th>Propuesta</th>
                                                     <th>Código</th>
                                                     <th>Participante</th>                                                    
-                                                    <th>Reporte de inscrito</th>                                                    
-                                                    <th>Ver propuesta</th>                                                    
+                                                    <th>Documentos administrativos</th>                                                    
+                                                    <th>Documentos técnicos</th>                                                    
+                                                    <th>Verificación #1</th>
+                                                    <th>Verificación #2</th>
+                                                    <th>Acciones</th>                                                                                                        
                                                 </tr>
                                             </thead>
                                         </table>
+
                                         <input type="hidden" id="id_convocatoria" value="" />
+                                        <input type="hidden" id="propuesta" value="" />
+
+                                        <div class="modal fade" id="verificacion_1">
+
+                                            <div class="modal-dialog" style="width: 800px;  margin: auto;">
+                                                <div class="modal-content">
+                                                    <!-- Modal que se activa cuando se realiza cualquier peticion ajax -->
+                                                    <div class="loading centrado-porcentual"></div>
+                                                    <!-- cabecera del diálogo -->
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                        <h4 class="modal-title">Información de la propuesta</h4>                                                    
+                                                    </div>
+                                                    <!-- cuerpo del diálogo -->                                                    
+                                                    <div class="modal-body" style="height: 450px; overflow-y: auto;">                                                                                                            
+                                                        <div class="row">
+                                                            <div class="col-lg-12">                                                                
+                                                                <table id="info_propuesta_verificacion_1" class="table table-bordered table-striped">                                    
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <th>Estado</th>
+                                                                            <td class="nombre_estado"></td>
+                                                                            <th>Código</th>
+                                                                            <td id="codigo_propuesta"></td>
+                                                                        </tr>
+                                                                        <tr>                                                                            
+                                                                            <th>Tipo de participante</th>
+                                                                            <td class="tipo_participante"></td>
+                                                                            <th>Nombre del participante</th>
+                                                                            <td class="nombre_participante"></td>
+                                                                        </tr>
+                                                                        <tr>                                                                            
+                                                                            <th colspan="1">Nombre de la propuesta</th>
+                                                                            <td colspan="3" class="nombre_propuesta"></td>
+                                                                        </tr>                                                                                                                                                                                
+                                                                    </tbody>
+                                                                </table>      
+                                                            </div>
+                                                        </div> 
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <div class="panel panel-green">
+                                                                    <div class="panel-heading">
+                                                                        Documentación administrativa
+                                                                    </div>
+                                                                    <div class="panel-body">
+                                                                        <table class="table" style="font-size: 10px">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Documentos Administrativos</th>
+                                                                                    <th>Archivos / Links</th>
+                                                                                    <th></th>                                                                                                                                                                                               
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody id="doc_administrativos_verificacion_1">
+
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>                                                                        
+                                                                </div>                                                                                                                                                                                                                                                        
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="modal fade" id="ver_propuesta">
-                                            <input type="hidden" id="propuesta" value="" />                                            
+
                                             <div class="modal-dialog" style="width: 800px;  margin: auto;">
                                                 <div class="modal-content">
                                                     <!-- Modal que se activa cuando se realiza cualquier peticion ajax -->
@@ -366,10 +437,10 @@
 
         <!-- Descargar archivo -->
         <script src="../../dist/libraries/ajaxdownloader/ajaxdownloader.min.js" type="text/javascript"></script>
-                
+
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
-        <script src='busqueda_propuestas.js'></script>
+        <script src='verificacion_propuestas.js'></script>
         <script src='../../dist/js/jquery.loadJSON.js'></script>
 
         <!-- Text area editor html -->
