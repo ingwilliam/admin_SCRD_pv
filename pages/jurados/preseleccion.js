@@ -155,7 +155,7 @@ function init(token_actual) {
             });
         }
 
-        //Cargos el select de entidad
+        //Cargos el select de año
         $('#anio').find('option').remove();
         $("#anio").append('<option value="">:: Seleccionar ::</option>');
         if (json.anios.length > 0) {

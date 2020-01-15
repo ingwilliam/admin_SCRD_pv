@@ -23,6 +23,39 @@
          permiso_lectura(token_actual, "Menu Participante");
          $("#back_step").attr("onclick", " location.href = 'experiencia_jurado.html?m=2&id="+  $("#idc").val()+"' ");
          $("#next_step").attr("onclick", " location.href = 'publicaciones.html?m=2&id="+  $("#idc").val()+"' ");
+         
+         //Peticion para buscar ciudades
+         var json_ciudades = function (request, response) {
+             $.ajax({
+                 type: 'GET',
+                 data: {"token": token_actual.token, "id": $("#id").attr('value'), q: request.term},
+                 url: url_pv + 'Ciudades/autocompletar/',
+                 dataType: "jsonp",
+                 success: function (data) {
+                     response(data);
+                 }
+             });
+         };
+         
+         //Cargos el autocomplete de ciudad
+         $( "#ciudad_name" ).autocomplete({
+             source: json_ciudades,
+             minLength: 2,
+             select: function (event, ui) {
+                 $(this).val(ui.item ? ui.item : " ");
+                 $("#ciudad").val(ui.item.id);
+             },
+             change: function (event, ui) {
+                 if (!ui.item) {
+                     this.value = '';
+                     $('.formulario_principal').bootstrapValidator('revalidateField', 'ciudad_name');
+                     $("#ciudad").val("");
+                 }
+             //else { Return your label here }
+             }
+         });
+
+         
          cargar_datos_formulario(token_actual);
          cargar_tabla(token_actual);
          validator_form(token_actual);
@@ -70,24 +103,7 @@
                });
            }
 
-           //Cargos el autocomplete de ciudad
-           $( "#ciudad_name" ).autocomplete({
-               source: json.ciudad,
-               minLength: 2,
-               select: function (event, ui) {
-                   $(this).val(ui.item ? ui.item : " ");
-                   $("#ciudad").val(ui.item.id);
-               },
-               change: function (event, ui) {
-                   if (!ui.item) {
-                       this.value = '';
-                       $('.formulario_principal').bootstrapValidator('revalidateField', 'ciudad_name');
-                       $("#ciudad").val("");
-                   }
-               //else { Return your label here }
-               }
-           });
-
+         
            //Cargo el formulario con los datos
            if( json.reconocimiento ){
              $('#ciudad_name').val(json.ciudad_name);

@@ -31,7 +31,7 @@
         <![endif]-->
 
         <!-- validator bootstrap -->
-        <link href='../../dist/libraries/bootstrap-validator/bootstrapValidator.css' rel='stylesheet'>                
+        <link href='../../dist/libraries/bootstrap-validator/bootstrapValidator.css' rel='stylesheet'>
 
         <!-- Bootstrap animate -->
         <link href="../../dist/libraries/bootstrap-notify-3.1.3/animate.css" rel="stylesheet" type="text/css"/>
@@ -45,25 +45,25 @@
             <nav id="menu_principal" class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             </nav>
 
-            <div id="page-wrapper">                
-                <div class="row">                    
-                    <div class="col-lg-12">                         
+            <div id="page-wrapper">
+                <div class="row">
+                    <div class="col-lg-12">
                         <h1 class="page-header">Estados</h1>
                     </div>
-                    <div class="panel-body" style="text-align: right">                    
+                    <div class="panel-body" style="text-align: right">
                         <button type="button" class="btn btn-default btn-circle btn-lg" onclick="location.href = 'list.html'"><i class="fa fa-arrow-left"></i>
                         </button>
                         <button type="button" class="btn btn-primary btn-circle btn-lg" onclick="location.href = 'list.html'"><i class="fa fa-list"></i>
                         </button>
                         <button type="button" class="btn btn-success btn-circle btn-lg" onclick="location.href = 'form.html'"><i class="fa fa-file-o"></i>
-                        </button>                        
+                        </button>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
-                <div class="row">                    
+                <div class="row">
                     <div class="col-lg-12">
-                        <div class="panel panel-default">                            
+                        <div class="panel panel-default">
                             <div class="panel-heading">
                                 Crear areas
                             </div>
@@ -73,27 +73,29 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Tipo de estados</label>
-                                                <select id='tipo_estado' name="tipo_estado" class="form-control" tabindex="1">                                                    
+                                                <select id='tipo_estado' name="tipo_estado" class="form-control" tabindex="1">
                                                     <option value="">:: Seleccionar ::</option>
                                                     <option value="convocatorias">Convocatorias</option>
                                                     <option value="propuestas">Propuestas</option>
                                                     <option value="jurados">Jurados</option>
+                                                    <option value="jurado_notificaciones">Jurados notificación</option>
+                                                    <option value="grupos_evaluacion">Grupos evaluacion</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label>Nombre</label>
-                                                <select id='nombre' name="nombre" class="form-control" tabindex="1">                                                    
-                                                    <option value="">:: Seleccionar ::</option>                                                    
-                                                </select>                                                
-                                            </div>                                                                                                                              
+                                                <select id='nombre' name="nombre" class="form-control" tabindex="1">
+                                                    <option value="">:: Seleccionar ::</option>
+                                                </select>
+                                            </div>
                                             <div class="form-group">
                                                 <label>Orden</label>
                                                 <input type="text" name="orden" class="form-control">
-                                            </div>                                                                                                                              
-                                        </div>                                                                    
+                                            </div>
+                                        </div>
                                         <div class="col-lg-12" style="text-align: right">
                                             <input type="hidden" id="id" name="id" />
-                                            <button type="submit" class="btn btn-default">Guardar</button>                                            
+                                            <button type="submit" class="btn btn-default">Guardar</button>
                                         </div>
                                     </form>
                                 </div>
@@ -125,7 +127,7 @@
         <script src="../../dist/js/sb-admin-2.js"></script>
 
         <!-- validator bootstrap -->
-        <script src='../../dist/libraries/bootstrap-validator/bootstrapValidator.min.js'></script>        
+        <script src='../../dist/libraries/bootstrap-validator/bootstrapValidator.min.js'></script>
         <script src='../../dist/libraries/bootstrap-validator/language/es_ES.js'></script>
 
         <!-- Bootstrap Notify-->
@@ -139,7 +141,7 @@
         <script>
                             $(document).ready(function () {
 
-                                //Verifico si el token exite en el cliente y verifico que el token este activo en el servidor                
+                                //Verifico si el token exite en el cliente y verifico que el token este activo en el servidor
                                 var token_actual = getLocalStorage(name_local_storage);
 
                                 //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
@@ -207,9 +209,9 @@
                                                     var json = JSON.parse(data);
 
                                                     if (typeof json.id === 'number') {
-                                                        
+
                                                         $('#nombre').find('option').remove();
-                                                        
+
                                                         $.ajax({
                                                             type: 'GET',
                                                             data: {"token": token_actual.token, "nombre": json.tipo_estado},
@@ -234,13 +236,13 @@
                                                                             {
                                                                                 selected = 'selected="selected"';
                                                                             }
-                                                                            $("#nombre").append('<option value="' +value+ '" '+selected+' >'+value+'</option>');                                                                                                                                                        
+                                                                            $("#nombre").append('<option value="' +value+ '" '+selected+' >'+value+'</option>');
                                                                         });
                                                                     }
                                                                 }
                                                             }
                                                         });
-                                                        
+
                                                         $('#form_validator').loadJSON(json);
                                                     }
                                                 }
@@ -313,7 +315,7 @@
                                                         notify("danger", "ok", "Estados:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                                     } else
                                                     {
-                                                        //Asigno el valor id al hidden 
+                                                        //Asigno el valor id al hidden
                                                         $("#id").attr('value', result);
                                                         notify("success", "ok", "Estados:", "Se creó el area con éxito.");
                                                     }
