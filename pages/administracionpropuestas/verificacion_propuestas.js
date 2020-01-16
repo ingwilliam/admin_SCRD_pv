@@ -363,14 +363,27 @@ function cargar_verificacion_1(token_actual, propuesta) {
                     $.each(json.administrativos, function (key2, documento) {
                         html_table = html_table + '<tr>';
                         html_table = html_table + '<td>'+documento.orden+' '+documento.requisito+'</td>';
-                        html_table = html_table + '<td>archivos y links</td>';
+                        html_table = html_table + '<td><b>Archivos<b/><br/><br/>';
+                        
+                        $.each(documento.archivos, function (key, archivo) {                            
+                                html_table = html_table+'<p><a href="javascript::void(0)" onclick="download_file(\''+archivo.id_alfresco+'\')">'+archivo.nombre+'</a></p>';                    
+                        });
+                        html_table = html_table + '<b>Links<b/><br/><br/>';
+                        var numero_link=1;
+                        $.each(documento.links, function (key, link) {
+                                html_table = html_table+'<p><a href="'+link.link+'" target="_blank">link '+numero_link+'</a></p>';                    
+                                numero_link++;
+                        });
+                        html_table = html_table + '</td>';
                         html_table = html_table + '<td>';  
                         html_table = html_table + '         <div class="row">';
                         html_table = html_table + '             <div class="col-lg-12">';
                         html_table = html_table + '                 <div class="form-group">';
                         html_table = html_table + '                     <label> Resultado de la verificación</label>';
-                        html_table = html_table + '                     <select name="recurso_no_pecuniario" class="form-control" >';
-                        html_table = html_table + '                         <option value="">:: Seleccionar ::</option>';                        
+                        html_table = html_table + '                     <select id="estado_'+documento.id+'" class="form-control" >';
+                        $.each(json.estados, function (key, estado) {
+                        html_table = html_table + '<option value="'+estado.id+'">'+estado.nombre+'</option>';                        
+                        });                                                
                         html_table = html_table + '                     </select>';
                         html_table = html_table + '                 </div>';
                         html_table = html_table + '             </div>';                        
@@ -379,7 +392,63 @@ function cargar_verificacion_1(token_actual, propuesta) {
                         html_table = html_table + '             <div class="col-lg-12">';
                         html_table = html_table + '                 <div class="form-group">';
                         html_table = html_table + '                     <label>Observaciones</label>';
-                        html_table = html_table + '                     <textarea class="form-control textarea_html" rows="3"></textarea>';
+                        html_table = html_table + '                     <textarea id="observaciones_'+documento.id+'" class="form-control" rows="3"></textarea>';
+                        html_table = html_table + '                 </div>';
+                        html_table = html_table + '             </div>';                        
+                        html_table = html_table + '         </div>';
+                        html_table = html_table + '         <div class="row">';
+                        html_table = html_table + '             <div class="col-lg-12">';
+                        html_table = html_table + '                 <div class="form-group" style="text-align: right">';
+                        html_table = html_table + '                     <button type="button" class="btn btn-success" onclick="guardar_verificacion_1(\''+documento.id+'\')">Guardar</button>';                        
+                        html_table = html_table + '                 </div>';
+                        html_table = html_table + '             </div>';                        
+                        html_table = html_table + '         </div>';
+                        html_table = html_table + '</td>';
+                        html_table = html_table + '</tr>';                                                                     
+                    });
+                    
+                    $('#doc_administrativos_verificacion_1 tr').remove();
+                    $("#doc_administrativos_verificacion_1").append(html_table);
+                    
+                    $.each(json.tecnicos, function (key2, documento) {
+                        html_table = html_table + '<tr>';
+                        html_table = html_table + '<td>'+documento.orden+' '+documento.requisito+'</td>';
+                        html_table = html_table + '<td><b>Archivos<b/><br/><br/>';
+                        
+                        $.each(documento.archivos, function (key, archivo) {                            
+                                html_table = html_table+'<p><a href="javascript::void(0)" onclick="download_file(\''+archivo.id_alfresco+'\')">'+archivo.nombre+'</a></p>';                    
+                        });
+                        html_table = html_table + '<b>Links<b/><br/><br/>';
+                        var numero_link=1;
+                        $.each(documento.links, function (key, link) {
+                                html_table = html_table+'<p><a href="'+link.link+'" target="_blank">link '+numero_link+'</a></p>';                    
+                        });
+                        html_table = html_table + '</td>';
+                        html_table = html_table + '<td>';  
+                        html_table = html_table + '         <div class="row">';
+                        html_table = html_table + '             <div class="col-lg-12">';
+                        html_table = html_table + '                 <div class="form-group">';
+                        html_table = html_table + '                     <label> Resultado de la verificación</label>';
+                        html_table = html_table + '                     <select id="estado_'+documento.id+'" class="form-control" >';
+                        $.each(json.estados, function (key, estado) {
+                        html_table = html_table + '<option value="'+estado.id+'">'+estado.nombre+'</option>';                        
+                        });                                                
+                        html_table = html_table + '                     </select>';
+                        html_table = html_table + '                 </div>';
+                        html_table = html_table + '             </div>';                        
+                        html_table = html_table + '         </div>';
+                        html_table = html_table + '         <div class="row">';
+                        html_table = html_table + '             <div class="col-lg-12">';
+                        html_table = html_table + '                 <div class="form-group">';
+                        html_table = html_table + '                     <label>Observaciones</label>';
+                        html_table = html_table + '                     <textarea id="observaciones_'+documento.id+'" class="form-control" rows="3"></textarea>';
+                        html_table = html_table + '                 </div>';
+                        html_table = html_table + '             </div>';                        
+                        html_table = html_table + '         </div>';
+                        html_table = html_table + '         <div class="row">';
+                        html_table = html_table + '             <div class="col-lg-12">';
+                        html_table = html_table + '                 <div class="form-group" style="text-align: right">';
+                        html_table = html_table + '                     <button type="button" class="btn btn-success" onclick="guardar_verificacion_1(\''+documento.id+'\')">Guardar</button>';                        
                         html_table = html_table + '                 </div>';
                         html_table = html_table + '             </div>';                        
                         html_table = html_table + '         </div>';
@@ -387,99 +456,10 @@ function cargar_verificacion_1(token_actual, propuesta) {
                         html_table = html_table + '</tr>';                                                                     
                     });
 
-                    $('#doc_administrativos_verificacion_1 tr').remove();
-                    $("#doc_administrativos_verificacion_1").append(html_table);                    
+                    $('#doc_tecnicos_verificacion_1 tr').remove();
+                    $("#doc_tecnicos_verificacion_1").append(html_table);                    
                     
                 }
-            }
-        }
-    });
-}
-
-
-function cargar_tabla_archivos(token_actual, documento) {
-    //Realizo la peticion para cargar el formulario
-    $.ajax({
-        type: 'GET',
-        data: {documento: documento, "token": token_actual.token, modulo: "Verificación de propuestas", propuesta: $("#propuesta").attr('value')},
-        url: url_pv + 'PropuestasVerificacion/buscar_archivos'
-    }).done(function (data) {
-        if (data == 'error_metodo')
-        {
-            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-        } else
-        {
-            if (data == 'error_token')
-            {
-                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-            } else
-            {
-                if (data == 'crear_propuesta')
-                {
-                    location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=Para poder inscribir la propuesta debe crear el perfil de agrupacion.&msg_tipo=danger';
-                } else
-                {
-                    if (data == 'acceso_denegado')
-                    {
-                        notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
-                    } else
-                    {
-                        var json = JSON.parse(data);
-
-                        var html_table = '';
-                        $("#tabla_archivos").html("");
-                        $.each(json, function (key2, documento) {
-                            html_table = html_table + '<tr class="tr_' + documento.id + '"><td>' + documento.nombre + '</td><td><button type="button" onclick="download_file(\'' + documento.id_alfresco + '\')" class="btn btn-success"><span class="glyphicon glyphicon-save"></span></button></td></tr>';
-                        });
-                        $("#tabla_archivos").append(html_table);
-
-                    }
-                }
-
-            }
-        }
-    });
-}
-
-function cargar_tabla_link(token_actual, documento) {
-    //Realizo la peticion para cargar el formulario
-    $.ajax({
-        type: 'GET',
-        data: {documento: documento, "token": token_actual.token, modulo: "Verificación de propuestas", propuesta: $("#propuesta").attr('value')},
-        url: url_pv + 'PropuestasVerificacion/buscar_link'
-    }).done(function (data) {
-        if (data == 'error_metodo')
-        {
-            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-        } else
-        {
-            if (data == 'error_token')
-            {
-                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-            } else
-            {
-                if (data == 'crear_propuesta')
-                {
-                    location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=Para poder inscribir la propuesta debe crear el perfil de agrupacion.&msg_tipo=danger';
-                } else
-                {
-                    if (data == 'acceso_denegado')
-                    {
-                        notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
-                    } else
-                    {
-                        var json = JSON.parse(data);
-
-                        var html_table = '';
-                        $("#tabla_link").html("");
-                        $.each(json, function (key2, documento) {
-                            html_table = html_table + '<tr class="tr_link_' + documento.id + '"><td><a href="' + documento.link + '" target="_blank">' + documento.link + '</a></td></tr>';
-                        });
-                        $("#tabla_link").append(html_table);
-
-                    }
-                }
-
             }
         }
     });
@@ -506,4 +486,13 @@ function download_file(cod)
         });
     }
 
+}
+
+//guardar verificacion 1
+function guardar_verificacion_1(id)
+{
+    var estado = $("#estado_"+id).val();
+    var observaciones = $("#observaciones_"+id).val();
+    alert(estado);
+    alert(observaciones);
 }
