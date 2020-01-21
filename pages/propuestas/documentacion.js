@@ -322,7 +322,7 @@ $(document).ready(function () {
 
                                                 $("#modal-btn-reporte").on("click", function () {
                                                     callback(false);
-                                                    window.open(url_pv_report + "/reporte_propuesta_inscrita.php?token=" + token_actual.token + "&id=" + $("#propuesta").attr('value'), '_blank');
+                                                    window.open(url_pv_report + "/reporte_propuesta_inscrita.php?token=" + token_actual.token + "&vi=1&id=" + $("#propuesta").attr('value'), '_blank');
                                                 });
                                             };
 

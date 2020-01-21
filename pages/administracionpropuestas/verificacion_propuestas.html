@@ -213,183 +213,48 @@
 
                                                                             </tbody>
                                                                         </table>
+                                                                    </div>                                                                                                                                                                                                                  
+                                                                </div>                                                                                                                                                                                                                                                        
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-12" style="text-align: center">
+                                                                <button type="button" class="btn btn-success">Confirmar verificación de documentación administrativa</button>
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <div class="panel panel-primary">
+                                                                    <div class="panel-heading">
+                                                                        Documentación técnica
+                                                                    </div>
+                                                                    <div class="panel-body">
+                                                                        <table class="table" style="font-size: 10px">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Documentos Técnicos</th>
+                                                                                    <th>Archivos / Links</th>
+                                                                                    <th></th>                                                                                                                                                                                               
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody id="doc_tecnicos_verificacion_1">
+
+                                                                            </tbody>
+                                                                        </table>
                                                                     </div>                                                                        
                                                                 </div>                                                                                                                                                                                                                                                        
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="modal fade" id="ver_propuesta">
-
-                                            <div class="modal-dialog" style="width: 800px;  margin: auto;">
-                                                <div class="modal-content">
-                                                    <!-- Modal que se activa cuando se realiza cualquier peticion ajax -->
-                                                    <div class="loading centrado-porcentual"></div>
-                                                    <!-- cabecera del diálogo -->
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                        <h4 class="modal-title">Información de la propuesta</h4>                                                    
-                                                    </div>
-                                                    <!-- cuerpo del diálogo -->                                                    
-                                                    <div class="modal-body" style="height: 450px; overflow-y: auto;">                                                                                                            
                                                         <div class="row">
-                                                            <div class="col-lg-12">
-                                                                <h4>Propuesta</h4>
-                                                                <table id="info_propuesta" class="table table-bordered table-striped">                                    
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <th colspan="1">Código</th>
-                                                                            <td colspan="3" id="codigo_propuesta"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>Nombre de la convocatoria</th>
-                                                                            <td id="nombre_convocatoria"></td>
-                                                                            <th>Categoría de laconvocatoria</th>
-                                                                            <td id="nombre_categoria"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>Nombre del participante</th>
-                                                                            <td id="nombre_participante"></td>
-                                                                            <th>Tipo de participante</th>
-                                                                            <td id="tipo_participante"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>Estado</th>
-                                                                            <td id="nombre_estado"></td>
-                                                                            <th>Nombre de la propuesta</th>
-                                                                            <td id="nombre_propuesta"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th colspan="1">Resumen de la propuesta</th>
-                                                                            <td colspan="3" id="resumen_propuesta"></td>
-                                                                        </tr>        
-                                                                        <tr>
-                                                                            <th colspan="1">Objetivo de la propuesta</th>
-                                                                            <td colspan="3" id="objetivo_propuesta"></td>
-                                                                        </tr>        
-                                                                        <tr>
-                                                                            <th>¿Su propuesta sedesarrolla en Bogotá D.C.?</th>
-                                                                            <td id="desarrollo_bogota"></td>
-                                                                            <th>Localidad</th>
-                                                                            <td id="nombre_localidad"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>Upz</th>
-                                                                            <td id="nombre_upz"></td>
-                                                                            <th>Barrio</th>
-                                                                            <td id="nombre_barrio"></td>
-                                                                        </tr>                                                                                                        
-                                                                    </tbody>
-                                                                </table>      
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-lg-12">
-                                                                <h4>Documentación administrativa</h4>
-                                                                <table class="table">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>N°</th>
-                                                                            <th>Requisito</th>
-                                                                            <th>Descripción</th>
-                                                                            <th>Tipos de archivos permitidos</th>
-                                                                            <th>Tamaño máximo permitido</th>
-                                                                            <th>Archivos cargados</th>
-                                                                            <th>Links cargados</th>                                                    
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody id="tabla_administrativos">                                                
-                                                                    </tbody>
-                                                                </table>                                                                
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-lg-12">
-                                                                <h4>Documentación técnica</h4>
-                                                                <table class="table">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>N°</th>
-                                                                            <th>Requisito</th>
-                                                                            <th>Descripción</th>
-                                                                            <th>Tipos de archivos permitidos</th>
-                                                                            <th>Tamaño máximo permitido</th>
-                                                                            <th>Archivos cargados</th>
-                                                                            <th>Links cargados</th>                                                    
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody id="tabla_tecnicos">                                                
-                                                                    </tbody>
-                                                                </table>
+                                                            <div class="col-lg-12" style="text-align: center">
+                                                                <button type="button" class="btn btn-primary">Confirmar verificación de documentación técnica</button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="modal fade" id="cargar_documento">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">                                                        
-                                                    <!-- cabecera del diálogo -->
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                        <h4 class="modal-title">Documentación Cargada</h4>                                                    
-                                                    </div>
-                                                    <div class="loading centrado-porcentual"></div>             
-                                                    <!-- cuerpo del diálogo -->
-                                                    <div class="modal-body">                                                        
-                                                        <div class="row">
-                                                            <div class="col-lg-12">
-                                                                <table class="table">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Archivo</th>
-                                                                            <th>Ver Archivo</th>                                                                                                                                        
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody id="tabla_archivos">                                                
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="modal fade" id="cargar_link">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">                                                        
-                                                    <!-- cabecera del diálogo -->
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                        <h4 class="modal-title">Links cargados</h4>                                                    
-                                                    </div>
-                                                    <div class="loading centrado-porcentual"></div>             
-                                                    <!-- cuerpo del diálogo -->
-                                                    <div class="modal-body">
-                                                        <div class="row">
-                                                            <div class="col-lg-12">
-                                                                <table class="table">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Link</th>                                                                                                                                                                                             
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody id="tabla_link">                                                
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                     </div>
                                 </div>
                                 <!-- /.row (nested) -->
