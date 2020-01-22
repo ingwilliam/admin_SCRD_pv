@@ -193,12 +193,14 @@ $(document).ready(function () {
                                                     srcExt = ext[ext.length - 1];
 
                                                     var permitidos = $("#permitidos").val();
+                                                    var permitidos_mayuscula = $("#permitidos").val().toUpperCase();
                                                     var documento = $("#documento").val();
                                                     var tamano = $("#tamano").val();
 
                                                     var extensiones = permitidos.split(',');
+                                                    var extensiones_mayuscula = permitidos_mayuscula.split(',');
 
-                                                    if (extensiones.includes(srcExt))
+                                                    if (extensiones.includes(srcExt) || extensiones_mayuscula.includes(srcExt) )
                                                     {
                                                         //mb -> bytes
                                                         permitidotamano = tamano * 1000 * 1000;
@@ -293,7 +295,18 @@ $(document).ready(function () {
                                                                     {
                                                                         var html_table = '<ul>';
                                                                         $.each(json, function (key, documento) {
-                                                                            html_table = html_table + '<li>' + documento.nombre + '</li>';
+                                                                            var nombre_requisito=documento.nombre;
+                                                                            if(documento.nombre=="Junta")
+                                                                            {
+                                                                                nombre_requisito="No ha ingresado los integrantes de la junta directiva.";
+                                                                            }
+                                                                            
+                                                                            if(documento.nombre=="Integrante")
+                                                                            {
+                                                                                nombre_requisito="No ha ingresado los integrantes de la agrupación.";
+                                                                            }
+                                                                            
+                                                                            html_table = html_table + '<li>' + nombre_requisito + '</li>';
                                                                         });
                                                                         html_table = html_table + '</ul>';
                                                                         notify("danger", "remove", "Convocatorias:", "<p>Los siguientes requisitos son obligatorios</p>" + html_table);
