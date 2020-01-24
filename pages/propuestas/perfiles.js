@@ -56,47 +56,40 @@ $(document).ready(function () {
                                         location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=El código de la propuesta no es valido.&msg_tipo=danger';
                                     } else
                                     {
-                                        if (data == 'error_participante')
+                                        if (data == 'ingresar' || data == 'error_participante')
                                         {
-                                            location.href = url_pv_admin + 'pages/index/index.html?msg=Para poder inscribir la propuesta debe crear al menos un perfil como participante.&msg_tipo=danger';
-                                        } 
-                                        else
-                                        {
-                                            if (data == 'ingresar')
-                                            {
-                                                $(".validar_acceso").css("display", "block");
+                                            $(".validar_acceso").css("display", "block");
 
 
-                                                //Realizo la peticion para cargar los tipos de participantes
-                                                $.ajax({
-                                                    type: 'POST',
-                                                    data: {"token": token_actual.token, "p": getURLParameter('p')},
-                                                    url: url_pv + 'PropuestasPerfiles/consultar_tipos_participantes/' + $("#id").val()
-                                                }).done(function (data) {
+                                            //Realizo la peticion para cargar los tipos de participantes
+                                            $.ajax({
+                                                type: 'POST',
+                                                data: {"token": token_actual.token, "p": getURLParameter('p')},
+                                                url: url_pv + 'PropuestasPerfiles/consultar_tipos_participantes/' + $("#id").val()
+                                            }).done(function (data) {
 
-                                                    var json = JSON.parse(data);
+                                                var json = JSON.parse(data);
 
-                                                    if (data == 'error_metodo')
+                                                if (data == 'error_metodo')
+                                                {
+                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                } else
+                                                {
+                                                    if (data == 'error_token')
                                                     {
-                                                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                                                     } else
                                                     {
-                                                        if (data == 'error_token')
-                                                        {
-                                                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                                                        } else
-                                                        {
-                                                            $("#tipo_participante").append('<option value="">:: Seleccionar ::</option>');
-                                                            if (json.length > 0) {
-                                                                $.each(json, function (key, value) {
-                                                                    $("#tipo_participante").append('<option value="' + value.id + '" title="' + value.terminos_condiciones + '" lang="' + value.condiciones_participacion + '" dir="' + value.acepto_terminos_condiciones + '">' + value.tipo_participante + '</option>');
-                                                                });
-                                                            }
+                                                        $("#tipo_participante").append('<option value="">:: Seleccionar ::</option>');
+                                                        if (json.length > 0) {
+                                                            $.each(json, function (key, value) {
+                                                                $("#tipo_participante").append('<option value="' + value.id + '" title="' + value.terminos_condiciones + '" lang="' + value.condiciones_participacion + '" dir="' + value.acepto_terminos_condiciones + '">' + value.tipo_participante + '</option>');
+                                                            });
                                                         }
                                                     }
-                                                });
-                                            }
-                                        }
+                                                }
+                                            });
+                                        }                                        
                                     }
                                 }
                             }
