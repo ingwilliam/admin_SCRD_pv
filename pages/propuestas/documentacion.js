@@ -67,205 +67,30 @@ $(document).ready(function () {
                                         location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=El código de la propuesta no es valido.&msg_tipo=danger';
                                     } else
                                     {
-                                        if (data == 'ingresar')
+                                        if (data == 'error_participante')
                                         {
-                                            //Vacio el id
-                                            $("#id").attr('value', "");
-                                            //Asignamos el valor a input conv
-                                            $("#conv").attr('value', getURLParameter('id'));
+                                            location.href = url_pv_admin + 'pages/index/index.html?msg=Para poder inscribir la propuesta debe crear al menos un perfil como participante.&msg_tipo=danger';
+                                        } 
+                                        else
+                                        {
+                                            if (data == 'ingresar')
+                                            {
+                                                //Vacio el id
+                                                $("#id").attr('value', "");
+                                                //Asignamos el valor a input conv
+                                                $("#conv").attr('value', getURLParameter('id'));
 
-                                            //disabled todos los componentes
-                                            $(".inactivar_estado_propuesta").attr("disabled","disabled");   
+                                                //disabled todos los componentes
+                                                $(".inactivar_estado_propuesta").attr("disabled","disabled");   
 
-                                            //Verifica si el token actual tiene acceso de lectura
-                                            permiso_lectura(token_actual, "Menu Participante");
+                                                //Verifica si el token actual tiene acceso de lectura
+                                                permiso_lectura(token_actual, "Menu Participante");
 
-                                            //Realizo la peticion para cargar el formulario
-                                            $.ajax({
-                                                type: 'GET',
-                                                data: {"token": token_actual.token, "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "p": getURLParameter('p')},
-                                                url: url_pv + 'PropuestasDocumentacion/buscar_documentacion'
-                                            }).done(function (data) {
-                                                if (data == 'error_metodo')
-                                                {
-                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                                } else
-                                                {
-                                                    if (data == 'error_token')
-                                                    {
-                                                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                                                    } else
-                                                    {
-                                                        if (data == 'crear_perfil_pn')
-                                                        {
-                                                            location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_natural.html?msg=Para poder inscribir la propuesta debe crear el perfil de persona natural.&msg_tipo=danger';
-                                                        } else
-                                                        {
-                                                            if (data == 'crear_perfil_pj')
-                                                            {
-                                                                location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_juridica.html?msg=Para poder inscribir la propuesta debe crear el perfil de persona juridica.&msg_tipo=danger';
-                                                            } else
-                                                            {
-                                                                if (data == 'crear_perfil_agr')
-                                                                {
-                                                                    location.href = url_pv_admin + 'pages/perfilesparticipantes/agrupacion.html?msg=Para poder inscribir la propuesta debe crear el perfil de agrupacion.&msg_tipo=danger';
-                                                                } else
-                                                                {
-
-                                                                    if (data == 'crear_propuesta')
-                                                                    {
-                                                                        location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=Para poder inscribir la propuesta debe crear el perfil de agrupacion.&msg_tipo=danger';
-                                                                    } else
-                                                                    {
-                                                                        if (data == 'acceso_denegado')
-                                                                        {
-                                                                            notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
-                                                                        } else
-                                                                        {
-                                                                            var json = JSON.parse(data);
-                                                                            
-                                                                            //elimino disabled todos los componentes
-                                                                            if(json.estado==7)
-                                                                            {
-                                                                                $(".inactivar_estado_propuesta").removeAttr("disabled");   
-                                                                            }
-                                                                    
-                                                                            $("#propuesta").attr("value", json.propuesta);
-                                                                            $("#participante").attr("value", json.participante);
-
-                                                                            var html_table = '';
-                                                                            $.each(json.administrativos, function (key2, documento) {
-                                                                                html_table = html_table + '<tr><td>' + documento.orden + '</td><td>' + documento.requisito + '</td><td>' + documento.descripcion + '</td><td>' + documento.archivos_permitidos + '</td><td>' + documento.tamano_permitido + ' MB</td><td><button title="' + documento.id + '" lang="' + documento.archivos_permitidos + '" dir="' + documento.tamano_permitido + '" type="button" class="btn btn-success btn_tecnico_documento" data-toggle="modal" data-target="#cargar_documento"><span class="glyphicon glyphicon-open"></span></button></td><td><button title="' + documento.id + '"  type="button" class="btn btn-primary btn_tecnico_link" data-toggle="modal" data-target="#cargar_link"><span class="glyphicon glyphicon-link"></span></button></td></tr>';
-                                                                            });
-
-                                                                            $("#tabla_administrativos").append(html_table);
-
-                                                                            html_table = '';
-                                                                            $.each(json.tecnicos, function (key2, documento) {
-                                                                                html_table = html_table + '<tr><td>' + documento.orden + '</td><td>' + documento.requisito + '</td><td>' + documento.descripcion + '</td><td>' + documento.archivos_permitidos + '</td><td>' + documento.tamano_permitido + ' MB</td><td><button title="' + documento.id + '" lang="' + documento.archivos_permitidos + '" dir="' + documento.tamano_permitido + '" type="button" class="btn btn-success btn_tecnico_documento" data-toggle="modal" data-target="#cargar_documento"><span class="glyphicon glyphicon-open"></span></button></td><td><button title="' + documento.id + '"  type="button" class="btn btn-primary btn_tecnico_link" data-toggle="modal" data-target="#cargar_link"><span class="glyphicon glyphicon-link"></span></button></td></tr>';
-                                                                            });
-
-                                                                            $("#tabla_tecnicos").append(html_table);
-
-                                                                            $(".btn_tecnico_documento").click(function () {
-                                                                                var documento = $(this).attr("title");
-                                                                                var permitidos = $(this).attr("lang");
-                                                                                var tamano = $(this).attr("dir");
-                                                                                $("#archivos_permitidos").html(permitidos);
-                                                                                $("#documento").val(documento);
-                                                                                $("#permitidos").val(permitidos);
-                                                                                $("#tamano").val(tamano);
-
-                                                                                cargar_tabla_archivos(token_actual, documento,json.estado);
-                                                                            });
-
-                                                                            $(".btn_tecnico_link").click(function () {
-                                                                                var documento = $(this).attr("title");
-                                                                                $("#documento").val(documento);
-
-                                                                                cargar_tabla_link(token_actual, documento,json.estado);
-                                                                            });
-
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-
-                                                        }
-                                                    }
-                                                }
-                                            });
-
-                                            $('input[type="file"]').change(function (evt) {
-
-                                                var f = evt.target.files[0];
-                                                var reader = new FileReader();
-
-                                                // Cierre para capturar la información del archivo.
-                                                reader.onload = function (fileLoadedEvent) {
-                                                    var srcData = fileLoadedEvent.target.result; // <--- data: base64
-                                                    var srcName = f.name;
-                                                    var srcSize = f.size;
-                                                    var srcType = f.type;
-                                                    var ext = srcName.split('.');
-                                                    // ahora obtenemos el ultimo valor despues el punto
-                                                    // obtenemos el length por si el archivo lleva nombre con mas de 2 puntos
-                                                    srcExt = ext[ext.length - 1];
-
-                                                    var permitidos = $("#permitidos").val();
-                                                    var permitidos_mayuscula = $("#permitidos").val().toUpperCase();
-                                                    var documento = $("#documento").val();
-                                                    var tamano = $("#tamano").val();
-
-                                                    var extensiones = permitidos.split(',');
-                                                    var extensiones_mayuscula = permitidos_mayuscula.split(',');
-
-                                                    if (extensiones.includes(srcExt) || extensiones_mayuscula.includes(srcExt) )
-                                                    {
-                                                        //mb -> bytes
-                                                        permitidotamano = tamano * 1000 * 1000;
-                                                        if (srcSize > permitidotamano)
-                                                        {
-                                                            notify("danger", "ok", "Documentación:", "El tamaño del archivo excede el permitido (" + tamano + " MB)");
-                                                        } else
-                                                        {
-                                                            $.post(url_pv + 'PropuestasDocumentacion/guardar_archivo', {documento: documento, srcExt: srcExt, srcData: srcData, srcName: srcName, srcSize: srcSize, srcType: srcType, "token": token_actual.token, conv: $("#conv").attr('value'), modulo: "Menu Participante", m: getURLParameter('m'), propuesta: $("#propuesta").attr('value')}).done(function (data) {
-                                                                if (data == 'error_metodo')
-                                                                {
-                                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                                                } else
-                                                                {
-                                                                    if (data == 'error_token')
-                                                                    {
-                                                                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                                                                    } else
-                                                                    {
-
-                                                                        if (data == 'acceso_denegado')
-                                                                        {
-                                                                            notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
-                                                                        } else
-                                                                        {
-                                                                            if (data == 'error_carpeta')
-                                                                            {
-                                                                                notify("danger", "ok", "Convocatorias:", "Se registro un error al subir el archivo en la carpeta, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                                                            } else
-                                                                            {
-                                                                                if (data == 'error_archivo')
-                                                                                {
-                                                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error al subir el archivo, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                                                                } else
-                                                                                {
-                                                                                    notify("success", "ok", "Convocatorias:", "Se guardo con el éxito el archivo.");
-                                                                                    cargar_tabla_archivos(token_actual, documento);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-
-                                                            });
-                                                        }
-                                                    } else
-                                                    {
-                                                        notify("danger", "ok", "Documentación:", "Archivo no permitido");
-                                                    }
-
-                                                };
-                                                // Leer en el archivo como una URL de datos.                
-                                                reader.readAsDataURL(f);
-                                            });
-
-                                            validator_form(token_actual);
-
-
-
-                                            $("#inscribir_propuesta").click(function () {
                                                 //Realizo la peticion para cargar el formulario
                                                 $.ajax({
                                                     type: 'GET',
-                                                    data: {"token": token_actual.token, conv: $("#conv").attr('value'), modulo: "Menu Participante", m: getURLParameter('m'), propuesta: $("#propuesta").attr('value')},
-                                                    url: url_pv + 'PropuestasDocumentacion/validar_requisitos'
+                                                    data: {"token": token_actual.token, "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "p": getURLParameter('p')},
+                                                    url: url_pv + 'PropuestasDocumentacion/buscar_documentacion'
                                                 }).done(function (data) {
                                                     if (data == 'error_metodo')
                                                     {
@@ -277,117 +102,299 @@ $(document).ready(function () {
                                                             location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                                                         } else
                                                         {
-                                                            if (data == 'crear_propuesta')
+                                                            if (data == 'crear_perfil_pn')
                                                             {
-                                                                location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=Para poder inscribir la propuesta debe crear el perfil de agrupacion.&msg_tipo=danger';
+                                                                location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_natural.html?msg=Para poder inscribir la propuesta debe crear el perfil de persona natural.&msg_tipo=danger';
                                                             } else
                                                             {
-                                                                if (data == 'acceso_denegado')
+                                                                if (data == 'crear_perfil_pj')
                                                                 {
-                                                                    notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
+                                                                    location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_juridica.html?msg=Para poder inscribir la propuesta debe crear el perfil de persona juridica.&msg_tipo=danger';
                                                                 } else
                                                                 {
-                                                                    var json = JSON.parse(data);
-
-                                                                    var count = Object.keys(json).length;
-
-                                                                    if (count > 0)
+                                                                    if (data == 'crear_perfil_agr')
                                                                     {
-                                                                        var html_table = '<ul>';
-                                                                        $.each(json, function (key, documento) {
-                                                                            var nombre_requisito=documento.nombre;
-                                                                            if(documento.nombre=="Junta")
-                                                                            {
-                                                                                nombre_requisito="No ha ingresado los integrantes de la junta directiva.";
-                                                                            }
-                                                                            
-                                                                            if(documento.nombre=="Integrante")
-                                                                            {
-                                                                                nombre_requisito="No ha ingresado los integrantes de la agrupación.";
-                                                                            }
-                                                                            
-                                                                            html_table = html_table + '<li>' + nombre_requisito + '</li>';
-                                                                        });
-                                                                        html_table = html_table + '</ul>';
-                                                                        notify("danger", "remove", "Convocatorias:", "<p>Los siguientes requisitos son obligatorios</p>" + html_table);
+                                                                        location.href = url_pv_admin + 'pages/perfilesparticipantes/agrupacion.html?msg=Para poder inscribir la propuesta debe crear el perfil de agrupacion.&msg_tipo=danger';
                                                                     } else
                                                                     {
-                                                                        $("#mi-modal").modal('show');
+
+                                                                        if (data == 'crear_propuesta')
+                                                                        {
+                                                                            location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=Para poder inscribir la propuesta debe crear el perfil de agrupacion.&msg_tipo=danger';
+                                                                        } else
+                                                                        {
+                                                                            if (data == 'acceso_denegado')
+                                                                            {
+                                                                                notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
+                                                                            } else
+                                                                            {
+                                                                                var json = JSON.parse(data);
+
+                                                                                //elimino disabled todos los componentes
+                                                                                if(json.estado==7)
+                                                                                {
+                                                                                    $(".inactivar_estado_propuesta").removeAttr("disabled");   
+                                                                                }
+
+                                                                                $("#propuesta").attr("value", json.propuesta);
+                                                                                $("#participante").attr("value", json.participante);
+
+                                                                                var html_table = '';
+                                                                                $.each(json.administrativos, function (key2, documento) {
+                                                                                    html_table = html_table + '<tr><td>' + documento.orden + '</td><td>' + documento.requisito + '</td><td>' + documento.descripcion + '</td><td>' + documento.archivos_permitidos + '</td><td>' + documento.tamano_permitido + ' MB</td><td><button title="' + documento.id + '" lang="' + documento.archivos_permitidos + '" dir="' + documento.tamano_permitido + '" type="button" class="btn btn-success btn_tecnico_documento" data-toggle="modal" data-target="#cargar_documento"><span class="glyphicon glyphicon-open"></span></button></td><td><button title="' + documento.id + '"  type="button" class="btn btn-primary btn_tecnico_link" data-toggle="modal" data-target="#cargar_link"><span class="glyphicon glyphicon-link"></span></button></td></tr>';
+                                                                                });
+
+                                                                                $("#tabla_administrativos").append(html_table);
+
+                                                                                html_table = '';
+                                                                                $.each(json.tecnicos, function (key2, documento) {
+                                                                                    html_table = html_table + '<tr><td>' + documento.orden + '</td><td>' + documento.requisito + '</td><td>' + documento.descripcion + '</td><td>' + documento.archivos_permitidos + '</td><td>' + documento.tamano_permitido + ' MB</td><td><button title="' + documento.id + '" lang="' + documento.archivos_permitidos + '" dir="' + documento.tamano_permitido + '" type="button" class="btn btn-success btn_tecnico_documento" data-toggle="modal" data-target="#cargar_documento"><span class="glyphicon glyphicon-open"></span></button></td><td><button title="' + documento.id + '"  type="button" class="btn btn-primary btn_tecnico_link" data-toggle="modal" data-target="#cargar_link"><span class="glyphicon glyphicon-link"></span></button></td></tr>';
+                                                                                });
+
+                                                                                $("#tabla_tecnicos").append(html_table);
+
+                                                                                $(".btn_tecnico_documento").click(function () {
+                                                                                    var documento = $(this).attr("title");
+                                                                                    var permitidos = $(this).attr("lang");
+                                                                                    var tamano = $(this).attr("dir");
+                                                                                    $("#archivos_permitidos").html(permitidos);
+                                                                                    $("#documento").val(documento);
+                                                                                    $("#permitidos").val(permitidos);
+                                                                                    $("#tamano").val(tamano);
+
+                                                                                    cargar_tabla_archivos(token_actual, documento,json.estado);
+                                                                                });
+
+                                                                                $(".btn_tecnico_link").click(function () {
+                                                                                    var documento = $(this).attr("title");
+                                                                                    $("#documento").val(documento);
+
+                                                                                    cargar_tabla_link(token_actual, documento,json.estado);
+                                                                                });
+
+                                                                            }
+                                                                        }
                                                                     }
                                                                 }
-                                                            }
 
+                                                            }
                                                         }
                                                     }
                                                 });
-                                            });
 
-                                            var modalConfirm = function (callback) {
-                                                $("#modal-btn-si").on("click", function () {
-                                                    callback(true);
-                                                    $("#mi-modal").modal('hide');
-                                                });
+                                                $('input[type="file"]').change(function (evt) {
 
-                                                $("#modal-btn-no").on("click", function () {
-                                                    callback(false);
-                                                    $("#mi-modal").modal('hide');
-                                                });
+                                                    var f = evt.target.files[0];
+                                                    var reader = new FileReader();
 
-                                                $("#modal-btn-reporte").on("click", function () {
-                                                    callback(false);
-                                                    window.open(url_pv_report + "/reporte_propuesta_inscrita.php?token=" + token_actual.token + "&vi=1&id=" + $("#propuesta").attr('value'), '_blank');
-                                                });
-                                            };
+                                                    // Cierre para capturar la información del archivo.
+                                                    reader.onload = function (fileLoadedEvent) {
+                                                        var srcData = fileLoadedEvent.target.result; // <--- data: base64
+                                                        var srcName = f.name;
+                                                        var srcSize = f.size;
+                                                        var srcType = f.type;
+                                                        var ext = srcName.split('.');
+                                                        // ahora obtenemos el ultimo valor despues el punto
+                                                        // obtenemos el length por si el archivo lleva nombre con mas de 2 puntos
+                                                        srcExt = ext[ext.length - 1];
 
-                                            modalConfirm(function (confirm) {
-                                                if (confirm) {
-                                                    //Se realiza la peticion con el fin de guardar el registro actual
-                                                    $.ajax({
-                                                        type: 'POST',
-                                                        url: url_pv + 'Propuestas/inscribir_propuesta',
-                                                        data: "conv=" + $("#conv").attr('value') + "&modulo=Menu Participante&token=" + token_actual.token + "&m=" + getURLParameter('m') + "&id=" + $("#propuesta").val(),
-                                                    }).done(function (result) {
+                                                        var permitidos = $("#permitidos").val();
+                                                        var permitidos_mayuscula = $("#permitidos").val().toUpperCase();
+                                                        var documento = $("#documento").val();
+                                                        var tamano = $("#tamano").val();
 
-                                                        if (result == 'error_estado')
+                                                        var extensiones = permitidos.split(',');
+                                                        var extensiones_mayuscula = permitidos_mayuscula.split(',');
+
+                                                        if (extensiones.includes(srcExt) || extensiones_mayuscula.includes(srcExt) )
                                                         {
-                                                            notify("danger", "ok", "Propuesta:", "Su propuesta no esta en estado registrada, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                                        } else
-                                                        {
-                                                            if (result == 'error')
+                                                            //mb -> bytes
+                                                            permitidotamano = tamano * 1000 * 1000;
+                                                            if (srcSize > permitidotamano)
                                                             {
-                                                                notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                                notify("danger", "ok", "Documentación:", "El tamaño del archivo excede el permitido (" + tamano + " MB)");
                                                             } else
                                                             {
-                                                                if (result == 'error_token')
-                                                                {
-                                                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                                                                } else
-                                                                {
-                                                                    if (result == 'acceso_denegado')
+                                                                $.post(url_pv + 'PropuestasDocumentacion/guardar_archivo', {documento: documento, srcExt: srcExt, srcData: srcData, srcName: srcName, srcSize: srcSize, srcType: srcType, "token": token_actual.token, conv: $("#conv").attr('value'), modulo: "Menu Participante", m: getURLParameter('m'), propuesta: $("#propuesta").attr('value')}).done(function (data) {
+                                                                    if (data == 'error_metodo')
                                                                     {
-                                                                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                                                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                                                     } else
                                                                     {
-                                                                        if (result == 'error_fecha_cierre')
+                                                                        if (data == 'error_token')
                                                                         {
-                                                                            notify("danger", "ok", "Convocatorias:", "La convocatoria ya no se encuentra disponible para inscribir su propuesta.");
+                                                                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                                                                         } else
                                                                         {
-                                                                            if (isNaN(result)) {
-                                                                                notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+
+                                                                            if (data == 'acceso_denegado')
+                                                                            {
+                                                                                notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
                                                                             } else
-                                                                            {                                                                                
-                                                                                location.href = url_pv_admin + 'pages/propuestas/mis_propuestas.html?msg=Felicitaciones, su propuesta quedo inscrita en la plataforma.&msg_tipo=success';                                                                                                                                                                
+                                                                            {
+                                                                                if (data == 'error_carpeta')
+                                                                                {
+                                                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error al subir el archivo en la carpeta, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                                                } else
+                                                                                {
+                                                                                    if (data == 'error_archivo')
+                                                                                    {
+                                                                                        notify("danger", "ok", "Convocatorias:", "Se registro un error al subir el archivo, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                                                    } else
+                                                                                    {
+                                                                                        notify("success", "ok", "Convocatorias:", "Se guardo con el éxito el archivo.");
+                                                                                        cargar_tabla_archivos(token_actual, documento);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                });
+                                                            }
+                                                        } else
+                                                        {
+                                                            notify("danger", "ok", "Documentación:", "Archivo no permitido");
+                                                        }
+
+                                                    };
+                                                    // Leer en el archivo como una URL de datos.                
+                                                    reader.readAsDataURL(f);
+                                                });
+
+                                                validator_form(token_actual);
+
+
+
+                                                $("#inscribir_propuesta").click(function () {
+                                                    //Realizo la peticion para cargar el formulario
+                                                    $.ajax({
+                                                        type: 'GET',
+                                                        data: {"token": token_actual.token, conv: $("#conv").attr('value'), modulo: "Menu Participante", m: getURLParameter('m'), propuesta: $("#propuesta").attr('value')},
+                                                        url: url_pv + 'PropuestasDocumentacion/validar_requisitos'
+                                                    }).done(function (data) {
+                                                        if (data == 'error_metodo')
+                                                        {
+                                                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        } else
+                                                        {
+                                                            if (data == 'error_token')
+                                                            {
+                                                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                                            } else
+                                                            {
+                                                                if (data == 'crear_propuesta')
+                                                                {
+                                                                    location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=Para poder inscribir la propuesta debe crear el perfil de agrupacion.&msg_tipo=danger';
+                                                                } else
+                                                                {
+                                                                    if (data == 'acceso_denegado')
+                                                                    {
+                                                                        notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
+                                                                    } else
+                                                                    {
+                                                                        var json = JSON.parse(data);
+
+                                                                        var count = Object.keys(json).length;
+
+                                                                        if (count > 0)
+                                                                        {
+                                                                            var html_table = '<ul>';
+                                                                            $.each(json, function (key, documento) {
+                                                                                var nombre_requisito=documento.nombre;
+                                                                                if(documento.nombre=="Junta")
+                                                                                {
+                                                                                    nombre_requisito="No ha ingresado los integrantes de la junta directiva.";
+                                                                                }
+
+                                                                                if(documento.nombre=="Integrante")
+                                                                                {
+                                                                                    nombre_requisito="No ha ingresado los integrantes de la agrupación.";
+                                                                                }
+
+                                                                                html_table = html_table + '<li>' + nombre_requisito + '</li>';
+                                                                            });
+                                                                            html_table = html_table + '</ul>';
+                                                                            notify("danger", "remove", "Convocatorias:", "<p>Los siguientes requisitos son obligatorios</p>" + html_table);
+                                                                        } else
+                                                                        {
+                                                                            $("#mi-modal").modal('show');
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                            }
+                                                        }
+                                                    });
+                                                });
+
+                                                var modalConfirm = function (callback) {
+                                                    $("#modal-btn-si").on("click", function () {
+                                                        callback(true);
+                                                        $("#mi-modal").modal('hide');
+                                                    });
+
+                                                    $("#modal-btn-no").on("click", function () {
+                                                        callback(false);
+                                                        $("#mi-modal").modal('hide');
+                                                    });
+
+                                                    $("#modal-btn-reporte").on("click", function () {
+                                                        callback(false);
+                                                        window.open(url_pv_report + "/reporte_propuesta_inscrita.php?token=" + token_actual.token + "&vi=1&id=" + $("#propuesta").attr('value'), '_blank');
+                                                    });
+                                                };
+
+                                                modalConfirm(function (confirm) {
+                                                    if (confirm) {
+                                                        //Se realiza la peticion con el fin de guardar el registro actual
+                                                        $.ajax({
+                                                            type: 'POST',
+                                                            url: url_pv + 'Propuestas/inscribir_propuesta',
+                                                            data: "conv=" + $("#conv").attr('value') + "&modulo=Menu Participante&token=" + token_actual.token + "&m=" + getURLParameter('m') + "&id=" + $("#propuesta").val(),
+                                                        }).done(function (result) {
+
+                                                            if (result == 'error_estado')
+                                                            {
+                                                                notify("danger", "ok", "Propuesta:", "Su propuesta no esta en estado registrada, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                            } else
+                                                            {
+                                                                if (result == 'error')
+                                                                {
+                                                                    notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                                } else
+                                                                {
+                                                                    if (result == 'error_token')
+                                                                    {
+                                                                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                                                    } else
+                                                                    {
+                                                                        if (result == 'acceso_denegado')
+                                                                        {
+                                                                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                                                        } else
+                                                                        {
+                                                                            if (result == 'error_fecha_cierre')
+                                                                            {
+                                                                                notify("danger", "ok", "Convocatorias:", "La convocatoria ya no se encuentra disponible para inscribir su propuesta.");
+                                                                            } else
+                                                                            {
+                                                                                if (isNaN(result)) {
+                                                                                    notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                                                } else
+                                                                                {                                                                                
+                                                                                    location.href = url_pv_admin + 'pages/propuestas/mis_propuestas.html?msg=Felicitaciones, su propuesta quedo inscrita en la plataforma.&msg_tipo=success';                                                                                                                                                                
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
                                                                 }
                                                             }
-                                                        }
 
-                                                    });
-                                                }
-                                            });
+                                                        });
+                                                    }
+                                                });
+                                            }
                                         }
                                     }
                                 }
