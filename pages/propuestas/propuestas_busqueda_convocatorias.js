@@ -219,10 +219,12 @@ function form_tipo_convocatoria(page, id)
                                 if (data == 'ingresar')
                                 {
                                     var redirect = "";
-                                    if (page == 1 || page == 3 || page == 4 || page == 5)
+                                    //Modalidades
+                                    if (page == 1 || page == 3 || page == 4 || page == 5|| page == 8)
                                     {
                                         redirect = "/propuestas/perfiles";
                                     }
+                                    //Modalidad de jurado
                                     if (page == 2)
                                     {
                                         redirect = "/propuestasjurados/perfil";

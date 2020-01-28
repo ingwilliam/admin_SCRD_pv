@@ -410,6 +410,8 @@ function cargar_verificacion_1(token_actual, propuesta) {
                     $('#doc_administrativos_verificacion_1 tr').remove();
                     $("#doc_administrativos_verificacion_1").append(html_table);
                     
+                    html_table="";
+                    
                     $.each(json.tecnicos, function (key2, documento) {
                         html_table = html_table + '<tr>';
                         html_table = html_table + '<td>'+documento.orden+' '+documento.requisito+'</td>';
@@ -495,4 +497,5 @@ function guardar_verificacion_1(id)
     var observaciones = $("#observaciones_"+id).val();
     alert(estado);
     alert(observaciones);
+    alert(id);
 }
