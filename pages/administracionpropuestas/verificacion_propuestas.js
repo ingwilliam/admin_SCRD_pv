@@ -334,6 +334,9 @@ function cargar_tabla(token_actual) {
 }
 
 function cargar_verificacion_1(token_actual, propuesta) {
+    //Asigno la propuesta actual
+    $("#propuesta").val(propuesta);
+    
     //Realizo la peticion para cargar el formulario
     $.ajax({
         type: 'POST',
@@ -361,6 +364,19 @@ function cargar_verificacion_1(token_actual, propuesta) {
                     
                     var html_table = '';
                     $.each(json.administrativos, function (key2, documento) {
+                        if( documento.verificacion_1_id === null)
+                        {
+                            documento.verificacion_1_id="";
+                        }
+                        if( documento.verificacion_1_estado === null)
+                        {
+                            documento.verificacion_1_estado="";
+                        }
+                        if( documento.verificacion_1_observacion === null)
+                        {
+                            documento.verificacion_1_observacion="";
+                        }
+                        
                         html_table = html_table + '<tr>';
                         html_table = html_table + '<td>'+documento.orden+' '+documento.requisito+'</td>';
                         html_table = html_table + '<td><b>Archivos<b/><br/><br/>';
@@ -381,8 +397,13 @@ function cargar_verificacion_1(token_actual, propuesta) {
                         html_table = html_table + '                 <div class="form-group">';
                         html_table = html_table + '                     <label> Resultado de la verificación</label>';
                         html_table = html_table + '                     <select id="estado_'+documento.id+'" class="form-control" >';
-                        $.each(json.estados, function (key, estado) {
-                        html_table = html_table + '<option value="'+estado.id+'">'+estado.nombre+'</option>';                        
+                        $.each(json.estados_verificacion_1, function (key, estado) {
+                            var selected = '';
+                            if(documento.verificacion_1_estado==estado.id)
+                            {
+                                selected = 'selected="selected"';
+                            }
+                        html_table = html_table + '<option value="'+estado.id+'" '+selected+'>'+estado.nombre+'</option>';                        
                         });                                                
                         html_table = html_table + '                     </select>';
                         html_table = html_table + '                 </div>';
@@ -392,14 +413,15 @@ function cargar_verificacion_1(token_actual, propuesta) {
                         html_table = html_table + '             <div class="col-lg-12">';
                         html_table = html_table + '                 <div class="form-group">';
                         html_table = html_table + '                     <label>Observaciones</label>';
-                        html_table = html_table + '                     <textarea id="observaciones_'+documento.id+'" class="form-control" rows="3"></textarea>';
+                        html_table = html_table + '                     <textarea id="observaciones_'+documento.id+'" class="form-control" rows="3">'+documento.verificacion_1_observacion+'</textarea>';
                         html_table = html_table + '                 </div>';
                         html_table = html_table + '             </div>';                        
                         html_table = html_table + '         </div>';
                         html_table = html_table + '         <div class="row">';
                         html_table = html_table + '             <div class="col-lg-12">';
                         html_table = html_table + '                 <div class="form-group" style="text-align: right">';
-                        html_table = html_table + '                     <button type="button" class="btn btn-success" onclick="guardar_verificacion_1(\''+documento.id+'\')">Guardar</button>';                        
+                        html_table = html_table + '                     <button type="button" class="btn btn-success" onclick="guardar_verificacion_1(\''+token_actual.token+'\',\''+documento.id+'\')">Guardar</button>';                        
+                        html_table = html_table + '                     <input type="hidden" id="id_documento_'+documento.id+'" value="'+documento.verificacion_1_id+'" />';                        
                         html_table = html_table + '                 </div>';
                         html_table = html_table + '             </div>';                        
                         html_table = html_table + '         </div>';
@@ -413,6 +435,20 @@ function cargar_verificacion_1(token_actual, propuesta) {
                     html_table="";
                     
                     $.each(json.tecnicos, function (key2, documento) {
+                        
+                        if( documento.verificacion_1_id === null)
+                        {
+                            documento.verificacion_1_id="";
+                        }
+                        if( documento.verificacion_1_estado === null)
+                        {
+                            documento.verificacion_1_estado="";
+                        }
+                        if( documento.verificacion_1_observacion === null)
+                        {
+                            documento.verificacion_1_observacion="";
+                        }
+                        
                         html_table = html_table + '<tr>';
                         html_table = html_table + '<td>'+documento.orden+' '+documento.requisito+'</td>';
                         html_table = html_table + '<td><b>Archivos<b/><br/><br/>';
@@ -432,8 +468,13 @@ function cargar_verificacion_1(token_actual, propuesta) {
                         html_table = html_table + '                 <div class="form-group">';
                         html_table = html_table + '                     <label> Resultado de la verificación</label>';
                         html_table = html_table + '                     <select id="estado_'+documento.id+'" class="form-control" >';
-                        $.each(json.estados, function (key, estado) {
-                        html_table = html_table + '<option value="'+estado.id+'">'+estado.nombre+'</option>';                        
+                        $.each(json.estados_verificacion_1, function (key, estado) {
+                            var selected = '';
+                            if(documento.verificacion_1_estado==estado.id)
+                            {
+                                selected = 'selected="selected"';
+                            }
+                            html_table = html_table + '<option value="'+estado.id+'" '+selected+'>'+estado.nombre+'</option>';                                                                                                
                         });                                                
                         html_table = html_table + '                     </select>';
                         html_table = html_table + '                 </div>';
@@ -443,14 +484,15 @@ function cargar_verificacion_1(token_actual, propuesta) {
                         html_table = html_table + '             <div class="col-lg-12">';
                         html_table = html_table + '                 <div class="form-group">';
                         html_table = html_table + '                     <label>Observaciones</label>';
-                        html_table = html_table + '                     <textarea id="observaciones_'+documento.id+'" class="form-control" rows="3"></textarea>';
+                        html_table = html_table + '                     <textarea id="observaciones_'+documento.id+'" class="form-control" rows="3">'+documento.verificacion_1_observacion+'</textarea>';
                         html_table = html_table + '                 </div>';
                         html_table = html_table + '             </div>';                        
                         html_table = html_table + '         </div>';
                         html_table = html_table + '         <div class="row">';
                         html_table = html_table + '             <div class="col-lg-12">';
                         html_table = html_table + '                 <div class="form-group" style="text-align: right">';
-                        html_table = html_table + '                     <button type="button" class="btn btn-success" onclick="guardar_verificacion_1(\''+documento.id+'\')">Guardar</button>';                        
+                        html_table = html_table + '                     <button type="button" class="btn btn-success" onclick="guardar_verificacion_1(\''+token_actual.token+'\',\''+documento.id+'\')">Guardar</button>';                                                
+                        html_table = html_table + '                     <input type="hidden" id="id_documento_'+documento.id+'" value="'+documento.verificacion_1_id+'" />';                        
                         html_table = html_table + '                 </div>';
                         html_table = html_table + '             </div>';                        
                         html_table = html_table + '         </div>';
@@ -491,11 +533,64 @@ function download_file(cod)
 }
 
 //guardar verificacion 1
-function guardar_verificacion_1(id)
+function guardar_verificacion_1(token_actual,id)
 {
+    //Debo validar que todos los documentos ya esten verificados
+    //Hablar con gato si en la 1 verificacion solo revisan documentación administrativa
+    //Eso quiere decir que la documentación tecnica solo se revisa cuando las propuesta
+    //Ya pasaron por el proceso de subsanacion
     var estado = $("#estado_"+id).val();
-    var observaciones = $("#observaciones_"+id).val();
-    alert(estado);
-    alert(observaciones);
-    alert(id);
+    var observacion = $("#observaciones_"+id).val();        
+    var propuesta = $("#propuesta").val();        
+    var convocatoriadocumento = id;   
+    var verificacion = 1;   
+    var id = $("#id_documento_"+id).val();   
+    
+    //Se realiza la peticion con el fin de guardar el registro actual
+    $.ajax({
+        type: 'POST',
+        url: url_pv + 'PropuestasVerificacion/guardar_verificacion_1',
+        data: {"token": token_actual, "modulo": "Verificación de propuestas", "propuesta": propuesta, "convocatoriadocumento": convocatoriadocumento, "estado": estado, "observacion": observacion, "verificacion": verificacion,"id":id},
+    }).done(function (result) {
+
+        if (result == 'error_metodo')
+        {
+            notify("danger", "ok", "Verificación de propuestas:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        } else
+        {
+            if (result == 'error_token')
+            {
+                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+            } else
+            {
+                if (result == 'acceso_denegado')
+                {
+                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                } else
+                {
+                    if (result == 'crear_propuesta')
+                    {
+                        notify("danger", "remove", "Verificación de propuestas:", "El código de la propuesta no es valido.");
+                    } else
+                    {
+                        if (result == 'error')
+                        {
+                            notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        } else
+                        {
+                            if (isNaN(result)) {
+                                notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            } else
+                            {
+                                notify("success", "ok", "Verificación de propuestas:", "Se guardo con éxito la verificación del documento.");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    });
+    
+    
 }
