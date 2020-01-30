@@ -172,6 +172,7 @@ $(document).ready(function () {
         //Cargar modalidades dependiendo el programa
         $('#programa').on('change', function () {
             var programa = $(this).val();
+            
             $('#modalidad').find('option').remove();
             $.ajax({
                 type: 'GET',
@@ -193,6 +194,33 @@ $(document).ready(function () {
                         if (json.length > 0) {
                             $.each(json, function (key, value) {
                                 $("#modalidad").append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                            });
+                        }
+                    }
+                }
+            });
+            
+            $('#enfoque').find('option').remove();
+            $.ajax({
+                type: 'GET',
+                data: {"token": token_actual.token, "programa": programa},
+                url: url_pv + 'Enfoques/select'
+            }).done(function (data) {
+                if (data == 'error_metodo')
+                {
+                    notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                } else
+                {
+                    if (data == 'error_token')
+                    {
+                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    } else
+                    {
+                        var json = JSON.parse(data);
+                        $("#enfoque").append('<option value="">:: Seleccionar ::</option>');
+                        if (json.length > 0) {
+                            $.each(json, function (key, value) {
+                                $("#enfoque").append('<option value="' + value.id + '">' + value.nombre + '</option>');
                             });
                         }
                     }
