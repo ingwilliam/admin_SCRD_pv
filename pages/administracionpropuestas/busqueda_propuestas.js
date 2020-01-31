@@ -131,15 +131,15 @@ $(document).ready(function () {
                 {
 
                     var mensaje;
-                    if ($("#convocatoria option:selected").attr("lang") == "true")
+                    if ($("#convocatoria option:selected").attr("dir") == "true")
                     {
                         $("#id_convocatoria").val($("#categoria").val());
                         mensaje = "categoría";
 
                     } else
                     {
-                        $("#id_convocatoria").val($("#categoria").val());
-                        mensaje = "categoría";
+                        $("#id_convocatoria").val($("#convocatoria").val());
+                        mensaje = "convocatoria";
                     }
 
                     if ($("#id_convocatoria").val() == "")

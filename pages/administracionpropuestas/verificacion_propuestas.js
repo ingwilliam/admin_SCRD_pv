@@ -83,15 +83,15 @@ $(document).ready(function () {
                 {
 
                     var mensaje;
-                    if ($("#convocatoria option:selected").attr("lang") == "true")
+                    if ($("#convocatoria option:selected").attr("dir") == "true")
                     {
                         $("#id_convocatoria").val($("#categoria").val());
                         mensaje = "categoría";
 
                     } else
                     {
-                        $("#id_convocatoria").val($("#categoria").val());
-                        mensaje = "categoría";
+                        $("#id_convocatoria").val($("#convocatoria").val());
+                        mensaje = "convocatoria";
                     }
 
                     if ($("#id_convocatoria").val() == "")
@@ -273,7 +273,7 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'POST',
                     url: url_pv + 'PropuestasVerificacion/valida_verificacion',
-                    data: {"token": token_actual.token, "modulo": "Verificación de propuestas", "propuesta": propuesta, "verificacion": verificacion, "tipo_requisito": "Administrativos"},
+                    data: {"token": token_actual.token, "modulo": "Verificación documentos administrativos", "propuesta": propuesta, "verificacion": verificacion, "tipo_requisito": "Administrativos"},
                 }).done(function (result) {
 
                     if (result == 'error_metodo')
@@ -348,7 +348,7 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'POST',
                     url: url_pv + 'PropuestasVerificacion/valida_verificacion',
-                    data: {"token": token_actual.token, "modulo": "Verificación de propuestas", "propuesta": propuesta, "verificacion": verificacion, "tipo_requisito": "Tecnicos"},
+                    data: {"token": token_actual.token, "modulo": "Verificación documentos técnicos", "propuesta": propuesta, "verificacion": verificacion, "tipo_requisito": "Tecnicos"},
                 }).done(function (result) {
 
                     if (result == 'error_metodo')
@@ -607,7 +607,10 @@ function cargar_verificacion_1(token_actual, propuesta) {
                             {
                                 selected = 'selected="selected"';
                             }
-                            html_table = html_table + '<option value="' + estado.id + '" ' + selected + '>' + estado.nombre + '</option>';
+                            if (estado.id != 26)
+                            {
+                                html_table = html_table + '<option value="' + estado.id + '" ' + selected + '>' + estado.nombre + '</option>';
+                            }
                         });
                         
                         var color_boton_guardado="btn-success";
@@ -631,7 +634,7 @@ function cargar_verificacion_1(token_actual, propuesta) {
                         html_table = html_table + '         <div class="row">';
                         html_table = html_table + '             <div class="col-lg-12">';
                         html_table = html_table + '                 <div class="form-group" style="text-align: right">';
-                        html_table = html_table + '                     <button id="btn_documento_' + documento.id + '" type="button" class="btn '+color_boton_guardado+'" onclick="guardar_verificacion_1(\'' + token_actual.token + '\',\'' + documento.id + '\')">Guardar</button>';
+                        html_table = html_table + '                     <button id="btn_documento_' + documento.id + '" type="button" class="btn '+color_boton_guardado+'" onclick="guardar_verificacion_1(\'' + token_actual.token + '\',\'' + documento.id + '\',\'Verificación documentos administrativos\')">Guardar</button>';
                         html_table = html_table + '                     <input type="hidden" class="validar_administrativos" id="id_documento_' + documento.id + '" value="' + documento.verificacion_1_id + '" />';
                         html_table = html_table + '                 </div>';
                         html_table = html_table + '             </div>';
@@ -642,12 +645,6 @@ function cargar_verificacion_1(token_actual, propuesta) {
 
                     $('#doc_administrativos_verificacion_1 tr').remove();
                     $("#doc_administrativos_verificacion_1").append(html_table);
-
-                    if (json.propuesta.verificacion_administrativos)
-                    {
-                        $("#doc_administrativos_verificacion_1").find('input,select,button,textarea').attr("disabled", "disabled");
-                        $("#confirma_administrativos_1").attr("disabled", "disabled");
-                    }
 
                     html_table = "";
 
@@ -718,7 +715,7 @@ function cargar_verificacion_1(token_actual, propuesta) {
                         html_table = html_table + '         <div class="row">';
                         html_table = html_table + '             <div class="col-lg-12">';
                         html_table = html_table + '                 <div class="form-group" style="text-align: right">';
-                        html_table = html_table + '                     <button type="button" id="btn_documento_' + documento.id + '" class="btn '+color_boton_guardado+'" onclick="guardar_verificacion_1(\'' + token_actual.token + '\',\'' + documento.id + '\')">Guardar</button>';
+                        html_table = html_table + '                     <button type="button" id="btn_documento_' + documento.id + '" class="btn '+color_boton_guardado+'" onclick="guardar_verificacion_1(\'' + token_actual.token + '\',\'' + documento.id + '\',\'Verificación documentos técnicos\')">Guardar</button>';
                         html_table = html_table + '                     <input type="hidden" class="validar_tecnicos" id="id_documento_' + documento.id + '" value="' + documento.verificacion_1_id + '" />';
                         html_table = html_table + '                 </div>';
                         html_table = html_table + '             </div>';
@@ -730,17 +727,56 @@ function cargar_verificacion_1(token_actual, propuesta) {
                     $('#doc_tecnicos_verificacion_1 tr').remove();
                     $("#doc_tecnicos_verificacion_1").append(html_table);
 
+
+                    //Por defecto los documentos tecnicos esta desactivados
+                    $("#doc_tecnicos_verificacion_1").find('input,select,button,textarea').attr("disabled", "disabled");
+                    $("#confirma_tecnicos_1").attr("disabled", "disabled");
+
+                    //Valido si ya realizaron la verificación administrativa con el fin de habilitar
+                    //la documentación tecnica
+                    if (json.propuesta.verificacion_administrativos)
+                    {
+                        
+                        $("#doc_administrativos_verificacion_1").find('input,select,button,textarea').attr("disabled", "disabled");
+                        $("#confirma_administrativos_1").attr("disabled", "disabled");
+                        
+                        $("#doc_tecnicos_verificacion_1").find('input,select,button,textarea').removeAttr("disabled");
+                        $("#confirma_tecnicos_1").removeAttr("disabled");                        
+                        
+                    }
+
+                    //Si la propuesta esta rechazada activo disable para todo
                     if (json.propuesta.estado == 23)
                     {
+                        
+                        $("#doc_administrativos_verificacion_1").find('input,select,button,textarea').attr("disabled", "disabled");
+                        $("#confirma_administrativos_1").attr("disabled", "disabled");
+                        
                         $("#doc_tecnicos_verificacion_1").find('input,select,button,textarea').attr("disabled", "disabled");
                         $("#confirma_tecnicos_1").attr("disabled", "disabled");
+                        
                     }
                     
                     if (json.propuesta.verificacion_tecnicos)
                     {
+                        
                         $("#doc_tecnicos_verificacion_1").find('input,select,button,textarea').attr("disabled", "disabled");
                         $("#confirma_tecnicos_1").attr("disabled", "disabled");
+                        
                     }
+                    
+                    //Si la propuesta esta por subsanar activo disable para todo
+                    if (json.propuesta.estado == 21)
+                    {
+                        
+                        $("#doc_administrativos_verificacion_1").find('input,select,button,textarea').attr("disabled", "disabled");
+                        $("#confirma_administrativos_1").attr("disabled", "disabled");
+                        
+                        $("#doc_tecnicos_verificacion_1").find('input,select,button,textarea').attr("disabled", "disabled");
+                        $("#confirma_tecnicos_1").attr("disabled", "disabled");
+                        
+                    }
+                    
 
                 }
             }
@@ -772,7 +808,7 @@ function download_file(cod)
 }
 
 //guardar verificacion 1
-function guardar_verificacion_1(token_actual, id)
+function guardar_verificacion_1(token_actual, id , modulo)
 {
     //Debo validar que todos los documentos ya esten verificados
     //Hablar con gato si en la 1 verificacion solo revisan documentación administrativa
@@ -789,7 +825,7 @@ function guardar_verificacion_1(token_actual, id)
     $.ajax({
         type: 'POST',
         url: url_pv + 'PropuestasVerificacion/guardar_verificacion_1',
-        data: {"token": token_actual, "modulo": "Verificación de propuestas", "propuesta": propuesta, "convocatoriadocumento": convocatoriadocumento, "estado": estado, "observacion": observacion, "verificacion": verificacion, "id": id},
+        data: {"token": token_actual, "modulo": modulo, "propuesta": propuesta, "convocatoriadocumento": convocatoriadocumento, "estado": estado, "observacion": observacion, "verificacion": verificacion, "id": id},
     }).done(function (result) {
 
         if (result == 'error_metodo')
