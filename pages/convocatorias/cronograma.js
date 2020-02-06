@@ -417,7 +417,7 @@ function acciones_categoria(token_actual)
         //Realizo la peticion para cargar el formulario
         $.ajax({
             type: 'GET',
-            data: {"token": token_actual.token, "id": $(this).attr("title")},
+            data: {"token": token_actual.token, "convocatoria_padre_categoria": $("#id").attr('value'), "id": $(this).attr("title")},
             url: url_pv + 'Convocatoriascronogramas/search/'
         }).done(function (data) {
             if (data == 'error_metodo')

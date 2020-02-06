@@ -443,7 +443,7 @@ function acciones_categoria(token_actual)
         //Realizo la peticion para cargar el formulario
         $.ajax({
             type: 'GET',
-            data: {"token": token_actual.token, "id": $(this).attr("title"), "tipo_requisito": "Administrativos"},
+            data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "id": $(this).attr("title"), "tipo_requisito": "Administrativos"},
             url: url_pv + 'Convocatoriasdocumentos/search/'
         }).done(function (data) {
             if (data == 'error_metodo')

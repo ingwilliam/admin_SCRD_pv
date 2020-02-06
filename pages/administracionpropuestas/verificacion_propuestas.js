@@ -766,7 +766,7 @@ function cargar_verificacion_1(token_actual, propuesta) {
                     }
                     
                     //Si la propuesta esta por subsanar activo disable para todo
-                    if (json.propuesta.estado == 21)
+                    if (json.propuesta.estado == 21 || json.propuesta.estado == 22 )
                     {
                         
                         $("#doc_administrativos_verificacion_1").find('input,select,button,textarea').attr("disabled", "disabled");
