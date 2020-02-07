@@ -113,7 +113,25 @@ $(document).ready(function () {
                             $('.btn_tooltip').tooltip();
                             
                             //Creo los botones para acciones de cada fila de la tabla
-                            row.ver_propuesta = '<a href="'+href+'" ><button style="margin: 0 0 5px 0" type="button" class="btn btn-warning btn_tooltip" title="Ver propuesta"><span class="fa fa-file-text-o"></span></button></a><br/><button  lang="'+row.id_propuesta+'" style="margin: 0 0 5px 0" type="button" class="btn_anular_propuesta btn btn-danger btn_tooltip" title="Anular propuesta" data-toggle="modal" data-target="#anular_propuesta"><span class="fa fa-times-circle"></span></button>';                            
+                            if(row.id_estado==22)
+                            {
+                                row.ver_propuesta = '<a href="'+href+'" ><button style="margin: 0 0 5px 0" type="button" class="btn btn-warning btn_tooltip" title="Ver propuesta"><span class="fa fa-file-text-o"></span></button></a><br/><a href="subsanar_propuesta.html?id='+row.id_convocatoria+'&p='+row.id_propuesta+'&sub=1" ><button style="margin: 0 0 5px 0" type="button" class="btn btn-info btn_tooltip" title="Subsanar propuesta"><span class="fa fa-file-text-o"></span></button></a><br/><button  lang="'+row.id_propuesta+'" style="margin: 0 0 5px 0" type="button" class="btn_anular_propuesta btn btn-danger btn_tooltip" title="Anular propuesta" data-toggle="modal" data-target="#anular_propuesta"><span class="fa fa-times-circle"></span></button>';                            
+                            }
+                            else
+                            {
+                                row.ver_propuesta = '<a href="'+href+'" ><button style="margin: 0 0 5px 0" type="button" class="btn btn-warning btn_tooltip" title="Ver propuesta"><span class="fa fa-file-text-o"></span></button></a><br/><button  lang="'+row.id_propuesta+'" style="margin: 0 0 5px 0" type="button" class="btn_anular_propuesta btn btn-danger btn_tooltip" title="Anular propuesta" data-toggle="modal" data-target="#anular_propuesta"><span class="fa fa-times-circle"></span></button>';                            
+                            }            
+                            
+                            if(row.fecha_subsanacion!=null)
+                            {
+                                row.ver_reporte='<a href="'+url_pv_report+'reporte_propuesta_inscrita.php?id='+row.id_propuesta+'&token='+row.token+'" target="_blank"><button style="margin: 0 0 5px 0" type="button" class="btn btn-danger btn_tooltip" title="Reporte de propuesta inscrita"><span class="fa fa-bar-chart-o"></span></button></a><br/><a href="'+url_pv_report+'reporte_propuesta_subsanacion.php?id='+row.id_propuesta+'&token='+row.token+'" target="_blank"><button type="button" class="btn btn-info btn_tooltip" title="Reporte de propuesta subsanada"><span class="fa fa-bar-chart-o"></span></button></a>';
+                            }
+                            else
+                            {
+                                row.ver_reporte='<a href="'+url_pv_report+'reporte_propuesta_inscrita.php?id='+row.id_propuesta+'&token='+row.token+'" target="_blank"><button type="button" class="btn btn-danger btn_tooltip" title="Reporte de propuesta inscrita"><span class="fa fa-bar-chart-o"></span></button></a>';
+                            }
+                            
+                            
                             row.estado="<b>"+row.estado+"</b>";
                             var categoria = row.convocatoria;
                             if (row.categoria != "") {
