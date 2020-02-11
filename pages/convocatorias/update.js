@@ -620,10 +620,10 @@ $(document).ready(function () {
                                     {
                                         if (data == 'Si')
                                         {
-                                            notify("info", "ok", "Convocatorias:", "Se activo el perfil del participante con éxito.");
+                                            notify("info", "ok", "Convocatorias:", "Se activó el perfil del participante con éxito.");
                                         } else
                                         {
-                                            notify("info", "ok", "Convocatorias:", "Se elimino el perfil del participante con éxito.");
+                                            notify("info", "ok", "Convocatorias:", "Se eliminó el perfil del participante con éxito.");
                                         }
 
                                         cargar_tabla_perfiles_participante(token_actual)
@@ -949,7 +949,7 @@ function activar_registro(id, token_actual) {
             {
                 if (data == 'Si')
                 {
-                    notify("info", "ok", "Convocatoria recurso:", "Se activo el registro con éxito.");
+                    notify("info", "ok", "Convocatoria recurso:", "Se activó el registro con éxito.");
                 } else
                 {
                     notify("danger", "ok", "Convocatoria recurso:", "Se inactivo el registro con éxito.");
@@ -985,10 +985,10 @@ function activar_perfil_jurado(id, convocatoria, token_actual) {
             {
                 if (data == 'Si')
                 {
-                    notify("info", "ok", "Convocatorias:", "Se activo el perfil del jurado con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se activó el perfil del jurado con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se elimino el perfil del jurado con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se eliminó el perfil del jurado con éxito.");
                 }
             } else
             {
@@ -1434,7 +1434,7 @@ function validator_form(token_actual) {
             });
         }
 
-        //Elimino contenido del formulario
+        //Eliminó contenido del formulario
         $("#id_cpj").attr("value", "");
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         bv.resetForm();
@@ -1541,7 +1541,7 @@ function validator_form(token_actual) {
             });
         }
 
-        //Elimino contenido del formulario
+        //Eliminó contenido del formulario
         $("#id_bolsa").attr("value", "");
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         bv.resetForm();
@@ -1658,7 +1658,7 @@ function validator_form(token_actual) {
             });
         }
 
-        //Elimino contenido del formulario
+        //Eliminó contenido del formulario
         $("#id_especie").attr("value", "");
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         bv.resetForm();

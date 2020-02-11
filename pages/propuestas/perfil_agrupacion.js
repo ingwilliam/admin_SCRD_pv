@@ -106,7 +106,7 @@ $(document).ready(function () {
                                                                     {                                                                    
                                                                         var json = JSON.parse(data);
 
-                                                                        //elimino disabled todos los componentes
+                                                                        //eliminó disabled todos los componentes
                                                                         if (json.estado == 7)
                                                                         {
                                                                             $("#formulario_principal input,select,button[type=submit]").removeAttr("disabled");
@@ -237,7 +237,7 @@ function validator_form(token_actual) {
                                             notify("danger", "ok", "Agrupación:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                         } else
                                         {
-                                            notify("success", "ok", "Agrupación:", "Se actualizo con el éxito el participante como agrupación.");
+                                            notify("success", "ok", "Agrupación:", "Se actualizó con el éxito el participante como agrupación.");
                                             setTimeout(function () {
                                                 location.href = url_pv_admin + 'pages/propuestas/propuestas.html?m=agr&id=' + $("#conv").attr('value')+'&p='+getURLParameter('p');
                                             }, 1800);

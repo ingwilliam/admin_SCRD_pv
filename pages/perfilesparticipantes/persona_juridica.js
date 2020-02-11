@@ -280,7 +280,7 @@ function validator_form(token_actual) {
                                 } 
                                 else
                                 {
-                                    notify("success", "ok", "Persona jurídica:", "Se actualizo con el éxito el participante como persona jurídica.");                                    
+                                    notify("success", "ok", "Persona jurídica:", "Se actualizó con el éxito el participante como persona jurídica.");                                    
                                 }
                             }
                         }                                                

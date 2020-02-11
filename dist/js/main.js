@@ -243,7 +243,7 @@ function logout()
                 if (data == 'ok')
                 {
                     removeLocalStorage(name_local_storage)
-                    location.href = '../../index.html?msg=Cerro su sesión con éxito.&msg_tipo=success';
+                    location.href = '../../index.html?msg=Cerró su sesión con éxito.&msg_tipo=success';
                 }
             }
         }

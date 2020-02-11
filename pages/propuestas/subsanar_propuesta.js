@@ -52,7 +52,7 @@ $(document).ready(function () {
                             {
                                 var json = JSON.parse(data);
 
-                                //elimino disabled todos los componentes
+                                //eliminó disabled todos los componentes
                                 if (json.estado == 22)
                                 {
                                     $(".inactivar_estado_propuesta").removeAttr("disabled");
@@ -158,7 +158,7 @@ $(document).ready(function () {
                                                     notify("danger", "ok", "Convocatorias:", "Se registro un error al subir el archivo, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                                 } else
                                                 {
-                                                    notify("success", "ok", "Convocatorias:", "Se guardo con el éxito el archivo.");
+                                                    notify("success", "ok", "Convocatorias:", "Se Guardó con el éxito el archivo.");
                                                     cargar_tabla_archivos(token_actual, documento,$("#estado_documento").val());
                                                 }
                                             }
@@ -299,7 +299,7 @@ $(document).ready(function () {
                                                 notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                             } else
                                             {
-                                                location.href = url_pv_admin + 'pages/propuestas/mis_propuestas.html?msg=Felicitaciones, su propuesta quedo subsanada en la plataforma.&msg_tipo=success';
+                                                location.href = url_pv_admin + 'pages/propuestas/mis_propuestas.html?msg=Felicitaciones, su propuesta quedó subsanada en la plataforma.&msg_tipo=success';
                                             }
                                         }
                                     }
@@ -493,7 +493,7 @@ function eliminar(id)
                             notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
                         } else
                         {
-                            notify("success", "ok", "Convocatorias:", "Se elimino con el éxito el archivo.");
+                            notify("success", "ok", "Convocatorias:", "Se eliminó con el éxito el archivo.");
                             $(".tr_" + id).remove();
                         }
                     }
@@ -541,7 +541,7 @@ function eliminar_link(id)
                             notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
                         } else
                         {
-                            notify("success", "ok", "Convocatorias:", "Se elimino con el éxito el archivo.");
+                            notify("success", "ok", "Convocatorias:", "Se eliminó con el éxito el archivo.");
                             $(".tr_link_" + id).remove();
                         }
                     }
@@ -614,7 +614,7 @@ function validator_form(token_actual) {
                             notify("danger", "ok", "Convocatorias:", "Se registro un error al subir el archivo en la carpeta, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                         } else
                         {
-                            notify("success", "ok", "Convocatorias:", "Se guardo con el éxito el archivo.");                            
+                            notify("success", "ok", "Convocatorias:", "Se Guardó con el éxito el archivo.");                            
                             cargar_tabla_link(token_actual, documento,$("#estado_documento").val());
 
                         }

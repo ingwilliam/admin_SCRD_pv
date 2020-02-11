@@ -1069,7 +1069,7 @@ function guardar_verificacion_1(token_actual, id , modulo , verificacion)
                                 $("#btn_documento_" + convocatoriadocumento).removeClass("btn-danger");
                                 $("#btn_documento_" + convocatoriadocumento).addClass("btn-success");
                                 
-                                notify("success", "ok", "Verificación de propuestas:", "Se guardo con éxito la verificación del documento.");
+                                notify("success", "ok", "Verificación de propuestas:", "Se Guardó con éxito la verificación del documento.");
                             }
                         }
                     }
