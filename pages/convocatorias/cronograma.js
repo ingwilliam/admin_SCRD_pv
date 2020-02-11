@@ -348,7 +348,7 @@ function activar_registro(id, token_actual) {
         {
             if (data == 'Si')
             {
-                notify("info", "ok", "Convocatoria recurso:", "Se activo el registro con éxito.");
+                notify("info", "ok", "Convocatoria recurso:", "Se activó el registro con éxito.");
             } else
             {
                 notify("danger", "ok", "Convocatoria recurso:", "Se inactivo el registro con éxito.");
@@ -394,10 +394,10 @@ function acciones_categoria(token_actual)
             {
                 if (data == 'Si')
                 {
-                    notify("info", "ok", "Convocatorias:", "Se activo el evento con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se activó el evento con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se elimino el evento con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se eliminó el evento con éxito.");
                 }
             } else
             {

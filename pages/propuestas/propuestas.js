@@ -124,7 +124,7 @@ $(document).ready(function () {
 
                                                                         var json = JSON.parse(data);
 
-                                                                        //elimino disabled todos los componentes
+                                                                        //eliminó disabled todos los componentes
                                                                         if(json.estado==7)
                                                                         {
                                                                             $("#formulario_principal input,select,button[type=submit]").removeAttr("disabled");   

@@ -123,7 +123,7 @@ function validator_form(token_actual) {
                                 } 
                                 else
                                 {
-                                    notify("success", "ok", "Agrupación:", "Se actualizo con el éxito el participante como agrupación.");                                    
+                                    notify("success", "ok", "Agrupación:", "Se actualizó con el éxito el participante como agrupación.");                                    
                                 }
                             }
                         }                                                

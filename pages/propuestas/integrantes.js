@@ -215,7 +215,7 @@ $(document).ready(function () {
 
                                                                                 var json = JSON.parse(data);
 
-                                                                                //elimino disabled todos los componentes
+                                                                                //eliminó disabled todos los componentes
                                                                                 if (json.estado == 7)
                                                                                 {
                                                                                     $("#formulario_principal input,select,button[type=submit]").removeAttr("disabled");
@@ -333,8 +333,7 @@ function validator_form(token_actual) {
             },
             numero_documento: {
                 validators: {
-                    notEmpty: {message: 'El número de documento de identificación es requerido'},
-                    numeric: {message: 'Debe ingresar solo numeros'}
+                    notEmpty: {message: 'El número de documento de identificación es requerido'}
                 }
             },
             primer_nombre: {
@@ -429,7 +428,7 @@ function validator_form(token_actual) {
                                 notify("danger", "ok", "Integrantes:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                             } else
                             {
-                                notify("success", "ok", "Integrantes:", "Se guardo con el éxito el integrante.");
+                                notify("success", "ok", "Integrantes:", "Se Guardó con el éxito el integrante.");
                                 cargar_tabla(token_actual);
                             }
                         }

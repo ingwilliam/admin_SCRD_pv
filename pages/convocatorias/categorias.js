@@ -458,7 +458,7 @@ function validator_form(token_actual) {
             });
         }
 
-        //Elimino contenido del formulario
+        //Eliminó contenido del formulario
         $("#id_bolsa").attr("value", "");
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         bv.resetForm();
@@ -576,7 +576,7 @@ function validator_form(token_actual) {
             });
         }
 
-        //Elimino contenido del formulario
+        //Eliminó contenido del formulario
         $("#id_especie").attr("value", "");
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         bv.resetForm();
@@ -794,10 +794,10 @@ function acciones_categoria(token_actual)
                                 {
                                     if (data == 'Si')
                                     {
-                                        notify("info", "ok", "Convocatorias:", "Se activo el perfil del participante con éxito.");
+                                        notify("info", "ok", "Convocatorias:", "Se activó el perfil del participante con éxito.");
                                     } else
                                     {
-                                        notify("info", "ok", "Convocatorias:", "Se elimino el perfil del participante con éxito.");
+                                        notify("info", "ok", "Convocatorias:", "Se eliminó el perfil del participante con éxito.");
                                     }
                                 } else
                                 {
@@ -901,10 +901,10 @@ function acciones_categoria(token_actual)
             {
                 if (active == "true")
                 {
-                    notify("info", "ok", "Convocatorias:", "Se activo la categoría con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se activó la categoría con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se elimino el categoría con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se eliminó el categoría con éxito.");
                 }
             } else
             {
@@ -975,7 +975,7 @@ function activar_registro(id, token_actual) {
         {
             if (data == 'Si')
             {
-                notify("info", "ok", "Convocatoria recurso:", "Se activo el registro con éxito.");
+                notify("info", "ok", "Convocatoria recurso:", "Se activó el registro con éxito.");
             } else
             {
                 notify("danger", "ok", "Convocatoria recurso:", "Se inactivo el registro con éxito.");
@@ -1011,12 +1011,12 @@ function activar_participante(tipo_participante, convocatoria, token_actual) {
         {
             if (data == 'Si')
             {
-                notify("info", "ok", "Convocatorias:", "Se activo el perfil del participante con éxito.");
+                notify("info", "ok", "Convocatorias:", "Se activó el perfil del participante con éxito.");
                 $(".tipo_participante_" + tipo_participante).attr('checked', true);
                 $(".tipo_participante_" + tipo_participante).prop("checked", true);
             } else
             {
-                notify("info", "ok", "Convocatorias:", "Se elimino el perfil del participante con éxito.");
+                notify("info", "ok", "Convocatorias:", "Se eliminó el perfil del participante con éxito.");
                 $(".tipo_participante_" + tipo_participante).attr('checked', false);
                 $(".tipo_participante_" + tipo_participante).prop("checked", false);
             }
