@@ -855,10 +855,10 @@ function acciones_categoria(token_actual)
                     }
 
                     $('#form_edit_convocatoria').loadJSON(json.convocatoria);
-
                     //Se realiza este set debido a que los boolean no lo toma con load json
                     $("#seudonimo option[value='" + json.convocatoria.seudonimo + "']").prop('selected', true);
                     $("#bolsa_concursable option[value='" + json.convocatoria.bolsa_concursable + "']").prop('selected', true);
+                    $("#descripcion_bolsa").val(json.convocatoria.descripcion_bolsa);  
                     //Verifico si es bolsa concursable
                     if ($("#bolsa_concursable").val() == "true")
                     {
