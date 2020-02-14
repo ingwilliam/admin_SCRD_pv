@@ -25,7 +25,7 @@ $(document).ready(function () {
                 $("#nuevo_nombre").val("");
                 $("#nuevo_orden").val("");
                 $("#nuevo_seudonimo option[value='false']").prop("selected", true);
-            })
+            });
 
             $('#editar_convocatoria').on('hidden.bs.modal', function () {
                 $("#nuevo_descripcion").jqteVal('');
@@ -38,7 +38,17 @@ $(document).ready(function () {
                 $("#bolsa_concursable option[value='false']").prop("selected", true);
                 $("#descripcion_bolsa").val("");                                      
                 
-            })
+            });
+            
+            //Limpio el formulario de los perfiles de los jurados
+            $('#perfiles_jurados_modal').on('hidden.bs.modal', function () {
+                $("#id_cpj").attr('value', '');
+                $("#perfiles_jurados_modal select option:selected").removeAttr("selected");
+                $("#perfiles_jurados_modal select option:selected").prop("selected", false);
+                $("#perfiles_jurados_modal input[type=text] , #perfiles_jurados_modal textarea").each(function () {
+                    this.value = ''
+                });
+            });
 
             //Realizo la peticion para cargar el formulario
             $.ajax({
@@ -581,7 +591,132 @@ function validator_form(token_actual) {
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         bv.resetForm();
     });
+    
+    //Validar el formulario principal
+    $('.form_validator_jurado').bootstrapValidator({
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            myClass: {
+                selector: '.validacion_general',
+                validators: {
+                    notEmpty: {
+                        message: 'Este campo es requerido'
+                    }
+                }
+            },
+            descripcion_perfil: {
+                validators: {
+                    notEmpty: {message: 'El perfil del jurado es requerido'}
+                }
+            },
+            campo_experiencia: {
+                validators: {
+                    notEmpty: {message: 'Los campos de experiencia son requeridos'}
+                }
+            }
+        }
+    }).on('success.form.bv', function (e) {
+        // Prevent form submission
+        e.preventDefault();
+        // Get the form instance
+        var $form = $(e.target);
 
+        // Get the BootstrapValidator instance
+        var bv = $form.data('bootstrapValidator');
+
+        // Enviar datos del formulario para guardar
+        if ($("#id_cpj").val() == "") {
+            //Se realiza la peticion con el fin de guardar el registro actual
+            $.ajax({
+                type: 'POST',
+                url: url_pv + 'Convocatoriasparticipantes/new/',
+                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria=" + $("#id_categoria").attr('value') + "&cantidad_perfil_jurado=" + $("#cantidad_perfil_jurado").val()
+            }).done(function (result) {
+
+                if (result == 'error')
+                {
+                    notify("danger", "ok", "Convocatoria perfil:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                } else
+                {
+                    if (result == 'error_token')
+                    {
+                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    } else
+                    {
+                        if (result == 'acceso_denegado')
+                        {
+                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                        } else
+                        {
+                            if (result == 'error_maximo_jurados')
+                            {
+                                notify("danger", "remove", "Convocatoria perfil:", "No puede exceder el máximo de perfiles como jurado para esta convocatoria.");
+                            } else
+                            {
+                                if (isNaN(result)) {
+                                    notify("danger", "ok", "Convocatoria perfil:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                } else
+                                {
+                                    cargar_tabla_perfiles_jurado(token_actual);
+                                    notify("success", "ok", "Convocatoria perfil:", "Se creó el perfil del jurado con éxito.");
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        } else {
+            //Realizo la peticion con el fin de editar el registro actual
+            $.ajax({
+                type: 'PUT',
+                url: url_pv + 'Convocatoriasparticipantes/edit/' + $("#id_cpj").attr('value'),
+                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token
+            }).done(function (result) {
+                if (result == 'error')
+                {
+                    notify("danger", "ok", "Convocatoria perfil:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                } else
+                {
+                    if (result == 'error_token')
+                    {
+                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    } else
+                    {
+                        if (result == 'acceso_denegado')
+                        {
+                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                        } else
+                        {
+                            if (isNaN(result))
+                            {
+                                notify("danger", "ok", "Convocatoria perfil:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            } else
+                            {
+                                cargar_tabla_perfiles_jurado(token_actual);
+
+                                notify("info", "ok", "Convocatoria perfil:", "Se edito el perfil del jurado con éxito.");
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        $("#perfiles_jurados_modal select option:selected").removeAttr("selected");
+        $("#perfiles_jurados_modal select option:selected").prop("selected", false);
+        $("#perfiles_jurados_modal input[type=text] , #perfiles_jurados_modal textarea").each(function () {
+            this.value = ''
+        });
+            
+        //Eliminó contenido del formulario
+        $("#id_cpj").attr("value", "");
+        $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
+        bv.resetForm();
+    });
 }
 
 function cargar_tabla(token_actual)
@@ -698,6 +833,7 @@ function acciones_categoria(token_actual)
                     }
 
                     //Cargo los perfiles de los jurados en esta convocatoria
+                    $("#tbody_perfiles_jurados").find("tr").remove();
                     if (json.perfiles_jurados.length > 0) {
                         $.each(json.perfiles_jurados, function (key, perfil_jurado) {
                             var checked = '';
@@ -875,7 +1011,49 @@ function acciones_categoria(token_actual)
                     //Se realiza este set en cada text area html debido a que jste no es compatible con load json
                     $("#descripcion").jqteVal(json.convocatoria.descripcion);
                     $("#orden").val(json.convocatoria.orden);
+                    
+                    //Cargo el select de cantidad de jurados
+                    $('#cantidad_perfil_jurado').find('option').remove();
+                    $('#orden_perfil_jurado').find('option').remove();
+                    $("#cantidad_perfil_jurado").append('<option value="">:: Seleccionar ::</option>');
+                    if (json.cantidad_perfil_jurados.length > 0) {
+                        $.each(json.cantidad_perfil_jurados, function (key, cantidad_perfil_jurado) {
+                            var selected = '';
+                            if (cantidad_perfil_jurado == json.convocatoria.cantidad_perfil_jurado)
+                            {
+                                selected = 'selected="selected"';
+                            }
+                            $("#cantidad_perfil_jurado").append('<option value="' + cantidad_perfil_jurado + '" ' + selected + ' >' + cantidad_perfil_jurado + '</option>');
+                            $("#orden_perfil_jurado").append('<option value="' + cantidad_perfil_jurado + '" >' + cantidad_perfil_jurado + '</option>');
+                        });
+                    }
 
+                    //Cargo el select de areas de conocimientos
+                    $('#area_conocimiento').find('option').remove();
+                    if (json.areas_conocimientos.length > 0) {
+                        $.each(json.areas_conocimientos, function (key, area_conocimiento) {
+                            $("#area_conocimiento").append('<option value="' + area_conocimiento.nombre + '" >' + area_conocimiento.nombre + '</option>');
+                        });
+                    }
+                    
+                    //Cargo el select de niveles educativos
+                    $('#nivel_educativo').find('option').remove();
+                    if (json.niveles_educativos.length > 0) {
+                        $.each(json.niveles_educativos, function (key, nivel_educativo) {
+                            $("#nivel_educativo").append('<option value="' + nivel_educativo.nombre + '" >' + nivel_educativo.nombre + '</option>');
+                        });
+                    }
+                    
+                    //Cargo el select de areas
+                    $('#area_perfil').find('option').remove();                    
+                    if (json.areas.length > 0) {
+                        $.each(json.areas, function (key, area) {
+                            $("#area_perfil").append('<option value="' + area.nombre + '" >' + area.nombre + '</option>');
+                        });
+                    }
+                    
+                    
+                    
                 }
             }
         });
@@ -1070,6 +1248,107 @@ function cargar_tabla_perfiles_participante(token_actual) {
                         $("#tipo_participante_cp").html(json_update.nombre);
                         $("#descripcion_cp").jqteVal(json_update.descripcion_cp);
                     });
+                }
+            }
+        }
+    });
+}
+
+//Carga el registro del perfil del jurado sobre el formulario
+function cargar_perfil_jurado(id) {
+    var json_update = JSON.parse($(".btn-update-convocatoria-jurados-" + id).attr("lang"));
+    $("#formacion_profesional option[value='" + json_update.formacion_profesional + "']").prop('selected', true);
+    $("#formacion_postgrado option[value='" + json_update.formacion_postgrado + "']").prop('selected', true);
+    $("#reside_bogota option[value='" + json_update.reside_bogota + "']").prop('selected', true);
+    $("#orden_perfil_jurado option[value='" + json_update.orden + "']").prop('selected', true);
+
+    $("#area_conocimiento option:selected").removeAttr("selected");
+    $("#area_conocimiento option:selected").prop("selected", false);
+    $.each(JSON.parse(json_update.area_conocimiento), function (i, e) {
+        $("#area_conocimiento option[value='" + e + "']").prop("selected", true);
+    });
+
+    $("#area_perfil option:selected").removeAttr("selected");
+    $("#area_perfil option:selected").prop("selected", false);
+    $.each(JSON.parse(json_update.area_perfil), function (i, e) {
+        $("#area_perfil option[value='" + e + "']").prop("selected", true);
+    });
+
+    $("#nivel_educativo option:selected").removeAttr("selected");
+    $("#nivel_educativo option:selected").prop("selected", false);
+    $.each(JSON.parse(json_update.nivel_educativo), function (i, e) {
+        $("#nivel_educativo option[value='" + e + "']").prop("selected", true);
+    });
+
+    $("#descripcion_perfil").val(json_update.descripcion_perfil);
+    $("#campo_experiencia").val(json_update.campo_experiencia);
+    $("#id_cpj").val(json_update.id);
+}
+
+//Carga la tabla de los perfiles de los jurados
+function cargar_tabla_perfiles_jurado(token_actual) {
+    $.ajax({
+        type: 'GET',
+        data: {"token": token_actual.token, "convocatoria": $("#id_categoria").val(), "tipo_participante": 4},
+        url: url_pv + 'Convocatoriasparticipantes/select'
+    }).done(function (data) {
+        if (data == 'error_metodo')
+        {
+            notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        } else
+        {
+            if (data == 'error_token')
+            {
+                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+            } else
+            {
+                var json = JSON.parse(data);
+                if (json.length > 0) {
+                    $("#tbody_perfiles_jurados").find("tr").remove();
+                    $.each(json, function (key, perfil_jurado) {
+                        var checked = '';
+                        if (perfil_jurado.active == true)
+                        {
+                            checked = "checked='checked'";
+                        }
+                        $("#tbody_perfiles_jurados").append('<tr><td>' + perfil_jurado.orden + '</td><td>' + perfil_jurado.descripcion_perfil + '</td><td><input onclick="activar_perfil_jurado(' + perfil_jurado.id + ',' + $("#id").attr('value') + ',\'' + token_actual.token + '\')" type="checkbox" ' + checked + '></td><td><button type="button" class="btn btn-warning btn-update-convocatoria-jurados-' + perfil_jurado.id + '" onclick="cargar_perfil_jurado(' + perfil_jurado.id + ')" lang="' + JSON.stringify(perfil_jurado).replace(/\"/g, "&quot;") + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                    });
+                }
+            }
+        }
+    });
+}
+
+//Funcion para activar o desactivar el perfil de los jurados
+function activar_perfil_jurado(id, convocatoria, token_actual) {
+    //Se realiza la peticion para desactivar la convocatoria participante
+    $.ajax({
+        type: 'DELETE',
+        data: {"token": token_actual, "modulo": "Convocatorias", "convocatoria": convocatoria},
+        url: url_pv + 'Convocatoriasparticipantes/delete_perfil_jurado/' + id
+    }).done(function (data) {
+        if (data == 'error_token')
+        {
+            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        } else
+        {
+            if (data == 'Si' || data == 'No')
+            {
+                if (data == 'Si')
+                {
+                    notify("info", "ok", "Convocatorias:", "Se activó el perfil del jurado con éxito.");
+                } else
+                {
+                    notify("info", "ok", "Convocatorias:", "Se eliminó el perfil del jurado con éxito.");
+                }
+            } else
+            {
+                if (data == 'acceso_denegado')
+                {
+                    notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                } else
+                {
+                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                 }
             }
         }
