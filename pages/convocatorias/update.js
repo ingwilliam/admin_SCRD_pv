@@ -25,7 +25,7 @@ $(document).ready(function () {
             $("#tipo_participante").attr('value', '');
             $("#descripcion_cp").jqteVal('');
             $("#tipo_participante_cp").html('');
-        })
+        });
 
         //Limpio el formulario de los perfiles de los jurados
         $('#perfiles_jurados_modal').on('hidden.bs.modal', function () {
@@ -35,7 +35,7 @@ $(document).ready(function () {
             $("#perfiles_jurados_modal input[type=text] , form textarea").each(function () {
                 this.value = ''
             });
-        })
+        });
 
         //guardar registro de convocatoria perfil participante
         $("#guardar_cp").click(function () {
