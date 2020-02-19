@@ -148,7 +148,7 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <table id="table_list" class="table">
+                                        <table id="table_list" class="table" style="font-size: 10px;">
                                             <thead>
                                                 <tr>
                                                     <th>Estado</th>
@@ -160,7 +160,8 @@
                                                     <th>Enfoque</th>
                                                     <th>Nombre</th>
                                                     <th>¿Activa?</th>
-                                                    <th>Ver convocatoria</th>                                                    
+                                                    <th>Ver convocatoria</th>
+                                                    <th>Publicar</th>                                                    
                                                     <th>Editar</th>
                                                 </tr>
                                             </thead>
@@ -180,7 +181,28 @@
                 <!-- /.row -->
             </div>
             <!-- /#page-wrapper -->
-
+            
+            <!-- Modal -->
+            <div class="modal fade" id="modal_confirmar_publicar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Publicar convocatoria</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Esta seguro de publicar esta convocatoria?, después de publicada no podrá modificar información de la convocatoria.
+                  </div>
+                  <div class="modal-footer">
+                    <input type="hidden" id="convocatoria_publicar" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="publicar_convocatoria" class="btn btn-primary">Confirmar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
         <!-- /#wrapper -->
 
