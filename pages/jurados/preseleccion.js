@@ -207,8 +207,6 @@ function cargar_select_convocatorias(token_actual, anio, entidad){
             });
         }
 
-
-
         break;
       }
 

@@ -24,7 +24,7 @@
 
         $("#back_step").attr("onclick", " location.href = 'educacion_no_formal.html?m=2&id="+  $("#idc").val()+"' ");
         $("#next_step").attr("onclick", " location.href = 'experiencia_jurado.html?m=2&id="+  $("#idc").val()+"' ");
-        
+
         //Peticion para buscar ciudades
         var json_ciudades = function (request, response) {
             $.ajax({
@@ -37,7 +37,7 @@
                 }
             });
         };
-        
+
         //Cargos el autocomplete de ciudad
         $( "#ciudad_name" ).autocomplete({
             source: json_ciudades,
@@ -55,8 +55,8 @@
             //else { Return your label here }
             }
         });
-        
-        
+
+
          cargar_datos_formulario(token_actual);
          cargar_tabla(token_actual);
          validator_form(token_actual);
@@ -113,7 +113,7 @@
                });
            }
 
-           
+
 
            //Cargo el formulario con los datos
            if( json.experiencialaboral ){
@@ -210,9 +210,9 @@
                      },
                      {"data": "aciones",
                                render: function ( data, type, row ) {
-                                           return '<button title="'+row.id+'" type="button" class="btn btn-warning btn_cargar" data-toggle="modal" data-target="#nueva_ronda\">'
+                                           return '<button title="Editar" id="'+row.id+'" type="button" class="btn btn-warning btn_cargar" data-toggle="modal" data-target="#nueva_ronda\">'
                                                +'<span class="glyphicon glyphicon-edit"></span></button>'
-                                               +'<button title="'+( row.file == null ? "No se ha cargado archivo": row.file)+'" type="button" class="btn btn-primary download_file">'
+                                               +'<button title="'+( row.file == null ? "No se ha cargado archivo": "Descargar archivo")+'" id="'+( row.file == null ? "No se ha cargado archivo": row.file)+'"type="button" class="btn btn-primary download_file">'
                                                + ( row.file == null ? '<span class="glyphicon glyphicon-ban-circle" title="No se ha cargado archivo"></span>':'<span class="glyphicon glyphicon-download-alt"></span>')
                                                + '</button>';
                                            },
@@ -416,7 +416,7 @@
 
      //Permite realizar la carga respectiva de cada registro
      $(".btn_cargar").click(function () {
-         $("#idregistro").val( $(this).attr("title") );
+         $("#idregistro").val( $(this).attr("id") );
          // cargo los datos
          cargar_datos_formulario(token_actual);
      });
@@ -471,7 +471,7 @@
      //desarcar archivo
      $(".download_file").click(function () {
        //Cargo el id file
-       var cod = $(this).attr('title');
+       var cod = $(this).attr('id');
 
        $.AjaxDownloader({
            url: url_pv + 'PropuestasJurados/download_file/',
