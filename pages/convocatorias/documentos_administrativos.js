@@ -283,7 +283,7 @@ function validator_form(token_actual) {
                                 notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                             } else
                             {
-                                notify("info", "ok", "Convocatorias:", "Se edito el area con éxito.");
+                                notify("info", "ok", "Convocatorias:", "Se edita el documento con éxito.");
                                 cargar_tabla(token_actual);
                             }
                         }
