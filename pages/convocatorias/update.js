@@ -431,7 +431,6 @@ $(document).ready(function () {
                 {
                     var json = JSON.parse(data);
 
-                    
                     //Verifico si es cobertura local
                     if (json.convocatoria.cobertura == 1)
                     {
@@ -919,6 +918,16 @@ $(document).ready(function () {
                     $("#no_pueden_participar").jqteVal(json.convocatoria.no_pueden_participar);
                     $("#derechos_ganadores").jqteVal(json.convocatoria.derechos_ganadores);
                     $("#deberes_ganadores").jqteVal(json.convocatoria.deberes_ganadores);
+                    
+                    //Si la convocatoria fue publicada
+                    if(json.convocatoria.estado==5){
+                        $("#form_validator input,select,button[type=submit],textarea").attr("disabled","disabled");   
+                        $(".class_bolsa_concursable").attr("disabled", "disabled");                
+                        $(".diferentes_categorias_button").attr("disabled", "disabled");                
+                        $(".modalidad_jurados").attr("disabled", "disabled");                                                                                        
+                        $(".jqte_editor").prop('contenteditable','false');
+                    }
+                    
 
                 }
             }

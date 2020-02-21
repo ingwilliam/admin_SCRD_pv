@@ -76,6 +76,16 @@ $(document).ready(function () {
                                 
                                 //Asigno la modalidad con el fin de determinar si es para jurados
                                 $("#modalidad").attr('value', json.convocatoria.modalidad);
+                                
+                                //Si la convocatoria fue publicada
+                                if(json.convocatoria.estado==5){
+                                    $("#form_validator input,select,button[type=submit],textarea").attr("disabled","disabled");   
+                                    $("#table_cronogramas button,input,select,button[type=submit],textarea").attr("disabled","disabled");   
+                                    $(".input-sm").css("display","none");                                       
+                                    $(".paginate_button").css("display","none");                                                                           
+                                    $(".jqte_editor").prop('contenteditable','false');
+                                }
+                                
                             }
                         }
                     }
@@ -351,7 +361,7 @@ function cargar_tabla(token_actual)
                     }
                     return row.convocatoria;
                 }
-            }
+            },{ orderable: false, targets: '_all' }
         ]
     });
 

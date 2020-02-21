@@ -285,7 +285,7 @@ function cargar_tabla(token_actual)
               }  
               return row.convocatoria;
             }
-          }
+          },{ orderable: false, targets: '_all' }
             ]
     });
 

@@ -66,7 +66,47 @@ $(document).ready(function () {
             //$('#form_nuevo_ronda').data('bootstrapValidator').resetForm(true);
         });
 
+        //2020-02-21
+        //Si esta publica no puede hacer ninguna accion
+        $.ajax({
+            type: 'GET',
+            data: {"token": token_actual.token, "id": $("#id").attr('value'), "tipo_requisito": "Tecnicos"},
+            url: url_pv + 'Convocatorias/search/'
+        }).done(function (data) {
+            if (data == 'error_metodo')
+            {
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            } else
+            {
+                if (data == 'error')
+                {
+                    location.href = 'list.html?msg=Debe seleccionar una convocatoria, para poder continuar.&msg_tipo=danger';
+                } else
+                {
+                    if (data == 'error_token')
+                    {
+                        location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    } else
+                    {
+                        var json = JSON.parse(data);
 
+                        if (typeof json.convocatoria.id === 'number') {
+
+                            //Si la convocatoria fue publicada
+                            if(json.convocatoria.estado==5){
+                                $("#form_validator button,input,select,button[type=submit],textarea").attr("disabled","disabled");                                   
+                                $("#form_nuevo_ronda button,input,select,button[type=submit],textarea").attr("disabled","disabled");                                   
+                                $("#btn_guardar").css("display","none");
+                                $(".input-sm").css("display","none");                                       
+                                $(".paginate_button").css("display","none");                                                                           
+                                $(".jqte_editor").prop('contenteditable','false');
+                            }
+
+                        }
+                    }
+                }
+            }
+        });
 
     }//fin else
 });//fin document
@@ -86,6 +126,9 @@ function cargar_tabla(id, token_actual) {
             url: url_pv + "Rondas/all_convocatoria",
             data: {"token": token_actual.token, "idcat": id}
         },
+        columnDefs: [
+            { orderable: false, targets: '_all' }
+        ],
         "drawCallback": function (settings) {
             $(".check_activar_t").attr("checked", "true");
             $(".check_activar_f").removeAttr("checked");
