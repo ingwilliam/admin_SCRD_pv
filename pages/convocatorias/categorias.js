@@ -90,6 +90,16 @@ $(document).ready(function () {
                                     $(".diferentes_requisitos").css("display", "none");
                                     $(".diferentes_requisitos_disable").attr("disabled", "disabled");
                                 }
+                                
+                                //Si la convocatoria fue publicada
+                                if(json.convocatoria.estado==5){
+                                    $("#form_validator input,select,button[type=submit],textarea").attr("disabled","disabled");   
+                                    $("#table_categorias button,input,select,button[type=submit],textarea").attr("disabled","disabled");   
+                                    $(".input-sm").css("display","none");                                       
+                                    $(".paginate_button").css("display","none");                                       
+                                    $(".jqte_editor").prop('contenteditable','false');
+                                }
+                                
                             }
                         }
                     }
@@ -728,8 +738,10 @@ function cargar_tabla(token_actual)
         "processing": true,
         "destroy": true,
         "serverSide": true,
-        "lengthMenu": [20, 30, 40],
-        "ordering": false,
+        "lengthMenu": [20, 30, 40],        
+        columnDefs: [
+                { orderable: false, targets: '_all' }
+        ],
         "ajax": {
             url: url_pv + "Convocatorias/all",
             data: {"token": token_actual.token, "convocatoria": $("#id").attr('value')}

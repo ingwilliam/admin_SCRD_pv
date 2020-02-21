@@ -72,6 +72,16 @@ $(document).ready(function () {
                                 {
                                     $(".diferentes_requisitos").css("display", "none");
                                 }
+                                
+                                //Si la convocatoria fue publicada
+                                if(json.convocatoria.estado==5){
+                                    $("#form_nuevo_documento input,select,button[type=submit],textarea").attr("disabled","disabled");   
+                                    $("#table_registros button,input,select,button[type=submit],textarea").attr("disabled","disabled");   
+                                    $(".input-sm").css("display","none");                                       
+                                    $(".paginate_button").css("display","none");                                       
+                                    $(".jqte_editor").prop('contenteditable','false');
+                                }
+                                
                             }
                         }
                     }
@@ -275,7 +285,7 @@ function cargar_tabla(token_actual)
               }  
               return row.convocatoria;
             }
-          }
+          },{ orderable: false, targets: '_all' }
             ]
     });
 
