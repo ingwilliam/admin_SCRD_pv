@@ -243,7 +243,7 @@ function form_tipo_convocatoria(page, id)
                                 {
                                     var redirect = "";
                                     //Modalidades
-                                    if (page == 1 || page == 3 || page == 4 || page == 5|| page == 8)
+                                    if (page == 1 || page == 3 || page == 4 || page == 6 || page == 5|| page == 8)
                                     {
                                         redirect = "/propuestas/perfiles";
                                     }
