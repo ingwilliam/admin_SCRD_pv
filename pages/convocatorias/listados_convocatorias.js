@@ -29,6 +29,10 @@ $(document).ready(function () {
 
             //Agrego url para retornar
             $(".regresar").attr("onclick", "location.href='update.html?id=" + $("#id").attr('value') + "'");
+            
+            $("#listado_propuesta_inscrita").attr("href", url_pv_report+"listado_propuesta_inscrita.php?id=" + $("#id").attr('value') + "&token=" + token_actual.token);
+
+            
 
             //Realizo la peticion para cargar el formulario
             $.ajax({
