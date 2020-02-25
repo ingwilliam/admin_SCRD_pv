@@ -30,10 +30,6 @@ $(document).ready(function () {
             //Agrego url para retornar
             $(".regresar").attr("onclick", "location.href='update.html?id=" + $("#id").attr('value') + "'");
             
-            $("#listado_propuesta_inscrita").attr("href", url_pv_report+"listado_propuesta_inscrita.php?id=" + $("#id").attr('value') + "&token=" + token_actual.token);
-
-            
-
             //Realizo la peticion para cargar el formulario
             $.ajax({
                 type: 'GET',
@@ -65,6 +61,8 @@ $(document).ready(function () {
                                 //Valido si la convocatoria tiene categorias                                            
                                 if (json.convocatoria.tiene_categorias == true)
                                 {
+                                    $("#tiene_categorias").val("Si");                                    
+                                    
                                     $(".diferentes_requisitos").css("display", "block");
                                     //Cargo el select de las categorias                                                
                                     if (json.categorias.length > 0) {
@@ -74,6 +72,7 @@ $(document).ready(function () {
                                     }
                                 } else
                                 {
+                                    $("#tiene_categorias").val("No");
                                     $(".diferentes_requisitos").css("display", "none");
                                 }
                             }
@@ -84,6 +83,86 @@ $(document).ready(function () {
 
             //Cargar datos de la tabla
             cargar_tabla(token_actual);
+
+            //Permite crear el href para crear el reporte de listas
+            $('#tipo_documento').on('change', function () {
+                var tipo = $('#tipo_documento').val();
+                var href="javascript:void(0);";
+                var id = $("#id").attr('value');
+                
+                if($("#tiene_categorias").val()=="Si")
+                {
+                    id = $("#convocatoria").val();
+                }
+                
+                if(tipo=="Listado de participantes inscritos")
+                {
+                    href=url_pv_report+"listado_propuesta_inscrita.php?id=" + id + "&token=" + token_actual.token;
+                }
+                
+                if(tipo=="Listados rechazados y documentos por subsanar")
+                {
+                    href=url_pv_report+"listado_propuesta_rechazados_subsanar.php?id=" + id + "&token=" + token_actual.token;
+                }
+                
+                if(tipo=="Listado de habilitados y rechazados")
+                {
+                    href=url_pv_report+"listado_propuesta_rechazados_habilitados.php?id=" + id + "&token=" + token_actual.token;
+                }
+                
+                if(tipo=="Listado de habilitados")
+                {
+                    href=url_pv_report+"listado_propuesta_habilitados.php?id=" + id + "&token=" + token_actual.token;
+                }    
+                
+                if(tipo=="Listado de preinscritos")
+                {
+                    href=url_pv_report+"listado_propuesta_pre_inscrita.php?id=" + id + "&token=" + token_actual.token;
+                }
+                
+                $("#link_reporte").attr("href", href);
+                
+            });
+            
+            //Permite crear el href para crear el reporte de listas
+            $('#convocatoria').on('change', function () {
+                var tipo = $('#tipo_documento').val();
+                var href="javascript:void(0);";
+                var id = $("#id").attr('value');
+                
+                if($("#tiene_categorias").val()=="Si")
+                {
+                    id = $("#convocatoria").val();
+                }
+                
+                if(tipo=="Listado de participantes inscritos")
+                {
+                    href=url_pv_report+"listado_propuesta_inscrita.php?id=" + id + "&token=" + token_actual.token;
+                }
+                
+                if(tipo=="Listados rechazados y documentos por subsanar")
+                {
+                    href=url_pv_report+"listado_propuesta_rechazados_subsanar.php?id=" + id + "&token=" + token_actual.token;
+                }
+                
+                if(tipo=="Listado de habilitados y rechazados")
+                {
+                    href=url_pv_report+"listado_propuesta_rechazados_habilitados.php?id=" + id + "&token=" + token_actual.token;
+                }
+                
+                if(tipo=="Listado de habilitados")
+                {
+                    href=url_pv_report+"listado_propuesta_habilitados.php?id=" + id + "&token=" + token_actual.token;
+                }
+                
+                if(tipo=="Listado de preinscritos")
+                {
+                    href=url_pv_report+"listado_propuesta_pre_inscrita.php?id=" + id + "&token=" + token_actual.token;
+                }             
+                
+                $("#link_reporte").attr("href", href);
+                
+            });
 
         } else
         {
