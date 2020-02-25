@@ -376,6 +376,11 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'El rol es requerido'}
                 }
             },
+            representante: {
+                validators: {
+                    notEmpty: {message: 'El representante es requerido'}
+                }
+            },
             correo_electronico: {
                 validators: {
                     notEmpty: {message: 'El correo electrónico es requerido'},
@@ -403,7 +408,7 @@ function validator_form(token_actual) {
             url: $form.attr('action'),
             data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
         }).done(function (result) {
-
+            
             if (result == 'error')
             {
                 notify("danger", "ok", "Integrantes:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
@@ -424,12 +429,18 @@ function validator_form(token_actual) {
                             notify("danger", "ok", "Integrantes:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                         } else
                         {
-                            if (isNaN(result)) {
-                                notify("danger", "ok", "Integrantes:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            if (result == 'error_representante')
+                            {
+                                notify("danger", "ok", "Integrantes:", "No puede registrar mas de un representante.");
                             } else
                             {
-                                notify("success", "ok", "Integrantes:", "Se Guardó con el éxito el integrante.");
-                                cargar_tabla(token_actual);
+                                if (isNaN(result)) {
+                                    notify("danger", "ok", "Integrantes:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                } else
+                                {
+                                    notify("success", "ok", "Integrantes:", "Se Guardó con el éxito el integrante.");
+                                    cargar_tabla(token_actual);
+                                }
                             }
                         }
                     }
@@ -510,7 +521,9 @@ function cargar_formulario(token_actual)
 
                     //Cargo el formulario con los datos
                     $('#formulario_principal').loadJSON(json.participante);
-
+                    
+                    $("#representante option[value='" + json.participante.representante + "']").prop('selected', true);
+                    
                     //Valido para que muestre solo los barrios de bogota
                     if ($("#ciudad_residencia").val() == 151)
                     {
