@@ -279,9 +279,10 @@ function cargar_tabla(token_actual)
         "columnDefs": [ {
             "targets": 0,                                        
             "render": function ( data, type, row, meta ) {
+            row.categoria = "<a href='formulario_dinamico.html?id="+row.id_categoria+"' target='_blank'>"+row.categoria+"</a>";
               if(data==null){
-                  row.convocatoria=row.categoria;
-                  row.categoria="";
+                  row.convocatoria = "<a href='formulario_dinamico.html?id="+getURLParameter('id')+"' target='_blank'>"+row.categoria+"</a>";
+                  row.categoria="";                  
               }  
               return row.convocatoria;
             }
