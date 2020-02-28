@@ -75,7 +75,7 @@ $(document).ready(function () {
                                 }
                                 
                                 //Si la convocatoria fue publicada
-                                if(json.convocatoria.estado==5){
+                                if(json.convocatoria.habilitar_cronograma===false){
                                     $("#form_validator input,select,button[type=submit],textarea").attr("disabled","disabled");   
                                     $("#table_cronogramas button,input,select,button[type=submit],textarea").attr("disabled","disabled");   
                                     $(".input-sm").css("display","none");                                       
@@ -270,7 +270,7 @@ function validator_form(token_actual) {
                 {
                     if (result == 'error_token')
                     {
-                        location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                     } else
                     {
                         if (result == 'acceso_denegado')
