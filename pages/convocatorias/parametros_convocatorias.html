@@ -66,9 +66,10 @@
                         <h1 class="page-header">Formulario de la propuesta</h1>
                     </div>                    
                     <div class="panel-body" style="text-align: right">                    
-                        <button type="button" class="btn btn-default btn-circle btn-lg regresar" onclick=""><i class="fa fa-arrow-left"></i></button>
-                        <button type="button" class="btn btn-primary btn-circle btn-lg" onclick="location.href = 'list.html'"><i class="fa fa-list"></i></button>
-                        <button type="button" class="btn btn-success btn-circle btn-lg cargar_formulario" data-toggle="modal" data-target="#nuevo_evento" ><i class="fa fa-file-o"></i></button>
+                        <button type="button" class="btn btn-default btn-circle btn-lg regresar btn_tooltip" data-original-title="Información general" onclick=""><i class="fa fa-arrow-left"></i></button>
+                        <button type="button" class="btn btn-primary btn-circle btn-lg btn_tooltip" data-original-title="Buscar convocatorias" onclick="location.href = 'list.html'"><i class="fa fa-list"></i></button>
+                        <button type="button" class="btn btn-info btn-circle btn-lg" onclick="window.open('formulario_dinamico.html?id='+getURLParameter('id'),'_blank')" data-toggle="tooltip" data-original-title="Previsualización del formulario de la propuesta"><i class="fa fa-eye"></i></button>
+                        <button type="button" class="btn btn-success btn-circle btn-lg cargar_formulario btn_tooltip" data-toggle="modal" data-target="#nuevo_evento" data-original-title="Crear variables"><i class="fa fa-file-o"></i></button>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
