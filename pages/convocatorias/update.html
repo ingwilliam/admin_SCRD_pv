@@ -125,14 +125,18 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Descripción corta de la convocatoria <span class="icono_requerido">*</span> <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Si la descripción es mayor a 420 caracteres, la descripción se mostrara en información básica de la convocatoria."><i class="fa fa-question"></i></button></label>
-                                                <textarea id="descripcion" name="descripcion" class="form-control" rows="3"></textarea>                                                
+                                                <label>Descripción corta de la convocatoria <span class="icono_requerido">*</span> <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lo recomendado es que no sea mayor a 420 caracteres."><i class="fa fa-question"></i></button></label>
+                                                <textarea id="descripcion_html" style="display: none" class="descripcion"></textarea>
+                                                <br/>
+                                                <button lang="descripcion" dir="Descripción corta de la convocatoria" type="button" class="btn btn-danger btn-circle btn_tooltip cargar_modal_descripcion" data-toggle="modal" data-target="#modal_html" data-placement="top" title="Cargar la descripción corta de la convocatoria."><i class="fa fa-plus"></i></button>
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>                                                                                                            
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Justificación de la convocatoria <span class="icono_requerido">*</span> <button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="El funcionario deberá argumentar por qué es importante crear y publicar la convocatoria. (Esta variable no es de carácter público)."><i class="fa fa-question"></i></button></label>
-                                                <textarea id="justificacion" name="justificacion" class="form-control " rows="3"></textarea>                                                
+                                                <textarea id="justificacion_html" style="display: none" class="justificacion"></textarea>
+                                                <br/>
+                                                <button lang="justificacion" dir="Justificación de la convocatoria" type="button" class="btn btn-danger btn-circle btn_tooltip cargar_modal_descripcion" data-toggle="modal" data-target="#modal_html" data-placement="top" title="Cargar la justificación de la convocatoria."><i class="fa fa-plus"></i></button>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>                                                                                                                                                    
                                     </div>                                    
@@ -419,7 +423,9 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Objeto <span class="icono_requerido">*</span></label>
-                                                <textarea id="objeto" name="objeto" class="form-control " rows="3"></textarea>
+                                                <textarea id="objeto_html" style="display: none" class="objeto"></textarea>
+                                                <br/>
+                                                <button lang="objeto" dir="Objeto" type="button" class="btn btn-danger btn-circle btn_tooltip cargar_modal_descripcion" data-toggle="modal" data-target="#modal_html" data-placement="top" title="Cargar el objeto."><i class="fa fa-plus"></i></button>                                                                                                                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
                                     </div>
@@ -427,7 +433,9 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Quiénes no pueden participar <span class="icono_requerido">*</span></label>
-                                                <textarea id="no_pueden_participar" name="no_pueden_participar" class="form-control " rows="3"></textarea>
+                                                <textarea id="no_pueden_participar_html" style="display: none" class="no_pueden_participar"></textarea>
+                                                <br/>
+                                                <button lang="no_pueden_participar" dir="Quiénes no pueden participar" type="button" class="btn btn-danger btn-circle btn_tooltip cargar_modal_descripcion" data-toggle="modal" data-target="#modal_html" data-placement="top" title="Cargar quiénes no pueden participar."><i class="fa fa-plus"></i></button>                                                                                                                                                                                                                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
                                     </div>
@@ -435,7 +443,9 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Derechos específicos de los ganadores <span class="icono_requerido">*</span></label>
-                                                <textarea id="derechos_ganadores" name="derechos_ganadores" class="form-control " rows="3"></textarea>
+                                                <textarea id="derechos_ganadores_html" style="display: none" class="derechos_ganadores"></textarea>
+                                                <br/>
+                                                <button lang="derechos_ganadores" dir="Derechos específicos de los ganadores" type="button" class="btn btn-danger btn-circle btn_tooltip cargar_modal_descripcion" data-toggle="modal" data-target="#modal_html" data-placement="top" title="Cargar derechos específicos de los ganadores."><i class="fa fa-plus"></i></button>                                                                                                                                                                                                                                                                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
                                     </div>
@@ -443,7 +453,9 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Deberes específicos de los ganadores <span class="icono_requerido">*</span></label>
-                                                <textarea id="deberes_ganadores" name="deberes_ganadores" class="form-control " rows="3"></textarea>
+                                                <textarea id="deberes_ganadores_html" style="display: none" class="deberes_ganadores"></textarea>
+                                                <br/>
+                                                <button lang="deberes_ganadores" dir="Deberes específicos de los ganadores" type="button" class="btn btn-danger btn-circle btn_tooltip cargar_modal_descripcion" data-toggle="modal" data-target="#modal_html" data-placement="top" title="Cargar deberes específicos de los ganadores."><i class="fa fa-plus"></i></button>                                                                                                                                                                                                                                                                                                                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
                                     </div>
@@ -806,6 +818,33 @@
                                                             </div>
                                                         </div>
                                                     </div>                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="modal fade" id="modal_html">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <!-- Modal que se activa cuando se realiza cualquier peticion ajax -->
+                                            <div class="loading centrado-porcentual"></div>
+                                            <!-- cabecera del diálogo -->
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title" id="html_titulo"></h4>                                                    
+                                            </div>
+
+                                            <!-- cuerpo del diálogo -->
+                                            <div class="modal-body" style="height: 450px; overflow-y: auto;">
+                                                    <textarea id="html_general" class="form-control" rows="3"></textarea>
+                                                    <br/>
+                                                    <div class="row">
+                                                        <div class="col-lg-12" style="text-align: right">                                                            
+                                                            <button id="html_guardar" type="button" class="btn btn-warning">Guardar</button>                                            
+                                                            <input type="hidden" id="variable" />
+                                                            <input type="hidden" id="titulo_variable" />
+                                                        </div>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>

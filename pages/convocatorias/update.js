@@ -22,12 +22,7 @@ $(document).ready(function () {
 
         CKEDITOR.config.height = 150;
         CKEDITOR.config.width = 'auto';
-        CKEDITOR.replace('descripcion');
-        CKEDITOR.replace('justificacion');
-        CKEDITOR.replace('objeto');
-        CKEDITOR.replace('no_pueden_participar');
-        CKEDITOR.replace('derechos_ganadores');
-        CKEDITOR.replace('deberes_ganadores');
+        CKEDITOR.replace('html_general');
         CKEDITOR.replace('descripcion_cp');
 
         //Limpio el formulario de los perfiles de los participantes
@@ -48,7 +43,69 @@ $(document).ready(function () {
             });
         });
 
-        //guardar registro de convocatoria perfil participante
+        //cargo el html dependiendo la varaible
+        $(".cargar_modal_descripcion").click(function () {
+            var variable = $(this).attr("lang");
+            var value = $("#"+variable+"_html").val();
+            var titulo =$(this).attr("dir");
+            $("#html_titulo").html(titulo);
+            $("#variable").val(variable);
+            $("#titulo_variable").val(titulo);
+            CKEDITOR.instances.html_general.setData(value);
+        });
+        
+        //guardo la descripcion html
+        $("#html_guardar").click(function () {
+            if(CKEDITOR.instances.html_general.getData()=="")
+            {
+                notify("danger", "ok", "Convocatorias:", "La variable ("+$("#titulo_variable").val()+"), es obligatoria");                
+            }
+            else
+            {
+                var values_html = {modulo:"Convocatorias","variable":$("#variable").val(), value_CKEDITOR:CKEDITOR.instances.html_general.getData(), modulo:"Convocatorias", token:token_actual.token}; 
+                
+                //Realizo la peticion con el fin de editar el registro actual
+                    $.ajax({
+                        type: 'PUT',
+                        url: url_pv + 'Convocatorias/edit/' + $("#id").attr('value'),
+                        data: $.param(values_html)                        
+                    }).done(function (result) {
+                        if (result == 'error')
+                        {
+                            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        } else
+                        {
+                            if (result == 'error_token')
+                            {
+                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                            } else
+                            {
+                                if (result == 'acceso_denegado')
+                                {
+                                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                } else
+                                {
+                                    if (isNaN(result))
+                                    {
+                                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+                                        notify("info", "ok", "Convocatorias:", "Se edito la convocatoria con éxito.");
+                                        $("#"+$("#variable").val()+"_html").val(CKEDITOR.instances.html_general.getData());                                                                                
+                                    }
+                                }
+                            }
+                        }
+                    });
+            }                        
+        });
+        
+        //Limpio el ckeditor al cerra el pop
+        $('#modal_html').on('hidden.bs.modal', function () {
+            CKEDITOR.instances.html_general.setData('');            
+        });
+        
+        
         $("#guardar_cp").click(function () {
             if ($("#id_cp").val() != "") {
                 //Realizo la peticion con el fin de editar el registro del perfil de la convocatoria
@@ -934,13 +991,14 @@ $(document).ready(function () {
                     }
                     
                     //Se realiza este set en cada text area html debido a que jste no es compatible con load json
+                    /*
                     CKEDITOR.instances.descripcion.setData(json.convocatoria.descripcion);
                     CKEDITOR.instances.justificacion.setData(json.convocatoria.justificacion);
                     CKEDITOR.instances.objeto.setData(json.convocatoria.objeto);
                     CKEDITOR.instances.no_pueden_participar.setData(json.convocatoria.no_pueden_participar);
                     CKEDITOR.instances.derechos_ganadores.setData(json.convocatoria.derechos_ganadores);
                     CKEDITOR.instances.deberes_ganadores.setData(json.convocatoria.deberes_ganadores);
-                    
+                    */
                     
 
                 }
@@ -1275,88 +1333,45 @@ function validator_form(token_actual) {
 
         // Get the BootstrapValidator instance
         var bv = $form.data('bootstrapValidator');
+                                
+        var values=$form.serializeArray();        
 
-        var enviar=true;
-        
-        if(CKEDITOR.instances.descripcion.getData()=="")
-        {
-            notify("danger", "ok", "Convocatorias:", "La descripción corta de la convocatoria es requerida");
-            enviar=false;
-        }
-        if(CKEDITOR.instances.justificacion.getData()=="")
-        {
-            notify("danger", "ok", "Convocatorias:", "La justificación de la convocatoria es requerida");
-            enviar=false;
-        }
-        if(CKEDITOR.instances.objeto.getData()=="")
-        {
-            notify("danger", "ok", "Convocatorias:", "El objeto es requerido");
-            enviar=false;
-        }
-        if(CKEDITOR.instances.no_pueden_participar.getData()=="")
-        {
-            notify("danger", "ok", "Convocatorias:", "Quiénes no pueden participar son requeridos");
-            enviar=false;
-        }
-        if(CKEDITOR.instances.derechos_ganadores.getData()=="")
-        {
-            notify("danger", "ok", "Convocatorias:", "Los derechos específicos de los ganadores son requeridos");
-            enviar=false;
-        }
-        if(CKEDITOR.instances.deberes_ganadores.getData()=="")
-        {
-            notify("danger", "ok", "Convocatorias:", "Los deberes específicos de los ganadores son requeridos");
-            enviar=false;
-        }
-        
-        
-        if(enviar)
-        {
-            var values=$form.serializeArray();        
-        
-            values.find(input => input.name == 'descripcion').value = CKEDITOR.instances.descripcion.getData();
-            values.find(input => input.name == 'justificacion').value = CKEDITOR.instances.justificacion.getData();
-            values.find(input => input.name == 'objeto').value = CKEDITOR.instances.objeto.getData();
-            values.find(input => input.name == 'no_pueden_participar').value = CKEDITOR.instances.no_pueden_participar.getData();
-            values.find(input => input.name == 'derechos_ganadores').value = CKEDITOR.instances.derechos_ganadores.getData();
-            values.find(input => input.name == 'deberes_ganadores').value = CKEDITOR.instances.deberes_ganadores.getData();        
-
-            //Realizo la peticion con el fin de editar el registro actual
-            $.ajax({
-                type: 'PUT',
-                url: url_pv + 'Convocatorias/edit/' + $("#id").attr('value'),
-                data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token
-            }).done(function (result) {
-                if (result == 'error')
+        //Realizo la peticion con el fin de editar el registro actual
+        $.ajax({
+            type: 'PUT',
+            url: url_pv + 'Convocatorias/edit/' + $("#id").attr('value'),
+            data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token
+        }).done(function (result) {
+            if (result == 'error')
+            {
+                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            } else
+            {
+                if (result == 'error_token')
                 {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                 } else
                 {
-                    if (result == 'error_token')
+                    if (result == 'acceso_denegado')
                     {
-                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                     } else
                     {
-                        if (result == 'acceso_denegado')
+                        if (isNaN(result))
                         {
-                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                         } else
                         {
-                            if (isNaN(result))
-                            {
-                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                            } else
-                            {
-                                notify("info", "ok", "Convocatorias:", "Se edito la convocatoria con éxito.");
-                            }
+                            notify("info", "ok", "Convocatorias:", "Se edito la convocatoria con éxito.");
                         }
                     }
                 }
-            });
+            }
+        });
 
-            //$form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
-            bv.resetForm();
-        }
+        //$form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
+        bv.resetForm();
+        
     
     
     
