@@ -16,11 +16,16 @@ $(document).ready(function () {
         if ($("#id").val() != "") {
 
             //Establesco los text area html
-            $('.textarea_html').jqte();
+            if (CKEDITOR.env.ie && CKEDITOR.env.version < 9)
+                CKEDITOR.tools.enableHtml5Elements(document);
+
+            CKEDITOR.config.height = 150;
+            CKEDITOR.config.width = 'auto';
+            CKEDITOR.replace('descripcion');
 
             //Limpio el formulario de las categorias
             $('#nuevo_evento').on('hidden.bs.modal', function () {
-                $("#descripcion").jqteVal('');
+                CKEDITOR.instances.descripcion.setData('');
                 $("#orden").val("");
                 $("#requisto option[value='']").prop("selected", true);
                 $("#subsanable option[value='true']").prop("selected", true);
@@ -83,7 +88,7 @@ $(document).ready(function () {
                                     $("#table_cronogramas button,input,select,button[type=submit],textarea").attr("disabled","disabled");   
                                     $(".input-sm").css("display","none");                                       
                                     $(".paginate_button").css("display","none");                                                                           
-                                    $(".jqte_editor").prop('contenteditable','false');
+                                    CKEDITOR.instances.descripcion.config.readOnly = true;                                    
                                 }
                                 
                             }
@@ -202,11 +207,6 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'Los tipos de archivos son requeridos'}
                 }
             },
-            descripcion: {
-                validators: {
-                    notEmpty: {message: 'La descripción es requerida'}
-                }
-            },
             orden: {
                 validators: {
                     notEmpty: {message: 'El orden es requerido'},
@@ -222,13 +222,18 @@ function validator_form(token_actual) {
 
         // Get the BootstrapValidator instance
         var bv = $form.data('bootstrapValidator');
+        
+        var values=$form.serializeArray();        
+        
+        values.find(input => input.name == 'descripcion').value = CKEDITOR.instances.descripcion.getData();
+
 
         if ($("#id_registro").val().length < 1) {
             //Se realiza la peticion con el fin de guardar el registro actual
             $.ajax({
                 type: 'POST',
                 url: url_pv + 'Convocatoriasdocumentos/new',
-                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
+                data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
             }).done(function (result) {
 
                 if (result == 'error')
@@ -265,7 +270,7 @@ function validator_form(token_actual) {
             $.ajax({
                 type: 'PUT',
                 url: url_pv + 'Convocatoriasdocumentos/edit/' + $("#id_registro").attr('value'),
-                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
+                data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
             }).done(function (result) {
                 if (result == 'error')
                 {
@@ -297,8 +302,8 @@ function validator_form(token_actual) {
         }
 
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
-        bv.resetForm();
-        $("#descripcion").jqteVal('');
+        bv.resetForm();        
+        CKEDITOR.instances.descripcion.setData('');
         $("#orden").val("");
         $("#requisto option[value='']").prop("selected", true);
         $("#subsanable option[value='true']").prop("selected", true);
@@ -499,8 +504,8 @@ function acciones_categoria(token_actual)
                     });
                     $("#tamano_permitido option[value='" + json.convocatoriadocumento.tamano_permitido + "']").prop('selected', true);
                     $("#subsanable option[value='" + json.convocatoriadocumento.subsanable + "']").prop('selected', true);
-                    $("#obligatorio option[value='" + json.convocatoriadocumento.obligatorio + "']").prop('selected', true);
-                    $("#descripcion").jqteVal(json.convocatoriadocumento.descripcion);
+                    $("#obligatorio option[value='" + json.convocatoriadocumento.obligatorio + "']").prop('selected', true);                    
+                    CKEDITOR.instances.descripcion.setData(json.convocatoriadocumento.descripcion);
                     $("#id_registro").val(json.convocatoriadocumento.id);
 
                 }

@@ -17,18 +17,25 @@ $(document).ready(function () {
         if ($("#id").val() != "") {
 
             //Establesco los text area html
-            $('.textarea_html').jqte();
+            if (CKEDITOR.env.ie && CKEDITOR.env.version < 9)
+                CKEDITOR.tools.enableHtml5Elements(document);
 
+            CKEDITOR.config.height = 150;
+            CKEDITOR.config.width = 'auto';
+            CKEDITOR.replace('nuevo_descripcion');
+            CKEDITOR.replace('descripcion');
+            CKEDITOR.replace('descripcion_cp');
+            
             //Limpio el formulario de las categorias
             $('#nueva_convocatoria').on('hidden.bs.modal', function () {
-                $("#nuevo_descripcion").jqteVal('');
+                CKEDITOR.instances.nuevo_descripcion.setData('');
                 $("#nuevo_nombre").val("");
                 $("#nuevo_orden").val("");
                 $("#nuevo_seudonimo option[value='false']").prop("selected", true);
             });
 
             $('#editar_convocatoria').on('hidden.bs.modal', function () {
-                $("#nuevo_descripcion").jqteVal('');
+                CKEDITOR.instances.nuevo_descripcion.setData('');
                 $("#nuevo_nombre").val("");
                 $("#nuevo_orden").val("");
                 $("#nuevo_seudonimo option[value='false']").prop("selected", true);                
@@ -97,7 +104,9 @@ $(document).ready(function () {
                                     $("#table_categorias button,input,select,button[type=submit],textarea").attr("disabled","disabled");   
                                     $(".input-sm").css("display","none");                                       
                                     $(".paginate_button").css("display","none");                                       
-                                    $(".jqte_editor").prop('contenteditable','false');
+                                    CKEDITOR.instances.nuevo_descripcion.config.readOnly = true;
+                                    CKEDITOR.instances.descripcion.config.readOnly = true;
+                                    CKEDITOR.instances.descripcion_cp.config.readOnly = true;
                                 }
                                 
                             }
@@ -132,10 +141,13 @@ $(document).ready(function () {
         $("#guardar_cp").click(function () {
             if ($("#id_cp").val() != "") {
                 //Realizo la peticion con el fin de editar el registro del perfil de la convocatoria
+                
+                var values_perfil = {active:"TRUE", descripcion_perfil:CKEDITOR.instances.descripcion_cp.getData(), modulo:"Convocatorias", token:token_actual.token}; 
+                
                 $.ajax({
                     type: 'PUT',
                     url: url_pv + 'Convocatoriasparticipantes/edit/' + $("#id_cp").attr('value'),
-                    data: "active=TRUE&descripcion_perfil=" + $("#descripcion_cp").val() + "&modulo=Convocatorias&token=" + token_actual.token
+                    data: $.param(values_perfil)
                 }).done(function (result) {
                     if (result == 'error')
                     {
@@ -165,7 +177,7 @@ $(document).ready(function () {
                                     //Limpio el formulario
                                     $("#id_cp").attr('value', '');
                                     $("#id_tipo_participante").attr('value', '');
-                                    $("#descripcion_cp").jqteVal('');
+                                    CKEDITOR.instances.descripcion_cp.setData('');
                                     $("#tipo_participante_cp").html('');
 
                                     cargar_tabla_perfiles_participante(token_actual);
@@ -181,7 +193,7 @@ $(document).ready(function () {
                     $.ajax({
                         type: 'POST',
                         url: url_pv + 'Convocatoriasparticipantes/new/',
-                        data: "active=TRUE&descripcion_perfil=" + $("#descripcion_cp").val() + "&convocatoria=" + $("#id_categoria").val() + "&tipo_participante=" + $("#id_tipo_participante").val() + "&modulo=Convocatorias&token=" + token_actual.token
+                        data: "active=TRUE&descripcion_perfil=" + CKEDITOR.instances.descripcion_cp.getData() + "&convocatoria=" + $("#id_categoria").val() + "&tipo_participante=" + $("#id_tipo_participante").val() + "&modulo=Convocatorias&token=" + token_actual.token
                     }).done(function (result) {
 
                         if (result == 'error')
@@ -211,8 +223,8 @@ $(document).ready(function () {
 
                                         //Limpio el formulario
                                         $("#id_cp").attr('value', '');
-                                        $("#id_tipo_participante").attr('value', '');
-                                        $("#descripcion_cp").jqteVal('');
+                                        $("#id_tipo_participante").attr('value', '');                                        
+                                        CKEDITOR.instances.descripcion_cp.setData('');
                                         $("#tipo_participante_cp").html('');
 
                                         cargar_tabla_perfiles_participante(token_actual);
@@ -248,11 +260,6 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'El nombre de la convocatoria es requerido'}
                 }
             },
-            descripcion: {
-                validators: {
-                    notEmpty: {message: 'La descripción corta de la convocatoria es requerida'}
-                }
-            },
             orden: {
                 validators: {
                     notEmpty: {message: 'El orden es requerido'},
@@ -269,11 +276,16 @@ function validator_form(token_actual) {
         // Get the BootstrapValidator instance
         var bv = $form.data('bootstrapValidator');
 
+        var values=$form.serializeArray();        
+        
+        values.find(input => input.name == 'descripcion').value = CKEDITOR.instances.nuevo_descripcion.getData();
+
+
         //Se realiza la peticion con el fin de guardar el registro actual
         $.ajax({
             type: 'POST',
             url: url_pv + 'Convocatorias/new_categoria',
-            data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token
+            data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token
         }).done(function (result) {
 
             if (result == 'error')
@@ -300,8 +312,8 @@ function validator_form(token_actual) {
         });
 
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
-        bv.resetForm();
-        $("#nuevo_descripcion").jqteVal('');
+        bv.resetForm();        
+        CKEDITOR.instances.nuevo_descripcion.setData('');
         $("#nuevo_nombre").val("");
         $("#nuevo_orden").val("");
         $("#nuevo_seudonimo option[value='false']").prop("selected", true);
@@ -318,11 +330,6 @@ function validator_form(token_actual) {
             nombre: {
                 validators: {
                     notEmpty: {message: 'El nombre de la convocatoria es requerido'}
-                }
-            },
-            descripcion: {
-                validators: {
-                    notEmpty: {message: 'La descripción corta de la convocatoria es requerida'}
                 }
             },
             tipo_estimulo: {
@@ -357,11 +364,16 @@ function validator_form(token_actual) {
         // Get the BootstrapValidator instance
         var bv = $form.data('bootstrapValidator');
 
+        var values=$form.serializeArray();        
+        
+        values.find(input => input.name == 'descripcion').value = CKEDITOR.instances.descripcion.getData();
+
+
         //Se realiza la peticion con el fin de guardar el registro actual
         $.ajax({
             type: 'PUT',
             url: url_pv + 'Convocatorias/edit_categoria/' + $("#id").attr('value'),
-            data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token
+            data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token
         }).done(function (result) {
 
             if (result == 'error')
@@ -786,15 +798,14 @@ function acciones_categoria(token_actual)
         } else
         {
             $("input[name='numero_estimulos']").removeAttr("disabled");
-            $(".class_bolsa_concursable").attr("disabled", "disabled");
-            $("#descripcion_bolsa").val("");
+            $(".class_bolsa_concursable").attr("disabled", "disabled");            
         }
     });
 
     //Limpio el formulario de los perfiles de los participantes
     $('#editar_convocatoria').on('hidden.bs.modal', function () {
-        $("#id_cp").attr('value', '');
-        $("#descripcion_cp").jqteVal('');
+        $("#id_cp").attr('value', '');        
+        CKEDITOR.instances.descripcion_cp.setData('');
         $("#tipo_participante_cp").html('');
     })
 
@@ -888,8 +899,8 @@ function acciones_categoria(token_actual)
                         var json_update = JSON.parse($(this).attr("lang"));
                         $("#id_cp").val(json_update.id_cp);
                         $("#id_tipo_participante").val(json_update.id);
-                        $("#tipo_participante_cp").html(json_update.nombre);
-                        $("#descripcion_cp").jqteVal(json_update.descripcion_cp);
+                        $("#tipo_participante_cp").html(json_update.nombre);                        
+                        CKEDITOR.instances.descripcion_cp.setData(json_update.descripcion_cp);
                     });
 
                     //Creamos los participantes en la convocatoria
@@ -1020,8 +1031,8 @@ function acciones_categoria(token_actual)
                         $("#descripcion_bolsa").val("");
                     }
 
-                    //Se realiza este set en cada text area html debido a que jste no es compatible con load json
-                    $("#descripcion").jqteVal(json.convocatoria.descripcion);
+                    //Se realiza este set en cada text area html debido a que jste no es compatible con load json                    
+                    CKEDITOR.instances.descripcion.setData(json.convocatoria.descripcion);
                     $("#orden").val(json.convocatoria.orden);
                     
                     //Cargo el select de cantidad de jurados
@@ -1257,8 +1268,8 @@ function cargar_tabla_perfiles_participante(token_actual) {
                         var json_update = JSON.parse($(this).attr("lang"));
                         $("#id_cp").val(json_update.id_cp);
                         $("#id_tipo_participante").val(json_update.id);
-                        $("#tipo_participante_cp").html(json_update.nombre);
-                        $("#descripcion_cp").jqteVal(json_update.descripcion_cp);
+                        $("#tipo_participante_cp").html(json_update.nombre);                        
+                        CKEDITOR.instances.descripcion_cp.setData(json_update.descripcion_cp);
                     });
                 }
             }

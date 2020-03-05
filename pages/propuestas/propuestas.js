@@ -290,6 +290,7 @@ $(document).ready(function () {
                                                                         });
                                                                     }
                                                                 }
+                                                                $("#barrio").append('<option value="">:: Seleccionar ::</option>');
                                                             }
                                                         }
                                                     });
@@ -475,7 +476,7 @@ function validator_form(token_actual) {
 
         if ($("#bogota").val() == 'true')
         {
-            if ($("#localidad").val() != "" || $("#upz").val() != "" || $("#barrio").val() != "")
+            if ($("#localidad").val() != "" || $("#upz").val() != "" || $("#barrio").val() != "" )
             {
                 validar = true;
             } else
