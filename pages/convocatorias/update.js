@@ -987,7 +987,14 @@ $(document).ready(function () {
                         $("#form_validator input,select,button[type=submit],textarea").attr("disabled","disabled");   
                         $(".class_bolsa_concursable").attr("disabled", "disabled");                
                         $(".diferentes_categorias_button").attr("disabled", "disabled");                
-                        $(".modalidad_jurados").attr("disabled", "disabled");                    
+                        $(".modalidad_jurados").attr("disabled", "disabled");
+                        
+                        if (json.convocatoria.diferentes_categorias == false)
+                        {
+                            $("#btn-perfile-jurados").removeAttr("disabled");
+                            $(".validar_jurado").removeAttr("disabled");
+                        }                        
+                        
                     }
                     
                     //Se realiza este set en cada text area html debido a que jste no es compatible con load json

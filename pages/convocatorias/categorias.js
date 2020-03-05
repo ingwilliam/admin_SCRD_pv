@@ -107,6 +107,14 @@ $(document).ready(function () {
                                     CKEDITOR.instances.nuevo_descripcion.config.readOnly = true;
                                     CKEDITOR.instances.descripcion.config.readOnly = true;
                                     CKEDITOR.instances.descripcion_cp.config.readOnly = true;
+                                    
+                                    if (json.convocatoria.diferentes_categorias == true)
+                                    {
+                                        $(".btn_categoria").removeAttr("disabled");
+                                        $(".validar_jurado").removeAttr("disabled");
+                                        $("#btn_perfiles_participantes").attr("disabled","disabled");
+                                    }
+                                    
                                 }
                                 
                             }
@@ -649,14 +657,14 @@ function validator_form(token_actual) {
 
         // Get the BootstrapValidator instance
         var bv = $form.data('bootstrapValidator');
-
+        
         // Enviar datos del formulario para guardar
         if ($("#id_cpj").val() == "") {
             //Se realiza la peticion con el fin de guardar el registro actual
             $.ajax({
                 type: 'POST',
                 url: url_pv + 'Convocatoriasparticipantes/new/',
-                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria=" + $("#id_categoria").attr('value') + "&cantidad_perfil_jurado=" + $("#cantidad_perfil_jurado").val()
+                data: $form.serialize() + "&tipo_participante="+$("#tipo_participante").val()+"&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria=" + $("#id_categoria").attr('value') + "&cantidad_perfil_jurado=" + $("#cantidad_perfil_jurado").val()
             }).done(function (result) {
 
                 if (result == 'error')
