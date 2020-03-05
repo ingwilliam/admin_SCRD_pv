@@ -925,21 +925,22 @@ $(document).ready(function () {
                         $('.modalidad_jurados').css("display", "block");
                     }
                     
-                    
                     //Si la convocatoria fue publicada
                     if(json.convocatoria.estado==5){
                         $("#form_validator input,select,button[type=submit],textarea").attr("disabled","disabled");   
                         $(".class_bolsa_concursable").attr("disabled", "disabled");                
                         $(".diferentes_categorias_button").attr("disabled", "disabled");                
-                        $(".modalidad_jurados").attr("disabled", "disabled");                                                                                                                                        
-                        CKEDITOR.instances.descripcion.config.readOnly = true;
-                        CKEDITOR.instances.justificacion.config.readOnly = true;
-                        CKEDITOR.instances.objeto.config.readOnly = true;
-                        CKEDITOR.instances.no_pueden_participar.config.readOnly = true;
-                        CKEDITOR.instances.derechos_ganadores.config.readOnly = true;
-                        CKEDITOR.instances.deberes_ganadores.config.readOnly = true;
-                        CKEDITOR.instances.descripcion_cp.config.readOnly = true;
+                        $(".modalidad_jurados").attr("disabled", "disabled");                    
                     }
+                    
+                    //Se realiza este set en cada text area html debido a que jste no es compatible con load json
+                    CKEDITOR.instances.descripcion.setData(json.convocatoria.descripcion);
+                    CKEDITOR.instances.justificacion.setData(json.convocatoria.justificacion);
+                    CKEDITOR.instances.objeto.setData(json.convocatoria.objeto);
+                    CKEDITOR.instances.no_pueden_participar.setData(json.convocatoria.no_pueden_participar);
+                    CKEDITOR.instances.derechos_ganadores.setData(json.convocatoria.derechos_ganadores);
+                    CKEDITOR.instances.deberes_ganadores.setData(json.convocatoria.deberes_ganadores);
+                    
                     
 
                 }
