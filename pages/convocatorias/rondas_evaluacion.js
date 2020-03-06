@@ -348,32 +348,29 @@ function validator_form(token_actual) {
                 url: url_pv + 'Rondas/edit/' + $("#id_registro").attr('value'),
                 data: $form.serialize() + "&modulo=Rondas&token=" + token_actual.token
             }).done(function (result) {
-                if (result == 'error')
-                {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                } else
-                {
-                    if (result == 'error_token')
-                    {
-                      location.href = url_pv_admin+'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                    } else
-                    {
-                        if (result == 'acceso_denegado')
-                        {
-                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                        } else
-                        {
-                            if (isNaN(result))
-                            {
-                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                            } else
-                            {
-                                notify("info", "ok", "Convocatorias:", "Se editó la ronda con éxito.");
-                                cargar_tabla($("#idConvocatoria").attr('value'), token_actual);
-                            }
-                        }
-                    }
+
+                switch (result) {
+                case 'error':
+                  notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                  break;
+                case 'error_metodo':
+                  notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                  break;
+                case 'error_token':
+                  location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                  break;
+                case 'acceso_denegado':
+                  notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                  break;
+                case 'deshabilitado':
+                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                    break;
+                default:
+                    notify("info", "ok", "Convocatorias:", "Se editó la ronda con éxito.");
+                    cargar_tabla($("#idConvocatoria").attr('value'), token_actual);
+                  break;
                 }
+
             });
 
             $("#id_registro").val(null);
@@ -429,11 +426,11 @@ function acciones_ronda(token_actual) {
               break;
             case 'deshabilitado':
               notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-              cargar_datos_formulario(token_actual);
+              cargar_tabla($("#idConvocatoria").attr('value'), token_actual);
               break;
             default:
               notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
-              cargar_datos_formulario(token_actual);
+                cargar_tabla($("#idConvocatoria").attr('value'), token_actual);
               break;
           }
 
@@ -681,7 +678,7 @@ function validator_form_criterio(token_actual, idRonda) {
         },
         excluded: ':disabled',
         fields: {
-            grupo_criterio: {
+           grupo_criterio: {
                 validators: {
                     notEmpty: {message: 'El grupo es requerido'}
                 }
@@ -793,6 +790,9 @@ function validator_form_criterio(token_actual, idRonda) {
                 case 'error_puntaje':
                   notify("danger", "ok", "Convocatorias:", "La suma de los valores de los criterios sobrepasa el valor máximo permitido");
                   break;
+                case 'deshabilitado':
+                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                    break;
                 default:
                   notify("info", "ok", "Convocatorias:", "Se editó el criterio con éxito.");
                   sum_criterios(token_actual, $("#convocatoria_ronda").attr('value') );

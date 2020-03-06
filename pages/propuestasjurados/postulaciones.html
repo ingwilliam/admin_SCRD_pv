@@ -79,18 +79,20 @@
                 <div class="modal fade" id="perfil_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
                     <div class="modal-content">
+                      <form id="form_nuevo_criterio" class="form_nuevo_criterio"  >
+
                       <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalScrollableTitle">Perfiles</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
+
                       <div class="modal-body">
 
-                        <form id="form_nuevo_criterio" action="" class="form_nuevo_criterio" role="form" >
-
-                            <div id="lista_perfiles">
+                            <div id="lista_perfiles"  class="form-group">
                             </div>
+
                             <div class="row">
                                 <div class="col-lg-12" style="text-align: right">
                                   <!--button type="button" id="aceptar" class="btn btn-primary"  style="display:none;">Aceptar</button>
@@ -98,17 +100,19 @@
                                 </div>
                             </div>
 
-                        </form>
                       </div>
-                      <div class="modal-footer">
+
+                      <div class="modal-footer" class="form-group">
                         <!--button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary">Save changes</button--->
                         <button type="button" id="aceptar" class="btn btn-primary"  style="display:none;">Cerrar</button>
 
                         <button type="button" id="cancelar" class="btn btn-secondary" data-dismiss="modal"  style="display:none;">Cancelar</button>
-                        <button type="button" id="postular" class="btn btn-primary"  style="display:none;">Postular</button>
+                        <button type="submit" id="postular" class="btn btn-primary"  style="display:none;">Postular</button>
 
                       </div>
+
+                    </form>
                     </div>
                   </div>
                 </div>
@@ -136,32 +140,57 @@
                           <div class="panel-body">
 
                               <!--form id="formulario_principal" action="" class="formulario_principal" role="form" method="post" style="display:none;"-->
-                              <form id="formulario_principal" action="" class="formulario_principal" role="form" style="display:none;">
+                              <!--form id="formulario_principal"  class="formulario_principal" style="display:none;" onsubmit=" return false;"-->
                                 <div class="row">
 
                                   <div class="col-lg-6">
-                                      <div class="form-group">
-                                        <label>Área <span class="icono_requerido">*</span></label>
+                                    <div class="form-group">
+                                        <label>Enfoque </label>
+                                        <select class="form-control" name="enfoque" id="enfoque">
+                                            <option>:: Seleccionar ::</option>
+                                        </select>
+                                    </div>
+                                  </div>
+
+                                  <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Línea estratégica </label>
+                                        <select class="form-control" name="linea" id="linea">
+                                            <option>:: Seleccionar ::</option>
+                                        </select>
+                                    </div>
+                                  </div>
+
+                                  <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Área </label>
                                         <select class="form-control" name="area" id="area">
                                             <option>:: Seleccionar ::</option>
                                         </select>
-                                      </div>
                                     </div>
+                                  </div>
 
-                                    <div class="col-lg-6">
+                                  <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Palabra clave</label>
+                                            <label>Palabra clave
+                                              <button
+                                                type="button"
+                                                class="btn btn-primary btn-circle"
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                title="Se busca la palabra clave en el nombre y descripción de la convocatoria como filtro de búsqueda"
+                                                >
+                                                <i class="fa fa-question"></i>
+                                              </button>
+                                            </label>
                                             <input type="text" id="pclave" name="pclave" class="form-control">
                                         </div>
-                                    </div>
+                                  </div>
 
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-12" style="text-align: right">
-                                      <button type="submit" class="btn btn-default">Buscar</button>
-                                      <input type="hidden" id="id" name="id" />
-                                      <input type="hidden" id="idc" name="idc" />
-                                      <input type="hidden" id="idregistro" name="idregistro" />
+                                      <button type="button" class="btn btn-default" id="buscar">Buscar</button>
                                     </div>
                                 </div>
                                 <!-- tabla rersultado busqueda-->
@@ -185,7 +214,7 @@
                                         </div>
                                     </div>
                                 </div>
-                              </form>
+                              <!--/form-->
 
                         </div>
 
@@ -211,11 +240,11 @@
                                               <tr>
                                                   <th>Tipo programa</th>
                                                   <th>Entidad</th>
-                                                  <th>Área</th>
-                                                  <th>Línea</th>
                                                   <th>Enfoque</th>
+                                                  <th>Línea</th>
+                                                  <th>Área</th>
                                                   <th>Nombre</th>
-                                                  <th>¿Activar?</th>
+                                                  <th>Eliminar</th>
 
                                               </tr>
                                             </thead>
@@ -230,7 +259,9 @@
               <!-- /.row -->
             </div>
             <!-- /#page-wrapper -->
-
+            <input type="hidden" id="idc" name="idc" />
+            <input type="hidden" id="id" name="id" />
+            <input type="hidden" id="idregistro" name="idregistro" />
         </div>
         <!-- /#wrapper -->
 
