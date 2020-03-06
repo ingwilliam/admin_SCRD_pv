@@ -285,7 +285,7 @@ function cargar_tabla(token_actual)
               }  
               return row.convocatoria;
             }
-          }
+          },{ orderable: false, targets: '_all' }
             ]
     });
 
@@ -363,7 +363,7 @@ function activar_registro(id, token_actual) {
         {
             if (data == 'Si')
             {
-                notify("info", "ok", "Convocatoria documento:", "Se activo el registro con éxito.");
+                notify("info", "ok", "Convocatoria documento:", "Se activó el registro con éxito.");
             } else
             {
                 notify("danger", "ok", "Convocatoria documento:", "Se inactivo el registro con éxito.");
@@ -409,10 +409,10 @@ function acciones_categoria(token_actual)
             {
                 if (data == 'Si')
                 {
-                    notify("info", "ok", "Convocatorias:", "Se activo el documento con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se activó el documento con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se elimino el documento con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se eliminó el documento con éxito.");
                 }
             } else
             {

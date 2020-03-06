@@ -72,6 +72,16 @@ $(document).ready(function () {
                                 {
                                     $(".diferentes_requisitos").css("display", "none");
                                 }
+                                
+                                //Si la convocatoria fue publicada
+                                if(json.convocatoria.estado==5){
+                                    $("#form_nuevo_documento input,select,button[type=submit],textarea").attr("disabled","disabled");   
+                                    $("#table_registros button,input,select,button[type=submit],textarea").attr("disabled","disabled");   
+                                    $(".input-sm").css("display","none");                                       
+                                    $(".paginate_button").css("display","none");                                       
+                                    $(".jqte_editor").prop('contenteditable','false');
+                                }
+                                
                             }
                         }
                     }
@@ -269,13 +279,14 @@ function cargar_tabla(token_actual)
         "columnDefs": [ {
             "targets": 0,                                        
             "render": function ( data, type, row, meta ) {
+            row.categoria = "<a href='formulario_dinamico.html?id="+row.id_categoria+"' target='_blank'>"+row.categoria+"</a>";
               if(data==null){
-                  row.convocatoria=row.categoria;
-                  row.categoria="";
+                  row.convocatoria = "<a href='formulario_dinamico.html?id="+getURLParameter('id')+"' target='_blank'>"+row.categoria+"</a>";
+                  row.categoria="";                  
               }  
               return row.convocatoria;
             }
-          }
+          },{ orderable: false, targets: '_all' }
             ]
     });
 
@@ -336,7 +347,7 @@ function activar_registro(id, token_actual) {
         {
             if (data == 'Si')
             {
-                notify("info", "ok", "Convocatoria documento:", "Se activo el registro con éxito.");
+                notify("info", "ok", "Convocatoria documento:", "Se activó el registro con éxito.");
             } else
             {
                 notify("danger", "ok", "Convocatoria documento:", "Se inactivo el registro con éxito.");
@@ -382,10 +393,10 @@ function acciones_categoria(token_actual)
             {
                 if (data == 'Si')
                 {
-                    notify("info", "ok", "Convocatorias:", "Se activo el parametro con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se activó el parametro con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se elimino el parametro con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se eliminó el parametro con éxito.");
                 }
             } else
             {

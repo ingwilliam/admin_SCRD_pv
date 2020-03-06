@@ -154,6 +154,46 @@ $(document).ready(function () {
                     $("#estado").val($(this).attr("title"));
                     dataTable.draw();
                 });
+                
+                $('.convocatoria_publicar').click(function () {
+                    $("#convocatoria_publicar").val($(this).attr("title"));                    
+                });
+                
+                $('#publicar_convocatoria').click(function () {
+                    
+                    $.ajax({
+                        type: 'GET',
+                        data: {"token": token_actual.token, "id": $("#convocatoria_publicar").val()},
+                        url: url_pv + 'Convocatorias/publicar_convocatoria'
+                    }).done(function (data) {
+                        if (data == 'error_metodo')
+                        {
+                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        } else
+                        {
+                            if (data == 'error_token')
+                            {
+                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                            } else
+                            {
+                                if (data == 'error_publicacion')
+                                {                                    
+                                    notify("danger", "ok", "Convocatorias:", "No cuenta con permisos para cambiar el estado de la convocatoria");
+                                } else
+                                {
+                                    if (data == 'error')
+                                    {
+                                        notify("danger", "ok", "Convocatorias:", "Se registro un error al editar, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+                                        notify("success", "ok", "Convocatorias:", "Se publico la convocatoria con éxito.");
+                                        dataTable.draw();
+                                    }                                    
+                                }
+                            }
+                        }
+                    });
+                });
 
                 $(".check_activar_t").attr("checked", "true");
                 $(".check_activar_f").removeAttr("checked");
@@ -171,6 +211,7 @@ $(document).ready(function () {
                 {"data": "nombre"},
                 {"data": "activar_registro"},
                 {"data": "ver_convocatoria"},
+                {"data": "publicar"},
                 {"data": "acciones"}
             ]
         });
@@ -235,7 +276,7 @@ function acciones_convocatoria(token_actual)
             {
                 if (active == "true")
                 {
-                    notify("info", "ok", "Convocatorias:", "Se activo la convocatoria con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se activó la convocatoria con éxito.");
                 } else
                 {
                     notify("info", "ok", "Convocatorias:", "Se inactivó la convocatoria con éxito.");

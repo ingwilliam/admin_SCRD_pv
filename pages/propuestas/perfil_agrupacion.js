@@ -51,72 +51,79 @@ $(document).ready(function () {
                                         location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=El código de la propuesta no es valido.&msg_tipo=danger';
                                     } else
                                     {
-                                        if (data == 'ingresar')
+                                        if (data == 'error_participante')
                                         {
-                                            //Vacio el id
-                                            $("#id").attr('value', "");
-                                            //Asignamos el valor a input conv
-                                            $("#conv").attr('value', getURLParameter('id'));
+                                            location.href = url_pv_admin + 'pages/index/index.html?msg=Para poder inscribir la propuesta debe crear al menos un perfil como participante.&msg_tipo=danger';
+                                        } 
+                                        else
+                                        {
+                                            if (data == 'ingresar')
+                                            {
+                                                //Vacio el id
+                                                $("#id").attr('value', "");
+                                                //Asignamos el valor a input conv
+                                                $("#conv").attr('value', getURLParameter('id'));
 
-                                            //disabled todos los componentes
-                                            $("#formulario_principal input,select,button[type=submit]").attr("disabled", "disabled");
-                                            
-                                            //Verifica si el token actual tiene acceso de lectura
-                                            permiso_lectura(token_actual, "Menu Participante");
+                                                //disabled todos los componentes
+                                                $("#formulario_principal input,select,button[type=submit]").attr("disabled", "disabled");
 
-                                            //Valido formulario
-                                            validator_form(token_actual);
+                                                //Verifica si el token actual tiene acceso de lectura
+                                                permiso_lectura(token_actual, "Menu Participante");
 
-                                            //Realizo la peticion para cargar el formulario
-                                            $.ajax({
-                                                type: 'GET',
-                                                data: {"token": token_actual.token, "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "p": getURLParameter('p')},
-                                                url: url_pv + 'Agrupaciones/buscar_participante/'
-                                            }).done(function (data) {
-                                                if (data == 'error_metodo')
-                                                {
-                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                                } else
-                                                {
-                                                    if (data == 'error_token')
+                                                //Valido formulario
+                                                validator_form(token_actual);
+
+                                                //Realizo la peticion para cargar el formulario
+                                                $.ajax({
+                                                    type: 'GET',
+                                                    data: {"token": token_actual.token, "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "p": getURLParameter('p')},
+                                                    url: url_pv + 'Agrupaciones/buscar_participante/'
+                                                }).done(function (data) {
+                                                    if (data == 'error_metodo')
                                                     {
-                                                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                                     } else
                                                     {
-                                                        if (data == 'crear_perfil')
+                                                        if (data == 'error_token')
                                                         {
-                                                            location.href = url_pv_admin + 'pages/perfilesparticipantes/agrupacion.html?msg=Para poder inscribir la propuesta debe crear el perfil como agrupación.&msg_tipo=danger';
+                                                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                                                         } else
                                                         {
-                                                            if (data == 'error_participante_propuesta')
+                                                            if (data == 'crear_perfil')
                                                             {
-                                                                location.href = url_pv_admin + 'pages/perfilesparticipantes/agrupacion.html?msg=Se registro un error al importar el participante, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co.&msg_tipo=danger';
+                                                                location.href = url_pv_admin + 'pages/perfilesparticipantes/agrupacion.html?msg=Para poder inscribir la propuesta debe crear el perfil como agrupación.&msg_tipo=danger';
                                                             } else
                                                             {
-                                                                if (data == 'acceso_denegado')
+                                                                if (data == 'error_participante_propuesta')
                                                                 {
-                                                                    notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
+                                                                    location.href = url_pv_admin + 'pages/perfilesparticipantes/agrupacion.html?msg=Se registro un error al importar el participante, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co.&msg_tipo=danger';
                                                                 } else
-                                                                {                                                                    
-                                                                    var json = JSON.parse(data);
-
-                                                                    //elimino disabled todos los componentes
-                                                                    if (json.estado == 7)
+                                                                {
+                                                                    if (data == 'acceso_denegado')
                                                                     {
-                                                                        $("#formulario_principal input,select,button[type=submit]").removeAttr("disabled");
+                                                                        notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
+                                                                    } else
+                                                                    {                                                                    
+                                                                        var json = JSON.parse(data);
+
+                                                                        //eliminó disabled todos los componentes
+                                                                        if (json.estado == 7)
+                                                                        {
+                                                                            $("#formulario_principal input,select,button[type=submit]").removeAttr("disabled");
+                                                                        }
+
+                                                                        //Cargo el formulario con los datos
+                                                                        $('#formulario_principal').loadJSON(json.participante);
+
                                                                     }
-
-                                                                    //Cargo el formulario con los datos
-                                                                    $('#formulario_principal').loadJSON(json.participante);
-
                                                                 }
-                                                            }
 
+                                                            }
                                                         }
                                                     }
-                                                }
-                                            });
+                                                });
 
+                                            }
                                         }
                                     }
                                 }
@@ -230,7 +237,7 @@ function validator_form(token_actual) {
                                             notify("danger", "ok", "Agrupación:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                         } else
                                         {
-                                            notify("success", "ok", "Agrupación:", "Se actualizo con el éxito el participante como agrupación.");
+                                            notify("success", "ok", "Agrupación:", "Se actualizó con el éxito el participante como agrupación.");
                                             setTimeout(function () {
                                                 location.href = url_pv_admin + 'pages/propuestas/propuestas.html?m=agr&id=' + $("#conv").attr('value')+'&p='+getURLParameter('p');
                                             }, 1800);

@@ -66,9 +66,9 @@
                         <h1 class="page-header">Formulario de la propuesta</h1>
                     </div>                    
                     <div class="panel-body" style="text-align: right">                    
-                        <button type="button" class="btn btn-default btn-circle btn-lg regresar" onclick=""><i class="fa fa-arrow-left"></i></button>
-                        <button type="button" class="btn btn-primary btn-circle btn-lg" onclick="location.href = 'list.html'"><i class="fa fa-list"></i></button>
-                        <button type="button" class="btn btn-success btn-circle btn-lg cargar_formulario" data-toggle="modal" data-target="#nuevo_evento" ><i class="fa fa-file-o"></i></button>
+                        <button type="button" class="btn btn-default btn-circle btn-lg regresar btn_tooltip" data-original-title="Información general" onclick=""><i class="fa fa-arrow-left"></i></button>
+                        <button type="button" class="btn btn-primary btn-circle btn-lg btn_tooltip" data-original-title="Buscar convocatorias" onclick="location.href = 'list.html'"><i class="fa fa-list"></i></button>                        
+                        <button type="button" class="btn btn-success btn-circle btn-lg cargar_formulario btn_tooltip" data-toggle="modal" data-target="#nuevo_evento" data-original-title="Crear variables"><i class="fa fa-file-o"></i></button>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -79,6 +79,8 @@
                         <li>Resumen de la propuesta</li>
                         <li>Objetivo de la propuesta</li>
                         <li>¿Su propuesta se desarrollara en Bogotá D.C.?</li>
+                        <li>¿En la ejecución de la propuesta o proyecto participarán menores de edad?</li>
+                        <li>Medio por el cual se enteró de esta convocatoria</li>
                     </ul>
                     <br/>
                     <p>Esta funcionalidad le permitirá adicionar variables al formulario de la propuesta</p>
@@ -228,7 +230,7 @@
         <script src='../../dist/js/main.js'></script>
         <script src='parametros_convocatorias.js'></script>
         <script src='../../dist/js/jquery.loadJSON.js'></script>
-        <script src='../../dist/js/verificar_token.js'></script>
+        
         
         <!-- Text area editor html -->
         <script type="text/javascript" src="../../dist/libraries/jQuery-TE_v.1.4.0/jquery-te-1.4.0.min.js" charset="utf-8"></script>

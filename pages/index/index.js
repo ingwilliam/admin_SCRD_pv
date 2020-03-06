@@ -33,6 +33,22 @@ $(document).ready(function () {
                     else
                     {
                         var json = JSON.parse(data);
+                        if(json.primer_nombre==null)
+                        {
+                           json.primer_nombre="";
+                        }
+                        if(json.segundo_nombre==null)
+                        {
+                           json.segundo_nombre="";
+                        }
+                        if(json.primer_apellido==null)
+                        {
+                           json.primer_apellido="";
+                        }
+                        if(json.segundo_apellido==null)
+                        {
+                           json.segundo_apellido="";
+                        }
                         $("#nombre_bienvenida").html(json.primer_nombre+" "+json.segundo_nombre+" "+json.primer_apellido+" "+json.segundo_apellido);                        
                     }
                 }

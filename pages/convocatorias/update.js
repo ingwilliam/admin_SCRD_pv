@@ -17,15 +17,21 @@ $(document).ready(function () {
         $('#form_validator').attr('action', url_pv + 'Convocatorias/new');
 
         //Establesco los text area html
-        $('.textarea_html').jqte();
+        if (CKEDITOR.env.ie && CKEDITOR.env.version < 9)
+        CKEDITOR.tools.enableHtml5Elements(document);
+
+        CKEDITOR.config.height = 150;
+        CKEDITOR.config.width = 'auto';
+        CKEDITOR.replace('html_general');
+        CKEDITOR.replace('descripcion_cp');
 
         //Limpio el formulario de los perfiles de los participantes
         $('#perfiles_participantes_modal').on('hidden.bs.modal', function () {
             $("#id_cp").attr('value', '');
             $("#tipo_participante").attr('value', '');
-            $("#descripcion_cp").jqteVal('');
+            CKEDITOR.instances.descripcion_cp.setData('');
             $("#tipo_participante_cp").html('');
-        })
+        });
 
         //Limpio el formulario de los perfiles de los jurados
         $('#perfiles_jurados_modal').on('hidden.bs.modal', function () {
@@ -35,16 +41,81 @@ $(document).ready(function () {
             $("#perfiles_jurados_modal input[type=text] , form textarea").each(function () {
                 this.value = ''
             });
-        })
+        });
 
-        //guardar registro de convocatoria perfil participante
+        //cargo el html dependiendo la varaible
+        $(".cargar_modal_descripcion").click(function () {
+            var variable = $(this).attr("lang");
+            var value = $("#"+variable+"_html").val();
+            var titulo =$(this).attr("dir");
+            $("#html_titulo").html(titulo);
+            $("#variable").val(variable);
+            $("#titulo_variable").val(titulo);
+            CKEDITOR.instances.html_general.setData(value);
+        });
+        
+        //guardo la descripcion html
+        $("#html_guardar").click(function () {
+            if(CKEDITOR.instances.html_general.getData()=="")
+            {
+                notify("danger", "ok", "Convocatorias:", "La variable ("+$("#titulo_variable").val()+"), es obligatoria");                
+            }
+            else
+            {
+                var values_html = {modulo:"Convocatorias","variable":$("#variable").val(), value_CKEDITOR:CKEDITOR.instances.html_general.getData(), modulo:"Convocatorias", token:token_actual.token}; 
+                
+                //Realizo la peticion con el fin de editar el registro actual
+                    $.ajax({
+                        type: 'PUT',
+                        url: url_pv + 'Convocatorias/edit/' + $("#id").attr('value'),
+                        data: $.param(values_html)                        
+                    }).done(function (result) {
+                        if (result == 'error')
+                        {
+                            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        } else
+                        {
+                            if (result == 'error_token')
+                            {
+                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                            } else
+                            {
+                                if (result == 'acceso_denegado')
+                                {
+                                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                } else
+                                {
+                                    if (isNaN(result))
+                                    {
+                                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+                                        notify("info", "ok", "Convocatorias:", "Se edito la convocatoria con éxito.");
+                                        $("#"+$("#variable").val()+"_html").val(CKEDITOR.instances.html_general.getData());                                                                                
+                                    }
+                                }
+                            }
+                        }
+                    });
+            }                        
+        });
+        
+        //Limpio el ckeditor al cerra el pop
+        $('#modal_html').on('hidden.bs.modal', function () {
+            CKEDITOR.instances.html_general.setData('');            
+        });
+        
+        
         $("#guardar_cp").click(function () {
             if ($("#id_cp").val() != "") {
                 //Realizo la peticion con el fin de editar el registro del perfil de la convocatoria
+                
+                var values_perfil = {active:"TRUE", descripcion_perfil:CKEDITOR.instances.descripcion_cp.getData(), modulo:"Convocatorias", token:token_actual.token}; 
+                
                 $.ajax({
                     type: 'PUT',
                     url: url_pv + 'Convocatoriasparticipantes/edit/' + $("#id_cp").attr('value'),
-                    data: "active=TRUE&descripcion_perfil=" + $("#descripcion_cp").val() + "&modulo=Convocatorias&token=" + token_actual.token
+                    data: $.param(values_perfil)
                 }).done(function (result) {
                     if (result == 'error')
                     {
@@ -74,7 +145,7 @@ $(document).ready(function () {
                                     //Limpio el formulario
                                     $("#id_cp").attr('value', '');
                                     $("#id_tipo_participante").attr('value', '');
-                                    $("#descripcion_cp").jqteVal('');
+                                    CKEDITOR.instances.descripcion_cp.setData('');
                                     $("#tipo_participante_cp").html('');
 
                                     cargar_tabla_perfiles_participante(token_actual);
@@ -90,7 +161,7 @@ $(document).ready(function () {
                     $.ajax({
                         type: 'POST',
                         url: url_pv + 'Convocatoriasparticipantes/new/',
-                        data: "active=TRUE&descripcion_perfil=" + $("#descripcion_cp").val() + "&convocatoria=" + $("#id").val() + "&tipo_participante=" + $("#id_tipo_participante").val() + "&modulo=Convocatorias&token=" + token_actual.token
+                        data: "active=TRUE&descripcion_perfil=" + CKEDITOR.instances.descripcion_cp.getData() + "&convocatoria=" + $("#id").val() + "&tipo_participante=" + $("#id_tipo_participante").val() + "&modulo=Convocatorias&token=" + token_actual.token
                     }).done(function (result) {
 
                         if (result == 'error')
@@ -121,7 +192,7 @@ $(document).ready(function () {
                                         //Limpio el formulario
                                         $("#id_cp").attr('value', '');
                                         $("#id_tipo_participante").attr('value', '');
-                                        $("#descripcion_cp").jqteVal('');
+                                        CKEDITOR.instances.descripcion_cp.setData('');
                                         $("#tipo_participante_cp").html('');
 
                                         cargar_tabla_perfiles_participante(token_actual);
@@ -172,6 +243,7 @@ $(document).ready(function () {
         //Cargar modalidades dependiendo el programa
         $('#programa').on('change', function () {
             var programa = $(this).val();
+            
             $('#modalidad').find('option').remove();
             $.ajax({
                 type: 'GET',
@@ -193,6 +265,33 @@ $(document).ready(function () {
                         if (json.length > 0) {
                             $.each(json, function (key, value) {
                                 $("#modalidad").append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                            });
+                        }
+                    }
+                }
+            });
+            
+            $('#enfoque').find('option').remove();
+            $.ajax({
+                type: 'GET',
+                data: {"token": token_actual.token, "programa": programa},
+                url: url_pv + 'Enfoques/select'
+            }).done(function (data) {
+                if (data == 'error_metodo')
+                {
+                    notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                } else
+                {
+                    if (data == 'error_token')
+                    {
+                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    } else
+                    {
+                        var json = JSON.parse(data);
+                        $("#enfoque").append('<option value="">:: Seleccionar ::</option>');
+                        if (json.length > 0) {
+                            $.each(json, function (key, value) {
+                                $("#enfoque").append('<option value="' + value.id + '">' + value.nombre + '</option>');
                             });
                         }
                     }
@@ -403,7 +502,6 @@ $(document).ready(function () {
                 {
                     var json = JSON.parse(data);
 
-                    
                     //Verifico si es cobertura local
                     if (json.convocatoria.cobertura == 1)
                     {
@@ -534,8 +632,8 @@ $(document).ready(function () {
                         var json_update = JSON.parse($(this).attr("lang"));
                         $("#id_cp").val(json_update.id_cp);
                         $("#id_tipo_participante").val(json_update.id);
-                        $("#tipo_participante_cp").html(json_update.nombre);
-                        $("#descripcion_cp").jqteVal(json_update.descripcion_cp);
+                        $("#tipo_participante_cp").html(json_update.nombre);                                                
+                        CKEDITOR.instances.descripcion_cp.setData(json_update.descripcion_cp);
                     });
 
                     //Creamos los participantes en la convocatoria
@@ -592,10 +690,10 @@ $(document).ready(function () {
                                     {
                                         if (data == 'Si')
                                         {
-                                            notify("info", "ok", "Convocatorias:", "Se activo el perfil del participante con éxito.");
+                                            notify("info", "ok", "Convocatorias:", "Se activó el perfil del participante con éxito.");
                                         } else
                                         {
-                                            notify("info", "ok", "Convocatorias:", "Se elimino el perfil del participante con éxito.");
+                                            notify("info", "ok", "Convocatorias:", "Se eliminó el perfil del participante con éxito.");
                                         }
 
                                         cargar_tabla_perfiles_participante(token_actual)
@@ -884,13 +982,31 @@ $(document).ready(function () {
                         $('.modalidad_jurados').css("display", "block");
                     }
                     
+                    //Si la convocatoria fue publicada
+                    if(json.convocatoria.estado==5){
+                        $("#form_validator input,select,button[type=submit],textarea").attr("disabled","disabled");   
+                        $(".class_bolsa_concursable").attr("disabled", "disabled");                
+                        $(".diferentes_categorias_button").attr("disabled", "disabled");                
+                        $(".modalidad_jurados").attr("disabled", "disabled");
+                        
+                        if (json.convocatoria.diferentes_categorias == false)
+                        {
+                            $("#btn-perfile-jurados").removeAttr("disabled");
+                            $(".validar_jurado").removeAttr("disabled");
+                        }                        
+                        
+                    }
+                    
                     //Se realiza este set en cada text area html debido a que jste no es compatible con load json
-                    $("#descripcion").jqteVal(json.convocatoria.descripcion);
-                    $("#justificacion").jqteVal(json.convocatoria.justificacion);
-                    $("#objeto").jqteVal(json.convocatoria.objeto);
-                    $("#no_pueden_participar").jqteVal(json.convocatoria.no_pueden_participar);
-                    $("#derechos_ganadores").jqteVal(json.convocatoria.derechos_ganadores);
-                    $("#deberes_ganadores").jqteVal(json.convocatoria.deberes_ganadores);
+                    /*
+                    CKEDITOR.instances.descripcion.setData(json.convocatoria.descripcion);
+                    CKEDITOR.instances.justificacion.setData(json.convocatoria.justificacion);
+                    CKEDITOR.instances.objeto.setData(json.convocatoria.objeto);
+                    CKEDITOR.instances.no_pueden_participar.setData(json.convocatoria.no_pueden_participar);
+                    CKEDITOR.instances.derechos_ganadores.setData(json.convocatoria.derechos_ganadores);
+                    CKEDITOR.instances.deberes_ganadores.setData(json.convocatoria.deberes_ganadores);
+                    */
+                    
 
                 }
             }
@@ -921,7 +1037,7 @@ function activar_registro(id, token_actual) {
             {
                 if (data == 'Si')
                 {
-                    notify("info", "ok", "Convocatoria recurso:", "Se activo el registro con éxito.");
+                    notify("info", "ok", "Convocatoria recurso:", "Se activó el registro con éxito.");
                 } else
                 {
                     notify("danger", "ok", "Convocatoria recurso:", "Se inactivo el registro con éxito.");
@@ -957,10 +1073,10 @@ function activar_perfil_jurado(id, convocatoria, token_actual) {
             {
                 if (data == 'Si')
                 {
-                    notify("info", "ok", "Convocatorias:", "Se activo el perfil del jurado con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se activó el perfil del jurado con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se elimino el perfil del jurado con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se eliminó el perfil del jurado con éxito.");
                 }
             } else
             {
@@ -1095,7 +1211,7 @@ function cargar_tabla_perfiles_participante(token_actual) {
                         $("#id_cp").val(json_update.id_cp);
                         $("#id_tipo_participante").val(json_update.id);
                         $("#tipo_participante_cp").html(json_update.nombre);
-                        $("#descripcion_cp").jqteVal(json_update.descripcion_cp);
+                        CKEDITOR.instances.descripcion_cp.setData(json_update.descripcion_cp);                        
                     });
                 }
             }
@@ -1169,16 +1285,6 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'El nombre de la convocatoria es requerido'}
                 }
             },
-            descripcion: {
-                validators: {
-                    notEmpty: {message: 'La descripción corta de la convocatoria es requerida'}
-                }
-            },
-            justificacion: {
-                validators: {
-                    notEmpty: {message: 'La justificación de la convocatoria es requerida'}
-                }
-            },
             modalidad: {
                 validators: {
                     notEmpty: {message: 'La modalidad es requerida'}
@@ -1224,26 +1330,6 @@ function validator_form(token_actual) {
                 validators: {
                     numeric: {message: 'Debe ingresar solo numeros'}
                 }
-            },
-            objeto: {
-                validators: {
-                    notEmpty: {message: 'El objeto es requerido'}
-                }
-            },
-            no_pueden_participar: {
-                validators: {
-                    notEmpty: {message: 'Quiénes no pueden participar son requeridos'}
-                }
-            },
-            derechos_ganadores: {
-                validators: {
-                    notEmpty: {message: 'Los derechos específicos de los ganadores son requeridos'}
-                }
-            },
-            deberes_ganadores: {
-                validators: {
-                    notEmpty: {message: 'Los deberes específicos de los ganadores son requeridos'}
-                }
             }
         }
     }).on('success.form.bv', function (e) {
@@ -1254,12 +1340,14 @@ function validator_form(token_actual) {
 
         // Get the BootstrapValidator instance
         var bv = $form.data('bootstrapValidator');
+                                
+        var values=$form.serializeArray();        
 
         //Realizo la peticion con el fin de editar el registro actual
         $.ajax({
             type: 'PUT',
             url: url_pv + 'Convocatorias/edit/' + $("#id").attr('value'),
-            data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token
+            data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token
         }).done(function (result) {
             if (result == 'error')
             {
@@ -1290,6 +1378,11 @@ function validator_form(token_actual) {
 
         //$form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         bv.resetForm();
+        
+    
+    
+    
+        
     });
 
     //Validar el formulario principal
@@ -1406,7 +1499,7 @@ function validator_form(token_actual) {
             });
         }
 
-        //Elimino contenido del formulario
+        //Eliminó contenido del formulario
         $("#id_cpj").attr("value", "");
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         bv.resetForm();
@@ -1513,7 +1606,7 @@ function validator_form(token_actual) {
             });
         }
 
-        //Elimino contenido del formulario
+        //Eliminó contenido del formulario
         $("#id_bolsa").attr("value", "");
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         bv.resetForm();
@@ -1630,7 +1723,7 @@ function validator_form(token_actual) {
             });
         }
 
-        //Elimino contenido del formulario
+        //Eliminó contenido del formulario
         $("#id_especie").attr("value", "");
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         bv.resetForm();

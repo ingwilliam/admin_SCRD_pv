@@ -243,7 +243,7 @@ function logout()
                 if (data == 'ok')
                 {
                     removeLocalStorage(name_local_storage)
-                    location.href = '../../index.html?msg=Cerro su sesión con éxito.&msg_tipo=success';
+                    location.href = '../../index.html?msg=Cerró su sesión con éxito.&msg_tipo=success';
                 }
             }
         }
@@ -275,7 +275,7 @@ $(document).ready(function () {
         //Cargamos el menu principal
         $.ajax({
             type: 'POST',
-            data: {"token": token_actual.token, "id": getURLParameter('id'), "m": getURLParameter('m'), "p": getURLParameter('p')},
+            data: {"token": token_actual.token, "id": getURLParameter('id'), "m": getURLParameter('m'), "p": getURLParameter('p'), "sub": getURLParameter('sub')},
             url: url_pv + 'Administrador/menu'
         }).done(function (result) {
             if (result == 'error_token')
