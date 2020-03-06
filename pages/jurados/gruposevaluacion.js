@@ -186,8 +186,7 @@ $(document).ready(function () {
   }
 
   function cargar_select_categorias(token_actual, convocatoria){
-
-
+    
     $.ajax({
         type: 'GET',
         url: url_pv + 'Juradospreseleccion/select_categorias',
@@ -286,6 +285,11 @@ $(document).ready(function () {
                       {"data": "Nombre del grupo",
                         render: function ( data, type, row ) {
                               return row.nombre_grupo;
+                            },
+                      },
+                      {"data": "Estado",
+                        render: function ( data, type, row ) {
+                              return row.nombre_estado;
                             },
                       },
                       {"data": "Número de jurados principales",
@@ -872,7 +876,7 @@ $(document).ready(function () {
           default:
               notify("success", "ok", "Convocatorias:", "Se editó el grupo con éxito.");
             //  $(".guardar_aplica_perfil").addClass( "disabled" );
-          //    cargar_tabla(token_actual);
+              cargar_tabla(token_actual);
            break;
          }
 
@@ -910,7 +914,7 @@ $(document).ready(function () {
               default:
                   notify("success", "ok", "Convocatorias:", "Se editó el grupo con éxito.");
                 //  $(".guardar_aplica_perfil").addClass( "disabled" );
-              //    cargar_tabla(token_actual);
+                 cargar_tabla(token_actual);
                break;
              }
 

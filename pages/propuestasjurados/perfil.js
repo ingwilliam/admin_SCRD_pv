@@ -20,7 +20,7 @@
      {
          //Verifica si el token actual tiene acceso de lectura
          permiso_lectura(token_actual, "Menu Participante");
-         
+
          //Peticion para buscar ciudades
          var json_ciudades = function (request, response) {
              $.ajax({
@@ -33,7 +33,7 @@
                  }
              });
          };
-         
+
          //Cargos el autocomplete de ciudad de residencia
 
          $( "#ciudad_residencia_name" ).autocomplete({
@@ -52,7 +52,7 @@
              //else { Return your label here }
              }
          });
-         
+
          //Cargos el autocomplete de ciudad de nacimiento
          //$("#ciudad_nacimiento_name").val(json.ciudad[json.participante.ciudad_nacimiento].label);
          $( "#ciudad_nacimiento_name" ).autocomplete({
@@ -71,7 +71,7 @@
              //else { Return your label here }
              }
          });
-         
+
        //Peticion para buscar barrios
          var json_barrio = function (request, response) {
              $.ajax({
@@ -84,7 +84,7 @@
                  }
              });
          };
-         
+
          //Cargos el autocomplete de barrios
          $("#barrio_residencia_name").autocomplete({
              source: json_barrio,
@@ -100,8 +100,8 @@
                  }
              }
          });
-         
-         
+
+
          cargar_datos_formulario(token_actual);
          validator_form(token_actual);
 
@@ -145,6 +145,8 @@ function cargar_datos_formulario(token_actual){
 
         if( json.participante ){
 
+          $("#estado_hv").html(json.estado);
+
           $("#idp").val(json.participante.id);
           //console.log("tipo-->"+json.participante.tipo);
           $('#categoria').val(json.categoria);
@@ -163,7 +165,7 @@ function cargar_datos_formulario(token_actual){
           if(json.participante.ciudad_residencia != null){
             $('#ciudad_residencia_name').val(json.ciudad_residencia_name);
             $('#ciudad_residencia').val(json.participante.ciudad_residencia);
-          }        
+          }
 
           if(json.participante.barrio_residencia != null ){
             $('#barrio_residencia_name').val(json.barrio_residencia_name);
@@ -258,7 +260,7 @@ function cargar_datos_formulario(token_actual){
                   $("#estrato").append('<option value="' + array + '" '+selected+' >' + array + '</option>');
               });
           }
-          
+
           $("#formulario_principal").show();
 
         }else{
