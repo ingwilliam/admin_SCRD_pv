@@ -65,6 +65,7 @@ $(document).ready(function () {
                                     $("#table_registros .cargar_formulario" ).prop( "disabled", true ); //Disable
                                     $(".input-sm").css("display","none");                                       
                                     $(".paginate_button").css("display","none");                                       
+                                    $("#form_nuevo_documento input,select,button[type=submit],textarea").attr("disabled","disabled");                                       
                                                                         
                                     $(".jqte_editor").prop('contenteditable','false');                                    
                                 }

@@ -311,6 +311,16 @@ $(document).ready(function () {
                                                                                 {
                                                                                     nombre_requisito="No ha ingresado los integrantes de la agrupación.";
                                                                                 }
+                                                                                
+                                                                                if(documento.nombre=="RJunta")
+                                                                                {
+                                                                                    nombre_requisito="No ha ingresado el representante de la junta directiva.";
+                                                                                }
+
+                                                                                if(documento.nombre=="RIntegrante")
+                                                                                {
+                                                                                    nombre_requisito="No ha ingresado el representante de la agrupación.";
+                                                                                }
 
                                                                                 html_table = html_table + '<li>' + nombre_requisito + '</li>';
                                                                             });
