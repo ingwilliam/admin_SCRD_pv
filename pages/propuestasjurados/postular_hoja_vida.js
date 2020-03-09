@@ -64,6 +64,7 @@
             var json = JSON.parse(data);
 
             $("#condiciones_banco_jurados").attr("href", json.archivo);
+            $("#terminos_condiciones_pdf").attr("src", json.archivo);
 
           });
 
@@ -656,6 +657,10 @@
            break;
        default:
         notify("success", "ok", "Usuario:", "Se realizó la inscripción con éxito.");
+        setTimeout(function () {
+            location.href = url_pv_admin + 'pages/propuestasjurados/postulaciones.html?m='+getURLParameter('m')+'&id='+getURLParameter('id');
+        }, 1800);
+
         cargar_datos_formulario(token_actual);
          break;
        }
