@@ -83,15 +83,15 @@ $(document).ready(function () {
                 {
 
                     var mensaje;
-                    if ($("#convocatoria option:selected").attr("lang") == "true")
+                    if ($("#convocatoria option:selected").attr("dir") == "true")
                     {
                         $("#id_convocatoria").val($("#categoria").val());
                         mensaje = "categoría";
 
                     } else
                     {
-                        $("#id_convocatoria").val($("#categoria").val());
-                        mensaje = "categoría";
+                        $("#id_convocatoria").val($("#convocatoria").val());
+                        mensaje = "convocatoria";
                     }
 
                     if ($("#id_convocatoria").val() == "")
@@ -249,8 +249,297 @@ $(document).ready(function () {
 
         });
 
+        $("#boton_rechazo_verificacion_1_administrativa").click(function () {
+            $('#modal_rechazo_verificacion_1_administrativa').modal('hide');
+            $('#modal_confirmar_administrativa_1').modal('show');
+        });
+        
+        $("#boton_rechazo_verificacion_1_tecnica").click(function () {
+            $('#modal_rechazo_verificacion_1_tecnica').modal('hide');
+            $('#modal_confirmar_tecnica_1').modal('show');
+        });
+
+        $("#boton_confirmar_administrativa_1").click(function () {
+            $('#modal_confirmar_administrativa_1').modal('hide');
+            guardar_confirmacion(token_actual, $("#estado_actual_propuesta").val(), $("#tipo_verificacion").val());
+        });
+        
+        $("#boton_confirmar_tecnica_1").click(function () {
+            $('#modal_confirmar_tecnica_1').modal('hide');
+            guardar_confirmacion(token_actual, $("#estado_actual_propuesta").val(), $("#tipo_verificacion").val());
+        });
+
+
+        $("#boton_confirma_administrativa_1").click(function () {
+
+            //Valido que todos los documentos administrativos ya estan validados
+            var requisitos_administrativos = $('#doc_administrativos_verificacion_1 .validar_administrativos:hidden[value=""]').toArray().length;
+            if (requisitos_administrativos <= 0)
+            {
+                //Se realiza la validacion con el fin de determinar la propuesta si se rechaza, 
+                //por subsanar o se deja igual
+                var propuesta = $("#propuesta").val();
+                var verificacion = 1;
+                $.ajax({
+                    type: 'POST',
+                    url: url_pv + 'PropuestasVerificacion/valida_verificacion',
+                    data: {"token": token_actual.token, "modulo": "Verificación documentos administrativos", "propuesta": propuesta, "verificacion": verificacion, "tipo_requisito": "Administrativos"},
+                }).done(function (result) {
+
+                    if (result == 'error_metodo')
+                    {
+                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    } else
+                    {
+                        if (result == 'error_token')
+                        {
+                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                        } else
+                        {
+                            if (result == 'acceso_denegado')
+                            {
+                                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                            } else
+                            {
+                                if (result == 'crear_propuesta')
+                                {
+                                    notify("danger", "remove", "Verificación de propuestas:", "El código de la propuesta no es valido.");
+                                } else
+                                {
+                                    if (result == 'error')
+                                    {
+                                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+
+                                        if (result == 'rechazar')
+                                        {
+                                            $('#modal_rechazo_verificacion_1_administrativa').modal('show');
+                                            $("#estado_actual_propuesta").val("rechazar");
+                                        }
+
+                                        if (result == 'subsanar')
+                                        {
+                                            $('#modal_confirmar_administrativa_1').modal('show');
+                                            $("#estado_actual_propuesta").val("subsanar");
+                                            $("#tipo_verificacion").val("administrativa");
+                                        }
+
+                                        if (result == 'confirmar')
+                                        {
+                                            $('#modal_confirmar_administrativa_1').modal('show');
+                                            $("#estado_actual_propuesta").val("confirmar");
+                                            $("#tipo_verificacion").val("administrativa");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                });
+            } else
+            {
+                notify("info", "ok", "Verificación de propuestas:", "Para poder continuar debe verificar todos los documentos administrativos.");
+            }
+
+        });
+        
+        $("#boton_confirma_administrativa_2").click(function () {            
+            //Valido que todos los documentos administrativos ya estan validados
+            var requisitos_administrativos = $('#doc_administrativos_verificacion_2 .validar_administrativos:hidden[value=""]').toArray().length;
+            if (requisitos_administrativos <= 0)
+            {
+                //Se realiza la validacion con el fin de determinar la propuesta si se rechaza, 
+                //por subsanar o se deja igual
+                var propuesta = $("#propuesta").val();
+                var verificacion = 2;
+                $.ajax({
+                    type: 'POST',
+                    url: url_pv + 'PropuestasVerificacion/valida_verificacion',
+                    data: {"token": token_actual.token, "modulo": "Verificación documentos administrativos", "propuesta": propuesta, "verificacion": verificacion, "tipo_requisito": "Administrativos"},
+                }).done(function (result) {
+
+                    if (result == 'error_metodo')
+                    {
+                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    } else
+                    {
+                        if (result == 'error_token')
+                        {
+                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                        } else
+                        {
+                            if (result == 'acceso_denegado')
+                            {
+                                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                            } else
+                            {
+                                if (result == 'crear_propuesta')
+                                {
+                                    notify("danger", "remove", "Verificación de propuestas:", "El código de la propuesta no es valido.");
+                                } else
+                                {
+                                    if (result == 'error')
+                                    {
+                                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+
+                                        if (result == 'rechazar')
+                                        {
+                                            $('#modal_rechazo_verificacion_1_administrativa').modal('show');
+                                            $("#estado_actual_propuesta").val("rechazar");
+                                        }
+
+                                        if (result == 'confirmar')
+                                        {
+                                            $('#modal_confirmar_administrativa_1').modal('show');
+                                            $("#estado_actual_propuesta").val("confirmar");
+                                            $("#tipo_verificacion").val("administrativa");
+                                        }
+                                        alert
+                                        if (result == 'cumple')
+                                        {                                            
+                                            $('#modal_confirmar_administrativa_1').modal('show');
+                                            $("#estado_actual_propuesta").val("cumple");
+                                            $("#tipo_verificacion").val("administrativa");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                });
+            } else
+            {
+                notify("info", "ok", "Verificación de propuestas:", "Para poder continuar debe verificar todos los documentos administrativos.");
+            }
+
+        });
+
+        $("#boton_confirma_tecnica_1").click(function () {
+
+            var requisitos_tecnicos = $('#doc_tecnicos_verificacion_1 .validar_tecnicos:hidden[value=""]').toArray().length;
+            
+            if (requisitos_tecnicos <= 0)
+            {
+                //Se realiza la validacion con el fin de determinar la propuesta si se rechaza, 
+                //por subsanar o se deja igual
+                var propuesta = $("#propuesta").val();
+                var verificacion = 1;
+                $.ajax({
+                    type: 'POST',
+                    url: url_pv + 'PropuestasVerificacion/valida_verificacion',
+                    data: {"token": token_actual.token, "modulo": "Verificación documentos técnicos", "propuesta": propuesta, "verificacion": verificacion, "tipo_requisito": "Tecnicos"},
+                }).done(function (result) {
+
+                    if (result == 'error_metodo')
+                    {
+                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    } else
+                    {
+                        if (result == 'error_token')
+                        {
+                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                        } else
+                        {
+                            if (result == 'acceso_denegado')
+                            {
+                                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                            } else
+                            {
+                                if (result == 'crear_propuesta')
+                                {
+                                    notify("danger", "remove", "Verificación de propuestas:", "El código de la propuesta no es valido.");
+                                } else
+                                {
+                                    if (result == 'error')
+                                    {
+                                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+
+                                        if (result == 'rechazar')
+                                        {
+                                            $('#modal_rechazo_verificacion_1_tecnica').modal('show');
+                                            $("#estado_actual_propuesta").val("rechazar");
+                                            $("#tipo_verificacion").val("tecnica");
+                                        }
+
+                                        if (result == 'confirmar')
+                                        {
+                                            $('#modal_confirmar_tecnica_1').modal('show');
+                                            $("#estado_actual_propuesta").val("habilitada");
+                                            $("#tipo_verificacion").val("tecnica");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                });
+            } else
+            {
+                notify("info", "ok", "Verificación de propuestas:", "Para poder continuar debe verificar todos los documentos técnicos.");
+            }
+
+        });
+
     }
 });
+
+function guardar_confirmacion(token_actual, estado_actual_propuesta,tipo_verificacion) {
+
+    var propuesta = $("#propuesta").val();
+
+    $.ajax({
+        type: 'POST',
+        url: url_pv + 'PropuestasVerificacion/guardar_confirmacion',
+        data: {"token": token_actual.token, "modulo": "Verificación de propuestas", "propuesta": propuesta, "estado_actual_propuesta": estado_actual_propuesta, "tipo_verificacion": tipo_verificacion},
+    }).done(function (result) {
+
+        if (result == 'error_metodo')
+        {
+            notify("danger", "ok", "Verificación de propuestas:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        } else
+        {
+            if (result == 'error_token')
+            {
+                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+            } else
+            {
+                if (result == 'acceso_denegado')
+                {
+                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                } else
+                {
+                    if (result == 'crear_propuesta')
+                    {
+                        notify("danger", "remove", "Verificación de propuestas:", "El código de la propuesta no es valido.");
+                    } else
+                    {
+                        if (result == 'error')
+                        {
+                            notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        } else
+                        {
+
+                            $('#modal_confirmar_administrativa_1').modal('hide');
+                            $('#modal_verificacion_2').modal('hide');
+                            $('#modal_verificacion_1').modal('hide');
+
+                            $('#table_list').DataTable().draw();
+                        }
+                    }
+                }
+            }
+        }
+
+    });
+}
 
 function cargar_tabla(token_actual) {
     $('#table_list').DataTable({
@@ -301,10 +590,10 @@ function cargar_tabla(token_actual) {
                     row.verificacion_tecnicos = icon_tecni;
 
                     //Iconos de numero de verificacion
-                    row.btn_verificacion_1 = '<button type="button" lang="' + row.id_propuesta + '" class="btn btn-primary btn_tooltip cargar_verificacion_1" data-toggle="modal" data-target="#verificacion_1" title="Es la primera verificación, la cual consiste en revisar los documentos administrativos y técnicos, con el fin de Habilitar, Rechazar o Subsanar."><span class="fa fa-eye"></span></button>';
-                    ;
-                    row.btn_verificacion_2 = '<button type="button" lang="' + row.id_propuesta + '" class="btn btn-primary btn_tooltip" title="Es la segunda verificación, la cual consiste en revisar los documentos administrativos que subsano el participante con el fin de Habilitar o Rechazar."><span class="fa fa-eye"></span></button>';
-                    ;
+                    row.btn_verificacion_1 = '<button type="button" lang="' + row.id_propuesta + '" class="btn btn-primary btn_tooltip cargar_verificacion_1" data-toggle="modal" data-target="#modal_verificacion_1" title="Es la primera verificación, la cual consiste en revisar los documentos administrativos y técnicos, con el fin de Habilitar, Rechazar o Subsanar."><span class="fa fa-eye"></span></button>';
+                    
+                    row.btn_verificacion_2 = '<button type="button" lang="' + row.id_propuesta + '" class="btn btn-primary btn_tooltip cargar_verificacion_2" data-toggle="modal" data-target="#modal_verificacion_2" title="Es la segunda verificación, la cual consiste en revisar los documentos administrativos que subsano el participante con el fin de Habilitar o Rechazar."><span class="fa fa-eye"></span></button>';
+                    
                     return row.estado;
                 }
             }
@@ -313,7 +602,10 @@ function cargar_tabla(token_actual) {
             $('.btn_tooltip').tooltip();
             $('.cargar_verificacion_1').click(function () {
                 cargar_verificacion_1(token_actual, $(this).attr("lang"));
-            });            
+            });
+            $('.cargar_verificacion_2').click(function () {
+                cargar_verificacion_2(token_actual, $(this).attr("lang"));
+            });
         },
         "columns": [
             {"data": "estado"},
@@ -334,10 +626,17 @@ function cargar_tabla(token_actual) {
 }
 
 function cargar_verificacion_1(token_actual, propuesta) {
+    //Asigno la propuesta actual
+    $("#propuesta").val(propuesta);
+
+    $('#doc_administrativos_verificacion_2 tr').remove();
+    $('#doc_administrativos_verificacion_1 tr').remove();
+    $('#doc_tecnicos_verificacion_1 tr').remove();
+    
     //Realizo la peticion para cargar el formulario
     $.ajax({
         type: 'POST',
-        data: {"token": token_actual.token},
+        data: {"token": token_actual.token, "verificacion": 1},
         url: url_pv + 'PropuestasVerificacion/cargar_propuesta/' + propuesta
     }).done(function (data) {
         if (data == 'error_metodo')
@@ -358,51 +657,234 @@ function cargar_verificacion_1(token_actual, propuesta) {
                     var json = JSON.parse(data);
 
                     $('#info_propuesta_verificacion_1').loadJSON(json.propuesta);
-                    
+
                     var html_table = '';
                     $.each(json.administrativos, function (key2, documento) {
+                        if (documento.verificacion_1_id === null)
+                        {
+                            documento.verificacion_1_id = "";
+                        }
+                        if (documento.verificacion_1_estado === null)
+                        {
+                            documento.verificacion_1_estado = "";
+                        }
+                        if (documento.verificacion_1_observacion === null)
+                        {
+                            documento.verificacion_1_observacion = "";
+                        }
+
                         html_table = html_table + '<tr>';
-                        html_table = html_table + '<td>'+documento.orden+' '+documento.requisito+'</td>';
-                        html_table = html_table + '<td>archivos y links</td>';
-                        html_table = html_table + '<td>';  
+                        html_table = html_table + '<td>' + documento.orden + ' ' + documento.requisito + '</td>';
+                        html_table = html_table + '<td><b>Archivos<b/><br/><br/>';
+
+                        $.each(documento.archivos, function (key, archivo) {
+                            html_table = html_table + '<p><a href="javascript::void(0)" onclick="download_file(\'' + archivo.id_alfresco + '\')">' + archivo.nombre + '</a></p>';
+                        });
+                        html_table = html_table + '<b>Links<b/><br/><br/>';
+                        var numero_link = 1;
+                        $.each(documento.links, function (key, link) {
+                            html_table = html_table + '<p><a href="' + link.link + '" target="_blank">link ' + numero_link + '</a></p>';
+                            numero_link++;
+                        });
+                        html_table = html_table + '</td>';
+                        html_table = html_table + '<td>';
                         html_table = html_table + '         <div class="row">';
                         html_table = html_table + '             <div class="col-lg-12">';
                         html_table = html_table + '                 <div class="form-group">';
                         html_table = html_table + '                     <label> Resultado de la verificación</label>';
-                        html_table = html_table + '                     <select name="recurso_no_pecuniario" class="form-control" >';
-                        html_table = html_table + '                         <option value="">:: Seleccionar ::</option>';                        
+                        html_table = html_table + '                     <select id="estado_' + documento.id + '" class="form-control estados_administrativos" >';
+                        $.each(json.estados_verificacion_1, function (key, estado) {
+                            var selected = '';
+                            if (documento.verificacion_1_estado == estado.id)
+                            {
+                                selected = 'selected="selected"';
+                            }
+                            if (estado.id != 26)
+                            {
+                                html_table = html_table + '<option value="' + estado.id + '" ' + selected + '>' + estado.nombre + '</option>';
+                            }
+                        });
+                        
+                        var color_boton_guardado="btn-success";
+                        if(documento.verificacion_1_id=="")
+                        {
+                            color_boton_guardado="btn-danger";
+                        } 
+                        
                         html_table = html_table + '                     </select>';
                         html_table = html_table + '                 </div>';
-                        html_table = html_table + '             </div>';                        
+                        html_table = html_table + '             </div>';
                         html_table = html_table + '         </div>';
                         html_table = html_table + '         <div class="row">';
                         html_table = html_table + '             <div class="col-lg-12">';
                         html_table = html_table + '                 <div class="form-group">';
                         html_table = html_table + '                     <label>Observaciones</label>';
-                        html_table = html_table + '                     <textarea class="form-control textarea_html" rows="3"></textarea>';
+                        html_table = html_table + '                     <textarea id="observaciones_' + documento.id + '" class="form-control" rows="3">' + documento.verificacion_1_observacion + '</textarea>';
                         html_table = html_table + '                 </div>';
-                        html_table = html_table + '             </div>';                        
+                        html_table = html_table + '             </div>';
+                        html_table = html_table + '         </div>';
+                        html_table = html_table + '         <div class="row">';
+                        html_table = html_table + '             <div class="col-lg-12">';
+                        html_table = html_table + '                 <div class="form-group" style="text-align: right">';
+                        html_table = html_table + '                     <button id="btn_documento_' + documento.id + '" type="button" class="btn '+color_boton_guardado+'" onclick="guardar_verificacion_1(\'' + token_actual.token + '\',\'' + documento.id + '\',\'Verificación documentos administrativos\',1)">Guardar</button>';
+                        html_table = html_table + '                     <input type="hidden" class="validar_administrativos" id="id_documento_' + documento.id + '" value="' + documento.verificacion_1_id + '" />';
+                        html_table = html_table + '                 </div>';
+                        html_table = html_table + '             </div>';
                         html_table = html_table + '         </div>';
                         html_table = html_table + '</td>';
-                        html_table = html_table + '</tr>';                                                                     
+                        html_table = html_table + '</tr>';
                     });
 
                     $('#doc_administrativos_verificacion_1 tr').remove();
-                    $("#doc_administrativos_verificacion_1").append(html_table);                    
+                    $("#doc_administrativos_verificacion_1").append(html_table);
+
+                    html_table = "";
+
+                    $.each(json.tecnicos, function (key2, documento) {
+
+                        if (documento.verificacion_1_id === null)
+                        {
+                            documento.verificacion_1_id = "";
+                        }
+                        if (documento.verificacion_1_estado === null)
+                        {
+                            documento.verificacion_1_estado = "";
+                        }
+                        if (documento.verificacion_1_observacion === null)
+                        {
+                            documento.verificacion_1_observacion = "";
+                        }
+
+                        html_table = html_table + '<tr>';
+                        html_table = html_table + '<td>' + documento.orden + ' ' + documento.requisito + '</td>';
+                        html_table = html_table + '<td><b>Archivos<b/><br/><br/>';
+
+                        $.each(documento.archivos, function (key, archivo) {
+                            html_table = html_table + '<p><a href="javascript::void(0)" onclick="download_file(\'' + archivo.id_alfresco + '\')">' + archivo.nombre + '</a></p>';
+                        });
+                        html_table = html_table + '<b>Links<b/><br/><br/>';
+                        var numero_link = 1;
+                        $.each(documento.links, function (key, link) {
+                            html_table = html_table + '<p><a href="' + link.link + '" target="_blank">link ' + numero_link + '</a></p>';
+                        });
+                        html_table = html_table + '</td>';
+                        html_table = html_table + '<td>';
+                        html_table = html_table + '         <div class="row">';
+                        html_table = html_table + '             <div class="col-lg-12">';
+                        html_table = html_table + '                 <div class="form-group">';
+                        html_table = html_table + '                     <label> Resultado de la verificación</label>';
+                        html_table = html_table + '                     <select id="estado_' + documento.id + '" class="form-control estados_tecnicos" >';
+                        $.each(json.estados_verificacion_1, function (key, estado) {
+                            var selected = '';
+                            if (documento.verificacion_1_estado == estado.id)
+                            {
+                                selected = 'selected="selected"';
+                            }
+                            if (estado.id != 27)
+                            {
+                                html_table = html_table + '<option value="' + estado.id + '" ' + selected + '>' + estado.nombre + '</option>';
+                            }
+                        });
+                        
+                        var color_boton_guardado="btn-success";
+                        if(documento.verificacion_1_id=="")
+                        {
+                            var color_boton_guardado="btn-danger";
+                        }                        
+                        
+                        html_table = html_table + '                     </select>';
+                        html_table = html_table + '                 </div>';
+                        html_table = html_table + '             </div>';
+                        html_table = html_table + '         </div>';
+                        html_table = html_table + '         <div class="row">';
+                        html_table = html_table + '             <div class="col-lg-12">';
+                        html_table = html_table + '                 <div class="form-group">';
+                        html_table = html_table + '                     <label>Observaciones</label>';
+                        html_table = html_table + '                     <textarea id="observaciones_' + documento.id + '" class="form-control" rows="3">' + documento.verificacion_1_observacion + '</textarea>';
+                        html_table = html_table + '                 </div>';
+                        html_table = html_table + '             </div>';
+                        html_table = html_table + '         </div>';
+                        html_table = html_table + '         <div class="row">';
+                        html_table = html_table + '             <div class="col-lg-12">';
+                        html_table = html_table + '                 <div class="form-group" style="text-align: right">';
+                        html_table = html_table + '                     <button type="button" id="btn_documento_' + documento.id + '" class="btn '+color_boton_guardado+'" onclick="guardar_verificacion_1(\'' + token_actual.token + '\',\'' + documento.id + '\',\'Verificación documentos técnicos\',1)">Guardar</button>';
+                        html_table = html_table + '                     <input type="hidden" class="validar_tecnicos" id="id_documento_' + documento.id + '" value="' + documento.verificacion_1_id + '" />';
+                        html_table = html_table + '                 </div>';
+                        html_table = html_table + '             </div>';
+                        html_table = html_table + '         </div>';
+                        html_table = html_table + '</td>';
+                        html_table = html_table + '</tr>';
+                    });
+
+                    $('#doc_tecnicos_verificacion_1 tr').remove();
+                    $("#doc_tecnicos_verificacion_1").append(html_table);
+
+
+                    //Por defecto los documentos tecnicos esta desactivados
+                    $("#doc_tecnicos_verificacion_1").find('input,select,button,textarea').attr("disabled", "disabled");
+                    $("#boton_confirma_tecnica_1").attr("disabled", "disabled");
+
+                    //Valido si ya realizaron la verificación administrativa con el fin de habilitar
+                    //la documentación tecnica
+                    if (json.propuesta.verificacion_administrativos)
+                    {
+                        
+                        $("#doc_administrativos_verificacion_1").find('input,select,button,textarea').attr("disabled", "disabled");
+                        $("#boton_confirma_administrativa_1").attr("disabled", "disabled");
+                        
+                        $("#doc_tecnicos_verificacion_1").find('input,select,button,textarea').removeAttr("disabled");
+                        $("#boton_confirma_tecnica_1").removeAttr("disabled");                        
+                        
+                    }
+
+                    if (json.propuesta.verificacion_tecnicos)
+                    {
+                        
+                        $("#doc_tecnicos_verificacion_1").find('input,select,button,textarea').attr("disabled", "disabled");
+                        $("#boton_confirma_tecnica_1").attr("disabled", "disabled");
+                        
+                    }
                     
+                    //Si la propuesta esta estado por
+                    //Registrada
+                    //Anulada
+                    //Por Subsanar
+                    //Subsanación Recibida
+                    //Rechazada
+                    //Habilitada
+                    //subsanada
+                    //Se inactiva en la 1 verificación los documetos tecnicos                    
+                    if (json.propuesta.estado == 7 || json.propuesta.estado == 20 || json.propuesta.estado == 21 || json.propuesta.estado == 22  || json.propuesta.estado == 23 || json.propuesta.estado == 24 || json.propuesta.estado == 31 )
+                    {
+                        
+                        $("#doc_administrativos_verificacion_1").find('input,select,button,textarea').attr("disabled", "disabled");
+                        $("#boton_confirma_administrativa_1").attr("disabled", "disabled");
+                        
+                        $("#doc_tecnicos_verificacion_1").find('input,select,button,textarea').attr("disabled", "disabled");
+                        $("#boton_confirma_tecnica_1").attr("disabled", "disabled");
+                        
+                    }
+                    
+
                 }
             }
         }
     });
 }
 
+function cargar_verificacion_2(token_actual, propuesta) {
+    //Asigno la propuesta actual
+    $("#propuesta").val(propuesta);
 
-function cargar_tabla_archivos(token_actual, documento) {
+    $('#doc_administrativos_verificacion_2 tr').remove();
+    $('#doc_administrativos_verificacion_1 tr').remove();
+    $('#doc_tecnicos_verificacion_1 tr').remove();
+
     //Realizo la peticion para cargar el formulario
     $.ajax({
-        type: 'GET',
-        data: {documento: documento, "token": token_actual.token, modulo: "Verificación de propuestas", propuesta: $("#propuesta").attr('value')},
-        url: url_pv + 'PropuestasVerificacion/buscar_archivos'
+        type: 'POST',
+        data: {"token": token_actual.token, "verificacion": 2},
+        url: url_pv + 'PropuestasVerificacion/cargar_propuesta/' + propuesta
     }).done(function (data) {
         if (data == 'error_metodo')
         {
@@ -414,72 +896,108 @@ function cargar_tabla_archivos(token_actual, documento) {
                 location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
             } else
             {
-                if (data == 'crear_propuesta')
+                if (data == 'error_propuesta')
                 {
-                    location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=Para poder inscribir la propuesta debe crear el perfil de agrupacion.&msg_tipo=danger';
+                    notify("danger", "ok", "Convocatorias:", "El código de la propuesta es incorrecto.");
                 } else
                 {
-                    if (data == 'acceso_denegado')
-                    {
-                        notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
-                    } else
-                    {
-                        var json = JSON.parse(data);
+                    var json = JSON.parse(data);
 
-                        var html_table = '';
-                        $("#tabla_archivos").html("");
-                        $.each(json, function (key2, documento) {
-                            html_table = html_table + '<tr class="tr_' + documento.id + '"><td>' + documento.nombre + '</td><td><button type="button" onclick="download_file(\'' + documento.id_alfresco + '\')" class="btn btn-success"><span class="glyphicon glyphicon-save"></span></button></td></tr>';
+                    $('#info_propuesta_verificacion_2').loadJSON(json.propuesta);
+
+                    var html_table = '';
+                    $.each(json.administrativos, function (key2, documento) {
+                        if (documento.verificacion_1_id === null)
+                        {
+                            documento.verificacion_1_id = "";
+                        }
+                        if (documento.verificacion_1_estado === null)
+                        {
+                            documento.verificacion_1_estado = "";
+                        }
+                        if (documento.verificacion_1_observacion === null)
+                        {
+                            documento.verificacion_1_observacion = "";
+                        }
+
+                        html_table = html_table + '<tr>';
+                        html_table = html_table + '<td>' + documento.orden + ' ' + documento.requisito + '</td>';
+                        html_table = html_table + '<td><b>Archivos<b/><br/><br/>';
+
+                        $.each(documento.archivos, function (key, archivo) {
+                            html_table = html_table + '<p><a href="javascript::void(0)" onclick="download_file(\'' + archivo.id_alfresco + '\')">' + archivo.nombre + '</a></p>';
                         });
-                        $("#tabla_archivos").append(html_table);
-
-                    }
-                }
-
-            }
-        }
-    });
-}
-
-function cargar_tabla_link(token_actual, documento) {
-    //Realizo la peticion para cargar el formulario
-    $.ajax({
-        type: 'GET',
-        data: {documento: documento, "token": token_actual.token, modulo: "Verificación de propuestas", propuesta: $("#propuesta").attr('value')},
-        url: url_pv + 'PropuestasVerificacion/buscar_link'
-    }).done(function (data) {
-        if (data == 'error_metodo')
-        {
-            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-        } else
-        {
-            if (data == 'error_token')
-            {
-                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-            } else
-            {
-                if (data == 'crear_propuesta')
-                {
-                    location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=Para poder inscribir la propuesta debe crear el perfil de agrupacion.&msg_tipo=danger';
-                } else
-                {
-                    if (data == 'acceso_denegado')
-                    {
-                        notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
-                    } else
-                    {
-                        var json = JSON.parse(data);
-
-                        var html_table = '';
-                        $("#tabla_link").html("");
-                        $.each(json, function (key2, documento) {
-                            html_table = html_table + '<tr class="tr_link_' + documento.id + '"><td><a href="' + documento.link + '" target="_blank">' + documento.link + '</a></td></tr>';
+                        html_table = html_table + '<b>Links<b/><br/><br/>';
+                        var numero_link = 1;
+                        $.each(documento.links, function (key, link) {
+                            html_table = html_table + '<p><a href="' + link.link + '" target="_blank">link ' + numero_link + '</a></p>';
+                            numero_link++;
                         });
-                        $("#tabla_link").append(html_table);
+                        html_table = html_table + '</td>';
+                        html_table = html_table + '<td>';
+                        html_table = html_table + '         <div class="row">';
+                        html_table = html_table + '             <div class="col-lg-12">';
+                        html_table = html_table + '                 <div class="form-group">';
+                        html_table = html_table + '                     <label> Resultado de la verificación</label>';
+                        html_table = html_table + '                     <select id="estado_' + documento.id + '" class="form-control estados_administrativos" >';
+                        $.each(json.estados_verificacion_2, function (key, estado) {
+                            var selected = '';
+                            if (documento.verificacion_1_estado == estado.id)
+                            {
+                                selected = 'selected="selected"';
+                            }
+                            
+                            html_table = html_table + '<option value="' + estado.id + '" ' + selected + '>' + estado.nombre + '</option>';
+                            
+                        });
+                        
+                        var color_boton_guardado="btn-success";
+                        if(documento.verificacion_1_id=="")
+                        {
+                            color_boton_guardado="btn-danger";
+                        } 
+                        
+                        html_table = html_table + '                     </select>';
+                        html_table = html_table + '                 </div>';
+                        html_table = html_table + '             </div>';
+                        html_table = html_table + '         </div>';
+                        html_table = html_table + '         <div class="row">';
+                        html_table = html_table + '             <div class="col-lg-12">';
+                        html_table = html_table + '                 <div class="form-group">';
+                        html_table = html_table + '                     <label>Observaciones</label>';
+                        html_table = html_table + '                     <textarea id="observaciones_' + documento.id + '" class="form-control" rows="3">' + documento.verificacion_1_observacion + '</textarea>';
+                        html_table = html_table + '                 </div>';
+                        html_table = html_table + '             </div>';
+                        html_table = html_table + '         </div>';
+                        html_table = html_table + '         <div class="row">';
+                        html_table = html_table + '             <div class="col-lg-12">';
+                        html_table = html_table + '                 <div class="form-group" style="text-align: right">';
+                        html_table = html_table + '                     <button id="btn_documento_' + documento.id + '" type="button" class="btn '+color_boton_guardado+'" onclick="guardar_verificacion_1(\'' + token_actual.token + '\',\'' + documento.id + '\',\'Verificación documentos administrativos\',2)">Guardar</button>';
+                        html_table = html_table + '                     <input type="hidden" class="validar_administrativos" id="id_documento_' + documento.id + '" value="' + documento.verificacion_1_id + '" />';
+                        html_table = html_table + '                 </div>';
+                        html_table = html_table + '             </div>';
+                        html_table = html_table + '         </div>';
+                        html_table = html_table + '</td>';
+                        html_table = html_table + '</tr>';
+                    });
 
+                    $('#doc_administrativos_verificacion_2 tr').remove();
+                    $("#doc_administrativos_verificacion_2").append(html_table);
+
+                    $("#doc_administrativos_verificacion_2").find('input,select,button,textarea').attr("disabled", "disabled");
+                    $("#boton_confirma_administrativa_2").attr("disabled", "disabled");                                                
+                    
+                    //Si la propuesta esta estado por
+                    //Subsanada
+                    if (json.propuesta.estado == 31)
+                    {
+                        
+                        $("#doc_administrativos_verificacion_2").find('input,select,button,textarea').removeAttr("disabled");
+                        $("#boton_confirma_administrativa_2").removeAttr("disabled");                                                                                               
                     }
-                }
+                    
 
+                }
             }
         }
     });
@@ -505,5 +1023,86 @@ function download_file(cod)
             }
         });
     }
+
+}
+
+//guardar verificacion 1
+function guardar_verificacion_1(token_actual, id , modulo , verificacion)
+{
+    //Debo validar que todos los documentos ya esten verificados
+    //Hablar con gato si en la 1 verificacion solo revisan documentación administrativa
+    //Eso quiere decir que la documentación tecnica solo se revisa cuando las propuesta
+    //Ya pasaron por el proceso de subsanacion
+    var estado = $("#estado_" + id).val();
+    var observacion = $("#observaciones_" + id).val();
+    var propuesta = $("#propuesta").val();
+    var convocatoriadocumento = id;    
+    var id = $("#id_documento_" + id).val();
+
+    var realizar_peticion=true;
+    var mensaje_observaciones='Las observaciones son obligatorias, al momento de colocar un requisito a subsanar.';    
+    if((estado==26 || estado==27 || estado==30) && observacion=="")
+    {
+        realizar_peticion=false;
+        var mensaje_observaciones='Las observaciones son obligatorias, al momento de colocar un requisito en no cumple.';
+    }
+        
+    if(realizar_peticion)
+    {
+        //Se realiza la peticion con el fin de guardar el registro actual
+        $.ajax({
+            type: 'POST',
+            url: url_pv + 'PropuestasVerificacion/guardar_verificacion_1',
+            data: {"token": token_actual, "modulo": modulo, "propuesta": propuesta, "convocatoriadocumento": convocatoriadocumento, "estado": estado, "observacion": observacion, "verificacion": verificacion, "id": id},
+        }).done(function (result) {
+
+            if (result == 'error_metodo')
+            {
+                notify("danger", "ok", "Verificación de propuestas:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            } else
+            {
+                if (result == 'error_token')
+                {
+                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                } else
+                {
+                    if (result == 'acceso_denegado')
+                    {
+                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                    } else
+                    {
+                        if (result == 'crear_propuesta')
+                        {
+                            notify("danger", "remove", "Verificación de propuestas:", "El código de la propuesta no es valido.");
+                        } else
+                        {
+                            if (result == 'error')
+                            {
+                                notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            } else
+                            {
+                                if (isNaN(result)) {
+                                    notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                } else
+                                {
+                                    $("#id_documento_" + convocatoriadocumento).val(result);
+                                    $("#btn_documento_" + convocatoriadocumento).removeClass("btn-danger");
+                                    $("#btn_documento_" + convocatoriadocumento).addClass("btn-success");
+
+                                    notify("success", "ok", "Verificación de propuestas:", "Se Guardó con éxito la verificación del documento.");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        });
+    }
+    else
+    {
+        notify("danger", "ok", "Verificación de propuestas:", mensaje_observaciones);
+    }
+
 
 }

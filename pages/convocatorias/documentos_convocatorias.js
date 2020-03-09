@@ -29,6 +29,53 @@ $(document).ready(function () {
 
             //Cargar datos de la tabla
             cargar_tabla(token_actual);
+            
+            
+            //2020-02-21
+            //Si esta publica no puede hacer ninguna accion
+            $.ajax({
+                type: 'GET',
+                data: {"token": token_actual.token, "id": $("#id").attr('value'), "tipo_requisito": "Tecnicos"},
+                url: url_pv + 'Convocatorias/search/'
+            }).done(function (data) {
+                if (data == 'error_metodo')
+                {
+                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                } else
+                {
+                    if (data == 'error')
+                    {
+                        location.href = 'list.html?msg=Debe seleccionar una convocatoria, para poder continuar.&msg_tipo=danger';
+                    } else
+                    {
+                        if (data == 'error_token')
+                        {
+                            location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                        } else
+                        {
+                            var json = JSON.parse(data);
+
+                            if (typeof json.convocatoria.id === 'number') {
+
+                                //Si la convocatoria fue publicada
+                                if(json.convocatoria.estado==5){
+                                    
+                                    $("#table_registros input,select,textarea").attr("disabled","disabled");                                       
+                                    $("#table_registros .cargar_formulario").attr("disabled","disabled");                                       
+                                    $("#table_registros .cargar_formulario" ).prop( "disabled", true ); //Disable
+                                    $(".input-sm").css("display","none");                                       
+                                    $(".paginate_button").css("display","none");                                       
+                                    $("#form_nuevo_documento input,select,button[type=submit],textarea").attr("disabled","disabled");                                       
+                                                                        
+                                    $(".jqte_editor").prop('contenteditable','false');                                    
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            
 
 
         } else
@@ -205,6 +252,9 @@ function cargar_tabla(token_actual)
         "destroy": true,
         "serverSide": true,
         "lengthMenu": [10, 20, 30],
+        columnDefs: [
+            { orderable: false, targets: '_all' }
+        ],
         "ajax": {
             url: url_pv + "Convocatoriasanexos/all",
             data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "anexos": "documentacion"}
@@ -235,6 +285,10 @@ function cargar_formulario(token_actual)
     $(".cargar_formulario").click(function () {
         //Cargo el id actual
         $("#id_registro").attr('value', $(this).attr('title'))
+        
+        $("#tipo_documento").removeAttr("disabled");                                       
+        $("#tipo_documento" ).prop( "disabled", false ); //Disable
+        
         //Realizo la peticion para cargar el formulario
         $.ajax({
             type: 'GET',
@@ -302,7 +356,7 @@ function activar_registro(id, token_actual) {
         {
             if (data == 'Si')
             {
-                notify("info", "ok", "Convocatoria documento:", "Se activo el registro con éxito.");
+                notify("info", "ok", "Convocatoria documento:", "Se activó el registro con éxito.");
             } else
             {
                 notify("danger", "ok", "Convocatoria documento:", "Se inactivo el registro con éxito.");
@@ -348,10 +402,10 @@ function acciones_categoria(token_actual)
             {
                 if (data == 'Si')
                 {
-                    notify("info", "ok", "Convocatorias:", "Se activo el documento con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se activó el documento con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se elimino el documento con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se eliminó el documento con éxito.");
                 }
             } else
             {

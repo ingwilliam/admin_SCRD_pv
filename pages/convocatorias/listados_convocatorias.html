@@ -86,6 +86,7 @@
                             <!-- cuerpo del diálogo -->
                             <div class="modal-body">
                                 <input type="hidden" id="id" name="convocatoria_padre_categoria" />
+                                <input type="hidden" id="tiene_categorias" value="No" />
                                 <form id="form_nuevo_documento" action="" class="form_nuevo_documento" role="form" method="post" enctype="multipart/form-data">
                                     <div class="row">
                                         <div class="col-lg-12 diferentes_requisitos">
@@ -122,6 +123,11 @@
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>                                        
                                         <div class="col-lg-12">
+                                            <div class="form-group">                                                
+                                                <a id="link_reporte" href="javascript:void(0);" class="btn">Generar Reporte <i class="fa fa-file-pdf-o"></i></a>                                                                                             
+                                            </div>                                                                                                                                                                                                                                                                                                        
+                                        </div>                                        
+                                        <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Archivo (pdf,doc,docx,xls,xlsx)<span class="icono_requerido">*</span></label>
                                                 <input type="file" name="archivo" >                                                
@@ -138,7 +144,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>                
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
@@ -214,7 +220,7 @@
         <script src='../../dist/js/main.js'></script>
         <script src='listados_convocatorias.js'></script>
         <script src='../../dist/js/jquery.loadJSON.js'></script>
-        <script src='../../dist/js/verificar_token.js'></script>
+        
         
         <!-- Text area editor html -->
         <script type="text/javascript" src="../../dist/libraries/jQuery-TE_v.1.4.0/jquery-te-1.4.0.min.js" charset="utf-8"></script>

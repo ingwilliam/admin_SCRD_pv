@@ -51,178 +51,185 @@ $(document).ready(function () {
                                         location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=El código de la propuesta no es valido.&msg_tipo=danger';
                                     } else
                                     {
-                                        if (data == 'ingresar')
+                                        if (data == 'error_participante')
                                         {
-                                            //Vacio el id
-                                            $("#id").attr('value', "");
-                                            //Asignamos el valor a input conv
-                                            $("#conv").attr('value', getURLParameter('id'));
+                                            location.href = url_pv_admin + 'pages/index/index.html?msg=Para poder inscribir la propuesta debe crear al menos un perfil como participante.&msg_tipo=danger';
+                                        } 
+                                        else
+                                        {                                        
+                                            if (data == 'ingresar')
+                                            {
+                                                //Vacio el id
+                                                $("#id").attr('value', "");
+                                                //Asignamos el valor a input conv
+                                                $("#conv").attr('value', getURLParameter('id'));
 
-                                            //disabled todos los componentes
-                                            $("#formulario_principal input,select,button[type=submit]").attr("disabled", "disabled");
+                                                //disabled todos los componentes
+                                                $("#formulario_principal input,select,button[type=submit]").attr("disabled", "disabled");
 
-                                            //Verifica si el token actual tiene acceso de lectura
-                                            permiso_lectura(token_actual, "Menu Participante");
+                                                //Verifica si el token actual tiene acceso de lectura
+                                                permiso_lectura(token_actual, "Menu Participante");
 
-                                            //Valido formulario
-                                            validator_form(token_actual);
+                                                //Valido formulario
+                                                validator_form(token_actual);
 
-                                            //Peticion para buscar barrios
-                                            var json_barrio = function (request, response) {
-                                                $.ajax({
-                                                    type: 'GET',
-                                                    data: {"token": token_actual.token, "id": $("#id").attr('value'), q: request.term},
-                                                    url: url_pv + 'Barrios/autocompletar/',
-                                                    dataType: "jsonp",
-                                                    success: function (data) {
-                                                        response(data);
-                                                    }
-                                                });
-                                            };
+                                                //Peticion para buscar barrios
+                                                var json_barrio = function (request, response) {
+                                                    $.ajax({
+                                                        type: 'GET',
+                                                        data: {"token": token_actual.token, "id": $("#id").attr('value'), q: request.term},
+                                                        url: url_pv + 'Barrios/autocompletar/',
+                                                        dataType: "jsonp",
+                                                        success: function (data) {
+                                                            response(data);
+                                                        }
+                                                    });
+                                                };
 
-                                            //Peticion para buscar ciudades
-                                            var json_ciudades = function (request, response) {
-                                                $.ajax({
-                                                    type: 'GET',
-                                                    data: {"token": token_actual.token, "id": $("#id").attr('value'), q: request.term},
-                                                    url: url_pv + 'Ciudades/autocompletar/',
-                                                    dataType: "jsonp",
-                                                    success: function (data) {
-                                                        response(data);
-                                                    }
-                                                });
-                                            };
+                                                //Peticion para buscar ciudades
+                                                var json_ciudades = function (request, response) {
+                                                    $.ajax({
+                                                        type: 'GET',
+                                                        data: {"token": token_actual.token, "id": $("#id").attr('value'), q: request.term},
+                                                        url: url_pv + 'Ciudades/autocompletar/',
+                                                        dataType: "jsonp",
+                                                        success: function (data) {
+                                                            response(data);
+                                                        }
+                                                    });
+                                                };
 
-                                            //Cargos el autocomplete de barrios
-                                            $("#barrio_residencia_name").autocomplete({
-                                                source: json_barrio,
-                                                minLength: 2,
-                                                select: function (event, ui) {
-                                                    $(this).val(ui.item ? ui.item : " ");
-                                                    $("#barrio_residencia").val(ui.item.id);
-                                                },
-                                                change: function (event, ui) {
-                                                    if (!ui.item) {
-                                                        this.value = '';
-                                                        $("#barrio_residencia").val("");
-                                                    }
-                                                }
-                                            });
-
-                                            //Cargos el autocomplete de ciudad de residencia
-                                            $("#ciudad_residencia_name").autocomplete({
-                                                source: json_ciudades,
-                                                minLength: 2,
-                                                select: function (event, ui) {
-                                                    $(this).val(ui.item ? ui.item : " ");
-                                                    $("#ciudad_residencia").val(ui.item.id);
-                                                },
-                                                change: function (event, ui) {
-                                                    if (!ui.item) {
-                                                        this.value = '';
-                                                        $('.formulario_principal').bootstrapValidator('revalidateField', 'ciudad_residencia_name');
-                                                        $("#ciudad_residencia").val("");
-                                                    }
-                                                    //else { Return your label here }
-                                                }
-                                            });
-
-                                            //Realizo la peticion para cargar el formulario
-                                            $.ajax({
-                                                type: 'GET',
-                                                data: {"token": token_actual.token, "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "p": getURLParameter('p')},
-                                                url: url_pv + 'Personasjuridicas/buscar_participante/'
-                                            }).done(function (data) {
-                                                if (data == 'error_metodo')
-                                                {
-                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
-                                                } else
-                                                {
-                                                    if (data == 'error_token')
-                                                    {
-                                                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                                                    } else
-                                                    {
-                                                        if (data == 'acceso_denegado')
-                                                        {
-                                                            notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
-                                                        } else
-                                                        {
-                                                            if (data == 'crear_perfil')
-                                                            {
-                                                                location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_juridica.html?msg=Para poder inscribir la propuesta debe crear el perfil de persona jurídica.&msg_tipo=danger';
-                                                            } else
-                                                            {
-                                                                if (data == 'error_participante_propuesta')
-                                                                {
-                                                                    location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=El código de la propuesta no es valido.&msg_tipo=danger';
-                                                                } else
-                                                                {
-                                                                    var json = JSON.parse(data);
-
-                                                                    //elimino disabled todos los componentes
-                                                                    if (json.estado == 7)
-                                                                    {
-                                                                        $("#formulario_principal input,select,button[type=submit]").removeAttr("disabled");
-                                                                    }
-
-                                                                    //Cargos el select de tipo de documento
-                                                                    $('#tipo_documento').find('option').remove();
-                                                                    if (json.tipo_documento.length > 0) {
-                                                                        $.each(json.tipo_documento, function (key, array) {
-                                                                            if (array.id == 7)
-                                                                            {
-                                                                                selected = 'selected="selected"';
-                                                                                $("#tipo_documento").append('<option value="' + array.id + '" ' + selected + ' >' + array.descripcion + '</option>');
-                                                                            }
-                                                                        });
-                                                                    }
-
-                                                                    //Cargos el select de estrato
-                                                                    $('#estrato').find('option').remove();
-                                                                    $("#estrato").append('<option value="">:: Seleccionar ::</option>');
-                                                                    if (json.estrato.length > 0) {
-                                                                        $.each(json.estrato, function (key, array) {
-                                                                            var selected = '';
-                                                                            if (array == json.participante.estrato)
-                                                                            {
-                                                                                selected = 'selected="selected"';
-                                                                            }
-                                                                            $("#estrato").append('<option value="' + array + '" ' + selected + ' >' + array + '</option>');
-                                                                        });
-                                                                    }
-
-                                                                    //Cargos el select de estrato
-                                                                    $('#tipo_sede').find('option').remove();
-                                                                    $("#tipo_sede").append('<option value="">:: Seleccionar ::</option>');
-                                                                    if (json.tipo_sede.length > 0) {
-                                                                        $.each(json.tipo_sede, function (key, array) {
-                                                                            var selected = '';
-                                                                            if (array == json.participante.tipo_sede)
-                                                                            {
-                                                                                selected = 'selected="selected"';
-                                                                            }
-                                                                            $("#tipo_sede").append('<option value="' + array + '" ' + selected + ' >' + array + '</option>');
-                                                                        });
-                                                                    }
-
-                                                                    //Asigno el nombre de las barrio
-                                                                    $("#barrio_residencia_name").val(json.barrio_residencia_name);
-
-                                                                    //Asigno el nombre de las ciudades
-                                                                    $("#ciudad_residencia_name").val(json.ciudad_residencia_name);
-
-                                                                    //Cargo el formulario con los datos
-                                                                    $('#formulario_principal').loadJSON(json.participante);
-
-                                                                    $("#cuenta_sede option[value='" + json.participante.cuenta_sede + "']").prop('selected', true);
-                                                                }
-                                                            }
-
+                                                //Cargos el autocomplete de barrios
+                                                $("#barrio_residencia_name").autocomplete({
+                                                    source: json_barrio,
+                                                    minLength: 2,
+                                                    select: function (event, ui) {
+                                                        $(this).val(ui.item ? ui.item : " ");
+                                                        $("#barrio_residencia").val(ui.item.id);
+                                                    },
+                                                    change: function (event, ui) {
+                                                        if (!ui.item) {
+                                                            this.value = '';
+                                                            $("#barrio_residencia").val("");
                                                         }
                                                     }
-                                                }
-                                            });
+                                                });
+
+                                                //Cargos el autocomplete de ciudad de residencia
+                                                $("#ciudad_residencia_name").autocomplete({
+                                                    source: json_ciudades,
+                                                    minLength: 2,
+                                                    select: function (event, ui) {
+                                                        $(this).val(ui.item ? ui.item : " ");
+                                                        $("#ciudad_residencia").val(ui.item.id);
+                                                    },
+                                                    change: function (event, ui) {
+                                                        if (!ui.item) {
+                                                            this.value = '';
+                                                            $('.formulario_principal').bootstrapValidator('revalidateField', 'ciudad_residencia_name');
+                                                            $("#ciudad_residencia").val("");
+                                                        }
+                                                        //else { Return your label here }
+                                                    }
+                                                });
+
+                                                //Realizo la peticion para cargar el formulario
+                                                $.ajax({
+                                                    type: 'GET',
+                                                    data: {"token": token_actual.token, "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "p": getURLParameter('p')},
+                                                    url: url_pv + 'Personasjuridicas/buscar_participante/'
+                                                }).done(function (data) {
+                                                    if (data == 'error_metodo')
+                                                    {
+                                                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                    } else
+                                                    {
+                                                        if (data == 'error_token')
+                                                        {
+                                                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                                        } else
+                                                        {
+                                                            if (data == 'acceso_denegado')
+                                                            {
+                                                                notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
+                                                            } else
+                                                            {
+                                                                if (data == 'crear_perfil')
+                                                                {
+                                                                    location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_juridica.html?msg=Para poder inscribir la propuesta debe crear el perfil de persona jurídica.&msg_tipo=danger';
+                                                                } else
+                                                                {
+                                                                    if (data == 'error_participante_propuesta')
+                                                                    {
+                                                                        location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=El código de la propuesta no es valido.&msg_tipo=danger';
+                                                                    } else
+                                                                    {
+                                                                        var json = JSON.parse(data);
+
+                                                                        //eliminó disabled todos los componentes
+                                                                        if (json.estado == 7)
+                                                                        {
+                                                                            $("#formulario_principal input,select,button[type=submit]").removeAttr("disabled");
+                                                                        }
+
+                                                                        //Cargos el select de tipo de documento
+                                                                        $('#tipo_documento').find('option').remove();
+                                                                        if (json.tipo_documento.length > 0) {
+                                                                            $.each(json.tipo_documento, function (key, array) {
+                                                                                if (array.id == 7)
+                                                                                {
+                                                                                    selected = 'selected="selected"';
+                                                                                    $("#tipo_documento").append('<option value="' + array.id + '" ' + selected + ' >' + array.descripcion + '</option>');
+                                                                                }
+                                                                            });
+                                                                        }
+
+                                                                        //Cargos el select de estrato
+                                                                        $('#estrato').find('option').remove();
+                                                                        $("#estrato").append('<option value="">:: Seleccionar ::</option>');
+                                                                        if (json.estrato.length > 0) {
+                                                                            $.each(json.estrato, function (key, array) {
+                                                                                var selected = '';
+                                                                                if (array == json.participante.estrato)
+                                                                                {
+                                                                                    selected = 'selected="selected"';
+                                                                                }
+                                                                                $("#estrato").append('<option value="' + array + '" ' + selected + ' >' + array + '</option>');
+                                                                            });
+                                                                        }
+
+                                                                        //Cargos el select de estrato
+                                                                        $('#tipo_sede').find('option').remove();
+                                                                        $("#tipo_sede").append('<option value="">:: Seleccionar ::</option>');
+                                                                        if (json.tipo_sede.length > 0) {
+                                                                            $.each(json.tipo_sede, function (key, array) {
+                                                                                var selected = '';
+                                                                                if (array == json.participante.tipo_sede)
+                                                                                {
+                                                                                    selected = 'selected="selected"';
+                                                                                }
+                                                                                $("#tipo_sede").append('<option value="' + array + '" ' + selected + ' >' + array + '</option>');
+                                                                            });
+                                                                        }
+
+                                                                        //Asigno el nombre de las barrio
+                                                                        $("#barrio_residencia_name").val(json.barrio_residencia_name);
+
+                                                                        //Asigno el nombre de las ciudades
+                                                                        $("#ciudad_residencia_name").val(json.ciudad_residencia_name);
+
+                                                                        //Cargo el formulario con los datos
+                                                                        $('#formulario_principal').loadJSON(json.participante);
+
+                                                                        $("#cuenta_sede option[value='" + json.participante.cuenta_sede + "']").prop('selected', true);
+                                                                    }
+                                                                }
+
+                                                            }
+                                                        }
+                                                    }
+                                                });
+                                            }
                                         }
                                     }
                                 }
@@ -384,7 +391,7 @@ function validator_form(token_actual) {
                                                 notify("danger", "ok", "Persona jurídica:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                             } else
                                             {
-                                                notify("success", "ok", "Persona jurídica:", "Se actualizo con el éxito el participante como persona jurídica.");
+                                                notify("success", "ok", "Persona jurídica:", "Se actualizó con el éxito el participante como persona jurídica.");
                                                 setTimeout(function () {
                                                     location.href = url_pv_admin + 'pages/propuestas/propuestas.html?m=pj&id=' + $("#conv").attr('value')+'&p='+getURLParameter('p');
                                                 }, 1800);

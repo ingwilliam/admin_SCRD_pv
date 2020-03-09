@@ -225,8 +225,7 @@ function validator_form(token_actual) {
             },
             numero_documento: {
                 validators: {
-                    notEmpty: {message: 'El número de documento de identificación es requerido'},
-                    numeric: {message: 'Debe ingresar solo numeros'}
+                    notEmpty: {message: 'El número de documento de identificación es requerido'}
                 }
             },
             primer_nombre: {
@@ -326,12 +325,16 @@ function validator_form(token_actual) {
                                         notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                     } else
                                     {
+<<<<<<< HEAD
                                       /**
                                       *Cesar Britto, 2020-02-28.
                                       *Se realiza el ajuste para cuando se crea perfil de pn
                                       */
                                         $("#id").val(result);
                                         notify("success", "ok", "Persona natural:", "Se actualizo con el éxito el participante como persona natural.");
+=======
+                                        notify("success", "ok", "Persona natural:", "Se actualizó con el éxito el participante como persona natural.");
+>>>>>>> bec974ebb179930eb723d50ef95fdc9738234c04
                                     }
                                 }
                             }

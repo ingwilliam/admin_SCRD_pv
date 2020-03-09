@@ -65,6 +65,13 @@ $(document).ready(function () {
                             $("#enfoque").append('<option value="' + enfoque.id + '"  >' + enfoque.nombre + '</option>');
                         });
                     }
+                    
+                    $("#modalidad").append('<option value="">:: Seleccionar ::</option>');
+                    if (json.modalidades.length > 0) {
+                        $.each(json.modalidades, function (key, modalidad) {
+                            $("#modalidad").append('<option value="' + modalidad.id + '"  >' + modalidad.nombre + '</option>');
+                        });
+                    }
 
                     $("#programa").append('<option value="">:: Seleccionar ::</option>');
                     if (json.programas.length > 0) {
@@ -101,6 +108,7 @@ $(document).ready(function () {
                     params.area = $('#area').val();
                     params.linea_estrategica = $('#linea_estrategica').val();
                     params.enfoque = $('#enfoque').val();
+                    params.modalidad = $('#modalidad').val();
                     params.programa = $('#programa').val();
                     params.nombre = $('#nombre').val();
                     params.estado = $('#estado').val();
@@ -123,6 +131,17 @@ $(document).ready(function () {
                 {"data": "categoria"},
                 {"data": "ver_cronograma"},
                 {"data": "ver_convocatoria"},
+            ],
+            "columnDefs": [{
+                    "targets": 0,
+                    "render": function (data, type, row, meta) {                                    
+                        if(row.modalidad==2)
+                        {
+                            row.entidad="Todas";    
+                        }                        
+                        return row.estado_convocatoria;
+                    }
+                }
             ]
         });
 
@@ -143,6 +162,10 @@ $(document).ready(function () {
         });
 
         $('#enfoque').change(function () {
+            dataTable.draw();
+        });
+        
+        $('#modalidad').change(function () {
             dataTable.draw();
         });
 
@@ -219,10 +242,12 @@ function form_tipo_convocatoria(page, id)
                                 if (data == 'ingresar')
                                 {
                                     var redirect = "";
-                                    if (page == 1 || page == 3 || page == 4 || page == 5)
+                                    //Modalidades
+                                    if (page == 1 || page == 3 || page == 4 || page == 6 || page == 5|| page == 8)
                                     {
                                         redirect = "/propuestas/perfiles";
                                     }
+                                    //Modalidad de jurado
                                     if (page == 2)
                                     {
                                         redirect = "/propuestasjurados/perfil";

@@ -56,8 +56,7 @@ $(document).ready(function () {
                                         location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=El código de la propuesta no es valido.&msg_tipo=danger';
                                     } else
                                     {
-
-                                        if (data == 'ingresar')
+                                        if (data == 'ingresar' || data == 'error_participante')
                                         {
                                             $(".validar_acceso").css("display", "block");
 
@@ -90,7 +89,7 @@ $(document).ready(function () {
                                                     }
                                                 }
                                             });
-                                        }
+                                        }                                        
                                     }
                                 }
                             }

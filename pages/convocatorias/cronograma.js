@@ -17,11 +17,16 @@ $(document).ready(function () {
         if ($("#id").val() != "") {
 
             //Establesco los text area html
-            $('.textarea_html').jqte();
+            if (CKEDITOR.env.ie && CKEDITOR.env.version < 9)
+                CKEDITOR.tools.enableHtml5Elements(document);
 
+            CKEDITOR.config.height = 150;
+            CKEDITOR.config.width = 'auto';
+            CKEDITOR.replace('descripcion');
+            
             //Limpio el formulario de las categorias
             $('#nuevo_evento').on('hidden.bs.modal', function () {
-                $("#descripcion").jqteVal('');
+                CKEDITOR.instances.descripcion.setData('');
                 $("#fecha_inicio").val("");
                 $("#fecha_fin").val("");
                 $("#tipo_evento option[value='']").prop("selected", true);
@@ -73,6 +78,16 @@ $(document).ready(function () {
                                 {
                                     $(".diferentes_requisitos").css("display", "none");
                                 }
+                                
+                                //Si la convocatoria fue publicada
+                                if(json.convocatoria.habilitar_cronograma===false){
+                                    $("#form_validator input,select,button[type=submit],textarea").attr("disabled","disabled");   
+                                    $("#table_cronogramas button,input,select,button[type=submit],textarea").attr("disabled","disabled");   
+                                    $(".input-sm").css("display","none");                                       
+                                    $(".paginate_button").css("display","none");                                                                           
+                                    CKEDITOR.instances.descripcion.config.readOnly = true;
+                                }
+                                
                             }
                         }
                     }
@@ -193,12 +208,7 @@ function validator_form(token_actual) {
                 validators: {
                     notEmpty: {message: 'La fecha fin es requerida'}
                 }
-            },
-            descripcion: {
-                validators: {
-                    notEmpty: {message: 'La descripción es requerida'}
-                }
-            },
+            }
         }
     }).on('success.form.bv', function (e) {
         // Prevent form submission
@@ -209,12 +219,16 @@ function validator_form(token_actual) {
         // Get the BootstrapValidator instance
         var bv = $form.data('bootstrapValidator');
 
+        var values=$form.serializeArray();        
+        
+        values.find(input => input.name == 'descripcion').value = CKEDITOR.instances.descripcion.getData();
+        
         if ($("#id_registro").val().length < 1) {
             //Se realiza la peticion con el fin de guardar el registro actual
             $.ajax({
                 type: 'POST',
                 url: url_pv + 'Convocatoriascronogramas/new',
-                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
+                data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
             }).done(function (result) {
 
                 if (result == 'error')
@@ -251,7 +265,7 @@ function validator_form(token_actual) {
             $.ajax({
                 type: 'PUT',
                 url: url_pv + 'Convocatoriascronogramas/edit/' + $("#id_registro").attr('value'),
-                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
+                data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
             }).done(function (result) {
                 if (result == 'error')
                 {
@@ -260,7 +274,7 @@ function validator_form(token_actual) {
                 {
                     if (result == 'error_token')
                     {
-                        location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                     } else
                     {
                         if (result == 'acceso_denegado')
@@ -283,8 +297,8 @@ function validator_form(token_actual) {
         }
 
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
-        bv.resetForm();
-        $("#descripcion").jqteVal('');
+        bv.resetForm();        
+        CKEDITOR.instances.descripcion.setData('');
         $("#fecha_inicio").val("");
         $("#fecha_fin").val("");
         $("#descripcion option[value='']").prop("selected", true);
@@ -322,6 +336,7 @@ function cargar_tabla(token_actual)
             {"data": "activar_registro"},
             {"data": "acciones"}
         ],
+        
         "columnDefs": [{
                 "targets": 0,
                 "render": function (data, type, row, meta) {
@@ -331,7 +346,7 @@ function cargar_tabla(token_actual)
                     }
                     return row.convocatoria;
                 }
-            }
+            },{ orderable: false, targets: '_all' }
         ]
     });
 
@@ -348,7 +363,7 @@ function activar_registro(id, token_actual) {
         {
             if (data == 'Si')
             {
-                notify("info", "ok", "Convocatoria recurso:", "Se activo el registro con éxito.");
+                notify("info", "ok", "Convocatoria recurso:", "Se activó el registro con éxito.");
             } else
             {
                 notify("danger", "ok", "Convocatoria recurso:", "Se inactivo el registro con éxito.");
@@ -394,10 +409,10 @@ function acciones_categoria(token_actual)
             {
                 if (data == 'Si')
                 {
-                    notify("info", "ok", "Convocatorias:", "Se activo el evento con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se activó el evento con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se elimino el evento con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se eliminó el evento con éxito.");
                 }
             } else
             {
@@ -417,7 +432,7 @@ function acciones_categoria(token_actual)
         //Realizo la peticion para cargar el formulario
         $.ajax({
             type: 'GET',
-            data: {"token": token_actual.token, "id": $(this).attr("title")},
+            data: {"token": token_actual.token, "convocatoria_padre_categoria": $("#id").attr('value'), "id": $(this).attr("title")},
             url: url_pv + 'Convocatoriascronogramas/search/'
         }).done(function (data) {
             if (data == 'error_metodo')
@@ -431,6 +446,17 @@ function acciones_categoria(token_actual)
                 } else
                 {
                     var json = JSON.parse(data);
+
+                    if (json.es_periodo)
+                    {
+                        $(".es_periodo").css("display", "block");                        
+                        $(".no_es_periodo").css("display", "none");
+                    } 
+                    else
+                    {
+                        $(".es_periodo").css("display", "none");
+                        $(".no_es_periodo").css("display", "block");                        
+                    }
 
                     //Cargo el select de los tipos eventos
                     $('#tipo_evento').find('option').remove();
@@ -447,8 +473,8 @@ function acciones_categoria(token_actual)
                     }
 
                     //Cargo el formulario con los datos
-                    $('#form_nuevo_cronograma').loadJSON(json.convocatoriacronograma);
-                    $("#descripcion").jqteVal(json.convocatoriacronograma.descripcion);
+                    $('#form_nuevo_cronograma').loadJSON(json.convocatoriacronograma);                    
+                    CKEDITOR.instances.descripcion.setData(json.convocatoriacronograma.descripcion);
                     $("#id_registro").val(json.convocatoriacronograma.id);
 
                 }
