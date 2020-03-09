@@ -7,7 +7,6 @@
  /*Cesar Britto*/
  $(document).ready(function () {
 
-
     $("#idc").val($("#id").val());
     $("#id").val(null);
 
@@ -62,11 +61,11 @@
          if( json.usuario_perfil ){
 
            //Cargos el select de tipo_entidad
-           $('#categoria_jurado').find('option').remove();
-           $("#categoria_jurado").append('<option value="">:: Seleccionar ::</option>');
+           $('#requisito').find('option').remove();
+           $("#requisito").append('<option value="">:: Seleccionar ::</option>');
            if (json.tipo.length > 0) {
                $.each(json.tipo, function (key, array) {
-                   $("#categoria_jurado").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
+                   $("#requisito").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
                });
            }
 
@@ -152,9 +151,14 @@
                validating: 'glyphicon glyphicon-refresh'
            },
            fields: {
+             requisito:{
+               validators: {
+                   notEmpty: {message: 'El tipo de documento es requerido'}
+               }
+             },
                documento:{
                  validators: {
-                     notEmpty: {message: 'El tipo de documento es requerido'}
+                     notEmpty: {message: 'El documento debe ser cargado'}
                  }
                },
              }
