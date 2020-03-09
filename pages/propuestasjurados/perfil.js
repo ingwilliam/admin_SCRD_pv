@@ -101,6 +101,37 @@
              }
          });
 
+         // cargo los datos
+         $.ajax({
+             type: 'GET',
+             url: url_pv + 'PropuestasJurados/select_categoria',
+             data: {"token": token_actual.token},
+         }).done(function (data) {
+
+           switch (data) {
+             case 'error_metodo':
+                 notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                 break;
+             case 'error_token':
+               location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+               break;
+             default:
+
+                  var json = JSON.parse(data);
+
+                  $('#modalidad_participa').find('option').remove();
+                  $("#modalidad_participa").append('<option value="">:: Seleccionar ::</option>');
+                  if (json.length > 0) {
+                      $.each(json, function (key, array) {
+                          $("#modalidad_participa").append('<option value="' + array.id+'" >' + array.nombre + '</option>');
+                      });
+                  }
+
+               break;
+             }
+
+         });
+
 
          cargar_datos_formulario(token_actual);
          validator_form(token_actual);
@@ -286,8 +317,6 @@ function cargar_datos_formulario(token_actual){
 
 function validator_form(token_actual) {
 
-
-
     //Se debe colocar debido a que el calendario es un componente diferente
     $('.calendario').on('changeDate show', function (e) {
         $('.formulario_principal').bootstrapValidator('revalidateField', 'fecha_nacimiento');
@@ -300,7 +329,7 @@ function validator_form(token_actual) {
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
-            categoria:{
+            categoria_participa:{
               validators: {
                   notEmpty: {message: 'La categoria es requerida'}
               }

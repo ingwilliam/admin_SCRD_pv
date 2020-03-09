@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    //Verifico si el token exite en el cliente y verifico que el token este activo en el servidor                
+    //Verifico si el token exite en el cliente y verifico que el token este activo en el servidor
     var token_actual = getLocalStorage(name_local_storage);
 
     //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
@@ -56,7 +56,7 @@ $(document).ready(function () {
             }
         });
 
-        //Cargos el autocomplete de ciudad de nacimiento                    
+        //Cargos el autocomplete de ciudad de nacimiento
         $("#ciudad_nacimiento_name").autocomplete({
             source: json_ciudades,
             minLength: 2,
@@ -325,7 +325,12 @@ function validator_form(token_actual) {
                                         notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                                     } else
                                     {
-                                        notify("success", "ok", "Persona natural:", "Se actualizó con el éxito el participante como persona natural.");
+                                      /**
+                                      *Cesar Britto, 2020-02-28.
+                                      *Se realiza el ajuste para cuando se crea perfil de pn
+                                      */
+                                        $("#id").val(result);
+                                        notify("success", "ok", "Persona natural:", "Se actualizo con el éxito el participante como persona natural.");
                                     }
                                 }
                             }
@@ -335,7 +340,7 @@ function validator_form(token_actual) {
             }
         });
 
-        //$form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);        
+        //$form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
     });
 
 }
