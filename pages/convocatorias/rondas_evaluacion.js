@@ -678,11 +678,11 @@ function validator_form_criterio(token_actual, idRonda) {
         },
         excluded: ':disabled',
         fields: {
-           grupo_criterio: {
+           /*grupo_criterio: {
                 validators: {
                     notEmpty: {message: 'El grupo es requerido'}
                 }
-            },
+            },*/
             descripcion_criterio: {
                 validators: {
                     notEmpty: {message: 'El criterio es requerido'}
