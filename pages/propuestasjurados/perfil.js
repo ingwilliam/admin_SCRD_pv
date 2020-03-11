@@ -181,6 +181,7 @@ function cargar_datos_formulario(token_actual){
           $("#idp").val(json.participante.id);
           //console.log("tipo-->"+json.participante.tipo);
           $('#categoria').val(json.categoria);
+          $("#modalidad_participa").val(json.categoria);
           $('#numero_documento').val(json.participante.numero_documento);
           $('#primer_nombre').val(json.participante.primer_nombre);
           $('#segundo_nombre').val(json.participante.segundo_nombre);
@@ -291,6 +292,7 @@ function cargar_datos_formulario(token_actual){
                   $("#estrato").append('<option value="' + array + '" '+selected+' >' + array + '</option>');
               });
           }
+
 
           $("#formulario_principal").show();
 
