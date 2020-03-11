@@ -398,7 +398,7 @@ $(document).ready(function () {
                                             $("#estado_actual_propuesta").val("confirmar");
                                             $("#tipo_verificacion").val("administrativa");
                                         }
-                                        alert
+                                        
                                         if (result == 'cumple')
                                         {                                            
                                             $('#modal_confirmar_administrativa_1').modal('show');
@@ -465,6 +465,13 @@ $(document).ready(function () {
                                         {
                                             $('#modal_rechazo_verificacion_1_tecnica').modal('show');
                                             $("#estado_actual_propuesta").val("rechazar");
+                                            $("#tipo_verificacion").val("tecnica");
+                                        }
+                                        
+                                        if (result == 'subsanar')
+                                        {
+                                            $('#modal_confirmar_tecnica_1').modal('show');
+                                            $("#estado_actual_propuesta").val("subsanar");
                                             $("#tipo_verificacion").val("tecnica");
                                         }
 
@@ -619,8 +626,7 @@ function cargar_tabla(token_actual) {
             {"data": "verificacion_administrativos"},
             {"data": "verificacion_tecnicos"},
             {"data": "btn_verificacion_1"},
-            {"data": "btn_verificacion_2"},
-            {"data": "btn_ver_documentacion"},
+            {"data": "btn_verificacion_2"}            
         ]
     });
 }
@@ -780,10 +786,20 @@ function cargar_verificacion_1(token_actual, propuesta) {
                             {
                                 selected = 'selected="selected"';
                             }
-                            if (estado.id != 27)
+                            
+                            //Se debe habilitar el estado subsanar en los documentos tecnicos
+                            //de modalidad LEP
+                            if(json.modalidad==6)
                             {
                                 html_table = html_table + '<option value="' + estado.id + '" ' + selected + '>' + estado.nombre + '</option>';
                             }
+                            else
+                            {
+                                if (estado.id != 27)
+                                {
+                                    html_table = html_table + '<option value="' + estado.id + '" ' + selected + '>' + estado.nombre + '</option>';
+                                }
+                            }                                                                                    
                         });
                         
                         var color_boton_guardado="btn-success";
@@ -907,6 +923,81 @@ function cargar_verificacion_2(token_actual, propuesta) {
 
                     var html_table = '';
                     $.each(json.administrativos, function (key2, documento) {
+                        if (documento.verificacion_1_id === null)
+                        {
+                            documento.verificacion_1_id = "";
+                        }
+                        if (documento.verificacion_1_estado === null)
+                        {
+                            documento.verificacion_1_estado = "";
+                        }
+                        if (documento.verificacion_1_observacion === null)
+                        {
+                            documento.verificacion_1_observacion = "";
+                        }
+
+                        html_table = html_table + '<tr>';
+                        html_table = html_table + '<td>' + documento.orden + ' ' + documento.requisito + '</td>';
+                        html_table = html_table + '<td><b>Archivos<b/><br/><br/>';
+
+                        $.each(documento.archivos, function (key, archivo) {
+                            html_table = html_table + '<p><a href="javascript::void(0)" onclick="download_file(\'' + archivo.id_alfresco + '\')">' + archivo.nombre + '</a></p>';
+                        });
+                        html_table = html_table + '<b>Links<b/><br/><br/>';
+                        var numero_link = 1;
+                        $.each(documento.links, function (key, link) {
+                            html_table = html_table + '<p><a href="' + link.link + '" target="_blank">link ' + numero_link + '</a></p>';
+                            numero_link++;
+                        });
+                        html_table = html_table + '</td>';
+                        html_table = html_table + '<td>';
+                        html_table = html_table + '         <div class="row">';
+                        html_table = html_table + '             <div class="col-lg-12">';
+                        html_table = html_table + '                 <div class="form-group">';
+                        html_table = html_table + '                     <label> Resultado de la verificación</label>';
+                        html_table = html_table + '                     <select id="estado_' + documento.id + '" class="form-control estados_administrativos" >';
+                        $.each(json.estados_verificacion_2, function (key, estado) {
+                            var selected = '';
+                            if (documento.verificacion_1_estado == estado.id)
+                            {
+                                selected = 'selected="selected"';
+                            }
+                            
+                            html_table = html_table + '<option value="' + estado.id + '" ' + selected + '>' + estado.nombre + '</option>';
+                            
+                        });
+                        
+                        var color_boton_guardado="btn-success";
+                        if(documento.verificacion_1_id=="")
+                        {
+                            color_boton_guardado="btn-danger";
+                        } 
+                        
+                        html_table = html_table + '                     </select>';
+                        html_table = html_table + '                 </div>';
+                        html_table = html_table + '             </div>';
+                        html_table = html_table + '         </div>';
+                        html_table = html_table + '         <div class="row">';
+                        html_table = html_table + '             <div class="col-lg-12">';
+                        html_table = html_table + '                 <div class="form-group">';
+                        html_table = html_table + '                     <label>Observaciones</label>';
+                        html_table = html_table + '                     <textarea id="observaciones_' + documento.id + '" class="form-control" rows="3">' + documento.verificacion_1_observacion + '</textarea>';
+                        html_table = html_table + '                 </div>';
+                        html_table = html_table + '             </div>';
+                        html_table = html_table + '         </div>';
+                        html_table = html_table + '         <div class="row">';
+                        html_table = html_table + '             <div class="col-lg-12">';
+                        html_table = html_table + '                 <div class="form-group" style="text-align: right">';
+                        html_table = html_table + '                     <button id="btn_documento_' + documento.id + '" type="button" class="btn '+color_boton_guardado+'" onclick="guardar_verificacion_1(\'' + token_actual.token + '\',\'' + documento.id + '\',\'Verificación documentos administrativos\',2)">Guardar</button>';
+                        html_table = html_table + '                     <input type="hidden" class="validar_administrativos" id="id_documento_' + documento.id + '" value="' + documento.verificacion_1_id + '" />';
+                        html_table = html_table + '                 </div>';
+                        html_table = html_table + '             </div>';
+                        html_table = html_table + '         </div>';
+                        html_table = html_table + '</td>';
+                        html_table = html_table + '</tr>';
+                    });
+                    
+                    $.each(json.tecnicos, function (key2, documento) {
                         if (documento.verificacion_1_id === null)
                         {
                             documento.verificacion_1_id = "";
