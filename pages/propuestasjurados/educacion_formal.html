@@ -164,15 +164,16 @@
                                       <div class="col-lg-6">
                                           <div class="form-group">
                                               <label>Graduado</label>
-                                              <input title="graduado" type="checkbox" id="graduado" name="graduado" >
+                                              <input title="graduado" type="checkbox" id="graduado_check">
+                                              <input type="hidden" id="graduado" name="graduado">
                                           </div>
                                       </div>
                                   </div>
                                   <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label>Anexo (pdf,doc,docx,xls,xlsx)</label>
-                                            <input type="file" name="archivo" id="archivo" >
+                                            <label>Anexo (pdf)</label>
+                                            <input type="file" name="archivo" id="archivo" accept="application/pdf" >
                                         </div>
                                     </div>
                                   </div>
@@ -257,8 +258,7 @@
 
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
-        <script src='educacion_formal.js'></script>
-        <script src='../../dist/js/verificar_token.js'></script>
+        <script src='educacion_formal.js'></script>      
         <script src='../../dist/js/jquery.loadJSON.js'></script>
 
 
