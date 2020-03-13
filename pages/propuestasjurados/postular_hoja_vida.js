@@ -117,7 +117,7 @@
   });
 
    cargar_tabla_educacion_formal(token_actual);
-   cargar_tabla_educacion_no_forma(token_actual);
+   cargar_tabla_educacion_no_formal(token_actual);
    cargar_tabla_experiencia(token_actual);
    cargar_tabla_experiencia_jurado(token_actual);
    cargar_tabla_reconocimiento(token_actual);
@@ -138,7 +138,7 @@
                  "responsive": true,
                  "searching": false,
                  "ajax":{
-                     url : url_pv+"PropuestasJurados/all_educacion_formal",
+                     url : url_pv+"PropuestasJurados/all_educacion_formal/active",
                      data: {"token": token_actual.token, "idc": $("#idc").val() },
                      //async: false
                    },
@@ -194,7 +194,7 @@
 
  }
 
- function cargar_tabla_educacion_no_forma(token_actual){
+ function cargar_tabla_educacion_no_formal(token_actual){
   // console.log("idconvocatoria-->"+$("#idc").val() );
    //Cargar datos en la tabla actual
    $('#table_educacion_no_formal').DataTable({
@@ -208,7 +208,7 @@
                  "responsive": true,
                  "searching": false,
                  "ajax":{
-                     url : url_pv+"PropuestasJurados/all_educacion_no_formal",
+                     url : url_pv+"PropuestasJurados/all_educacion_no_formal/active",
                      data: {"token": token_actual.token, "idc": $("#idc").val() },
                    //  async: false
                    },
@@ -297,7 +297,7 @@
                  "responsive": true,
                   "searching": false,
                  "ajax":{
-                     url : url_pv+"PropuestasJurados/all_experiencia_laboral",
+                     url : url_pv+"PropuestasJurados/all_experiencia_laboral/active",
                      data: {"token": token_actual.token, "idc": $("#idc").val() },
                      async: false
                    },
@@ -382,7 +382,7 @@
                  "responsive":true,
                    "searching": false,
                  "ajax":{
-                     url : url_pv+"PropuestasJurados/all_experiencia_jurado",
+                     url : url_pv+"PropuestasJurados/all_experiencia_jurado/active",
                      data: {"token": token_actual.token, "idc": $("#idc").val() },
                      async: false
                    },
@@ -455,7 +455,7 @@
                  "responsive":true,
                  "searching": false,
                  "ajax":{
-                     url : url_pv+"PropuestasJurados/all_reconocimiento",
+                     url : url_pv+"PropuestasJurados/all_reconocimiento/active",
                      data: {"token": token_actual.token, "idc": $("#idc").val() },
                      async: false
                    },
@@ -526,7 +526,7 @@
                  "responsive":true,
                   "searching": false,
                  "ajax":{
-                     url : url_pv+"PropuestasJurados/all_publicacion",
+                     url : url_pv+"PropuestasJurados/all_publicacion/active",
                      data: {"token": token_actual.token, "idc": $("#idc").val() },
                      async: false
                    },
@@ -592,7 +592,7 @@
                  "lengthMenu": [10],
                  "searching": false,
                  "ajax":{
-                     url : url_pv+"PropuestasJurados/all_documento",
+                     url : url_pv+"PropuestasJurados/all_documento/active",
                      data: {"token": token_actual.token, "idc": $("#idc").val() },
                     // async: false
                    },

@@ -23,7 +23,7 @@
          permiso_lectura(token_actual, "Menu Participante");
          $("#back_step").attr("onclick", " location.href = 'experiencia_profesional.html?m=2&id="+  $("#idc").val()+"' ");
          $("#next_step").attr("onclick", " location.href = 'reconocimiento.html?m=2&id="+  $("#idc").val()+"' ");
-         
+
          //Peticion para buscar ciudades
          var json_ciudades = function (request, response) {
              $.ajax({
@@ -36,7 +36,7 @@
                  }
              });
          };
-         
+
          //Cargos el autocomplete de ciudad
          $( "#ciudad_name" ).autocomplete({
              source: json_ciudades,
@@ -54,7 +54,31 @@
              //else { Return your label here }
              }
          });
-         
+
+         $("#archivo").on('change', function(){
+
+           $('#formulario_principal').bootstrapValidator('addField', 'archivo', {
+             validators: {
+                 //notEmpty: {message: 'El archivo es requerido'},
+                 file: {
+                     extension: 'pdf',
+                     type: 'application/pdf',
+                     message: 'El archivo seleccionado no es válido',
+                 }
+             }
+            });
+
+            //console.log( $('#archivo')[0].files[0].size );
+
+            //4974593 = 5mb
+            if ( $('#archivo')[0].files[0].size > 4974593 ){
+                notify("danger", "remove", "Usuario:", "El archivo sobrepasa el tamaño máximo permitido");
+                $('#archivo').val('');
+            }
+
+         });
+
+
          cargar_datos_formulario(token_actual);
          cargar_tabla(token_actual);
          validator_form(token_actual);
@@ -102,8 +126,6 @@
                });
            }
 
-          
-
            //Cargo el formulario con los datos
            if( json.experienciajurado ){
              $('#ciudad_name').val(json.ciudad_name);
@@ -129,7 +151,8 @@
  }
 
  function cargar_tabla(token_actual){
-   console.log("idconvocatoria-->"+$("#idc").val() );
+
+   //console.log("idconvocatoria-->"+$("#idc").val() );
    //Cargar datos en la tabla actual
    $('#table_list').DataTable({
                  "language": {
@@ -252,9 +275,9 @@
            formData.append("convocatoria", $("#id").attr('value'));
            formData.append("anexos", "documentacion");
 
-           console.log("formData-->"+formData);
+          // console.log("formData-->"+formData);
 
-           console.log("idregistro-->"+$("#idregistro").val());
+           //console.log("idregistro-->"+$("#idregistro").val());
 
            if (typeof $("#idregistro").attr('value') == 'undefined' || $("#idregistro").val() =='' ) {
                  console.log("guardar");
@@ -387,8 +410,8 @@
                  notify("info", "ok", "Convocatorias:", "Se activó el registro con éxito.");
                  break;
              case 'No':
-                   notify("info", "ok", "Convocatorias:", "Se desactivó el registro con éxito.");
-                   break;
+                 notify("info", "ok", "Convocatorias:", "Se desactivó el registro con éxito.");
+                 break;
              case 'error':
                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                break;

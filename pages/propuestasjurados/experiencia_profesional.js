@@ -56,11 +56,32 @@
             }
         });
 
+        $("#archivo").on('change', function(){
+
+          $('#formulario_principal').bootstrapValidator('addField', 'archivo', {
+            validators: {
+                //notEmpty: {message: 'El archivo es requerido'},
+                file: {
+                    extension: 'pdf',
+                    type: 'application/pdf',
+                    message: 'El archivo seleccionado no es válido',
+                }
+            }
+           });
+
+           //console.log( $('#archivo')[0].files[0].size );
+
+           //4974593 = 5mb
+           if ( $('#archivo')[0].files[0].size > 4974593 ){
+               notify("danger", "remove", "Usuario:", "El archivo sobrepasa el tamaño máximo permitido");
+               $('#archivo').val('');
+           }
+
+        });
 
          cargar_datos_formulario(token_actual);
          cargar_tabla(token_actual);
          validator_form(token_actual);
-
 
        }
 
@@ -113,8 +134,6 @@
                });
            }
 
-
-
            //Cargo el formulario con los datos
            if( json.experiencialaboral ){
              $("#graduado").removeClass();
@@ -143,7 +162,7 @@
  }
 
  function cargar_tabla(token_actual){
-   console.log("idconvocatoria-->"+$("#idc").val() );
+   //console.log("idconvocatoria-->"+$("#idc").val() );
    //Cargar datos en la tabla actual
    $('#table_list').DataTable({
                  "language": {
@@ -218,8 +237,6 @@
                                            },
                      }
 
-
-
                  ]
              });
 
@@ -232,9 +249,9 @@
            $('.formulario_principal').bootstrapValidator('revalidateField', 'fecha_inicio');
        });
 
-       $('.calendario').on('changeDate show', function (e) {
+      /* $('.calendario').on('changeDate show', function (e) {
            $('.formulario_principal').bootstrapValidator('revalidateField', 'fecha_fin');
-       });
+       });*/
 
        //Validar el formulario
        $('.formulario_principal').bootstrapValidator({
@@ -324,7 +341,6 @@
 
                  }).done(function (result) {
 
-
                    switch (result) {
                      case 'error':
                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
@@ -348,7 +364,6 @@
                        //cargar_datos_formulario(token_actual);
                        break;
                    }
-
 
                  });
 
@@ -393,10 +408,7 @@
                  }
                );
 
-
-
              }
-
 
            $("#idregistro").val(null);
            $("#archivo").val(null);
