@@ -73,13 +73,64 @@
               cargar_select_nucleobasico(token_actual, $('#area_conocimiento').val() );
           });
 
+          $("#archivo").on('change', function(){
+
+              console.log( $('#archivo')[0].files[0] );
+
+            $('#formulario_principal').bootstrapValidator('addField', 'archivo', {
+              validators: {
+                  //notEmpty: {message: 'El archivo es requerido'},
+                  file: {
+                      extension: 'pdf',
+                      type: 'application/pdf',
+                      message: 'El archivo seleccionado no es válido',
+                  }
+              }
+             });
+
+               //4974593 = 5mb
+             if ( $('#archivo')[0].files[0].size > 4974593 ){
+                 notify("danger", "remove", "Usuario:", "El archivo sobrepasa el tamaño máximo permitido");
+                    $('#archivo').val('');
+             }
+
+             /*$('#formulario_principal').bootstrapValidator('addField', 'filesize', {
+               validators: {
+                 between: {
+                     min: 1,
+                     max: 4974593,
+                     message: 'The number of floors must be between %s and %s'
+                 }
+               }
+             });*/
+
+
+            /*$.each($('#archivo')[0].files, function(index, file){
+              //console.log(file.type);
+              console.log( file );
+              if( file.type != 'application/pdf'){
+                  notify("danger", "remove", "Usuario:", "Debe cargar un archivo PDF");
+                   $('#archivo').val('');
+                //  break;
+              }
+
+              if( file.type != 'application/pdf'){
+                  notify("danger", "remove", "Usuario:", "Debe cargar un archivo PDF");
+                   $('#archivo').val('');
+                //  break;
+              }
+
+            });*/
+
+          });
+
         }
 
   });
 
-
-
   function cargar_datos_formulario(token_actual){
+
+      $("input[name=graduado][type=checkbox]").removeAttr('checked', 'checked');
 
     // cargo los datos
     $.ajax({
@@ -128,16 +179,28 @@
 
             //Cargo el formulario con los datos
             if( json.educacionformal ){
+
               $("#graduado").removeClass();
               $('#ciudad_name').val(json.ciudad_name);
+              $('#ciudad').val(json.educacionformal.ciudad.id);
               $('.formulario_principal').loadJSON(json.educacionformal);
+
               json.educacionformal.nivel_educacion > 2? $("#niveleseducativosextra").show() : $("#niveleseducativosextra").hide() ;
               cargar_select_nucleobasico(token_actual, json.educacionformal.area_conocimiento, json.educacionformal.nucleo_basico );
 
-              //  console.log(json.educacionformal.graduado );
-              json.educacionformal.graduado ? $("#graduado").attr("checked", "checked") :  $("#graduado").removeAttr("checked");
+
+              if( json.educacionformal.graduado ){
+
+                $("input[id=graduado_check][type=checkbox]").prop( "checked", true );
+
+              }else if( (!json.educacionformal.graduado) && json.educacionformal.graduado !== null ){
+
+                  $("input[id=graduado_check][type=checkbox]").prop( "checked", false );
+              }
+
+
             //  $("#graduado").addClass("check_activar_"+json.educacionformal.graduado+"  activar_registro");
-                $("#graduado").addClass("check_activar_"+json.educacionformal.graduado+"");
+              //  $("#graduado").addClass("check_activar_"+json.educacionformal.graduado+"");
 
             //  json.educacionformal.graduado ? $("#graduado").addClass("check_activar_true activar_registro") :  $("#graduado").addClass("check_activar_false activar_registro");
 
@@ -326,6 +389,20 @@
             }
 
       }).on('success.form.bv', function (e) {
+
+        $("#graduado").val($("input[name=graduado_check][type=checkbox]").prop( "checked")) ;
+
+        if($("input[id=graduado_check][type=checkbox]").prop( "checked")){
+          $("#graduado").val("true");
+        }
+
+        if( !$("input[id=graduado_check][type=checkbox]").prop( "checked") ){
+          $("#graduado").val("false");
+        }
+
+
+          console.log("---->>>"+ $("#graduado").val() );
+
           // Prevent form submission
           e.preventDefault();
           // Get the form instance
@@ -340,7 +417,7 @@
           formData.append("convocatoria", $("#id").attr('value'));
           formData.append("anexos", "documentacion");
 
-          console.log("idregistro-->"+$("#idregistro").val());
+          //console.log("idregistro-->"+$("#idregistro").val());
 
           if (typeof $("#idregistro").attr('value') == 'undefined' || $("#idregistro").val() =='' ) {
                 //console.log("Guardar-->"+$("#idregistro").val());
@@ -356,7 +433,21 @@
                     cache: false,
                     contentType: false,
                     processData: false,
-                    async: false
+                    async: false,
+                    /*beforeSend: function(xhr){
+
+                      $.each($('#archivo')[0].files, function(index, file){
+                        //console.log(file.type);
+                        //console.log( file );
+                        if( file.type != 'application/pdf'){
+                            notify("danger", "remove", "Usuario:", "Debe cargar un archivo PDF");
+                             $('#archivo').val('');
+                          return false;
+                        }
+
+                      });
+
+                    }*/
 
                 }).done(function (result) {
 
@@ -399,7 +490,8 @@
                     cache: false,
                     contentType: false,
                     processData: false,
-                    async: false
+                    async: false,                 
+
                 }).done(function (result) {
 
                   switch (result) {
@@ -434,6 +526,7 @@
           $("#idregistro").val(null);
           $("#archivo").val(null);
           $("#niveleseducativosextra").hide() ;
+          $("input[id=graduado_check][type=checkbox]").prop('checked',false);
           $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
           //$form.bootstrapValidator('destroy', true);
           bv.resetForm();

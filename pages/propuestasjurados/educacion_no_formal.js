@@ -59,10 +59,32 @@
              }
          });
 
+         $("#archivo").on('change', function(){
+
+           $('#formulario_principal').bootstrapValidator('addField', 'archivo', {
+             validators: {
+                 //notEmpty: {message: 'El archivo es requerido'},
+                 file: {
+                     extension: 'pdf',
+                     type: 'application/pdf',
+                     message: 'El archivo seleccionado no es válido',
+                 }
+             }
+            });
+
+            //console.log( $('#archivo')[0].files[0].size );
+
+            //4974593 = 5mb
+            if ( $('#archivo')[0].files[0].size > 4974593 ){
+                notify("danger", "remove", "Usuario:", "El archivo sobrepasa el tamaño máximo permitido");
+                $('#archivo').val('');
+            }
+
+         });
+
           cargar_datos_formulario(token_actual);
           cargar_tabla(token_actual);
           validator_form(token_actual);
-
 
       }
 
@@ -117,6 +139,7 @@
             //Cargo el formulario con los datos
             if( json.educacionnoformal ){
               $('#ciudad_name').val(json.ciudad_name);
+              $('#ciudad').val(json.educacionnoformal.ciudad.id);
               $('.formulario_principal').loadJSON(json.educacionnoformal);
 
             }
@@ -140,7 +163,7 @@
   }
 
   function cargar_tabla(token_actual){
-    console.log("idconvocatoria-->"+$("#idc").val() );
+    //console.log("idconvocatoria-->"+$("#idc").val() );
     //Cargar datos en la tabla actual
     $('#table_list').DataTable({
                   "language": {
@@ -280,7 +303,7 @@
               },
               numero_hora: {
                   validators: {
-                      notEmpty: {message: 'La cantidad de horas es requerida'},
+                      //notEmpty: {message: 'La cantidad de horas es requerida'},
                       integer: {message: 'Solo se admiten números'}
                   }
               },
@@ -300,17 +323,15 @@
           // Get the BootstrapValidator instance
           var bv = $form.data('bootstrapValidator');
 
-
           var formData = new FormData(document.getElementById("formulario_principal"));
           formData.append("modulo", "Menu Participante");
           formData.append("token", token_actual.token);
           formData.append("convocatoria", $("#id").attr('value'));
           formData.append("anexos", "documentacion");
 
+            //console.log("formData-->"+formData);
 
-            console.log("formData-->"+formData);
-
-            console.log("idregistro-->"+$("#idregistro").val());
+            //console.log("idregistro-->"+$("#idregistro").val());
 
           if (typeof $("#idregistro").attr('value') == 'undefined' || $("#idregistro").val() =='' ) {
                 console.log("Guardar-->"+$("#idregistro").val());
@@ -324,10 +345,8 @@
                     cache: false,
                     contentType: false,
                     processData: false,
-                    async: false
-
+                    async: false,
                 }).done(function (result) {
-
 
                   switch (result) {
                     case 'error':
@@ -368,7 +387,8 @@
                   cache: false,
                   contentType: false,
                   processData: false,
-                  async: false
+                  async: false,
+
                 }).done(function (result) {
 
                   switch (result) {
