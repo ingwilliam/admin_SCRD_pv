@@ -28,7 +28,7 @@ $(document).ready(function () {
             }).done(function (data) {
                 if (data == 'error_metodo')
                 {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                 } else
                 {
                     if (data == 'error_token')
@@ -72,7 +72,7 @@ $(document).ready(function () {
 
                                                 if (data == 'error_metodo')
                                                 {
-                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                                 } else
                                                 {
                                                     if (data == 'error_token')
@@ -196,7 +196,7 @@ $(document).ready(function () {
                 }).done(function (data) {
                     if (data == 'error_metodo')
                     {
-                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                     } else
                     {
                         if (data == 'error_token')
@@ -216,7 +216,7 @@ $(document).ready(function () {
                                 {
                                     if (data == 'error_participante_propuesta')
                                     {
-                                        location.href = url_pv_admin + 'pages/perfilesparticipantes/'+redirect_perfil+'.html?msg=Se registro un error al importar el participante, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co.&msg_tipo=danger';
+                                        location.href = url_pv_admin + 'pages/perfilesparticipantes/'+redirect_perfil+'.html?msg=Se registro un error al importar el participante, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co.&msg_tipo=danger';
                                     } else
                                     {
                                         var json = JSON.parse(data);

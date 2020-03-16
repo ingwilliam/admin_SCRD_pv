@@ -20,7 +20,7 @@ $(document).ready(function () {
         }).done(function (data) {
             if (data == 'error_metodo')
             {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
                 if (data == 'error')
@@ -85,7 +85,7 @@ $(document).ready(function () {
                     }).done(function (data) {
                         if (data == 'error_metodo')
                         {
-                            notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                         } else
                         {
                             if (data == 'error_token')
@@ -138,7 +138,7 @@ $(document).ready(function () {
                 }).done(function (data) {
                     if (data == 'error_metodo')
                     {
-                        notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                     } else
                     {
                         if (data == 'error_token')
@@ -197,9 +197,33 @@ $(document).ready(function () {
                         
                         var json = JSON.parse(data);
                         
+                        $("#reporte_propuestas_estados").empty();                                
+                        $("#reporte_propuestas_participantes").empty();                                
+                        $(".fecha_actual").empty();                                
+                        
+                        var reporte_propuestas_estados = Morris.Bar({
+                            element: 'reporte_propuestas_estados',                            
+                            xkey: 'device',
+                            ykeys: ['geekbench'],
+                            labels: ['Total'],
+                            barRatio: 0.4,
+                            xLabelAngle: 35,
+                            hideHover: 'auto'           
+                        });
+                        
+                        var reporte_propuestas_participantes = Morris.Bar({
+                            element: 'reporte_propuestas_participantes',                            
+                            xkey: 'device',
+                            ykeys: ['geekbench'],
+                            labels: ['Total'],
+                            barRatio: 0.4,
+                            xLabelAngle: 35,
+                            hideHover: 'auto'           
+                        });
+                        
                         if (json.error == 'error_metodo')
                         {                            
-                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                         } else
                         {
                             if (json.error == 'error_token')
@@ -213,32 +237,12 @@ $(document).ready(function () {
                                 } else
                                 {
                                     $("#reportes_propuestas").css("display","block");
+                                                                        
+                                    $(".fecha_actual").html(json.fecha_actual);
                                     
+                                    reporte_propuestas_estados.setData(json.reporte_propuestas_estados);
                                     
-                                    $("#reporte_propuestas_estados").empty();
-                                
-                                
-                                    Morris.Bar({
-                                        element: 'reporte_propuestas_estados',
-                                        data: [
-                                        {device: 'Registradas', geekbench: json.reporte_propuestas_estados[7]},    
-                                        {device: 'Inscritas', geekbench: json.reporte_propuestas_estados[8]},    
-                                        {device: 'Anuladas', geekbench: json.reporte_propuestas_estados[20]},    
-                                        {device: 'Por Subsanar', geekbench: json.reporte_propuestas_estados[21]},    
-                                        {device: 'Subsanación\nRecibida', geekbench: json.reporte_propuestas_estados[22]},    
-                                        {device: 'Subsanadas', geekbench: json.reporte_propuestas_estados[31]},
-                                        {device: 'Rechazadas', geekbench: json.reporte_propuestas_estados[23]},    
-                                        {device: 'Habilitadas', geekbench: json.reporte_propuestas_estados[24]}                                        
-                                        ],
-                                        xkey: 'device',
-                                        ykeys: ['geekbench'],
-                                        labels: ['Total'],
-                                        barRatio: 0.4,
-                                        xLabelAngle: 35,
-                                        hideHover: 'auto'           
-                                    });
-                                    
-                                    
+                                    reporte_propuestas_participantes.setData(json.reporte_propuestas_participantes);
                                     
                                 }                                
                             }

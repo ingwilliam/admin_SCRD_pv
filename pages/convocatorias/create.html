@@ -173,7 +173,7 @@
                                     }).done(function (data) {
                                         if (data == 'error_metodo')
                                         {
-                                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                         } else
                                         {
                                             if (data == 'error')
@@ -281,7 +281,7 @@
 
                                         if (result == 'error')
                                         {
-                                            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                         } else
                                         {
                                             if (result == 'acceso_denegado')
@@ -292,11 +292,11 @@
                                                 if (isNaN(result)) {
                                                     if(result=="error_alfresco")
                                                     {                                                        
-                                                        location.href = 'update.html?id='+result+'&msg=Se creó la convocatoria con éxito, pero se genero un error con alfresco, por favor informar a la mesa de ayuda soporte.convocatorias@scrd.gov.co.&msg_tipo=warning';
+                                                        location.href = 'update.html?id='+result+'&msg=Se creó la convocatoria con éxito, pero se genero un error con alfresco, por favor informar a la mesa de ayuda convocatorias@scrd.gov.co.&msg_tipo=warning';
                                                     }
                                                     else
                                                     {
-                                                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                                     }                                                    
                                                 } 
                                                 else

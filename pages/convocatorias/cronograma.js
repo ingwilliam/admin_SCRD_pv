@@ -41,7 +41,7 @@ $(document).ready(function () {
             }).done(function (data) {
                 if (data == 'error_metodo')
                 {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                 } else
                 {
                     if (data == 'error')
@@ -131,7 +131,7 @@ $(document).ready(function () {
                 }).done(function (data) {
                     if (data == 'error_metodo')
                     {
-                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                     } else
                     {
                         if (data == 'error')
@@ -233,7 +233,7 @@ function validator_form(token_actual) {
 
                 if (result == 'error')
                 {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                 } else
                 {
                     if (result == 'error_token')
@@ -247,7 +247,7 @@ function validator_form(token_actual) {
                         } else
                         {
                             if (isNaN(result)) {
-                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                             } else
                             {
                                 notify("success", "ok", "Convocatorias:", "Se creó la categoría con éxito.");
@@ -269,7 +269,7 @@ function validator_form(token_actual) {
             }).done(function (result) {
                 if (result == 'error')
                 {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                 } else
                 {
                     if (result == 'error_token')
@@ -284,7 +284,7 @@ function validator_form(token_actual) {
                         {
                             if (isNaN(result))
                             {
-                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                             } else
                             {
                                 notify("info", "ok", "Convocatorias:", "Se edito el area con éxito.");
@@ -375,7 +375,7 @@ function activar_registro(id, token_actual) {
                 notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
             } else
             {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             }
         }
     });
@@ -421,7 +421,7 @@ function acciones_categoria(token_actual)
                     notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
                 } else
                 {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                 }
             }
         });
@@ -437,7 +437,7 @@ function acciones_categoria(token_actual)
         }).done(function (data) {
             if (data == 'error_metodo')
             {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
                 if (data == 'error')

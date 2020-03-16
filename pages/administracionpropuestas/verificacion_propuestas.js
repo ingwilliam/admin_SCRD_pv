@@ -20,7 +20,7 @@ $(document).ready(function () {
         }).done(function (data) {
             if (data == 'error_metodo')
             {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
                 if (data == 'error')
@@ -107,7 +107,7 @@ $(document).ready(function () {
                         }).done(function (data) {
                             if (data == 'error_metodo')
                             {
-                                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                             } else
                             {
                                 if (data == 'error_token')
@@ -134,7 +134,7 @@ $(document).ready(function () {
                                             }
                                         } else
                                         {
-                                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                         }
                                     }
                                 }
@@ -170,7 +170,7 @@ $(document).ready(function () {
                     }).done(function (data) {
                         if (data == 'error_metodo')
                         {
-                            notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                         } else
                         {
                             if (data == 'error_token')
@@ -221,7 +221,7 @@ $(document).ready(function () {
                 }).done(function (data) {
                     if (data == 'error_metodo')
                     {
-                        notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                     } else
                     {
                         if (data == 'error_token')
@@ -288,7 +288,7 @@ $(document).ready(function () {
 
                     if (result == 'error_metodo')
                     {
-                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                     } else
                     {
                         if (result == 'error_token')
@@ -308,7 +308,7 @@ $(document).ready(function () {
                                 {
                                     if (result == 'error')
                                     {
-                                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                     } else
                                     {
 
@@ -362,7 +362,7 @@ $(document).ready(function () {
 
                     if (result == 'error_metodo')
                     {
-                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                     } else
                     {
                         if (result == 'error_token')
@@ -382,7 +382,7 @@ $(document).ready(function () {
                                 {
                                     if (result == 'error')
                                     {
-                                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                     } else
                                     {
 
@@ -437,7 +437,7 @@ $(document).ready(function () {
 
                     if (result == 'error_metodo')
                     {
-                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                     } else
                     {
                         if (result == 'error_token')
@@ -457,7 +457,7 @@ $(document).ready(function () {
                                 {
                                     if (result == 'error')
                                     {
-                                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                        notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                     } else
                                     {
 
@@ -510,7 +510,7 @@ function guardar_confirmacion(token_actual, estado_actual_propuesta,tipo_verific
 
         if (result == 'error_metodo')
         {
-            notify("danger", "ok", "Verificación de propuestas:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            notify("danger", "ok", "Verificación de propuestas:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
         } else
         {
             if (result == 'error_token')
@@ -530,7 +530,7 @@ function guardar_confirmacion(token_actual, estado_actual_propuesta,tipo_verific
                     {
                         if (result == 'error')
                         {
-                            notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                         } else
                         {
 
@@ -647,7 +647,7 @@ function cargar_verificacion_1(token_actual, propuesta) {
     }).done(function (data) {
         if (data == 'error_metodo')
         {
-            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
         } else
         {
             if (data == 'error_token')
@@ -904,7 +904,7 @@ function cargar_verificacion_2(token_actual, propuesta) {
     }).done(function (data) {
         if (data == 'error_metodo')
         {
-            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
         } else
         {
             if (data == 'error_token')
@@ -1149,7 +1149,7 @@ function guardar_verificacion_1(token_actual, id , modulo , verificacion)
 
             if (result == 'error_metodo')
             {
-                notify("danger", "ok", "Verificación de propuestas:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Verificación de propuestas:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
                 if (result == 'error_token')
@@ -1169,11 +1169,11 @@ function guardar_verificacion_1(token_actual, id , modulo , verificacion)
                         {
                             if (result == 'error')
                             {
-                                notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                             } else
                             {
                                 if (isNaN(result)) {
-                                    notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    notify("danger", "ok", "Verificación de propuestas:", "Se registro un error al crear, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                 } else
                                 {
                                     $("#id_documento_" + convocatoriadocumento).val(result);
