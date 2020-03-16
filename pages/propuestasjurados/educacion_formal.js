@@ -21,7 +21,7 @@
       {
           //Verifica si el token actual tiene acceso de lectura
           permiso_lectura(token_actual, "Menu Participante");
-          
+
           //Peticion para buscar ciudades
           var json_ciudades = function (request, response) {
               $.ajax({
@@ -34,7 +34,7 @@
                   }
               });
           };
-          
+
           //Cargos el autocomplete de ciudad
           $( "#ciudad_name" ).autocomplete({
               source: json_ciudades,
@@ -53,7 +53,7 @@
               }
           });
 
-          
+
           cargar_datos_formulario(token_actual);
           cargar_tabla(token_actual);
           validator_form(token_actual);
@@ -73,13 +73,64 @@
               cargar_select_nucleobasico(token_actual, $('#area_conocimiento').val() );
           });
 
+          $("#archivo").on('change', function(){
+
+              console.log( $('#archivo')[0].files[0] );
+
+            $('#formulario_principal').bootstrapValidator('addField', 'archivo', {
+              validators: {
+                  //notEmpty: {message: 'El archivo es requerido'},
+                  file: {
+                      extension: 'pdf',
+                      type: 'application/pdf',
+                      message: 'El archivo seleccionado no es válido',
+                  }
+              }
+             });
+
+               //4974593 = 5mb
+             if ( $('#archivo')[0].files[0].size > 4974593 ){
+                 notify("danger", "remove", "Usuario:", "El archivo sobrepasa el tamaño máximo permitido");
+                    $('#archivo').val('');
+             }
+
+             /*$('#formulario_principal').bootstrapValidator('addField', 'filesize', {
+               validators: {
+                 between: {
+                     min: 1,
+                     max: 4974593,
+                     message: 'The number of floors must be between %s and %s'
+                 }
+               }
+             });*/
+
+
+            /*$.each($('#archivo')[0].files, function(index, file){
+              //console.log(file.type);
+              console.log( file );
+              if( file.type != 'application/pdf'){
+                  notify("danger", "remove", "Usuario:", "Debe cargar un archivo PDF");
+                   $('#archivo').val('');
+                //  break;
+              }
+
+              if( file.type != 'application/pdf'){
+                  notify("danger", "remove", "Usuario:", "Debe cargar un archivo PDF");
+                   $('#archivo').val('');
+                //  break;
+              }
+
+            });*/
+
+          });
+
         }
 
   });
 
-
-
   function cargar_datos_formulario(token_actual){
+
+      $("input[name=graduado][type=checkbox]").removeAttr('checked', 'checked');
 
     // cargo los datos
     $.ajax({
@@ -125,19 +176,31 @@
                 });
             }
 
-           
+
             //Cargo el formulario con los datos
             if( json.educacionformal ){
+
               $("#graduado").removeClass();
               $('#ciudad_name').val(json.ciudad_name);
+              $('#ciudad').val(json.educacionformal.ciudad.id);
               $('.formulario_principal').loadJSON(json.educacionformal);
+
               json.educacionformal.nivel_educacion > 2? $("#niveleseducativosextra").show() : $("#niveleseducativosextra").hide() ;
               cargar_select_nucleobasico(token_actual, json.educacionformal.area_conocimiento, json.educacionformal.nucleo_basico );
 
-              //  console.log(json.educacionformal.graduado );
-              json.educacionformal.graduado ? $("#graduado").attr("checked", "checked") :  $("#graduado").removeAttr("checked");
+
+              if( json.educacionformal.graduado ){
+
+                $("input[id=graduado_check][type=checkbox]").prop( "checked", true );
+
+              }else if( (!json.educacionformal.graduado) && json.educacionformal.graduado !== null ){
+
+                  $("input[id=graduado_check][type=checkbox]").prop( "checked", false );
+              }
+
+
             //  $("#graduado").addClass("check_activar_"+json.educacionformal.graduado+"  activar_registro");
-                $("#graduado").addClass("check_activar_"+json.educacionformal.graduado+"");
+              //  $("#graduado").addClass("check_activar_"+json.educacionformal.graduado+"");
 
             //  json.educacionformal.graduado ? $("#graduado").addClass("check_activar_true activar_registro") :  $("#graduado").addClass("check_activar_false activar_registro");
 
@@ -258,9 +321,9 @@
                       },
                       {"data": "aciones",
                                 render: function ( data, type, row ) {
-                                            return '<button title="'+row.id+'" type="button" class="btn btn-warning btn_cargar">'
+                                            return '<button title="Editar" id="'+row.id+'" type="button" class="btn btn-warning btn_cargar">'
                                                 +'<span class="glyphicon glyphicon-edit"></span></button>'
-                                                +'<button title="'+( row.file == null ? "No se ha cargado archivo": row.file)+'" type="button" class="btn btn-primary download_file">'
+                                                +'<button title="'+( row.file == null ? "No se ha cargado archivo": "Descargar archivo")+'" id="'+( row.file == null ? "No se ha cargado archivo": row.file)+'"  type="button" class="btn btn-primary download_file">'
                                                 + ( row.file == null ? '<span class="glyphicon glyphicon-ban-circle" title="No se ha cargado archivo"></span>':'<span class="glyphicon glyphicon-download-alt"></span>')
                                                 + '</button>';
                                             },
@@ -326,6 +389,20 @@
             }
 
       }).on('success.form.bv', function (e) {
+
+        $("#graduado").val($("input[name=graduado_check][type=checkbox]").prop( "checked")) ;
+
+        if($("input[id=graduado_check][type=checkbox]").prop( "checked")){
+          $("#graduado").val("true");
+        }
+
+        if( !$("input[id=graduado_check][type=checkbox]").prop( "checked") ){
+          $("#graduado").val("false");
+        }
+
+
+          console.log("---->>>"+ $("#graduado").val() );
+
           // Prevent form submission
           e.preventDefault();
           // Get the form instance
@@ -340,7 +417,7 @@
           formData.append("convocatoria", $("#id").attr('value'));
           formData.append("anexos", "documentacion");
 
-          console.log("idregistro-->"+$("#idregistro").val());
+          //console.log("idregistro-->"+$("#idregistro").val());
 
           if (typeof $("#idregistro").attr('value') == 'undefined' || $("#idregistro").val() =='' ) {
                 //console.log("Guardar-->"+$("#idregistro").val());
@@ -356,7 +433,21 @@
                     cache: false,
                     contentType: false,
                     processData: false,
-                    async: false
+                    async: false,
+                    /*beforeSend: function(xhr){
+
+                      $.each($('#archivo')[0].files, function(index, file){
+                        //console.log(file.type);
+                        //console.log( file );
+                        if( file.type != 'application/pdf'){
+                            notify("danger", "remove", "Usuario:", "Debe cargar un archivo PDF");
+                             $('#archivo').val('');
+                          return false;
+                        }
+
+                      });
+
+                    }*/
 
                 }).done(function (result) {
 
@@ -399,7 +490,8 @@
                     cache: false,
                     contentType: false,
                     processData: false,
-                    async: false
+                    async: false,                 
+
                 }).done(function (result) {
 
                   switch (result) {
@@ -434,6 +526,7 @@
           $("#idregistro").val(null);
           $("#archivo").val(null);
           $("#niveleseducativosextra").hide() ;
+          $("input[id=graduado_check][type=checkbox]").prop('checked',false);
           $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
           //$form.bootstrapValidator('destroy', true);
           bv.resetForm();
@@ -448,7 +541,7 @@
 
     //Permite realizar la carga respectiva de cada registro
     $(".btn_cargar").click(function () {
-        $("#idregistro").val( $(this).attr("title") );
+        $("#idregistro").val( $(this).attr("id") );
         // cargo los datos
         cargar_datos_formulario(token_actual);
     });
@@ -503,7 +596,7 @@
     //descargar archivo
     $(".download_file").click(function () {
       //Cargo el id file
-      var cod = $(this).attr('title');
+      var cod = $(this).attr('id');
 
       $.AjaxDownloader({
           url: url_pv + 'PropuestasJurados/download_file/',

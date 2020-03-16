@@ -20,7 +20,7 @@
      {
          //Verifica si el token actual tiene acceso de lectura
          permiso_lectura(token_actual, "Menu Participante");
-         
+
          //Peticion para buscar ciudades
          var json_ciudades = function (request, response) {
              $.ajax({
@@ -33,7 +33,7 @@
                  }
              });
          };
-         
+
          //Cargos el autocomplete de ciudad de residencia
 
          $( "#ciudad_residencia_name" ).autocomplete({
@@ -52,7 +52,7 @@
              //else { Return your label here }
              }
          });
-         
+
          //Cargos el autocomplete de ciudad de nacimiento
          //$("#ciudad_nacimiento_name").val(json.ciudad[json.participante.ciudad_nacimiento].label);
          $( "#ciudad_nacimiento_name" ).autocomplete({
@@ -71,7 +71,7 @@
              //else { Return your label here }
              }
          });
-         
+
        //Peticion para buscar barrios
          var json_barrio = function (request, response) {
              $.ajax({
@@ -84,7 +84,7 @@
                  }
              });
          };
-         
+
          //Cargos el autocomplete de barrios
          $("#barrio_residencia_name").autocomplete({
              source: json_barrio,
@@ -100,8 +100,39 @@
                  }
              }
          });
-         
-         
+
+         // cargo los datos
+         $.ajax({
+             type: 'GET',
+             url: url_pv + 'PropuestasJurados/select_categoria',
+             data: {"token": token_actual.token},
+         }).done(function (data) {
+
+           switch (data) {
+             case 'error_metodo':
+                 notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                 break;
+             case 'error_token':
+               location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+               break;
+             default:
+
+                  var json = JSON.parse(data);
+
+                  $('#modalidad_participa').find('option').remove();
+                  $("#modalidad_participa").append('<option value="">:: Seleccionar ::</option>');
+                  if (json.length > 0) {
+                      $.each(json, function (key, array) {
+                          $("#modalidad_participa").append('<option value="' + array.id+'" >' + array.nombre + '</option>');
+                      });
+                  }
+
+               break;
+             }
+
+         });
+
+
          cargar_datos_formulario(token_actual);
          validator_form(token_actual);
 
@@ -145,9 +176,12 @@ function cargar_datos_formulario(token_actual){
 
         if( json.participante ){
 
+          $("#estado_hv").html(json.estado);
+
           $("#idp").val(json.participante.id);
           //console.log("tipo-->"+json.participante.tipo);
           $('#categoria').val(json.categoria);
+          $("#modalidad_participa").val(json.categoria);
           $('#numero_documento').val(json.participante.numero_documento);
           $('#primer_nombre').val(json.participante.primer_nombre);
           $('#segundo_nombre').val(json.participante.segundo_nombre);
@@ -163,7 +197,7 @@ function cargar_datos_formulario(token_actual){
           if(json.participante.ciudad_residencia != null){
             $('#ciudad_residencia_name').val(json.ciudad_residencia_name);
             $('#ciudad_residencia').val(json.participante.ciudad_residencia);
-          }        
+          }
 
           if(json.participante.barrio_residencia != null ){
             $('#barrio_residencia_name').val(json.barrio_residencia_name);
@@ -258,7 +292,8 @@ function cargar_datos_formulario(token_actual){
                   $("#estrato").append('<option value="' + array + '" '+selected+' >' + array + '</option>');
               });
           }
-          
+
+
           $("#formulario_principal").show();
 
         }else{
@@ -284,8 +319,6 @@ function cargar_datos_formulario(token_actual){
 
 function validator_form(token_actual) {
 
-
-
     //Se debe colocar debido a que el calendario es un componente diferente
     $('.calendario').on('changeDate show', function (e) {
         $('.formulario_principal').bootstrapValidator('revalidateField', 'fecha_nacimiento');
@@ -298,7 +331,7 @@ function validator_form(token_actual) {
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
-            categoria:{
+            categoria_participa:{
               validators: {
                   notEmpty: {message: 'La categoria es requerida'}
               }

@@ -68,20 +68,46 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Información Básica</h1>
+                        <h1 class="page-header">Hoja de vida - Información Básica</h1>
                         <!--h5><b>Su estado actual es:</b></h5-->
                     </div>
                     <!-- /.col-lg-12 -->
                     <div class="panel-body" style="text-align: right">
-                        <button type="button" class="btn btn-default btn-circle btn-lg" onclick="location.href = '../propuestas/propuestas_busqueda_convocatorias.html'"><i class="fa fa-arrow-left"></i>
-
-                        </button>
-
-                        <button type="button" class="btn btn-default btn-circle btn-lg" onclick="" id="next_step"><i class="fa fa-arrow-right"></i>
+                      <button
+                      type="button"
+                      class="btn btn-primary btn-circle btn-lg"
+                      onclick="location.href = '../propuestas/propuestas_busqueda_convocatorias.html'"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Listar todas las convocatorias."
+                      data-original-title="Listar todas las convocatorias."
+                      >
+                        <i class="fa fa-list"></i>
+                      </button>
+                        <button
+                        type="button"
+                        class="btn btn-default btn-circle btn-lg"
+                        onclick=""
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Ingresar la información sobre educación formal."
+                        data-original-title="Ingresar la información sobre educación formal."
+                        id="next_step"
+                        >
+                          <i class="fa fa-arrow-right"></i>
                         </button>
                     </div>
                 </div>
                 <!-- /.row -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                      <div class="alert alert-info">
+                         El estado de su hoja de vida es <b><span id="estado_hv"></span></b>.
+                      </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
@@ -104,6 +130,14 @@
                                     </div-->
 
                                     <div class="row">
+                                      <div class="col-lg-12">
+                                          <div class="form-group">
+                                              <label>Participa en la categoria de:  <span class="icono_requerido">*</span></label>
+                                              <select id='modalidad_participa' name="modalidad_participa" class="form-control" >
+                                                  <option value="">:: Seleccionar ::</option>
+                                              </select>
+                                          </div>
+                                      </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Tipo de documento de identificación  <span class="icono_requerido">*</span></label>
@@ -342,7 +376,7 @@
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
         <script src='perfil.js'></script>
-        <script src='../../dist/js/verificar_token.js'></script>
+        <!--script src='../../dist/js/verificar_token.js'></script-->
 
     </body>
 </html>

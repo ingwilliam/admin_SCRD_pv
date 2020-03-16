@@ -68,13 +68,34 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Experiencia disciplinar</h1>
+                        <h1 class="page-header">Hoja de vida - Experiencia disciplinar</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                     <div class="panel-body" style="text-align: right">
-                      <button type="button" class="btn btn-default btn-circle btn-lg" onclick="" id="back_step"><i class="fa fa-arrow-left"></i>
+                      <button
+                      type="button"
+                      class="btn btn-default btn-circle btn-lg"
+                      onclick=""
+                      id="back_step"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Ingresar la información sobre educación no formal."
+                      data-original-title="Ingresar la información sobre educación no formal."
+                      >
+                        <i class="fa fa-arrow-left"></i>
                       </button>
-                      <button type="button" class="btn btn-default btn-circle btn-lg" onclick="" id="next_step"><i class="fa fa-arrow-right"></i>
+
+                      <button
+                      type="button"
+                      class="btn btn-default btn-circle btn-lg"
+                      onclick=""
+                      id="next_step"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Ingresar la información sobre experiencia como jurado"
+                      data-original-title="Ingresar la información sobre experiencia como jurado"
+                      >
+                        <i class="fa fa-arrow-right"></i>
                       </button>
                     </div>
                 </div>
@@ -192,8 +213,8 @@
                                     <div class="row">
                                       <div class="col-lg-12">
                                           <div class="form-group">
-                                              <label>Anexo (pdf,doc,docx,xls,xlsx)</label>
-                                              <input type="file" name="archivo" id="archivo" >
+                                              <label>Anexo (pdf), tamaño máximo 5mb.</label>
+                                              <input type="file" name="archivo" id="archivo"accept="application/pdf" >
                                           </div>
                                       </div>
                                     </div>
@@ -281,8 +302,7 @@
 
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
-        <script src='experiencia_profesional.js'></script>
-        <script src='../../dist/js/verificar_token.js'></script>
+        <script src='experiencia_profesional.js'></script>      
         <script src='../../dist/js/jquery.loadJSON.js'></script>
 
     </body>

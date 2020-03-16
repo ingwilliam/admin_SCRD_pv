@@ -27,7 +27,7 @@ function cargar_notificacion( key){
     // cargo los datos
     $.ajax({
         type: 'GET',
-        url: 'http://localhost/crud_SCRD_pv/api/Juradosseleccion/notificado_key_notificacion',
+        url: url_pv+'Juradosseleccion/notificado_key_notificacion',
         data: {"key": key},
     }).done(function (data) {
 
@@ -91,7 +91,7 @@ function aceptar_notificacion( key){
 
   $.ajax({
       type: 'PUT',
-      url: 'http://localhost/crud_SCRD_pv/api/Juradosseleccion/aceptar_notificacion',
+      url: url_pv+'/Juradosseleccion/aceptar_notificacion',
       data: $("#form_notificacion").serialize()
       +"&key="+key
   }).done(function (data) {
@@ -131,7 +131,7 @@ function rechazar_notificacion( key){
 
   $.ajax({
       type: 'PUT',
-      url: 'http://localhost/crud_SCRD_pv/api/Juradosseleccion/rechazar_notificacion',
+      url: url_pv+'Juradosseleccion/rechazar_notificacion',
       data:"key="+key
   }).done(function (data) {
 

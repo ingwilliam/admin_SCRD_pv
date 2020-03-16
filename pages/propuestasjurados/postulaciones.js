@@ -8,10 +8,10 @@
  $(document).ready(function () {
 
     $("#idc").val($("#id").val());
-    $("#id").val(null);
+    //$("#id").val(null);
 
      //Verifico si el token exite en el cliente y verifico que el token este activo en el servidor
-     var token_actual = getLocalStorage(name_local_storage);
+    var token_actual = getLocalStorage(name_local_storage);
 
      //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
      if ($.isEmptyObject(token_actual)) {
@@ -24,27 +24,40 @@
 
          verificar_estado_propuesta(token_actual);
 
+         cargar_select_enfoques(token_actual);
+         cargar_select_lineas(token_actual);
          cargar_select_area(token_actual);
-         validator_form(token_actual);
+
+        // validator_form(token_actual);
 
          //Listado de las postulaicones
          cargar_tabla_p(token_actual);
 
-         //Postular hoja de vida
-         $("#postular").click(function () {
-
-             $('#perfil_info').modal('toggle');
-             //actualizar tabla postulaciones
-             postular(token_actual);
-
+         $('#perfil_info').on('shown.bs.modal', function() {
+           //alert("Cargando");
+            // $('#form_nuevo_criterio').bootstrapValidator('resetForm', true);
+          //  fields = $('input[type=radio][name="perfilesRadios"]');
+            /// $('#form_nuevo_criterio').bootstrapValidator('revalidateField', fields);
          });
 
-       }
+       $('#perfil_info').on('hidden.bs.modal', function() {
+
+           //elimina el validador del formulario de los perfiles
+            $('#form_nuevo_criterio').data("bootstrapValidator").destroy();
+        });
+
+        $("#buscar").on('click', function(){          
+             cargar_tabla_b(token_actual);
+        });
+
+
+
+       }// fin else
 
  });
 
 
-  function verificar_estado_propuesta(token_actual){
+ function verificar_estado_propuesta(token_actual){
 
    //datos de la propuesta
    $.ajax({
@@ -88,12 +101,91 @@
   }
 
 
- function cargar_select_area(token_actual){
+ function cargar_select_enfoques(token_actual){
 
+    $.ajax({
+        type: 'GET',
+        url: url_pv + 'Enfoques/select',
+        data: {"token": token_actual.token},
+    }).done(function (data) {
+
+      switch (data) {
+        case 'error':
+          notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+          break;
+        case 'error_metodo':
+            notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            break;
+        case 'error_token':
+          location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+          break;
+        case 'acceso_denegado':
+          notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
+          break;
+        default:
+          var json = JSON.parse(data);
+
+          //Cargos el select de enfoques
+          $('#enfoque').find('option').remove();
+          $("#enfoque").append('<option value="">:: Seleccionar ::</option>');
+          if ( json != null && json.length > 0) {
+              $.each(json, function (key, array) {
+                  $("#enfoque").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
+              });
+          }
+
+          break;
+        }
+
+      }
+    );
+  }
+
+ function cargar_select_lineas(token_actual){
+
+     $.ajax({
+         type: 'GET',
+         url: url_pv + 'Lineasestrategicas/select',
+         data: {"token": token_actual.token},
+     }).done(function (data) {
+
+       switch (data) {
+         case 'error':
+           notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+           break;
+         case 'error_metodo':
+             notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+             break;
+         case 'error_token':
+           location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+           break;
+         case 'acceso_denegado':
+           notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
+           break;
+         default:
+           var json = JSON.parse(data);
+
+           //Cargos el select de líneas estratégicas
+           $('#linea').find('option').remove();
+           $("#linea").append('<option value="">:: Seleccionar ::</option>');
+           if ( json != null && json.length > 0) {
+               $.each(json, function (key, array) {
+                   $("#linea").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
+               });
+           }
+
+           break;
+         }
+
+       }
+     );
+   }
+
+ function cargar_select_area(token_actual){
 
    $.ajax({
        type: 'GET',
-       url: url_pv + 'PropuestasJurados/postulacion_select_area',
+       url: url_pv + 'Areas/select',
        data: {"token": token_actual.token},
    }).done(function (data) {
 
@@ -131,7 +223,7 @@
    );
  }
 
- function validator_form(token_actual) {
+ /*function validator_form(token_actual) {
 
        //Validar el formulario
        $('.formulario_principal').bootstrapValidator({
@@ -169,7 +261,7 @@
 
        });
 
-   }
+   }*/
 
  function cargar_tabla_b(token_actual){
      //console.log("idconvocatoria-->"+$("#idc").val() );
@@ -188,9 +280,17 @@
                    "serverSide": true,
                    "lengthMenu": [5,10],
                    "responsive": true,
+                   "searching": false,
                    "ajax":{
                        url : url_pv+"PropuestasJurados/postulacion_search_convocatorias",
-                       data: {"token": token_actual.token, "area": $("#area").val(), "idc": $("#idc").val() },
+                       data: {
+                         "token" : token_actual.token,
+                         "enfoque" : $("#enfoque").val(),
+                         "linea" : $("#linea").val(),
+                         "area" : $("#area").val(),
+                         "idc" : $("#idc").val(),
+                         "pclave" : $("#pclave").val()
+                       },
                        async: false
                      },
                    "drawCallback": function (settings) {
@@ -244,21 +344,25 @@
 
    }
 
-   //Permite realizar acciones despues de cargar la tabla
+//Permite realizar acciones despues de cargar la tabla
  function acciones_b_registro(token_actual) {
 
      //Permite realizar la carga respectiva de cada registro
      $(".btn_cargar_b").click(function () {
+
          $("#idregistro").val( $(this).attr("id") );
 
+         //Remueve los div de los perfiles
          $("#lista_perfiles").find('div').remove();
-         // cargo los datos
+
+         // se crea el validador
+         validator_form_perfiles(token_actual);
+
+         // carga de los datos de los perfiles
          cargar_datos_perfiles(token_actual);
      });
 
-     $("#aceptar").click(function(){
-       $('#perfil_info').modal('toggle');
-     });
+
 
    }
 
@@ -297,7 +401,7 @@
                if (json.length > 0) {
 
                    $.each(json, function (key, perfil) {
-                       $("#lista_perfiles").append('<div class="well"><div class="row">'
+                       $("#lista_perfiles").append('<div class="well"> <div class="row">'
                                                    +' <div class="col-lg-12">'
                                                    +'  <h4>Perfil '+(key+1)+'</h4>'
                                                    +' </div>'
@@ -305,7 +409,7 @@
                                                    +'  <h5><b>Descripción:</h5></b> '+perfil.descripcion_perfil
                                                    +' </div>'
                                                    +' <div class="col-lg-6">'
-                                                   + ' <h5><b>Formación profesional:</h5></b> '+(perfil.formacion_profesional?"Si":"No")
+                                                   +'  <h5><b>Formación profesional:</h5></b> '+(perfil.formacion_profesional?"Si":"No")
                                                    +' </div>'
                                                    +' <div class="col-lg-6">'
                                                    + ' <h5><b>Formación de postgrado:</h5></b> '+(perfil.formacion_postgrado? "Si":"No")
@@ -325,11 +429,18 @@
                                                    +' <div class="col-lg-6">'
                                                    +'  <h5><b>Reside en bogota:</h5></b> '+( perfil.reside_bogota ? "Si":"No")
                                                    +' </div>'
-                                                   +' <div class="col-lg-12 btn btn-outline btn-default" style="text-align: right">'
-                                                   +'   <input type="radio" name="perfilesRadios" id="optionsRadios'+(key+1)+'" value="'+perfil.id+'" > Seleccionar'
+                                                   +' <div class="col-lg-12" style="text-align: right" id="optionsRadios'+(key+1)+'" >'
+                                                   +'   <div class="radio"><div class="form-control"> '
+                                                   +'     <input type="radio"  name="perfilesRadios" value="'+perfil.id+'" /> Seleccionar'
+                                                   +'   </div></div>'
                                                    +' </div>'
-                                                   +' </div></div>');
+                                                   +'</div></div>');
 
+
+
+                        //se agrega los campos a validar dinamicamente
+                         $option   =  $("#optionsRadios"+(key+1)+"").find('input[type=radio][name="perfilesRadios"]');
+                          $('#form_nuevo_criterio').bootstrapValidator('addField', $option);
 
                      });
 
@@ -346,13 +457,10 @@
                  );
 
                  $("#postular").hide();
-                  $("#cancelar").hide();
+                 $("#cancelar").hide();
                  $("#aceptar").show();
 
-
                }
-
-
 
            break;
          }
@@ -465,7 +573,7 @@
 
                          {"data": "Seleccionar",
                            render: function ( data, type, row ) {
-                                 return ' <input title=\"'+row.postulacion.id+'\" type=\"checkbox\" class=\"check_activar_'+row.postulacion.active+'  activar_registro" '+(row.postulacion.active? 'checked ':'')+' />';
+                                 return ' <input title=\"'+row.postulacion.id+'\" type=\"checkbox\" class=\"check_activar_'+row.postulacion.active+'  eliminar_registro" '+(row.postulacion.active? 'checked ':'')+' />';
                                  },
                          },
 
@@ -474,11 +582,11 @@
 
      }
 
-   //Permite realizar acciones despues de cargar la tabla
+//Permite realizar acciones despues de cargar la tabla
  function acciones_P_registro(token_actual) {
 
    //Permite activar o eliminar una registro
-   $(".activar_registro").click(function () {
+   $(".eliminar_registro").click(function () {
 
        //Cambio el estado del check
        var active = "false";
@@ -499,32 +607,78 @@
                notify("info", "ok", "Usuario:", "Se activó el registro con éxito.");
                break;
            case 'No':
-                 notify("info", "ok", "Usuario:", "Se desactivó el registro con éxito.");
-                 break;
+               notify("info", "ok", "Usuario:", "Se eliminó el registro con éxito.");
+               break;
            case 'error':
-             notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-             break;
+               notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+               break;
            case 'error_token':
-             location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-             break;
+               location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+               break;
            case 'acceso_denegado':
-             notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-             break;
+               notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+               break;
            case 'deshabilitado':
-             notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-             break;
+               notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+               break;
            case 'error_limite':
-             cargar_tabla_p(token_actual);
-             notify("danger", "remove", "Usuario:", "Se cumplió el máximo de postulaciones activas.");             
-             break;
+               notify("danger", "remove", "Usuario:", "Se cumplió el máximo de postulaciones activas.");
+               break;
            default:
-             notify("success", "ok", "Usuario:", "Se actualizó el registro con éxito.");
-             cargar_tabla_p(token_actual);
-             break;
+               notify("success", "ok", "Usuario:", "Se actualizó el registro con éxito.");
+               break;
          }
+
+         cargar_tabla_p(token_actual);
 
 
        });
    });
 
    }
+
+ function validator_form_perfiles(token_actual) {
+
+
+                  $('#form_nuevo_criterio').bootstrapValidator({
+                        // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+                        feedbackIcons: {
+                            //valid: 'glyphicon glyphicon-ok',
+                          //  invalid: 'glyphicon glyphicon-remove',
+                            validating: 'glyphicon glyphicon-refresh'
+                        },
+                        fields: {
+
+                            perfilesRadios: {
+                                validators: {
+                                    notEmpty: {
+                                        message: 'Debe seleccionar un perfil de jurado'
+                                    }
+                                }
+                            }
+                        }
+                    }).on('success.form.bv', function (e) {
+
+                       postular(token_actual);
+
+                        $('#perfil_info').modal('toggle');
+
+                        // Prevent form submission
+                        e.preventDefault();
+                        // Get the form instance
+                        var $form = $(e.target);
+                        // Get the BootstrapValidator instance
+                        var bv = $form.data('bootstrapValidator');
+
+                        $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
+                        bv.resetForm();
+
+                    }).on('error.form.bv', function (e) {
+
+                      //mostrar el mensaje de error
+                      $('[data-bv-for="perfilesRadios"]').removeAttr("style");
+                      $('[data-bv-for="perfilesRadios"]').parent().focus();
+
+                    });
+
+     }

@@ -24,7 +24,7 @@
 
         $("#back_step").attr("onclick", " location.href = 'educacion_no_formal.html?m=2&id="+  $("#idc").val()+"' ");
         $("#next_step").attr("onclick", " location.href = 'experiencia_jurado.html?m=2&id="+  $("#idc").val()+"' ");
-        
+
         //Peticion para buscar ciudades
         var json_ciudades = function (request, response) {
             $.ajax({
@@ -37,7 +37,7 @@
                 }
             });
         };
-        
+
         //Cargos el autocomplete de ciudad
         $( "#ciudad_name" ).autocomplete({
             source: json_ciudades,
@@ -55,12 +55,33 @@
             //else { Return your label here }
             }
         });
-        
-        
+
+        $("#archivo").on('change', function(){
+
+          $('#formulario_principal').bootstrapValidator('addField', 'archivo', {
+            validators: {
+                //notEmpty: {message: 'El archivo es requerido'},
+                file: {
+                    extension: 'pdf',
+                    type: 'application/pdf',
+                    message: 'El archivo seleccionado no es válido',
+                }
+            }
+           });
+
+           //console.log( $('#archivo')[0].files[0].size );
+
+           //4974593 = 5mb
+           if ( $('#archivo')[0].files[0].size > 4974593 ){
+               notify("danger", "remove", "Usuario:", "El archivo sobrepasa el tamaño máximo permitido");
+               $('#archivo').val('');
+           }
+
+        });
+
          cargar_datos_formulario(token_actual);
          cargar_tabla(token_actual);
          validator_form(token_actual);
-
 
        }
 
@@ -113,8 +134,6 @@
                });
            }
 
-           
-
            //Cargo el formulario con los datos
            if( json.experiencialaboral ){
              $("#graduado").removeClass();
@@ -143,7 +162,7 @@
  }
 
  function cargar_tabla(token_actual){
-   console.log("idconvocatoria-->"+$("#idc").val() );
+   //console.log("idconvocatoria-->"+$("#idc").val() );
    //Cargar datos en la tabla actual
    $('#table_list').DataTable({
                  "language": {
@@ -210,15 +229,13 @@
                      },
                      {"data": "aciones",
                                render: function ( data, type, row ) {
-                                           return '<button title="'+row.id+'" type="button" class="btn btn-warning btn_cargar" data-toggle="modal" data-target="#nueva_ronda\">'
+                                           return '<button title="Editar" id="'+row.id+'" type="button" class="btn btn-warning btn_cargar" data-toggle="modal" data-target="#nueva_ronda\">'
                                                +'<span class="glyphicon glyphicon-edit"></span></button>'
-                                               +'<button title="'+( row.file == null ? "No se ha cargado archivo": row.file)+'" type="button" class="btn btn-primary download_file">'
+                                               +'<button title="'+( row.file == null ? "No se ha cargado archivo": "Descargar archivo")+'" id="'+( row.file == null ? "No se ha cargado archivo": row.file)+'"type="button" class="btn btn-primary download_file">'
                                                + ( row.file == null ? '<span class="glyphicon glyphicon-ban-circle" title="No se ha cargado archivo"></span>':'<span class="glyphicon glyphicon-download-alt"></span>')
                                                + '</button>';
                                            },
                      }
-
-
 
                  ]
              });
@@ -232,9 +249,9 @@
            $('.formulario_principal').bootstrapValidator('revalidateField', 'fecha_inicio');
        });
 
-       $('.calendario').on('changeDate show', function (e) {
+      /* $('.calendario').on('changeDate show', function (e) {
            $('.formulario_principal').bootstrapValidator('revalidateField', 'fecha_fin');
-       });
+       });*/
 
        //Validar el formulario
        $('.formulario_principal').bootstrapValidator({
@@ -324,7 +341,6 @@
 
                  }).done(function (result) {
 
-
                    switch (result) {
                      case 'error':
                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
@@ -348,7 +364,6 @@
                        //cargar_datos_formulario(token_actual);
                        break;
                    }
-
 
                  });
 
@@ -393,10 +408,7 @@
                  }
                );
 
-
-
              }
-
 
            $("#idregistro").val(null);
            $("#archivo").val(null);
@@ -416,7 +428,7 @@
 
      //Permite realizar la carga respectiva de cada registro
      $(".btn_cargar").click(function () {
-         $("#idregistro").val( $(this).attr("title") );
+         $("#idregistro").val( $(this).attr("id") );
          // cargo los datos
          cargar_datos_formulario(token_actual);
      });
@@ -471,7 +483,7 @@
      //desarcar archivo
      $(".download_file").click(function () {
        //Cargo el id file
-       var cod = $(this).attr('title');
+       var cod = $(this).attr('id');
 
        $.AjaxDownloader({
            url: url_pv + 'PropuestasJurados/download_file/',
