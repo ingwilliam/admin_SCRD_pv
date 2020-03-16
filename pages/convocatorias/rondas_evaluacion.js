@@ -75,7 +75,7 @@ $(document).ready(function () {
         }).done(function (data) {
             if (data == 'error_metodo')
             {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
                 if (data == 'error')
@@ -206,7 +206,7 @@ function cargar_select_categoria(token_actual) {
     }).done(function (data) {
 
         if (data == 'error_metodo') {
-            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
         } else if (data == 'error') {
             notify("danger", "ok", "Convocatorias:", "El convocatoria no se encuentra registrado, por favor registrarse");
         } else {
@@ -245,7 +245,7 @@ function cargar_select_tipo_acta(token_actual) {
 
 
         if (data == 'error_metodo') {
-            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
         } else if (data == 'error') {
             notify("danger", "ok", "Convocatorias:", "El convocatoria no se encuentra registrado, por favor registrarse");
         } else {
@@ -361,10 +361,10 @@ function validator_form(token_actual) {
 
                   switch (result) {
                     case 'error':
-                      notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                      notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                       break;
                     case 'error_metodo':
-                      notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                      notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                       break;
                     case 'error_token':
                       location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
@@ -393,7 +393,7 @@ function validator_form(token_actual) {
             }).done(function (result) {
                 if (result == 'error')
                 {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                 } else
                 {
                     if (result == 'error_token')
@@ -408,7 +408,7 @@ function validator_form(token_actual) {
                         {
                             if (isNaN(result))
                             {
-                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                             } else
                             {
                                 notify("info", "ok", "Convocatorias:", "Se editó la ronda con éxito.");
@@ -462,7 +462,7 @@ function acciones_ronda(token_actual) {
                 notify("info", "ok", "Convocatorias:", "Se eliminó la ronda con éxito.");
               break;
             case 'error':
-              notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+              notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
               break;
             case 'error_token':
                 location.href = url_pv_admin+'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
@@ -497,7 +497,7 @@ function acciones_ronda(token_actual) {
         }).done(function (data) {
             if (data == 'error_metodo')
             {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
                 if (data == 'error')
@@ -551,7 +551,7 @@ function acciones_ronda(token_actual) {
 
            switch (data) {
               case 'error':
-                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                 break;
               case 'error_token':
                 location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
@@ -560,7 +560,7 @@ function acciones_ronda(token_actual) {
                 notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                 break;
               case 'error_metodo':
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                 break;
               default:
                 var json = JSON.parse(data);
@@ -584,7 +584,7 @@ function acciones_ronda(token_actual) {
 
               switch (result) {
                 case 'error':
-                  notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                  notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                   break;
                 case 'error_token':
                   location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
@@ -593,7 +593,7 @@ function acciones_ronda(token_actual) {
                   notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                   break;
                 case 'error_metodo':
-                  notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                  notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                   break;
                 default:
                   var json = JSON.parse(result);
@@ -629,7 +629,7 @@ function acciones_ronda(token_actual) {
 
 
             if (data == 'error_metodo') {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else if (data == 'error') {
                 notify("danger", "ok", "Convocatorias:", "El convocatoria no se encuentra registrado, por favor registrarse");
             } else {
@@ -785,7 +785,7 @@ function validator_form_criterio(token_actual, idRonda) {
 
               switch (result) {
                 case 'error':
-                  notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                  notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                   break;
                 case 'error_token':
                   location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
@@ -794,7 +794,7 @@ function validator_form_criterio(token_actual, idRonda) {
                   notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                   break;
                 case 'error_metodo':
-                  notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                  notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                   break;
                   case 'error_puntaje':
                     notify("danger", "ok", "Convocatorias:", "La suma de los valores de los criterios sobrepasa el valor máximo permitido");
@@ -822,7 +822,7 @@ function validator_form_criterio(token_actual, idRonda) {
 
               switch (result) {
                 case 'error':
-                  notify("danger", "ok", "Convocatorias:", "Se registró un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                  notify("danger", "ok", "Convocatorias:", "Se registró un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                   break;
                 case 'error_token':
                   location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
@@ -831,7 +831,7 @@ function validator_form_criterio(token_actual, idRonda) {
                   notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                   break;
                 case 'error_metodo':
-                  notify("danger", "ok", "Convocatorias:", "Se registró un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                  notify("danger", "ok", "Convocatorias:", "Se registró un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                   break;
                 case 'error_puntaje':
                   notify("danger", "ok", "Convocatorias:", "La suma de los valores de los criterios sobrepasa el valor máximo permitido");
@@ -889,7 +889,7 @@ function acciones_criterio(token_actual) {
                 notify("info", "ok", "Convocatorias:", "Se eliminó el evento con éxito.");
               break;
             case 'error':
-              notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+              notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
               break;
             case 'error_token':
               location.href = url_pv_admin+'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
@@ -898,7 +898,7 @@ function acciones_criterio(token_actual) {
               notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
               break;
             case 'error_metodo':
-              notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+              notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
               break;
             case 'error_puntaje':
                 notify("danger", "ok", "Convocatorias:", "La suma de los valores de los criterios sobrepasa el valor máximo permitido");
@@ -926,7 +926,7 @@ function acciones_criterio(token_actual) {
         }).done(function (data) {
             if (data == 'error_metodo')
             {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
                 if (data == 'error')
@@ -974,7 +974,7 @@ function sum_criterios(token_actual, idRonda) {
     }).done(function (data) {
         var json = JSON.parse(data);
         if (data == 'error_metodo') {
-            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
         } else if (data == 'error') {
             notify("danger", "ok", "Convocatorias:", "El convocatoria no se encuentra registrado, por favor registrarse");
         } else {
@@ -999,7 +999,7 @@ function sum_criterios(token_actual, idRonda) {
         var json = JSON.parse(data);
 
         if (data == 'error_metodo') {
-            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
         } else if (data == 'error') {
             notify("danger", "ok", "Convocatorias:", "El convocatoria no se encuentra registrado, por favor registrarse");
         } else {
