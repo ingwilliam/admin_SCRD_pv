@@ -655,6 +655,9 @@
        case 'error_documento_administrativo':
            notify("danger", "remove", "Usuario:", "Debe cargar los documentos administrativos para inscribir la hoja de vida");
            break;
+       case 'error_modalidad':
+           notify("danger", "remove", "Usuario:", "Debe seleccionar la modalidad en la cuál participará para inscribir la hoja de vida");
+           break;
        default:
         notify("success", "ok", "Usuario:", "Se realizó la inscripción con éxito.");
         setTimeout(function () {
