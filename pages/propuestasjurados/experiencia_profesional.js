@@ -138,10 +138,11 @@
            if( json.experiencialaboral ){
              $("#graduado").removeClass();
              $('#ciudad_name').val(json.ciudad_name);
+             $('#ciudad').val(json.experiencialaboral.cidudad.id);
              $('#funcion').val(json.experiencialaboral.funcion);
 
              $('.formulario_principal').loadJSON(json.experiencialaboral);
-           }
+           }           
 
            $("#formulario_principal").show();
 

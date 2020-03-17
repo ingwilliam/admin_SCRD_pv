@@ -140,8 +140,9 @@
            //Cargo el formulario con los datos
            if( json.publicacion ){
              $('#ciudad_name').val(json.ciudad_name);
+             $('#ciudad').val(json.publicacion.cidudad.id);
              $('.formulario_principal').loadJSON(json.publicacion);
-           }
+           }        
 
            $("#formulario_principal").show();
 
