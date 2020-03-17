@@ -98,7 +98,7 @@ $(document).ready(function () {
               // $('.form_notificar').bootstrapValidator('resetFormData', true);
                //$(".form_notificar").trigger("reset");
             //$('.form_notificar').data('bootstrapValidator').destroy()
-            console.log("estado...ssssll");
+            //console.log("estado...ssssll");
         });
 
     }
@@ -366,8 +366,6 @@ function cargar_tabla(token_actual){
 
 }
 
-
-
 function acciones_registro(token_actual){
 
   //$("#evaluar").trigger("reset");
@@ -529,8 +527,6 @@ function cargar_notificacion(token_actual,notificacion_key){
   });
 
 }
-
-
 
 function validator_form(token_actual) {
 
