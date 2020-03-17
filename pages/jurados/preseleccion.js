@@ -80,7 +80,7 @@ $(document).ready(function () {
 
         $("#evaluar").on('hide.bs.modal', function(){
 
-      });
+          });
 
         $(".guardar_aplica_perfil").click(function(){
 
@@ -1450,6 +1450,9 @@ function acciones_registro_publicaciones(token_actual) {
 //carga información de los criterios de evaluacion de las rondas
 function cargar_criterios_evaluacion(token_actual, postulacion, participante){
   $("#form_criterios").empty();
+
+  $("#form_criterios").hide();
+
   $("input[name=option_aplica_perfil][value=true]").removeAttr('checked');
   $("input[name=option_aplica_perfil][value=false]").removeAttr('checked');
   $(".guardar_aplica_perfil").removeClass( "disabled" );
@@ -1499,10 +1502,14 @@ function cargar_criterios_evaluacion(token_actual, postulacion, participante){
 
             $("input[name=option_aplica_perfil][value=true]").removeAttr('checked');
             $("input[name=option_aplica_perfil][value=false]").removeAttr('checked');
-            console.log("-->"+!json[r].postulacion.aplica_perfil);
+
+            console.log("aplica_perfil-->"+!json[r].postulacion.aplica_perfil);
+
             if( json[r].postulacion.aplica_perfil ){
               $(".guardar_aplica_perfil").addClass( "disabled" );
               $("input[name=option_aplica_perfil][value=true]").attr('checked', 'checked');
+                $("#form_criterios").show();
+
             }else if( (!json[r].postulacion.aplica_perfil) && json[r].postulacion.aplica_perfil !== null ){
               $(".guardar_aplica_perfil").addClass( "disabled" );
               $("input[name=option_aplica_perfil][value=false]").attr('checked', 'checked');
@@ -1519,9 +1526,6 @@ function cargar_criterios_evaluacion(token_actual, postulacion, participante){
             $.each(json[r].criterios, function (key, array) {
               //console.log("key-->"+key);
               //console.log("arraysss-->"+Object.keys(array));
-
-
-
 
               $(".criterios").append('<div class="row">'
                                             +' <div class="col-lg-12"> <h5><b>'+Object.keys(array)+'</b><div id="perfil2"> </div></h5></div>'
@@ -1648,6 +1652,16 @@ function evaluar_perfil(token_actual, postulacion, participante){
           notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
           $(".guardar_aplica_perfil").addClass( "disabled" );
           cargar_tabla(token_actual);
+
+
+                      if( $("#optionsRadiosInline1").val() ){
+
+                          $("#form_criterios").show();
+
+                      }else {
+                        
+                          $("#form_criterios").hide();
+                      }
        break;
      }
 

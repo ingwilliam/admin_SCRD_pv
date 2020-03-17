@@ -128,6 +128,7 @@
            //Cargo el formulario con los datos
            if( json.reconocimiento ){
              $('#ciudad_name').val(json.ciudad_name);
+             $('#ciudad').val(json.reconocimiento.cidudad.id);
              $('.formulario_principal').loadJSON(json.reconocimiento);
            }
 
