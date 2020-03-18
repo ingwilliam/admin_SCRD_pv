@@ -115,11 +115,11 @@ $(document).ready(function () {
                             //Creo los botones para acciones de cada fila de la tabla
                             if(row.id_estado==22)
                             {
-                                row.ver_propuesta = '<a href="'+href+'" ><button style="margin: 0 0 5px 0" type="button" class="btn btn-warning btn_tooltip" title="Ver propuesta"><span class="fa fa-file-text-o"></span></button></a><br/><a href="subsanar_propuesta.html?id='+row.id_convocatoria+'&p='+row.id_propuesta+'&sub=1" ><button style="margin: 0 0 5px 0" type="button" class="btn btn-info btn_tooltip" title="Subsanar propuesta"><span class="fa fa-file-text-o"></span></button></a><br/><button  lang="'+row.id_propuesta+'" style="margin: 0 0 5px 0" type="button" class="btn_anular_propuesta btn btn-danger btn_tooltip" title="Anular propuesta" data-toggle="modal" data-target="#anular_propuesta"><span class="fa fa-times-circle"></span></button>';                            
+                                row.ver_propuesta = '<a href="'+href+'" ><button style="margin: 0 0 5px 0" type="button" class="btn btn-warning btn_tooltip" title="Ver propuesta"><span class="fa fa-file-text-o"></span></button></a><br/><a href="subsanar_propuesta.html?id='+row.id_convocatoria+'&p='+row.id_propuesta+'&sub=1" ><button style="margin: 0 0 5px 0" type="button" class="btn btn-info btn_tooltip" title="Subsanar propuesta"><span class="fa fa-file-text-o"></span></button></a><br/><button style="margin: 0 0 5px 0" type="button" onclick="anular_propuesta('+row.id_propuesta+')" class="btn btn-danger btn_tooltip" title="Anular propuesta" data-toggle="modal" data-target="#anular_propuesta"><span class="fa fa-times-circle"></span></button>';                            
                             }
                             else
                             {
-                                row.ver_propuesta = '<a href="'+href+'" ><button style="margin: 0 0 5px 0" type="button" class="btn btn-warning btn_tooltip" title="Ver propuesta"><span class="fa fa-file-text-o"></span></button></a><br/><button  lang="'+row.id_propuesta+'" style="margin: 0 0 5px 0" type="button" class="btn_anular_propuesta btn btn-danger btn_tooltip" title="Anular propuesta" data-toggle="modal" data-target="#anular_propuesta"><span class="fa fa-times-circle"></span></button>';                            
+                                row.ver_propuesta = '<a href="'+href+'" ><button style="margin: 0 0 5px 0" type="button" class="btn btn-warning btn_tooltip" title="Ver propuesta"><span class="fa fa-file-text-o"></span></button></a><br/><button style="margin: 0 0 5px 0" type="button" onclick="anular_propuesta('+row.id_propuesta+')" class="btn btn-danger btn_tooltip" title="Anular propuesta" data-toggle="modal" data-target="#anular_propuesta"><span class="fa fa-times-circle"></span></button>';                            
                             }            
                             
                             if(row.fecha_subsanacion!=null)
@@ -133,17 +133,13 @@ $(document).ready(function () {
                             
                             
                             row.estado="<b>"+row.estado+"</b>";
+                            
                             var categoria = row.convocatoria;
-                            if (row.categoria != "") {
+                            
+                            if (row.categoria != null) {
                                 row.convocatoria = row.categoria;
                                 row.categoria = categoria;
                             }
-                            
-                            //Asigno la propuesta para anular
-                            $(".btn_anular_propuesta").on("click", function () {
-                                $("#id_propuesta").val($(this).attr("lang"));
-                            });
-                            
                             
                             return row.estado;
                         }
@@ -171,50 +167,69 @@ $(document).ready(function () {
 
         $('#buscar').click(function () {
                    $('#table_list').DataTable().draw();
-        }); 
+        });                 
         
         $("#modal-btn-si").on("click", function () {
             
-            //Se realiza la peticion con el fin de guardar el registro actual
-            $.ajax({
-                type: 'POST',
-                url: url_pv + 'Propuestas/anular_propuesta',
-                data: "modulo=Menu Participante&token=" + token_actual.token + "&propuesta=" + $("#id_propuesta").val(),
-            }).done(function (result) {
+            if($("#justificacion_anulacion").val()=="")
+            {
+                notify("danger", "ok", "Propuesta:", "La justificación de la anulación de la propuesta es obligatoria.");
+            }
+            else
+            {
+                //Se realiza la peticion con el fin de guardar el registro actual
+                $.ajax({
+                    type: 'POST',
+                    url: url_pv + 'Propuestas/anular_propuesta',
+                    data: "modulo=Menu Participante&token=" + token_actual.token + "&propuesta=" + $("#id_propuesta").val()+"&justificacion_anulacion="+$("#justificacion_anulacion").val(),
+                }).done(function (result) {
 
-                if (result == 'error_estado')
-                {
-                    notify("danger", "ok", "Propuesta:", "Su propuesta no esta en estado registrada, por tal razón no puede ser anulada.");
-                } else
-                {
-                    if (result == 'error')
+                    if (result == 'error_estado')
                     {
-                        notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                        notify("danger", "ok", "Propuesta:", "Su propuesta no esta en estado registrada, por tal razón no puede ser anulada.");
                     } else
                     {
-                        if (result == 'error_token')
+                        if (result == 'error')
                         {
-                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                            notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                         } else
                         {
-                            if (result == 'acceso_denegado')
+                            if (result == 'error_token')
                             {
-                                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                             } else
                             {
-                                if (isNaN(result)) {
-                                    notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                if (result == 'acceso_denegado')
+                                {
+                                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                                 } else
-                                {                                                                                
-                                    notify("success", "ok", "Propuesta:", "Su propuesta fue anulada con éxito.");
-                                    $('#table_list').DataTable().draw();
-                                }                                
+                                {
+                                    if (result == 'error_fecha_cierre')
+                                    {
+                                        notify("danger", "remove", "Propuesta:", "La convocatoria se encuentra en estado cerrada, por tal razón no puede anular la propuesta.");
+                                    } else
+                                    {
+                                        if (isNaN(result)) {
+                                            notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                        } else
+                                        {                                                                                
+                                            notify("success", "ok", "Propuesta:", "Su propuesta fue anulada con éxito.");
+                                            $('#table_list').DataTable().draw();
+                                            $('#anular_propuesta').modal('toggle');
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
-                }
 
-            });                                    
+                }); 
+            }                                    
         });
     }
 });
+
+function anular_propuesta(id){
+    $("#id_propuesta").val(id);
+    $("#justificacion_anulacion").val("");
+}
