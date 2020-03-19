@@ -129,8 +129,8 @@
            //Cargo el formulario con los datos
            if( json.experienciajurado ){
              $('#ciudad_name').val(json.ciudad_name);
-              $('#ciudad').val(json.experienciajurado.cidudad.id);
-             $('.formulario_principal').loadJSON(json.experienciajurado);
+              $('#ciudad').val(json.experienciajurado.ciudad.id);
+              $('.formulario_principal').loadJSON(json.experienciajurado);
            }
 
            $("#formulario_principal").show();
