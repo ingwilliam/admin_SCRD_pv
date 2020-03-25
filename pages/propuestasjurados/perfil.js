@@ -331,9 +331,9 @@ function validator_form(token_actual) {
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
-            categoria_participa:{
+            modalidad_participa:{
               validators: {
-                  notEmpty: {message: 'La categoria es requerida'}
+                  notEmpty: {message: 'La categoría es requerida'}
               }
             },
             tipo_documento: {

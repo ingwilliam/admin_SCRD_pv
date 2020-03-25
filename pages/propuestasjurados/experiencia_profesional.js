@@ -138,6 +138,7 @@
            if( json.experiencialaboral ){
              $("#graduado").removeClass();
              $('#ciudad_name').val(json.ciudad_name);
+             $('#ciudad').val(json.experiencialaboral.ciudad.id);
              $('#funcion').val(json.experiencialaboral.funcion);
 
              $('.formulario_principal').loadJSON(json.experiencialaboral);
@@ -276,7 +277,6 @@
                        notEmpty: {message: 'La fecha es requerida'}
                    }
                },
-
                linea: {
                     validators: {
                         notEmpty: {message: 'La línea es requerida'}
@@ -320,12 +320,12 @@
            formData.append("convocatoria", $("#id").attr('value'));
            formData.append("anexos", "documentacion");
 
-           console.log("formData-->"+formData);
+        //   console.log("formData-->"+formData);
 
-           console.log("idregistro-->"+$("#idregistro").val());
+          // console.log("idregistro-->"+$("#idregistro").val());
 
            if (typeof $("#idregistro").attr('value') == 'undefined' || $("#idregistro").val() =='' ) {
-                 console.log("guardar");
+                 //console.log("guardar");
 
                  //$("#id").val($("#idp").attr('value'));
                  //Se realiza la peticion con el fin de guardar el registro actual
