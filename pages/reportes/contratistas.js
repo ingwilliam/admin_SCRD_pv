@@ -46,49 +46,8 @@ $(document).ready(function () {
             }
         });
 
-        $('#buscar').click(function () {
-
-            //Realizo la peticion para validar cargar las prouestas a subsanar
-            $.ajax({
-                type: 'GET',
-                data: {"token": token_actual.token, "modulo": "Reporte Contratistas", "entidad": $("#entidad").val()},
-                url: url_pv + 'ReportesPropuestas/generar_reportes_entidades'
-            }).done(function (data) {
-
-                var json = JSON.parse(data);
-
-                $("#reporte_propuestas_estados").empty();                
-                $(".fecha_actual").empty();
-
-                if (json.error == 'error_metodo')
-                {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                } else
-                {
-                    if (json.error == 'error_token')
-                    {
-                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                    } else
-                    {
-                        if (data == 'acceso_denegado')
-                        {
-                            notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
-                        } else
-                        {
-                            $("#reportes_propuestas").css("display", "block");
-                            
-                            $("#reporte_propuestas_estados").html(json.reporte_propuestas_estados);                
-
-                            $(".fecha_actual").html(json.fecha_actual);                            
-
-                        }
-                    }
-                }
-            });
-        });
-        
         //Cargar datos en la tabla actual
-        $('#table_list').DataTable({
+        var dataTable = $('#table_list').DataTable({
             "language": {
                 "url": "../../dist/libraries/datatables/js/spanish.json"
             },
@@ -97,10 +56,8 @@ $(document).ready(function () {
             "lengthMenu": [50, 75, 100],
             "ajax":{                
                 data: function (d) {
-                    var params = new Object();
-                    params.entidad = $('#entidad').val();
-                    params.modulo = "Reporte Contratistas";
-                    d.params = JSON.stringify(params);
+                    d.entidad = $('#entidad').val();
+                    d.modulo = "Reporte Contratistas";                    
                     d.token = token_actual.token;
                 },
                 url: url_pv + 'ReportesPropuestas/generar_reportes_contratistas'
@@ -116,6 +73,36 @@ $(document).ready(function () {
             ]
         });
         
+        $('#buscar').click(function () {
+            dataTable.draw();
+        });
+        
     }
+    
+    $('input[type="file"]').change(function (evt) {
+
+        alert($("ent").val());
+
+        var f = evt.target.files[0];
+        var reader = new FileReader();
+
+        // Cierre para capturar la información del archivo.
+        reader.onload = function (fileLoadedEvent) {
+            var srcData = fileLoadedEvent.target.result; // <--- data: base64
+            var srcName = f.name;
+            var srcSize = f.size;
+            var srcType = f.type;
+            alert(srcName);
+            alert(srcSize);
+            alert(srcType);
+            /*
+            $.post("http://localhost/Chemistry-Convocatorias/archivo_cargar.php", {srcData: srcData, srcName: srcName, srcSize: srcSize, srcType: srcType}).done(function (data) {
+
+                        });*/
+        };
+         // Leer en el archivo como una URL de datos.                
+        reader.readAsDataURL(f);
+    });
+    
 });
 
