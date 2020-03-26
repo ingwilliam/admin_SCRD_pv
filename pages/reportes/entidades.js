@@ -80,6 +80,8 @@ $(document).ready(function () {
                 var json = JSON.parse(data);
 
                 $("#reporte_propuestas_estados").empty();                
+                $("#reporte_convocatorias_cerrar").empty();                
+                $("#reporte_convocatorias_cantidad_jurados").empty();                
                 $(".fecha_actual").empty();
 
                 if (json.error == 'error_metodo')
@@ -100,6 +102,8 @@ $(document).ready(function () {
                             $("#reportes_propuestas").css("display", "block");
                             
                             $("#reporte_propuestas_estados").html(json.reporte_propuestas_estados);                
+                            $("#reporte_convocatorias_cerrar").html(json.reporte_convocatorias_cerrar);                
+                            $("#reporte_convocatorias_cantidad_jurados").html(json.reporte_convocatorias_cantidad_jurados);                
 
                             $(".fecha_actual").html(json.fecha_actual);                            
 
