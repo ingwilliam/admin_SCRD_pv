@@ -107,6 +107,36 @@ $(document).ready(function () {
 
                             $(".fecha_actual").html(json.fecha_actual);                            
 
+                            $('.reporte_propuestas_estados_excel').click(function () {
+                                var json = JSON.parse( $(this).attr("rel") );
+                                
+                                $.AjaxDownloader({
+                                    data: json,
+                                    url: url_pv + 'ReportesWS/reporte_listado_entidades_convocatorias_estado_xls/'
+                                });
+                                
+                            });
+                            
+                            $('.reporte_convocatorias_cerrar_excel').click(function () {
+                                var json = JSON.parse( $(this).attr("rel") );
+                                
+                                $.AjaxDownloader({
+                                    data: json,
+                                    url: url_pv + 'ReportesWS/reporte_convocatorias_cerrar_xls/'
+                                });
+                                
+                            });
+                            
+                            $('.reporte_convocatorias_cantidad_jurados').click(function () {
+                                var json = JSON.parse( $(this).attr("rel") );
+                                
+                                $.AjaxDownloader({
+                                    data: json,
+                                    url: url_pv + 'ReportesWS/reporte_listado_entidades_convocatorias_total_jurados_xls/'
+                                });
+                                
+                            });
+
                         }
                     }
                 }
