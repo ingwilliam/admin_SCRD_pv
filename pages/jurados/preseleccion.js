@@ -58,8 +58,6 @@ $(document).ready(function () {
             //$('#filtro').val(true);
             //cargar_tabla(token_actual);
             //$("#exampleModal").modal("toggle");
-
-
         });
 
         $('#busqueda_avanzada').click(function(){
@@ -68,8 +66,6 @@ $(document).ready(function () {
             //$('#filtro').val(true);
             //cargar_tabla(token_actual);
             //$("#exampleModal").modal("toggle");
-
-
         });
 
         $("#exampleModal").on('hide.bs.modal', function(){
@@ -239,7 +235,6 @@ function cargar_select_categorias(token_actual, convocatoria){
       default:
         var json = JSON.parse(data);
 
-
         if ( json != null && json.length > 0) {
 
           //Cargos el select de areasconocimientos
@@ -253,8 +248,6 @@ function cargar_select_categorias(token_actual, convocatoria){
             });
 
         }
-
-
 
         break;
       }
@@ -797,7 +790,7 @@ function cargar_tabla_educacion_no_formal(token_actual,postulacion,participante)
 //Permite realizar acciones despues de cargar la tabla educacion no formal
 function acciones_registro_educacion_no_formal(token_actual) {
 
-  //Permite realizar la carga respectiva de cada registro
+  //Permite realizar la carga respectiva de cada registro----
     $(".btn_cargar_educacion_no_formal").click(function () {
            $('#vermas_enf').show();
            $('#table_enformal').hide();
