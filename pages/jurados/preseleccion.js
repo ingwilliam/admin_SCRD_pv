@@ -1503,7 +1503,7 @@ function cargar_criterios_evaluacion(token_actual, postulacion, participante){
             $("input[name=option_aplica_perfil][value=true]").removeAttr('checked');
             $("input[name=option_aplica_perfil][value=false]").removeAttr('checked');
 
-            console.log("aplica_perfil-->"+!json[r].postulacion.aplica_perfil);
+          //  console.log("aplica_perfil-->"+!json[r].postulacion.aplica_perfil);
 
             if( json[r].postulacion.aplica_perfil ){
               $(".guardar_aplica_perfil").addClass( "disabled" );
@@ -1520,7 +1520,7 @@ function cargar_criterios_evaluacion(token_actual, postulacion, participante){
             $("#id_jurados_postulados").val(json[r].postulacion.id);
 
             //grupo
-            $("#form_criterios").append('<fieldset class="criterios" '+(json[r].postulacion.estado >= 11 ? ' disabled="" ': '') +'>');
+            $("#form_criterios").append('<fieldset class="criterios" '+(json[r].postulacion.estado >= 12 ? ' disabled="" ': '') +'>');
 
 
             $.each(json[r].criterios, function (key, array) {
@@ -1571,20 +1571,22 @@ function cargar_criterios_evaluacion(token_actual, postulacion, participante){
               //$.each(array[Object.keys(array)], function (k, a)
              });
 
-             $(".criterios").append('<div class="col-lg-12" style="text-align: right"><button type="button" class="btn btn-default '+( (json[r].postulacion.estado >= 11) ? "disabled":' guardar_evaluacion_'+$("#id_ronda").val() )+'">Guardar</button></div>');
+             $(".criterios").append('<div class="col-lg-12" style="text-align: right"><button type="button" class="btn btn-default '+( (json[r].postulacion.estado >= 12) ? "disabled":' guardar_evaluacion_'+$("#id_ronda").val() )+'">Guardar</button></div>');
 
 
           });
 
 
             $(".guardar_evaluacion_"+$("#id_ronda").val() ).click(function(){
-
-              evaluar_criterios(token_actual, postulacion, participante);
+                //$('#alertModal').modal('show');
+                evaluar_criterios(token_actual, postulacion, participante);
             });
 
             $("#baceptar").click(function(){
-              evaluar_criterios(token_actual, postulacion, participante);
-              $('#alertModal').modal('toggle');
+              //
+              //$('#alertModal').modal('hide');
+              //$('#evaluar').modal('hide');
+              //evaluar_criterios(token_actual, postulacion, participante);
 
             });
 
@@ -1659,7 +1661,7 @@ function evaluar_perfil(token_actual, postulacion, participante){
                           $("#form_criterios").show();
 
                       }else {
-                        
+
                           $("#form_criterios").hide();
                       }
        break;
