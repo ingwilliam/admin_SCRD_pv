@@ -72,7 +72,7 @@
            //console.log( $('#archivo')[0].files[0].size );
 
            //4974593 = 5mb
-           if ( $('#archivo')[0].files[0].size > 4974593 ){
+           if ( $('#archivo')[0].files.length > 0 && $('#archivo')[0].files[0].size > 4974593 ){
                notify("danger", "remove", "Usuario:", "El archivo sobrepasa el tamaño máximo permitido");
                $('#archivo').val('');
            }
