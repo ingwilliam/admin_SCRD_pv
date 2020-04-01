@@ -69,78 +69,97 @@ $(document).ready(function () {
         });
 
         $('#buscar').click(function () {
+            
+            if($("#anio").val()=="" || $("#entidad").val()=="")
+            {
+                notify("danger", "ok", "Propuestas:", "Debe seleccionar el año y/o la entidad.");
+            }   
+            else
+            {
+                //Realizo la peticion para validar cargar las prouestas a subsanar
+                $.ajax({
+                    type: 'GET',
+                    data: {"token": token_actual.token, "modulo": "Reporte Propuestas", "anio": $("#anio").val(), "entidad": $("#entidad").val()},
+                    url: url_pv + 'ReportesPropuestas/generar_reportes_entidades'
+                }).done(function (data) {
 
-            //Realizo la peticion para validar cargar las prouestas a subsanar
-            $.ajax({
-                type: 'GET',
-                data: {"token": token_actual.token, "modulo": "Reporte Propuestas", "anio": $("#anio").val(), "entidad": $("#entidad").val()},
-                url: url_pv + 'ReportesPropuestas/generar_reportes_entidades'
-            }).done(function (data) {
+                    var json = JSON.parse(data);
 
-                var json = JSON.parse(data);
+                    $("#reporte_propuestas_estados").empty();                
+                    $("#reporte_convocatorias_cerrar").empty();                
+                    $("#reporte_convocatorias_cantidad_jurados").empty();                
+                    $("#reporte_convocatorias_listado_jurados").empty();                
+                    $(".fecha_actual").empty();
 
-                $("#reporte_propuestas_estados").empty();                
-                $("#reporte_convocatorias_cerrar").empty();                
-                $("#reporte_convocatorias_cantidad_jurados").empty();                
-                $(".fecha_actual").empty();
-
-                if (json.error == 'error_metodo')
-                {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                } else
-                {
-                    if (json.error == 'error_token')
+                    if (json.error == 'error_metodo')
                     {
-                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                     } else
                     {
-                        if (data == 'acceso_denegado')
+                        if (json.error == 'error_token')
                         {
-                            notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
+                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                         } else
                         {
-                            $("#reportes_propuestas").css("display", "block");
-                            
-                            $("#reporte_propuestas_estados").html(json.reporte_propuestas_estados);                
-                            $("#reporte_convocatorias_cerrar").html(json.reporte_convocatorias_cerrar);                
-                            $("#reporte_convocatorias_cantidad_jurados").html(json.reporte_convocatorias_cantidad_jurados);                
+                            if (data == 'acceso_denegado')
+                            {
+                                notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
+                            } else
+                            {
+                                $("#reportes_propuestas").css("display", "block");
 
-                            $(".fecha_actual").html(json.fecha_actual);                            
+                                $("#reporte_propuestas_estados").html(json.reporte_propuestas_estados);                
+                                $("#reporte_convocatorias_cerrar").html(json.reporte_convocatorias_cerrar);                
+                                $("#reporte_convocatorias_cantidad_jurados").html(json.reporte_convocatorias_cantidad_jurados);                
+                                $("#reporte_convocatorias_listado_jurados").html(json.reporte_convocatorias_listado_jurados);                
 
-                            $('.reporte_propuestas_estados_excel').click(function () {
-                                var json = JSON.parse( $(this).attr("rel") );
-                                
-                                $.AjaxDownloader({
-                                    data: json,
-                                    url: url_pv + 'ReportesWS/reporte_listado_entidades_convocatorias_estado_xls/'
+                                $(".fecha_actual").html(json.fecha_actual);                            
+
+                                $('.reporte_propuestas_estados_excel').click(function () {
+                                    var json = JSON.parse( $(this).attr("rel") );
+
+                                    $.AjaxDownloader({
+                                        data: json,
+                                        url: url_pv + 'ReportesWS/reporte_listado_entidades_convocatorias_estado_xls/'
+                                    });
+
+                                });
+
+                                $('.reporte_convocatorias_cerrar_excel').click(function () {
+                                    var json = JSON.parse( $(this).attr("rel") );
+
+                                    $.AjaxDownloader({
+                                        data: json,
+                                        url: url_pv + 'ReportesWS/reporte_convocatorias_cerrar_xls/'
+                                    });
+
+                                });
+
+                                $('.reporte_convocatorias_cantidad_jurados').click(function () {
+                                    var json = JSON.parse( $(this).attr("rel") );
+
+                                    $.AjaxDownloader({
+                                        data: json,
+                                        url: url_pv + 'ReportesWS/reporte_listado_entidades_convocatorias_total_jurados_xls/'
+                                    });
+
                                 });
                                 
-                            });
-                            
-                            $('.reporte_convocatorias_cerrar_excel').click(function () {
-                                var json = JSON.parse( $(this).attr("rel") );
-                                
-                                $.AjaxDownloader({
-                                    data: json,
-                                    url: url_pv + 'ReportesWS/reporte_convocatorias_cerrar_xls/'
-                                });
-                                
-                            });
-                            
-                            $('.reporte_convocatorias_cantidad_jurados').click(function () {
-                                var json = JSON.parse( $(this).attr("rel") );
-                                
-                                $.AjaxDownloader({
-                                    data: json,
-                                    url: url_pv + 'ReportesWS/reporte_listado_entidades_convocatorias_total_jurados_xls/'
-                                });
-                                
-                            });
+                                $('.reporte_convocatorias_listado_jurados').click(function () {
+                                    var json = JSON.parse( $(this).attr("rel") );
 
+                                    $.AjaxDownloader({
+                                        data: json,
+                                        url: url_pv + 'ReportesWS/reporte_listado_entidades_convocatorias_listado_jurados_xls/'
+                                    });
+
+                                });
+
+                            }
                         }
                     }
-                }
-            });
+                });
+            }            
         });
     }
 });

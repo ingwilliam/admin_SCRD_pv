@@ -63,6 +63,10 @@ $(document).ready(function () {
             }
         });
 
+        $('.close').click(function () {
+            $("#contratistas").css("display","none");            
+        });
+        
         $('#buscar').click(function () {
 
             if ($("#codigo").val() != "")
@@ -881,6 +885,23 @@ function cargar_verificacion_1(token_actual, propuesta) {
                         
                     }
                     
+                    if(Object.keys(json.contratistas).length>0)
+                    {
+                        $("#contratistas").css("display","block");
+                        
+                        var html_table = "";
+                        $( ".tr_contratistas" ).remove();
+                        $.each(json.contratistas, function (key, contratista) {
+                                 var nombre_contratista=String(contratista);
+                                 html_table = html_table+'<tr class="tr_contratistas"><td>'+key+'</td><td>'+nombre_contratista.replace(",","<br/>")+'</td></tr>';                                                      
+                        });                    
+                        $( "#body_contratistas" ).append(html_table);
+                        
+                    }
+                    else
+                    {
+                        $("#contratistas").css("display","none");
+                    }
 
                 }
             }
