@@ -58,8 +58,6 @@ $(document).ready(function () {
             //$('#filtro').val(true);
             //cargar_tabla(token_actual);
             //$("#exampleModal").modal("toggle");
-
-
         });
 
         $('#busqueda_avanzada').click(function(){
@@ -68,8 +66,6 @@ $(document).ready(function () {
             //$('#filtro').val(true);
             //cargar_tabla(token_actual);
             //$("#exampleModal").modal("toggle");
-
-
         });
 
         $("#exampleModal").on('hide.bs.modal', function(){
@@ -239,7 +235,6 @@ function cargar_select_categorias(token_actual, convocatoria){
       default:
         var json = JSON.parse(data);
 
-
         if ( json != null && json.length > 0) {
 
           //Cargos el select de areasconocimientos
@@ -253,8 +248,6 @@ function cargar_select_categorias(token_actual, convocatoria){
             });
 
         }
-
-
 
         break;
       }
@@ -797,7 +790,7 @@ function cargar_tabla_educacion_no_formal(token_actual,postulacion,participante)
 //Permite realizar acciones despues de cargar la tabla educacion no formal
 function acciones_registro_educacion_no_formal(token_actual) {
 
-  //Permite realizar la carga respectiva de cada registro
+  //Permite realizar la carga respectiva de cada registro----
     $(".btn_cargar_educacion_no_formal").click(function () {
            $('#vermas_enf').show();
            $('#table_enformal').hide();
@@ -1503,7 +1496,7 @@ function cargar_criterios_evaluacion(token_actual, postulacion, participante){
             $("input[name=option_aplica_perfil][value=true]").removeAttr('checked');
             $("input[name=option_aplica_perfil][value=false]").removeAttr('checked');
 
-            console.log("aplica_perfil-->"+!json[r].postulacion.aplica_perfil);
+          //  console.log("aplica_perfil-->"+!json[r].postulacion.aplica_perfil);
 
             if( json[r].postulacion.aplica_perfil ){
               $(".guardar_aplica_perfil").addClass( "disabled" );
@@ -1520,7 +1513,7 @@ function cargar_criterios_evaluacion(token_actual, postulacion, participante){
             $("#id_jurados_postulados").val(json[r].postulacion.id);
 
             //grupo
-            $("#form_criterios").append('<fieldset class="criterios" '+(json[r].postulacion.estado >= 11 ? ' disabled="" ': '') +'>');
+            $("#form_criterios").append('<fieldset class="criterios" '+(json[r].postulacion.estado >= 12 ? ' disabled="" ': '') +'>');
 
 
             $.each(json[r].criterios, function (key, array) {
@@ -1571,20 +1564,22 @@ function cargar_criterios_evaluacion(token_actual, postulacion, participante){
               //$.each(array[Object.keys(array)], function (k, a)
              });
 
-             $(".criterios").append('<div class="col-lg-12" style="text-align: right"><button type="button" class="btn btn-default '+( (json[r].postulacion.estado >= 11) ? "disabled":' guardar_evaluacion_'+$("#id_ronda").val() )+'">Guardar</button></div>');
+             $(".criterios").append('<div class="col-lg-12" style="text-align: right"><button type="button" class="btn btn-default '+( (json[r].postulacion.estado >= 12) ? "disabled":' guardar_evaluacion_'+$("#id_ronda").val() )+'">Guardar</button></div>');
 
 
           });
 
 
             $(".guardar_evaluacion_"+$("#id_ronda").val() ).click(function(){
-
-              evaluar_criterios(token_actual, postulacion, participante);
+                //$('#alertModal').modal('show');
+                evaluar_criterios(token_actual, postulacion, participante);
             });
 
             $("#baceptar").click(function(){
-              evaluar_criterios(token_actual, postulacion, participante);
-              $('#alertModal').modal('toggle');
+              //
+              //$('#alertModal').modal('hide');
+              //$('#evaluar').modal('hide');
+              //evaluar_criterios(token_actual, postulacion, participante);
 
             });
 
@@ -1659,7 +1654,7 @@ function evaluar_perfil(token_actual, postulacion, participante){
                           $("#form_criterios").show();
 
                       }else {
-                        
+
                           $("#form_criterios").hide();
                       }
        break;

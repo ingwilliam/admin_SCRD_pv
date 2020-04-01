@@ -75,7 +75,6 @@
 
           $("#archivo").on('change', function(){
 
-              console.log( $('#archivo')[0].files[0] );
 
             $('#formulario_principal').bootstrapValidator('addField', 'archivo', {
               validators: {
@@ -88,41 +87,56 @@
               }
              });
 
-               //4974593 = 5mb
-             if ( $('#archivo')[0].files[0].size > 4974593 ){
-                 notify("danger", "remove", "Usuario:", "El archivo sobrepasa el tamaño máximo permitido");
-                    $('#archivo').val('');
-             }
 
-             /*$('#formulario_principal').bootstrapValidator('addField', 'filesize', {
-               validators: {
-                 between: {
-                     min: 1,
-                     max: 4974593,
-                     message: 'The number of floors must be between %s and %s'
+
+            if( $('#archivo')[0].files.length > 0 ){
+
+                  console.log( $('#archivo')[0].files[0] );
+
+                   //4974593 = 5mb
+                 if ( ($('#archivo')[0].files[0]).size > 4974593 ){
+
+                     notify("danger", "remove", "Usuario:", "El archivo sobrepasa el tamaño máximo permitido");
+                        $('#archivo').val('');
+                        //$('#formulario_principal').bootstrapValidator('removeField', 'archivo');
+                         $('#formulario_principal').bootstrapValidator('revalidateField', 'archivo');
+                        //$('#formulario_principal').bootstrapValidator('resetField', 'archivo');
+
+                 }else{
+                     $('#formulario_principal').bootstrapValidator('revalidateField', 'archivo');
                  }
-               }
-             });*/
 
+            }else{
+                    $('#formulario_principal').bootstrapValidator('removeField', 'archivo');
+                  //$('#formulario_principal').bootstrapValidator('removeField', 'archivo');
+                  // $('#formulario_principal').bootstrapValidator('revalidateField', 'archivo');
+            }
 
-            /*$.each($('#archivo')[0].files, function(index, file){
-              //console.log(file.type);
-              console.log( file );
-              if( file.type != 'application/pdf'){
-                  notify("danger", "remove", "Usuario:", "Debe cargar un archivo PDF");
-                   $('#archivo').val('');
-                //  break;
-              }
-
-              if( file.type != 'application/pdf'){
-                  notify("danger", "remove", "Usuario:", "Debe cargar un archivo PDF");
-                   $('#archivo').val('');
-                //  break;
-              }
-
-            });*/
 
           });
+
+          /*  $("#archivo").on('change', function(){
+
+              $('#formulario_principal').bootstrapValidator('addField', 'archivo', {
+                validators: {
+                    //notEmpty: {message: 'El archivo es requerido'},
+                    file: {
+                        extension: 'pdf',
+                        type: 'application/pdf',
+                        message: 'El archivo seleccionado no es válido',
+                    }
+                }
+               });
+
+               //console.log( $('#archivo')[0].files[0].size );
+
+               //4974593 = 5mb
+               if ( $('#archivo')[0].files.length > 0 && $('#archivo')[0].files[0].size > 4974593 ){
+                   notify("danger", "remove", "Usuario:", "El archivo sobrepasa el tamaño máximo permitido");
+                   $('#archivo').val('');
+               }
+
+            });*/
 
         }
 
@@ -490,7 +504,7 @@
                     cache: false,
                     contentType: false,
                     processData: false,
-                    async: false,                 
+                    async: false,
 
                 }).done(function (result) {
 
