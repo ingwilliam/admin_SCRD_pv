@@ -60,7 +60,7 @@ $(document).ready(function () {
                     d.modulo = "Reporte Contratistas";
                     d.token = token_actual.token;
                 },
-                url: url_pv + 'ReportesPropuestas/generar_reportes_contratistas'
+                url: url_pv + 'Reportes/generar_reportes_contratistas'
             },
             "drawCallback": function (settings) {
                 $(".cargar_contratista").click(function () {
@@ -71,7 +71,7 @@ $(document).ready(function () {
                     $.ajax({
                         type: 'GET',
                         data: {"token": token_actual.token},
-                        url: url_pv + 'ReportesWS/buscar_contratista/' + $(this).attr("title")
+                        url: url_pv + 'ConvocatoriasFormatos/buscar_contratista/' + $(this).attr("title")
                     }).done(function (data) {
                         if (data == 'error_metodo')
                         {
@@ -144,7 +144,7 @@ $(document).ready(function () {
                     var token_actual = getLocalStorage(name_local_storage);
                     if (srcType == "text/csv")
                     {
-                        $.post(url_pv + 'ReportesWS/cargar_contratistas_csv', {srcData: srcData, srcName: srcName, srcSize: srcSize, srcType: srcType, token: token_actual.token, modulo: "Reporte Contratistas", entidad: $("#entidad").val()}).done(function (data) {
+                        $.post(url_pv + 'ConvocatoriasFormatos/cargar_contratistas_csv', {srcData: srcData, srcName: srcName, srcSize: srcSize, srcType: srcType, token: token_actual.token, modulo: "Reporte Contratistas", entidad: $("#entidad").val()}).done(function (data) {
                             if (data == "error_columnas")
                             {
                                 notify("danger", "ok", "Contratistas:", "El archivo csv, no cumple con las columnas requeridas.");
@@ -227,7 +227,7 @@ function validator_form(token_actual,dataTable) {
         //Realizo la peticion con el fin de editar el registro actual
         $.ajax({
             type: 'PUT',
-            url: url_pv + 'ReportesWS/editar_contratista/' + $("#id_registro").attr('value'),
+            url: url_pv + 'ConvocatoriasFormatos/editar_contratista/' + $("#id_registro").attr('value'),
             data: $form.serialize() + "&modulo=Paises&token=" + token_actual.token
         }).done(function (result) {
             if (result == 'error')

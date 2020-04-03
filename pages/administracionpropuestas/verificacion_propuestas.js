@@ -64,7 +64,8 @@ $(document).ready(function () {
         });
 
         $('.close').click(function () {
-            $("#contratistas").css("display","none");            
+            $("#contratistas").css("display","none");                    
+            $("#boton_confirma_administrativa_1").removeAttr("disabled"); 
         });
         
         $('#buscar').click(function () {
