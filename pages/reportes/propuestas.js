@@ -8,7 +8,7 @@ $(document).ready(function () {
         location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
     } else
     {
-        
+
         //Verifica si el token actual tiene acceso de lectura
         permiso_lectura(token_actual, "Reporte Propuestas");
 
@@ -68,8 +68,8 @@ $(document).ready(function () {
             $("#categoria option[value='']").prop('selected', true);
             $("#convocatoria option[value='']").prop('selected', true);
             $("#categoria").attr("disabled", "disabled");
-            
-            $("#reportes_propuestas").css("display","none");
+
+            $("#reportes_propuestas").css("display", "none");
 
             if ($("#anio").val() == "")
             {
@@ -81,7 +81,7 @@ $(document).ready(function () {
                     $.ajax({
                         type: 'GET',
                         data: {"modulo": "Reporte Propuestas", "token": token_actual.token, "anio": $("#anio").val(), "entidad": $("#entidad").val()},
-                        url: url_pv + 'ReportesPropuestas/select_convocatorias'
+                        url: url_pv + 'Reportes/select_convocatorias'
                     }).done(function (data) {
                         if (data == 'error_metodo')
                         {
@@ -119,8 +119,8 @@ $(document).ready(function () {
 
         $('#convocatoria').change(function () {
 
-            $("#reportes_propuestas").css("display","none");
-            
+            $("#reportes_propuestas").css("display", "none");
+
             if ($("#convocatoria option:selected").attr("dir") == "true")
             {
                 $("#categoria").removeAttr("disabled")
@@ -134,7 +134,7 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'GET',
                     data: {"modulo": "Reporte Propuestas", "token": token_actual.token, "conv": $("#convocatoria").val()},
-                    url: url_pv + 'ReportesPropuestas/select_categorias'
+                    url: url_pv + 'Reportes/select_categorias'
                 }).done(function (data) {
                     if (data == 'error_metodo')
                     {
@@ -184,78 +184,128 @@ $(document).ready(function () {
                 }
 
                 if ($("#id_convocatoria").val() == "")
-                {                    
+                {
                     notify("danger", "ok", "Convocatorias:", "Debe seleccionar la " + mensaje + ".");
                 } else
                 {
                     //Realizo la peticion para validar cargar las prouestas a subsanar
                     $.ajax({
                         type: 'GET',
-                        data: {"token": token_actual.token, "modulo": "Reporte Propuestas", "convocatoria": $("#id_convocatoria").val()},
-                        url: url_pv + 'ReportesPropuestas/generar_reportes'
+                        data: {"token": token_actual.token, "modulo": "Reporte Propuestas", "convocatoria": $("#id_convocatoria").val(), "entidad": $("#entidad").val(), "anio": $("#anio").val()},
+                        url: url_pv + 'Reportes/generar_reportes'
                     }).done(function (data) {
-                        
-                        var json = JSON.parse(data);
-                        
-                        $("#reporte_propuestas_estados").empty();                                
-                        $("#reporte_propuestas_participantes").empty();                                
-                        $(".fecha_actual").empty();                                
-                        
-                        var reporte_propuestas_estados = Morris.Bar({
-                            element: 'reporte_propuestas_estados',                            
-                            xkey: 'device',
-                            ykeys: ['geekbench'],
-                            labels: ['Total'],
-                            barRatio: 0.4,
-                            xLabelAngle: 35,
-                            hideHover: 'auto'           
-                        });
-                        
-                        var reporte_propuestas_participantes = Morris.Bar({
-                            element: 'reporte_propuestas_participantes',                            
-                            xkey: 'device',
-                            ykeys: ['geekbench'],
-                            labels: ['Total'],
-                            barRatio: 0.4,
-                            xLabelAngle: 35,
-                            hideHover: 'auto'           
-                        });
-                        
-                        if (json.error == 'error_metodo')
-                        {                            
-                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                        if (data == 'error_entidad')
+                        {
+                            notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información de la entidad seleccionada.");
                         } else
                         {
-                            if (json.error == 'error_token')
+
+                            if (data == 'error_metodo')
                             {
-                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                             } else
                             {
-                                 if (data == 'acceso_denegado')
+                                if (data == 'error')
                                 {
-                                    notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
+                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                                 } else
                                 {
-                                    $("#reportes_propuestas").css("display","block");
-                                                                        
-                                    $(".fecha_actual").html(json.fecha_actual);
-                                    
-                                    reporte_propuestas_estados.setData(json.reporte_propuestas_estados);
-                                    
-                                    reporte_propuestas_participantes.setData(json.reporte_propuestas_participantes);
-                                    
-                                }                                
+                                    if (data == 'acceso_denegado')
+                                    {
+                                        notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
+                                    } else
+                                    {
+                                        var json = JSON.parse(data);
+
+                                        $("#reporte_propuestas_estados").empty();
+                                        $("#reporte_propuestas_participantes").empty();
+                                        $("#reporte_convocatorias_listado_contratistas").empty();
+                                        $("#reporte_convocatorias_listado_participantes").empty();
+                                        $(".fecha_actual").empty();
+
+                                        var reporte_propuestas_estados = Morris.Bar({
+                                            element: 'reporte_propuestas_estados',
+                                            xkey: 'device',
+                                            ykeys: ['geekbench'],
+                                            labels: ['Total'],
+                                            barRatio: 0.4,
+                                            xLabelAngle: 35,
+                                            hideHover: 'auto'
+                                        });
+
+                                        var reporte_propuestas_participantes = Morris.Bar({
+                                            element: 'reporte_propuestas_participantes',
+                                            xkey: 'device',
+                                            ykeys: ['geekbench'],
+                                            labels: ['Total'],
+                                            barRatio: 0.4,
+                                            xLabelAngle: 35,
+                                            hideHover: 'auto'
+                                        });
+
+                                        if (json.error == 'error_metodo')
+                                        {
+                                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                        } else
+                                        {
+                                            if (json.error == 'error_token')
+                                            {
+                                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                            } else
+                                            {
+                                                if (data == 'acceso_denegado')
+                                                {
+                                                    notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
+                                                } else
+                                                {
+                                                    $("#reportes_propuestas").css("display", "block");
+
+                                                    $(".fecha_actual").html(json.fecha_actual);
+
+                                                    reporte_propuestas_estados.setData(json.reporte_propuestas_estados);
+
+                                                    reporte_propuestas_participantes.setData(json.reporte_propuestas_participantes);
+
+                                                    $("#reporte_convocatorias_listado_contratistas").html(json.reporte_convocatorias_listado_contratistas);
+                                                    
+                                                    $("#reporte_convocatorias_listado_participantes").html(json.reporte_convocatorias_listado_participantes);
+
+                                                    $('.reporte_convocatorias_listado_contratistas').click(function () {
+                                                        var json = JSON.parse($(this).attr("rel"));
+
+                                                        $.AjaxDownloader({
+                                                            data: json,
+                                                            url: url_pv + 'ConvocatoriasFormatos/reporte_listado_entidades_convocatorias_listado_contratistas_xls/'
+                                                        });
+
+                                                    });
+                                                    
+                                                    $('.reporte_convocatorias_listado_participantes').click(function () {
+                                                        var json = JSON.parse($(this).attr("rel"));
+
+                                                        $.AjaxDownloader({
+                                                            data: json,
+                                                            url: url_pv + 'ConvocatoriasFormatos/reporte_listado_entidades_convocatorias_listado_participantes_xls/'
+                                                        });
+
+                                                    });
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     });
                 }
 
             } else
-            {                
+            {
                 notify("danger", "ok", "Propuestas:", "Debe seleccionar la convocatoria");
-            }            
+            }
 
-        });                
+        });
     }
 });
 
