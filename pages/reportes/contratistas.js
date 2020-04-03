@@ -142,7 +142,12 @@ $(document).ready(function () {
                     var srcSize = f.size;
                     var srcType = f.type;
                     var token_actual = getLocalStorage(name_local_storage);
-                    if (srcType == "text/csv")
+                    
+                    var ext = srcName.split('.');
+                    // ahora obtenemos el ultimo valor despues el punto
+                    // obtenemos el length por si el archivo lleva nombre con mas de 2 puntos
+                    srcExt = ext[ext.length - 1];                                                                                                
+                    if (srcExt == "txt")
                     {
                         $.post(url_pv + 'ConvocatoriasFormatos/cargar_contratistas_csv', {srcData: srcData, srcName: srcName, srcSize: srcSize, srcType: srcType, token: token_actual.token, modulo: "Reporte Contratistas", entidad: $("#entidad").val()}).done(function (data) {
                             if (data == "error_columnas")
