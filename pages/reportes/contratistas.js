@@ -115,7 +115,7 @@ $(document).ready(function () {
                         {
                             row.active="No";    
                         }                        
-                        return row.numero_documento;
+                        return row.entidad;
                     }
                 }
             ]
