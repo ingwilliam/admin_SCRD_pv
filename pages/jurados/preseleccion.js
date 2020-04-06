@@ -9,6 +9,7 @@ $(document).ready(function () {
           location.href = url_pv_admin+'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
     } else
     {
+       $('.convocatorias-search').select2();
         //Verifica si el token actual tiene acceso de lectura
         permiso_lectura(token_actual, "Jurados");
         init(token_actual) ;
@@ -78,20 +79,51 @@ $(document).ready(function () {
 
           });
 
-        $(".guardar_aplica_perfil").click(function(){
+        $("#form_aplica_perfil").bootstrapValidator({
+          feedbackIcons: {
+           valid: 'glyphicon glyphicon-ok',
+           invalid: 'glyphicon glyphicon-remove',
+           validating: 'glyphicon glyphicon-refresh'
+          },
+          fields:{
+            descripcion_evaluacion: {
+              enabled: false,
+              validators: {
+                    notEmpty: {
+                        message: 'Digite la razón por la cual no aplica el perfil.'
+                    }
+                }
+            },
+            'option_aplica_perfil': {
+                   validators: {
+                       notEmpty: {
+                           message: 'Debe seleccionar si aplica ó no el perfil.'
+                       },
+                     }
+               }
 
-          //Se evalua si algun radiobutton es seleccionado
-           if( $("input[name=option_aplica_perfil]:checked").length == 0 ){
+          }
+        })
+        .on('error.field.bv', function(e, data) {
 
-              notify("danger", "remove", "Usuario:", "Debe seleccionar si aplica el perfil o no");
-              return false;
-            }
+           if( data.field == "option_aplica_perfil"){
+               notify("danger", "remove", "Usuario:", "Debe seleccionar si aplica ó no el perfil.");
+           }
 
-            if( $('.guardar_aplica_perfil').hasClass('disabled') ){
-                return false;
-            }else{
-                evaluar_perfil(token_actual, $("#id_jurados_postulados").val(),   $("#id_participante_sel").val() );
-            }
+         })
+        .on('success.form.bv', function (e) {
+
+            // Prevent form submission
+            e.preventDefault();
+            // Get the form instance
+            var $form = $(e.target);
+
+            // Get the BootstrapValidator instance
+            var bv = $form.data('bootstrapValidator');
+
+            evaluar_perfil(token_actual, $("#id_jurados_postulados").val(),   $("#id_participante_sel").val() );
+
+            bv.resetForm();
 
         });
 
@@ -103,6 +135,28 @@ $(document).ready(function () {
             $("#panel_tabs").show();
 
           });
+
+        $("#optionsRadiosInline1").click( function(){
+
+          $('#form_aplica_perfil').bootstrapValidator('enableFieldValidators', 'descripcion_evaluacion', false );
+
+        });
+
+        $("#optionsRadiosInline2").click( function(){
+
+          if( this.checked){
+              $('#form_aplica_perfil').bootstrapValidator('enableFieldValidators', 'descripcion_evaluacion', true );
+              $('#form_aplica_perfil').bootstrapValidator('validateField', 'descripcion_evaluacion');
+          }
+
+        });
+
+        $("#baceptar").click(function(){
+          $('#alertModal').modal('hide');
+          confirmar_evaluacion( token_actual,  $("#id_perfil_selecionado").val(),  $("#id_participante_sel").val() );
+          $('#evaluar').modal('hide');
+        });
+
 
     }
 
@@ -337,8 +391,15 @@ function cargar_tabla(token_actual){
                     },*/
                     {"data": "aciones",
                               render: function ( data, type, row ) {
-                                          return '<button id="'+row.id_postulacion+'" title="Evaluar la hoja de vida " type="button" class="btn btn-primary btn_cargar" data-toggle="modal" data-target="#evaluar" id-participante="'+row.id+'">'
-                                              +'<span class="glyphicon glyphicon-check"></span></button>' ;
+
+                                  if( row.id_postulacion === null || row.id_postulacion === undefined){
+                                    return '<button id="'+row.id_postulacion+'" title="Seleccionar la hoja de vida" type="button" class="btn btn-warning btn_postular" id-participante="'+row.id+'">'
+                                        +'<span class="glyphicon glyphicon-log-in"></span></button>' ;
+                                  }else{
+                                    return '<button id="'+row.id_postulacion+'" title="Evaluar la hoja de vida " type="button" class="btn btn-primary btn_cargar" data-toggle="modal" data-target="#evaluar" id-participante="'+row.id+'">'
+                                        +'<span class="glyphicon glyphicon-check"></span></button>' ;
+                                  }
+
 
                                           },
                     }
@@ -356,11 +417,15 @@ function acciones_registro(token_actual){
 
   $(".btn_cargar").click(function(){
 
+    ///  $('#form_aplica_perfil').bootstrapValidator('destroy');
+    //$('#form_aplica_perfil').bootstrapValidator('resetForm', true);
+
     $("#id_perfil_selecionado").val( $(this).attr("id") );
     $("#id_participante_sel").val( $(this).attr("id-participante") );
     $("#id_jurados_postulados").val(null);
     // alert("convocatoria"+ $('#convocatorias').val());
      cargar_select_categorias_2(token_actual);
+
 
      cargar_datos_basicos(token_actual,$(this).attr("id"), $(this).attr("id-participante")  );
      cargar_tabla_documentos(token_actual, $(this).attr("id"), $(this).attr("id-participante") );
@@ -375,7 +440,9 @@ function acciones_registro(token_actual){
 
   });
 
-
+    $(".btn_postular").click(function(){
+      postular(token_actual, $(this).attr("id"), $(this).attr("id-participante"));
+    });
 
 }
 
@@ -383,7 +450,6 @@ function acciones_registro(token_actual){
 function cargar_datos_basicos(token_actual, postulacion, participante){
     $("#perfiles_jurados").html("");
   //consulto si tengo propuesta cargada
-
 
   // cargo los datos
   $.ajax({
@@ -1496,26 +1562,32 @@ function cargar_criterios_evaluacion(token_actual, postulacion, participante){
             $("input[name=option_aplica_perfil][value=true]").removeAttr('checked');
             $("input[name=option_aplica_perfil][value=false]").removeAttr('checked');
 
-          //  console.log("aplica_perfil-->"+!json[r].postulacion.aplica_perfil);
+            console.log("aplica_perfil-->"+ json[r].postulacion);
 
-            if( json[r].postulacion.aplica_perfil ){
-              $(".guardar_aplica_perfil").addClass( "disabled" );
-              $("input[name=option_aplica_perfil][value=true]").attr('checked', 'checked');
+            if( json[r].postulacion ){
+
+              if( json[r].postulacion.aplica_perfil !== null && json[r].postulacion.aplica_perfil ){
+                $(".guardar_aplica_perfil").addClass( "disabled" );
+                $("#fieldset_aplica_perfil").attr("disabled","");
+                $("input[name=option_aplica_perfil][value=true]").attr('checked', 'checked');
                 $("#form_criterios").show();
 
-            }else if( (!json[r].postulacion.aplica_perfil) && json[r].postulacion.aplica_perfil !== null ){
-              $(".guardar_aplica_perfil").addClass( "disabled" );
-              $("input[name=option_aplica_perfil][value=false]").attr('checked', 'checked');
+              }else if( json[r].postulacion.aplica_perfil !== null && (!json[r].postulacion.aplica_perfil) ){
+                $(".guardar_aplica_perfil").addClass( "disabled" );
+                $("#fieldset_aplica_perfil").attr("disabled","");
+                $("input[name=option_aplica_perfil][value=false]").attr('checked', 'checked');
+              }
+
+              $("#descripcion_evaluacion").val(json[r].postulacion.descripcion_evaluacion);
+
+              $("#id_jurados_postulados").val(json[r].postulacion.id);
+
+              //grupo
+              $("#form_criterios").append('<fieldset class="criterios" '+(json[r].postulacion.estado >= 12 ? ' disabled="" ': '') +'>');
+
             }
 
-            $("#descripcion_evaluacion").val(json[r].postulacion.descripcion_evaluacion);
-
-            $("#id_jurados_postulados").val(json[r].postulacion.id);
-
-            //grupo
-            $("#form_criterios").append('<fieldset class="criterios" '+(json[r].postulacion.estado >= 12 ? ' disabled="" ': '') +'>');
-
-
+            //categoria criterio
             $.each(json[r].criterios, function (key, array) {
               //console.log("key-->"+key);
               //console.log("arraysss-->"+Object.keys(array));
@@ -1560,28 +1632,26 @@ function cargar_criterios_evaluacion(token_actual, postulacion, participante){
                                                 +'</div>');
               //append
 
-                       });
-              //$.each(array[Object.keys(array)], function (k, a)
-             });
+            });//fin foreach criterio
 
-             $(".criterios").append('<div class="col-lg-12" style="text-align: right"><button type="button" class="btn btn-default '+( (json[r].postulacion.estado >= 12) ? "disabled":' guardar_evaluacion_'+$("#id_ronda").val() )+'">Guardar</button></div>');
+            }); //fin foreach categoria criterio
 
+             $(".criterios").append('<div class="col-lg-12" style="text-align: right">'
+                                      +'<button type="button" class="btn btn-default '+( (json[r].postulacion.estado >= 12) ? "disabled":' guardar_evaluacion_'+$("#id_ronda").val() )+'">Guardar</button>'
+                                      +'<button type="button" class="btn btn-default '+( (json[r].postulacion.estado >= 12) ? "disabled":' confirmar_evaluacion_'+$("#id_ronda").val() )+'">Confirmar evaluación</button></div>'
+                                    );
 
+          });//fin foreach ronda
+
+          $(".guardar_evaluacion_"+$("#id_ronda").val() ).click(function(){
+              evaluar_criterios(token_actual, postulacion, participante);
           });
 
+          $(".confirmar_evaluacion_"+$("#id_ronda").val() ).click(function(){
+              $('#alertModal').modal('show');
+            //  confirmar_evaluacion(token_actual, postulacion, participante);
+          });
 
-            $(".guardar_evaluacion_"+$("#id_ronda").val() ).click(function(){
-                //$('#alertModal').modal('show');
-                evaluar_criterios(token_actual, postulacion, participante);
-            });
-
-            $("#baceptar").click(function(){
-              //
-              //$('#alertModal').modal('hide');
-              //$('#evaluar').modal('hide');
-              //evaluar_criterios(token_actual, postulacion, participante);
-
-            });
 
         break;
     }
@@ -1646,17 +1716,18 @@ function evaluar_perfil(token_actual, postulacion, participante){
       default:
           notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
           $(".guardar_aplica_perfil").addClass( "disabled" );
+          $("#fieldset_aplica_perfil").attr("disabled","");
           cargar_tabla(token_actual);
 
+          if( $("#optionsRadiosInline1").val() ){
 
-                      if( $("#optionsRadiosInline1").val() ){
+              $("#form_criterios").show();
 
-                          $("#form_criterios").show();
+          }else {
 
-                      }else {
+              $("#form_criterios").hide();
+          }
 
-                          $("#form_criterios").hide();
-                      }
        break;
      }
 
@@ -1704,7 +1775,7 @@ function evaluar_criterios(token_actual,  postulacion, participante){
         break;
       default:
         notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
-        $(".criterios").attr('disabled','');
+        //$(".criterios").attr('disabled','');
         cargar_tabla(token_actual);
        break;
      }
@@ -1714,6 +1785,51 @@ function evaluar_criterios(token_actual,  postulacion, participante){
 
 
 }
+
+//Guarda la evaluación de los criterios evaluados
+function confirmar_evaluacion(token_actual,  postulacion, participante){
+
+  $.ajax({
+      type: 'POST',
+      url: url_pv + 'Juradospreseleccion/confirmar_evaluacion',
+      data: $("#form_criterios").serialize()
+            + "&modulo=Jurados&token="+ token_actual.token
+            + "&idc="+ $('#convocatorias').val()
+            + "&postulacion="+postulacion
+            + "&participante="+participante
+            + "&ronda="+$("#id_ronda").val()
+  }).done(function (data) {
+
+    switch (data) {
+      case 'error':
+        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        break;
+      case 'error_metodo':
+        notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        break;
+      case 'error_token':
+        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        break;
+      case 'acceso_denegado':
+        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+        break;
+      case 'deshabilitado':
+        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+        break;
+      case 'error_duplicado':
+        notify("danger", "remove", "Usuario:", "Ya existe un usuario registrado con el mismo documento de identificación.");
+        break;
+      default:
+        notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
+        $(".criterios").attr('disabled','');
+        cargar_tabla(token_actual);
+       break;
+     }
+
+  });
+
+}
+
 
 function cargar_select_categorias_2(token_actual){
 
@@ -1848,6 +1964,8 @@ function validator_form(token_actual) {
         $('#filtro').val(true);
         cargar_tabla(token_actual);
 
+        $("#idc").val($("#banco_jurado").val());
+
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         bv.resetForm();
         $("#exampleModal").modal("toggle");
@@ -1896,3 +2014,50 @@ function seleccionar_jurado(token_actual,postulacion, participante){
   });
 
 }
+
+function postular(token_actual, postulacion, participante ){
+
+  var idregistro = ( $('#categorias').val()==="" )? $('#convocatorias').val(): $('#categorias').val();
+
+     $.ajax({
+         type: 'POST',
+         url: url_pv + 'Juradospreseleccion/new_postulacion',
+         data: {
+           "token": token_actual.token,
+           "modulo":"Menu Participante",
+           "idc":   $("#idc").val(), //id de la convocatoria de jurado
+           "idregistro": idregistro,
+           "participante": participante,
+         },
+     }).done(function (result) {
+
+       switch (result) {
+         case 'error':
+           notify("danger", "ok", "Convocatorias:", "Se registró un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+           break;
+         case 'error_token':
+           location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+           break;
+         case 'acceso_denegado':
+           notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+           break;
+         case 'deshabilitado':
+           notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+             //cargar_tabla_p(token_actual);
+           break;
+         case 'error_metodo':
+           notify("danger", "ok", "Convocatorias:", "Se registró un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+           break;
+         case 'error_limite':
+           notify("danger", "remove", "Usuario:", "Se cumplió el máximo de postulaciones activas.");
+           ///  cargar_tabla_p(token_actual);
+           break;
+         default:
+           notify("success", "ok", "Convocatorias:", "Se postuló la hoja de vida con éxito.");
+           cargar_tabla(token_actual);
+           break;
+       }
+
+     });
+
+   }

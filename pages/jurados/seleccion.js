@@ -9,6 +9,7 @@ $(document).ready(function () {
           location.href = url_pv_admin+'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
     } else
     {
+         $('.convocatorias-search').select2();
         //Verifica si el token actual tiene acceso de lectura
         permiso_lectura(token_actual, "Jurados");
         init(token_actual) ;
