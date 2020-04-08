@@ -81,7 +81,7 @@ $(document).ready(function () {
                                 var icono_class = 'fa-save';
                             }
                             if (estado.id == 2) {
-                                var style_class = 'panel-green';
+                                var style_class = 'panel-default';
                                 var style_class_number = 'estados estado_2';
                                 var icono_class = 'fa-check-circle';
                             }
@@ -96,7 +96,7 @@ $(document).ready(function () {
                                 var icono_class = 'fa-check-circle-o';
                             }
                             if (estado.id == 5) {
-                                var style_class = 'panel-red';
+                                var style_class = 'panel-green';
                                 var style_class_number = 'estados estado_5';
                                 var icono_class = 'fa-cloud-upload';
                             }
@@ -125,6 +125,7 @@ $(document).ready(function () {
             "searching": false,
             "processing": true,
             "serverSide": true,
+            "ordering": false,
             "lengthMenu": [20, 30, 40],
             "ajax": {
                 url: url_pv + "Convocatorias/all",
@@ -157,6 +158,49 @@ $(document).ready(function () {
                 
                 $('.convocatoria_publicar').click(function () {
                     $("#convocatoria_publicar").val($(this).attr("title"));                    
+                });
+                
+                $('.convocatoria_cancelar').click(function () {
+                    //Convocatoria principal
+                    $("#convocatoria_cancelar").val($(this).attr("title"));                    
+                    //Verificar si es una convocatoria especial
+                    $("#convocatoria_diferente").val($(this).attr("lang"));                                        
+                    
+                    if($("#convocatoria_diferente").val()=="t")
+                    {
+                        $.ajax({
+                            type: 'GET',
+                            data: {"modulo": "Convocatorias", "token": token_actual.token, "id": $("#convocatoria_cancelar").val()},
+                            url: url_pv + 'Convocatorias/select_convocatoria_categorias'
+                        }).done(function (data) {
+                            if (data == 'error_metodo')
+                            {
+                                notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                            } else
+                            {
+                                if (data == 'error_token')
+                                {
+                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                } else
+                                {
+                                    var json = JSON.parse(data);
+
+                                    $('#convocatoria_diferente_categoria').find('option').remove();
+                                    $("#convocatoria_diferente_categoria").append('<option value="">:: Seleccionar ::</option>');
+                                    $.each(json, function (key, value) {
+                                        $("#convocatoria_diferente_categoria").append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                                    });
+                                }
+                            }
+                        });
+                        
+                        
+                        $("#convocatoria_categorias_diferente").css("display","block");                        
+                    }
+                    else
+                    {
+                        $("#convocatoria_categorias_diferente").css("display","none");                        
+                    }
                 });
                 
                 $('#publicar_convocatoria').click(function () {
@@ -194,6 +238,49 @@ $(document).ready(function () {
                         }
                     });
                 });
+                
+                $('#cancelar_convocatoria').click(function () {
+                    
+                    var convocatoria_cancelar = $("#convocatoria_cancelar").val();
+                    
+                    if($("#convocatoria_diferente").val()=="t")
+                    {
+                        convocatoria_cancelar = $("#convocatoria_diferente_categoria").val();
+                    }
+                    
+                    $.ajax({
+                        type: 'GET',
+                        data: {"token": token_actual.token, "id": convocatoria_cancelar},
+                        url: url_pv + 'Convocatorias/cancelar_convocatoria'
+                    }).done(function (data) {
+                        if (data == 'error_metodo')
+                        {
+                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                        } else
+                        {
+                            if (data == 'error_token')
+                            {
+                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                            } else
+                            {
+                                if (data == 'error_publicacion')
+                                {                                    
+                                    notify("danger", "ok", "Convocatorias:", "No cuenta con permisos para cambiar el estado de la convocatoria");
+                                } else
+                                {
+                                    if (data == 'error')
+                                    {
+                                        notify("danger", "ok", "Convocatorias:", "Se registro un error al editar, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+                                        notify("success", "ok", "Convocatorias:", "Se cancelo la convocatoria con éxito.");
+                                        dataTable.draw();
+                                    }                                    
+                                }
+                            }
+                        }
+                    });
+                });
 
                 $(".check_activar_t").attr("checked", "true");
                 $(".check_activar_f").removeAttr("checked");
@@ -208,10 +295,10 @@ $(document).ready(function () {
                 {"data": "area"},
                 {"data": "linea_estrategica"},
                 {"data": "enfoque"},
-                {"data": "nombre"},
-                {"data": "activar_registro"},
+                {"data": "nombre"},                
                 {"data": "ver_convocatoria"},
                 {"data": "publicar"},
+                {"data": "cancelar"},
                 {"data": "acciones"}
             ]
         });

@@ -982,8 +982,8 @@ $(document).ready(function () {
                         $('.modalidad_jurados').css("display", "block");
                     }
                     
-                    //Si la convocatoria fue publicada
-                    if(json.convocatoria.estado==5){
+                    //Si la convocatoria fue publicada o cancelada
+                    if(json.convocatoria.estado==5 || json.convocatoria.estado==32){
                         $("#form_validator input,select,button[type=submit],textarea").attr("disabled","disabled");   
                         $(".class_bolsa_concursable").attr("disabled", "disabled");                
                         $(".diferentes_categorias_button").attr("disabled", "disabled");                

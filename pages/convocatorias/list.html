@@ -130,7 +130,7 @@
                 <div class="row" id="filtros_estados_convocatorias">
 
                 </div>
-                
+
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group text-right">
@@ -158,16 +158,14 @@
                                                     <th>Área</th>
                                                     <th>Línea</th>
                                                     <th>Enfoque</th>
-                                                    <th>Nombre</th>
-                                                    <th>¿Activa?</th>
+                                                    <th>Nombre</th>                                                    
                                                     <th>Ver convocatoria</th>
                                                     <th>Publicar</th>                                                    
+                                                    <th>Cancelar</th>                                                    
                                                     <th>Editar</th>
                                                 </tr>
                                             </thead>
                                         </table>
-
-
                                     </div>
                                 </div>
                                 <!-- /.row (nested) -->
@@ -181,27 +179,59 @@
                 <!-- /.row -->
             </div>
             <!-- /#page-wrapper -->
-            
+
             <!-- Modal -->
             <div class="modal fade" id="modal_confirmar_publicar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Publicar convocatoria</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    Esta seguro de publicar esta convocatoria?, después de publicada no podrá modificar información de la convocatoria.
-                  </div>
-                  <div class="modal-footer">
-                    <input type="hidden" id="convocatoria_publicar" />
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" id="publicar_convocatoria" class="btn btn-primary">Confirmar</button>
-                  </div>
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Publicar convocatoria</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Esta seguro de publicar esta convocatoria?, después de publicada no podrá modificar información de la convocatoria.
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" id="convocatoria_publicar" />
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="button" id="publicar_convocatoria" class="btn btn-primary">Confirmar</button>
+                        </div>
+                    </div>
                 </div>
-              </div>
+            </div>
+            <div class="modal fade" id="modal_confirmar_cancelar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Cancelar convocatoria</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Esta seguro de cancelar esta convocatoria?, después de cancelada los participantes no podrán inscribir sus propuestas.                            
+                            <div id="convocatoria_categorias_diferente" class="row" style="display: none">
+                                <br/>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Seleccionar Convocatoria<span class="icono_requerido">*</span></label>
+                                        <select id='convocatoria_diferente_categoria' name="convocatoria_diferente_categoria" class="form-control" >
+                                            <option value="">:: Seleccionar ::</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" id="convocatoria_cancelar" />
+                            <input type="hidden" id="convocatoria_diferente" />
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="button" id="cancelar_convocatoria" class="btn btn-primary">Confirmar</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- /#wrapper -->

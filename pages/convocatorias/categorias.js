@@ -98,8 +98,8 @@ $(document).ready(function () {
                                     $(".diferentes_requisitos_disable").attr("disabled", "disabled");
                                 }
                                 
-                                //Si la convocatoria fue publicada
-                                if(json.convocatoria.estado==5){
+                                //Si la convocatoria fue publicada o cancelada
+                                if(json.convocatoria.estado==5 || json.convocatoria.estado==32){
                                     $("#form_validator input,select,button[type=submit],textarea").attr("disabled","disabled");   
                                     $("#table_categorias button,input,select,button[type=submit],textarea").attr("disabled","disabled");   
                                     $(".input-sm").css("display","none");                                       
