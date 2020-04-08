@@ -1520,7 +1520,7 @@ function cargar_criterios_evaluacion(token_actual, postulacion, participante){
   $.ajax({
       type: 'GET',
       url: url_pv + 'Juradospreseleccion/criterios_evaluacion',
-      data: "&modulo=Menu Participante&token=" + token_actual.token
+      data: "&modulo=Jurados&token=" + token_actual.token
             +"&idc="+$('#convocatorias').val()
             +"&postulacion="+postulacion
             +"&participante="+participante
@@ -2024,7 +2024,7 @@ function postular(token_actual, postulacion, participante ){
          url: url_pv + 'Juradospreseleccion/new_postulacion',
          data: {
            "token": token_actual.token,
-           "modulo":"Menu Participante",
+           "modulo":"Jurados",
            "idc":   $("#idc").val(), //id de la convocatoria de jurado
            "idregistro": idregistro,
            "participante": participante,
