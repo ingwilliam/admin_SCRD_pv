@@ -220,6 +220,7 @@ $(document).ready(function () {
                                         $("#reporte_propuestas_estados").empty();
                                         $("#reporte_propuestas_participantes").empty();
                                         $("#reporte_convocatorias_listado_contratistas").empty();
+                                        $("#reporte_convocatorias_listado_no_inscritas").empty();
                                         $("#reporte_convocatorias_listado_participantes").empty();
                                         $(".fecha_actual").empty();
 
@@ -268,6 +269,8 @@ $(document).ready(function () {
 
                                                     $("#reporte_convocatorias_listado_contratistas").html(json.reporte_convocatorias_listado_contratistas);
                                                     
+                                                    $("#reporte_convocatorias_listado_no_inscritas").html(json.reporte_convocatorias_listado_no_inscritas);
+                                                    
                                                     $("#reporte_convocatorias_listado_participantes").html(json.reporte_convocatorias_listado_participantes);
 
                                                     $('.reporte_convocatorias_listado_contratistas').click(function () {
@@ -276,6 +279,16 @@ $(document).ready(function () {
                                                         $.AjaxDownloader({
                                                             data: json,
                                                             url: url_pv + 'ConvocatoriasFormatos/reporte_listado_entidades_convocatorias_listado_contratistas_xls/'
+                                                        });
+
+                                                    });
+                                                    
+                                                    $('.reporte_convocatorias_listado_no_inscritas').click(function () {
+                                                        var json = JSON.parse($(this).attr("rel"));
+
+                                                        $.AjaxDownloader({
+                                                            data: json,
+                                                            url: url_pv + 'ConvocatoriasFormatos/reporte_listado_entidades_convocatorias_no_inscritas_xls/'
                                                         });
 
                                                     });
