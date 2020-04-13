@@ -57,8 +57,8 @@ $(document).ready(function () {
 
                             if (typeof json.convocatoria.id === 'number') {
 
-                                //Si la convocatoria fue publicada
-                                if(json.convocatoria.estado==5){
+                                //Si la convocatoria fue publicada o cancelada
+                                if(json.convocatoria.estado==5 || json.convocatoria.estado==32){
                                     
                                     $("#table_registros input,select,textarea").attr("disabled","disabled");                                       
                                     $("#table_registros .cargar_formulario").attr("disabled","disabled");                                       

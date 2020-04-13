@@ -73,8 +73,8 @@ $(document).ready(function () {
                                     $(".diferentes_requisitos").css("display", "none");
                                 }
                                 
-                                //Si la convocatoria fue publicada
-                                if(json.convocatoria.estado==5){
+                                //Si la convocatoria fue publicada o cancelada
+                                if(json.convocatoria.estado==5 || json.convocatoria.estado==32){
                                     $("#form_nuevo_documento input,select,button[type=submit],textarea").attr("disabled","disabled");   
                                     $("#table_registros button,input,select,button[type=submit],textarea").attr("disabled","disabled");   
                                     $(".input-sm").css("display","none");                                       

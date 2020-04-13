@@ -9,6 +9,7 @@ $(document).ready(function () {
       } else
       {
 
+        $('.convocatorias-search').select2();
         //Verifica si el token actual tiene acceso de lectura
         permiso_lectura(token_actual, "Jurados");
         init(token_actual) ;
@@ -186,7 +187,7 @@ $(document).ready(function () {
   }
 
   function cargar_select_categorias(token_actual, convocatoria){
-    
+
     $.ajax({
         type: 'GET',
         url: url_pv + 'Juradospreseleccion/select_categorias',
