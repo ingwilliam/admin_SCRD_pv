@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>::Selección::</title>
+        <title>::Evaluación de propuestas::</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -50,9 +50,6 @@
         <!-- Datepicker animate -->
         <link href="../../dist/libraries/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css"/>
 
-        <!--Select2-->
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-
 
     </head>
 
@@ -74,7 +71,7 @@
               <div class="loading centrado-porcentual"></div>
               <div class="row">
                   <div class="col-lg-12">
-                      <h1 class="page-header">Selección de jurados</h1>
+                      <h1 class="page-header">Evaluación de propuestas</h1>
                   </div>
                   <!-- /.col-lg-12 -->
               </div>
@@ -83,42 +80,61 @@
                   <div class="col-lg-12">
                       <div class="panel panel-default">
                           <div class="panel-heading">
-                            Búsqueda de jurados
+                            Búsqueda de propuestas
                           </div>
                           <div class="panel-body">
                               <form id="formulario_principal" action="" class="formulario_principal" role="form" method="post">
 
                                   <div class="row">
-                                      <div class="col-lg-6">
-                                          <div class="form-group">
-                                              <label>Entidad</label>
-                                              <select id='entidad' name="entidad" class="form-control" >
-                                                  <option value="">:: Seleccionar ::</option>
-                                              </select>
-                                          </div>
-                                      </div>
-                                      <div class="col-lg-6">
-                                          <div class="form-group">
-                                              <label>Año</label>
-                                              <select id='anio' name="anio" class="form-control" >
-                                                  <option value="">:: Seleccionar ::</option>
-                                              </select>
-                                          </div>
-                                      </div>
+                                  	<div class="col-lg-6">
+                                         <div class="form-group">
+                                             <label>Año</label>
+                                             <select id='anio' name="anio" class="form-control" >
+                                                 <option value="">:: Seleccionar ::</option>
+                                             </select>
+                                         </div>
+                                     </div>
+                                     <div class="col-lg-6">
+                                         <div class="form-group">
+                                             <label>Entidad</label>
+                                             <select id='entidad' name="entidad" class="form-control" >
+                                                 <option value="">:: Seleccionar ::</option>
+                                             </select>
+                                         </div>
+                                     </div>
                                   </div>
                                   <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Convocatorias</label>
-                                            <select id='convocatorias' name="convocatorias" class="form-control  convocatorias-search">
+                                            <label>Convocatoria</label>
+                                            <select id='convocatorias' name="convocatorias" class="form-control" >
                                                 <option value="">:: Seleccionar ::</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6" style="display: none;" id="select_categorias">
+                                    <div class="col-lg-6" id="select_categorias" >
                                         <div class="form-group">
                                             <label>Categorias</label>
-                                            <select id='categorias' name="categorias" class="form-control" >
+                                            <select id='categorias' name="categorias" class="form-control" disabled="" >
+                                                <option value="">:: Seleccionar ::</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                  </div>
+
+                                   <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Ronda de evaluación</label>
+                                            <select id='rondas' name="rondas" class="form-control" >
+                                                <option value="">:: Seleccionar ::</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6"  >
+                                        <div class="form-group">
+                                            <label>Estado</label>
+                                            <select id='estados' name="estados" class="form-control" >
                                                 <option value="">:: Seleccionar ::</option>
                                             </select>
                                         </div>
@@ -140,8 +156,23 @@
                   </div>
                   <!-- /.col-lg-12 -->
               </div>
+              <div class="row">
+                  <div class="col-lg-12">
+                    <!-- /.col-lg-12 -->
+                    <div class="panel-body" style="text-align: right">
+                      <button type="button" class="btn btn-success btn-circle btn-lg" onclick="" id="confirmar_top" title="Confirmar top individual"><i class="fa  fa-check-square-o "></i>
+                      </button>
 
+                    </div>
+                  </div>
 
+              </div>
+			       <div class="row">
+                 <div class="col-lg-12">
+                 	<div class="alert alert-danger" id="notificacion_periodo">
+                 	</div>
+                 </div>
+              </div>
 
               <div class="row">
                   <div class="col-lg-12">
@@ -157,12 +188,9 @@
                                         <thead>
                                             <tr>
                                                 <th>Código de la propuesta</th>
-                                                <th>Tipo documento</th>
-                                                <th>Número documento</th>
-                                                <th>Nombres</th>
-                                                <th>Apellidos</th>
-                                                <th>Puntaje</th>
-                                                <th>Estado notificación</th>
+                                                <th>Nombre de la propuesta</th>
+                                                <th>Total de la evaluación</th>
+                                                <th>Estado</th>
                                                 <th>Acciones</th>
                                             </tr>
                                         </thead>
@@ -175,7 +203,7 @@
                       </div>
                       <!-- /.panel -->
                   </div>
-                  <input type="hidden" id="id_jurado_postulado">
+
                   <!-- /.col-lg-12 -->
               </div>
               <!-- /.row -->
@@ -186,151 +214,183 @@
         </div>
         <!-- /#wrapper -->
 
-        <!-- Modal notificar-->
-        <div class="modal fade" id="notificarModal" tabindex="-1" role="dialog" aria-labelledby="notificarModalLabel" >
-            <div class="modal-dialog " role="document">
+        <!-- Modal evaluar propuesta-->
+        <div class="modal fade" id="evaluarModal" tabindex="-1" role="dialog" aria-labelledby="evaluarModalLabel" >
+            <div class="modal-dialog modal-lg " role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="notificarModalLabel">Notificar</h5>
+                  <h5 class="modal-title" id="evaluarModalLabel">Evaluar propuesta</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
 
-                <form id="form_notificar" action="" class="form_notificar" role="form" method="post">
-                  <div class="row">
-                    <div class="col-lg-6">
-                            <div class="form-group">
-                                <label>Fecha inicio de la evaluación:<span class="icono_requerido">*</span></label>
-                                <div class="input-group date calendario c1" data-date="" data-date-format="yyyy-mm-dd" data-link-format="yyyy-mm-dd">
-                                    <input class="form-control" id="fecha_inicio_evaluacion" name="fecha_inicio_evaluacion" size="16" type="text" value="" readonly>
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#informacion" data-toggle="tab">Información de la propuesta</a>
+                        </li>
+                        <li><a href="#evaluacion" data-toggle="tab">Evaluación de la propuesta</a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+
+                    	<!-- Panel de información de la propuesta -->
+                        <div class="tab-pane fade in active" id="informacion">
+
+		                    <div class="panel panel-info">
+		                        <div class="panel-heading">
+		                            Información básica
+		                        </div>
+		                        <div class="panel-body">
+		                            <div class="row">
+		                            	<div class="col-lg-6">
+		                            		<h5><b>Código de la propuesta:</b></h5>
+		                            		<span id="codigo_propuesta"></span>
+		                            	</div>
+		                            	<div class="col-lg-6">
+		                            		<h5><b>Nombre de la propuesta:</b></h5>
+		                            		<span id="nombre_propuesta"></span>
+		                            	</div>
+		                            	<div class="col-lg-12">
+		                            		<h5><b>Resumen de la propuesta:</b></h5>
+		                            		<span id="resumen_propuesta"></span>
+		                            	</div>
+		                            	<div class="col-lg-12">
+		                            		<h5><b>Objetivo de la propuesta:</b></h5>
+		                            		<span id="objetivo_propuesta"></span>
+		                            	</div>
+		                            	<div class="col-lg-6">
+		                            		<h5><b>¿La propuesta se desarrollara en Bogotá D.C.?</b></h5>
+		                            		<span id="bogota_propuesta"></span>
+		                            	</div>
+
+		                            	<div id="parametros_propuesta">
+		                            	</div>
+		                            </div>
+		                    	</div>
+
+                        	</div>
+
+                        	<div class="panel panel-info">
+		                        <div class="panel-heading">
+		                            Documentos técnicos
+		                        </div>
+		                        <div class="panel-body">
+
+		                          	<div class="table-responsive">
+		                          	 <h4>Archivos</h4>
+ 									 <p>Documentos cargados en el sistema:</p>
+									  <table class="table table-hover table-striped">
+									    <thead>
+									      <tr>
+									        <th>Documento</th>
+									        <th>Descripcion</th>
+									        <th>Tipo</th>
+									        <th>Acciones</th>
+									      </tr>
+									    </thead>
+									     <tbody id="archivos_table">
+
+									     </tbody>
+									  </table>
+									</div>
+
+									<div class="table-responsive">
+									 <h4>Links</h4>
+ 									 <p>Links de acceso a los recursos web:</p>
+									  <table class="table table-hover table-striped">
+									    <thead>
+									      <tr>
+									        <th>Documento</th>
+									        <th>Descripcion</th>
+									        <th>Tipo</th>
+									          <th>Acciones</th>
+									      </tr>
+									    </thead>
+									     <tbody id="links_table">
+
+									     </tbody>
+									  </table>
+									</div>
+		                    	</div>
+
+                        	</div>
+
+                        </div>
+
+                        <!-- Panel de evaluación -->
+                        <div class="tab-pane fade" id="evaluacion">
+
+                            <div class="panel panel-info" id="evaluar" >
+                            	<div class="panel-heading">
+                                	<h4 class="panel-title">Evaluar</h4>
                                 </div>
-                            </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Fecha fin de la evaluación:<span class="icono_requerido">*</span></label>
-                            <div class="input-group date calendario c2" data-date="" data-date-format="yyyy-mm-dd" data-link-format="yyyy-mm-dd">
-                                <input class="form-control" id="fecha_fin_evaluacion" name="fecha_fin_evaluacion" size="16" type="text" value="" readonly>
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
+                                <div class="panel-body" >
+                                	<form role="form" id="form_criterios">
+                                  </form>
+									                <div class="col-lg-12 btn_guardar_evaluacion" style="text-align: right">
 
-                  <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Fecha de deliberación:<span class="icono_requerido">*</span></label>
-                            <div class="input-group date calendario c3" data-date="" data-date-format="yyyy-mm-dd" data-link-format="yyyy-mm-dd">
-                                <input class="form-control" id="fecha_deliberacion" name="fecha_deliberacion" size="16" type="text" value="" readonly>
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                            </div>
-                        </div>
+									                </div>
+                                </div>
+                           </div>
+
+			            </div>
+
                     </div>
-                    <div class="col-lg-6">
-                      <div class="form-group">
-                        <label>Tipo de jurado</label>
-                        <select id="select_tipo_jurado" name="select_tipo_jurado" class="form-control">
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-6">
-                      <div class="form-group">
-                        <label>Jurado suplente?</label>
-                      </div>
-                      <div class="form-group">
-                        <label class="radio-inline">
-                            <input type="radio" name="option_suplente" id="optionsRadiosInline1" value="true">Si
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="option_suplente" id="optionsRadiosInline2" value="false">No
-                        </label>
-                      </div>
-                    </div>
-
-                      <div class="col-lg-6">
-                        <div class="form-group">
-                          <label>Valor estímulo</label>
-                          <input type="text" id="valor_estimulo" name="valor_estimulo"  class="form-control" >
-                        </div>
-
-                      </div>
-
-                  </div>
 
                 </div>
 
                 <div class="modal-footer">
-                  <button type="submit" class="btn btn-primary">Enviar notificación</button>
 
                   <button type="button" class="btn btn-secondary" data-dismiss="modal" id="notificar_cancelar" >Cancelar</button>
                   <!--button type="button" class="btn btn-primary" id="baceptar" style="display:none;">Aceptar</button-->
                 </div>
 
-              </form>
+
               </div>
             </div>
           </div>
         <!-- Modal -->
 
-        <!-- Modal -->
-          <div class="modal fade" id="notificacionModal" tabindex="-1" role="dialog" aria-labelledby="notificacionModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+        <!-- Modal notificar impedimento-->
+        <div class="modal fade" id="impedimentoModal" tabindex="-1" role="dialog" aria-labelledby="impedimentoModalLabel" >
+            <div class="modal-dialog " role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="notificacionModal">Notificación</h5-->
+                  <h5 class="modal-title" id="impedimentoModalLabel">Declaración de impedimento</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
+
+                  <form class="impedimentoForm">
+
                     <div class="row">
-                        <div class="col-lg-6">
-                            <label>Usuario que notificó</label>
-                            <p><span id="notificacionModal_usuario"></span></p>
-                        </div>
-                        <div class="col-lg-6">
-                            <label>Fecha notificación</label>
-                            <p><span id="notificacionModal_fecha_creacion"></span></p>
-                        </div>
+                      <div class="col-lg-12" id="notificacion">
 
-                        <div class="col-lg-6">
-                            <label>Tipo </label>
-                            <p><span id="notificacionModal_tipo_jurado"></span></p>
-                        </div>
-                        <div class="col-lg-6">
-                            <label>Rol</label>
-                            <p><span id="notificacionModal_rol_jurado"></span></p>
-                        </div>
-                        <div class="col-lg-6">
-                            <label>Fecha aceptacion</label>
-                            <p><span id="notificacionModal_fecha_aceptacion"></span></p>
-                        </div>
-                        <div class="col-lg-6">
-                            <label>Fecha rechazo</label>
-                            <p><span id="notificacionModal_fecha_rechazo"></span></p>
-                        </div>
-                        <div class="col-lg-6">
-                            <label>Estímulo</label>
-                            <p><span id="notificacionModal_estimulo"></span></p>
-                        </div>
-
+                      </div>
                     </div>
+
+
                 </div>
+
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" id="notificacionModal_baceptar"  data-dismiss="modal" >Aceptar</button>
+
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal" id="notificar_cancelar" >Cancelar</button>
+                  <button type="submit" class="btn btn-primary">Declararse impedido</button>
                 </div>
+              </form>
+
               </div>
             </div>
           </div>
-          <!-- Modal -->
+        <!-- Modal -->
 
+		 <input type="hidden" id="id_evaluacion">
 
         <!-- jQuery -->
         <script src="../../vendor/jquery/jquery.min.js"></script>
@@ -367,12 +427,10 @@
         <!-- Descargar archivo -->
         <script src="../../dist/libraries/ajaxdownloader/ajaxdownloader.min.js" type="text/javascript"></script>
 
-        <!--Select2-->
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
-        <script src='seleccion.js'></script>
+        <script src='evaluacion_propuestas.js'></script>
+        <!--script src='../../dist/js/verificar_token.js'></script-->
         <script src='../../dist/js/jquery.loadJSON.js'></script>
     </body>
 </html>

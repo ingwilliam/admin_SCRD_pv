@@ -50,6 +50,8 @@
         <!-- Datepicker animate -->
         <link href="../../dist/libraries/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css"/>
 
+        <!--Select2-->
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 
     </head>
 
@@ -107,7 +109,7 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label>Convocatorias</label>
-                                            <select id='convocatorias' name="convocatorias" class="form-control" >
+                                            <select id='convocatorias' name="convocatorias" class="form-control  convocatorias-search" >
                                                 <option value="">:: Seleccionar ::</option>
                                             </select>
                                         </div>
@@ -393,6 +395,7 @@
                 <button type="submit" class="btn btn-primary" id="buscar_banco" title="Buscar en el banco">Buscar</button>
               </div>
             </form>
+
             </div>
           </div>
         </div>
@@ -791,6 +794,7 @@
                                           </div>
                                           <div class="panel-body">
                                             <form role="form" id="form_aplica_perfil">
+                                              <fieldset id="fieldset_aplica_perfil">
                                               <div class="row">
                                                   <div class="col-lg-6">
                                                     <h5><b>Nombres: </b><div id="nombres2"> </div></h5>
@@ -815,7 +819,6 @@
                                                       <label class="radio-inline">
                                                           <input type="radio" name="option_aplica_perfil" id="optionsRadiosInline2" value="false">No
                                                       </label>
-
                                                   </div>
 
                                                 </div>
@@ -830,10 +833,11 @@
                                                 </div>
                                               </div>
                                               <div class="col-lg-12" style="text-align: right">
-                                                <button type="button" class="btn btn-default guardar_aplica_perfil">Guardar</button>
+                                                <button type="submit" class="btn btn-default guardar_aplica_perfil">Guardar</button>
                                                 <input type="hidden" id="id_jurados_postulados">
                                                 <input type="hidden" id="id_ronda">
                                               </div>
+                                             </fieldset>
                                             </form>
                                           </div>
                                       </div>
@@ -889,7 +893,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <div id="mensaje" >Esta seguro de inscribir su hoja de vida registrada hasta el momento?</div>
+                  <div id="mensaje" >Esta seguro de registrar la evaluación?</div>
 
                 </div>
                 <div class="modal-footer">
@@ -900,7 +904,7 @@
             </div>
           </div>
           <!-- Modal -->
-
+          <input type="hidden" id="idc">
 
         <!-- jQuery -->
         <script src="../../vendor/jquery/jquery.min.js"></script>
@@ -936,6 +940,9 @@
 
         <!-- Descargar archivo -->
         <script src="../../dist/libraries/ajaxdownloader/ajaxdownloader.min.js" type="text/javascript"></script>
+
+        <!--Select2-->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
