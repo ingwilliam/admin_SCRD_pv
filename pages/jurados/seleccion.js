@@ -348,7 +348,7 @@ function cargar_tabla(token_actual){
                             return ' <input title=\"'+row.id+'\" type=\"checkbox\" class=\"check_activar_'+row.active+'  activar_registro" '+(row.active? 'checked ':'')+' />';
                             },
                     },*/
-                    {"data": "aciones",
+                    {"data": "Acciones",
                               render: function ( data, type, row ) {
                                           return '<button id="'+row.id_postulacion+'" title="Notificar" type="button" class="btn btn-primary btn_cargar_notificar" data-toggle="modal" data-target="#notificarModal" id-participante="'+row.id+'"  postulado= "'+row.postulado+'">'
                                               +'<span class="fa fa-send-o"></span></button>'
