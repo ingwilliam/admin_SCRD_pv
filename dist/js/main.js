@@ -201,12 +201,12 @@ function permiso_lectura(token_actual, modulo)
     }).done(function (data) {
         if (data == 'error_metodo')
         {
-            location.href = '../index/index.html?msg=Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co&msg_tipo=danger';
+            location.href = '../index/index.html?msg=Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co&msg_tipo=danger';
         } else
         {
             if (data == 'error')
             {
-                location.href = '../index/index.html?msg=Se registro un error en la consulta, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co&msg_tipo=danger';
+                location.href = '../index/index.html?msg=Se registro un error en la consulta, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co&msg_tipo=danger';
             } else
             {
                 if (data == 'acceso_denegado')
@@ -232,12 +232,12 @@ function logout()
     }).done(function (data) {
         if (data == 'error_metodo')
         {
-            location.href = '../index/index.html?msg=Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co&msg_tipo=danger';
+            location.href = '../index/index.html?msg=Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co&msg_tipo=danger';
         } else
         {
             if (data == 'error')
             {
-                location.href = '../index/index.html?msg=Se registro un error en la consulta, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co&msg_tipo=danger';
+                location.href = '../index/index.html?msg=Se registro un error en la consulta, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co&msg_tipo=danger';
             } else
             {
                 if (data == 'ok')

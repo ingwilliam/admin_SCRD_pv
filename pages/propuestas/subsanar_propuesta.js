@@ -32,7 +32,7 @@ $(document).ready(function () {
             }).done(function (data) {
                 if (data == 'error_metodo')
                 {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                 } else
                 {
                     if (data == 'error_token')
@@ -65,7 +65,7 @@ $(document).ready(function () {
 
                                 var html_table = '';
                                 $.each(json.administrativos, function (key2, documento) {
-                                    html_table = html_table + '<tr><td>' + documento.orden + '</td><td>' + documento.requisito + '</td><td>' + documento.descripcion + '</td><td><button title="' + documento.id + '" lang="' + documento.archivos_permitidos + '" dir="' + documento.tamano_permitido + '" name="' + documento.estado + '" type="button" class="btn btn-success btn_tecnico_documento" data-toggle="modal" data-target="#cargar_documento"><span class="glyphicon glyphicon-open"></span></button></td><td><button title="' + documento.id + '" name="' + documento.estado + '"  type="button" class="btn btn-primary btn_tecnico_link" data-toggle="modal" data-target="#cargar_link"><span class="glyphicon glyphicon-link"></span></button></td></tr>';
+                                    html_table = html_table + '<tr><td>' + documento.orden + '</td><td>' + documento.tipo_requisito + '</td><td>' + documento.requisito + '</td><td>' + documento.descripcion + '</td><td><button title="' + documento.id + '" lang="' + documento.archivos_permitidos + '" dir="' + documento.tamano_permitido + '" name="' + documento.estado + '" type="button" class="btn btn-success btn_tecnico_documento" data-toggle="modal" data-target="#cargar_documento"><span class="glyphicon glyphicon-open"></span></button></td><td><button title="' + documento.id + '" name="' + documento.estado + '"  type="button" class="btn btn-primary btn_tecnico_link" data-toggle="modal" data-target="#cargar_link"><span class="glyphicon glyphicon-link"></span></button></td></tr>';
                                 });
 
                                 $("#tabla_administrativos").append(html_table);
@@ -134,7 +134,7 @@ $(document).ready(function () {
                             $.post(url_pv + 'PropuestasDocumentacion/guardar_archivo', {documento: documento, srcExt: srcExt, srcData: srcData, srcName: srcName, srcSize: srcSize, srcType: srcType, "token": token_actual.token, conv: $("#conv").attr('value'), modulo: "Menu Participante", m: getURLParameter('m'), propuesta: $("#propuesta").attr('value'), cargue_subsanacion: true}).done(function (data) {
                                 if (data == 'error_metodo')
                                 {
-                                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                 } else
                                 {
                                     if (data == 'error_token')
@@ -150,12 +150,12 @@ $(document).ready(function () {
                                         {
                                             if (data == 'error_carpeta')
                                             {
-                                                notify("danger", "ok", "Convocatorias:", "Se registro un error al subir el archivo en la carpeta, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                notify("danger", "ok", "Convocatorias:", "Se registro un error al subir el archivo en la carpeta, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                             } else
                                             {
                                                 if (data == 'error_archivo')
                                                 {
-                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error al subir el archivo, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error al subir el archivo, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                                 } else
                                                 {
                                                     notify("success", "ok", "Convocatorias:", "Se Guardó con el éxito el archivo.");
@@ -191,7 +191,7 @@ $(document).ready(function () {
                 }).done(function (data) {
                     if (data == 'error_metodo')
                     {
-                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                     } else
                     {
                         if (data == 'error_token')
@@ -272,12 +272,12 @@ $(document).ready(function () {
 
                         if (result == 'error_estado')
                         {
-                            notify("danger", "ok", "Propuesta:", "Su propuesta no esta en estado Subsanación Recibida, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            notify("danger", "ok", "Propuesta:", "Su propuesta no esta en estado Subsanación Recibida, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                         } else
                         {
                             if (result == 'error')
                             {
-                                notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                             } else
                             {
                                 if (result == 'error_token')
@@ -296,7 +296,7 @@ $(document).ready(function () {
                                         } else
                                         {
                                             if (isNaN(result)) {
-                                                notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                             } else
                                             {
                                                 location.href = url_pv_admin + 'pages/propuestas/mis_propuestas.html?msg=Felicitaciones, su propuesta quedó subsanada en la plataforma.&msg_tipo=success';
@@ -327,7 +327,7 @@ function cargar_tabla_archivos(token_actual, documento, estado) {
     }).done(function (data) {
         if (data == 'error_metodo')
         {
-            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
         } else
         {
             if (data == 'error_token')
@@ -386,7 +386,7 @@ function cargar_tabla_link(token_actual, documento, estado) {
     }).done(function (data) {
         if (data == 'error_metodo')
         {
-            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
         } else
         {
             if (data == 'error_token')
@@ -475,7 +475,7 @@ function eliminar(id)
         }).done(function (data) {
             if (data == 'error_metodo')
             {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
                 if (data == 'error_token')
@@ -485,7 +485,7 @@ function eliminar(id)
                 {
                     if (data == 'error')
                     {
-                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                     } else
                     {
                         if (data == 'acceso_denegado')
@@ -523,7 +523,7 @@ function eliminar_link(id)
         }).done(function (data) {
             if (data == 'error_metodo')
             {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
                 if (data == 'error_token')
@@ -533,7 +533,7 @@ function eliminar_link(id)
                 {
                     if (data == 'error')
                     {
-                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                     } else
                     {
                         if (data == 'acceso_denegado')
@@ -595,7 +595,7 @@ function validator_form(token_actual) {
         }).done(function (data) {
             if (data == 'error_metodo')
             {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
                 if (data == 'error_token')
@@ -611,7 +611,7 @@ function validator_form(token_actual) {
                     {
                         if (data == 'error_carpeta')
                         {
-                            notify("danger", "ok", "Convocatorias:", "Se registro un error al subir el archivo en la carpeta, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            notify("danger", "ok", "Convocatorias:", "Se registro un error al subir el archivo en la carpeta, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                         } else
                         {
                             notify("success", "ok", "Convocatorias:", "Se Guardó con el éxito el archivo.");                            

@@ -26,7 +26,7 @@ $(document).ready(function () {
                 if (data == 'error_metodo')
                 {
                     removeLocalStorage(name_local_storage);
-                    location.href='pages/index/index.html?msg=Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co&msg_tipo=danger';                            
+                    location.href='pages/index/index.html?msg=Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co&msg_tipo=danger';                            
                 } 
                 else
                 {
@@ -40,13 +40,13 @@ $(document).ready(function () {
             }
             else
             {
-                location.href='pages/index/index.html?msg=Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co&msg_tipo=danger';
+                location.href='pages/index/index.html?msg=Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co&msg_tipo=danger';
             }
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             if (console && console.log) {  
                 removeLocalStorage(name_local_storage);
-                location.href='pages/index/index.html?msg=Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co .'+ textStatus+'&msg_tipo=danger';
+                location.href='pages/index/index.html?msg=Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co .'+ textStatus+'&msg_tipo=danger';
             }
         });
     }     

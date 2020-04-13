@@ -20,7 +20,7 @@ $(document).ready(function () {
         }).done(function (data) {
             if (data == 'error_metodo')
             {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
                 if (data == 'error_token')
@@ -83,8 +83,7 @@ $(document).ready(function () {
                     $("#estado").append('<option value="">:: Seleccionar ::</option>');
                     $("#estado").append('<option value="5">Publicada</option>');
                     $("#estado").append('<option value="51">Abierta</option>');
-                    $("#estado").append('<option value="52">Cerrada</option>');
-                    $("#estado").append('<option value="6">Adjudicada</option>');
+                    $("#estado").append('<option value="52">Cerrada</option>');                    
 
                 }
             }
@@ -98,7 +97,8 @@ $(document).ready(function () {
             "searching": false,
             "processing": true,
             "serverSide": true,
-            "lengthMenu": [20, 30, 40],
+            "ordering": false,
+            "lengthMenu": [50, 60, 70],
             "ajax": {
                 url: url_pv + "PropuestasBusquedasConvocatorias/busqueda_convocatorias",
                 data: function (d) {
@@ -212,7 +212,7 @@ function form_tipo_convocatoria(page, id)
         }).done(function (data) {
             if (data == 'error_metodo')
             {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
                 if (data == 'error_token')
@@ -277,7 +277,7 @@ function cargar_cronograma(token_actual)
         }).done(function (data) {
             if (data == 'error_metodo')
             {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } 
             else
             {
