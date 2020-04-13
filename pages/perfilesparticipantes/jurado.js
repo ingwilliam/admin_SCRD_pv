@@ -337,8 +337,8 @@ function validator_form(token_actual) {
             },
             numero_documento: {
                 validators: {
-                    notEmpty: {message: 'El número de documento de identificación es requerido'},
-                    numeric: {message: 'Debe ingresar solo numeros'}
+                    notEmpty: {message: 'El número de documento de identificación es requerido'}
+                    //numeric: {message: 'Debe ingresar solo numeros'} Wilmer Mogollon 14-04-2020 se elimina la validación numérica
                 }
             },
             primer_nombre: {
