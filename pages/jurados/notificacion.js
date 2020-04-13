@@ -59,8 +59,8 @@ function cargar_notificacion( key){
               var fecha = new Date();
               $('#nombre').html(json.participante.primer_nombre+" "+json.participante.segundo_nombre+" "+json.participante.primer_apellido+" "+json.participante.segundo_apellido);
               $('#documento').html(json.participante.tipo_documento+" "+json.participante.numero_documento);
-              $('#anio').html("2019");
-              $('#anio2').html("2019");
+              $('#anio').html(json.notificacion.vigencia);
+              $('#anio2').html(json.notificacion.vigencia);
               $('#fecha').html( fecha.getFullYear()+"-"+(fecha.getMonth()+1)+"-"+fecha.getDate());
 
               $("#notificación_texto").show();
@@ -91,32 +91,17 @@ function aceptar_notificacion( key){
 
   $.ajax({
       type: 'PUT',
-      url: url_pv+'/Juradosseleccion/aceptar_notificacion',
+      url: url_pv+'Juradosseleccion/aceptar_notificacion',
       data: $("#form_notificacion").serialize()
       +"&key="+key
   }).done(function (data) {
-
 
     switch (data) {
       case 'error':
         notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
         break;
-      case 'error_metodo':
-          notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-          break;
-      case 'acceso_denegado':
-        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-        break;
-      case 'deshabilitado':
-        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-        //cargar_datos_formulario(token_actual);
-        break;
-      case 'error_email':
-          notify("danger", "remove", "Usuario:", "Error al enviar la notificación.");
-          //cargar_datos_formulario(token_actual);
-          break;
-      default:
-          notify("success", "ok", "Convocatorias:", "Se notificó con éxito.");
+      case 'exito':
+        notify("success", "ok", "Convocatorias:", "Se notificó con éxito.");
          $("#aceptar").addClass( "disabled" );
           ///cargar_tabla(token_actual);
           cargar_notificacion(key );
@@ -167,8 +152,7 @@ function rechazar_notificacion( key){
 }
 
 function validator_form(key) {
-   console.log("Validando");
-
+   
   $('.form_notificacion').bootstrapValidator({
         feedbackIcons: {
             valid: 'glyphicon glyphicon-ok',
@@ -189,7 +173,7 @@ function validator_form(key) {
         }
     }).on('success.form.bv', function (e) {
 
-        console.log("Validado");
+        //console.log("Validado");
         // Prevent form submission
         e.preventDefault();
         // Get the form instance
@@ -202,8 +186,6 @@ function validator_form(key) {
 
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         bv.resetForm();
-      //  $("#exampleModal").modal("toggle");
-
 
     });
 
