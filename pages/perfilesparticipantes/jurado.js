@@ -96,9 +96,16 @@ $(document).ready(function () {
                 }
             }
         });
+        
+                
+        
+        
+        
         cargar_datos_formulario(token_actual);
         validator_form(token_actual);
     }
+    
+    
 
 });
 function cargar_select_tipodocumentos(token_actual) {
@@ -261,6 +268,14 @@ function cargar_datos_formulario(token_actual) {
                     if (json.participante.ciudad_residencia != null) {
                         $("#ciudad_residencia_name").val(json.ciudad_residencia_name);
                     }
+                    
+                    /*
+                     * Wilmer Mogollón 19-04-2020
+                     */
+                    
+                    if(json.pais_residencia_id!=46){
+                        $('#estrato').hide();
+                    }
 
                     if (json.participante.barrio_residencia != null) {
                         $("#barrio_residencia_name").val(json.barrio_residencia_name);
@@ -273,7 +288,7 @@ function cargar_datos_formulario(token_actual) {
                     $('#correo_electronico').val(json.participante.correo_electronico);
                 }
                 
-                /**
+                 /**
                  * 15-04-2020
                  * Wilmer Gustavo Mogollón Duque
                  * Se modifica la forma de validar el campo estrato (No aplica para otros paises).
