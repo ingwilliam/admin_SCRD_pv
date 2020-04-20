@@ -197,7 +197,8 @@ function cargar_tabla(token_actual)
         "processing": true,
         "destroy": true,
         "serverSide": true,
-        "lengthMenu": [10, 20, 30],
+        "ordering": false,
+        "lengthMenu": [30, 40, 50],
         "ajax": {
             url: url_pv + "Encuestas/all_params",
             data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "anexos": "listados"}
@@ -250,7 +251,10 @@ function cargar_formulario(token_actual)
                     $("#tipo_parametro").append('<option value="">:: Seleccionar ::</option>');
                     if (json.tipo_parametro.length > 0) {
                         $.each(json.tipo_parametro, function (key, registro) {
-                            $("#tipo_parametro").append('<option value="' + registro + '">' + registro + '</option>');
+                            if(registro=="Lista desplegable")
+                            {
+                                $("#tipo_parametro").append('<option value="' + registro + '">' + registro + '</option>');
+                            }
                         });
                     }
 
