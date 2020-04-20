@@ -12,6 +12,7 @@ $(document).ready(function () {
     {
         //Verifica si el token actual tiene acceso de lectura
         permiso_lectura(token_actual, "Evaluación de propuestas");
+        $('.convocatorias-search').select2();
 
         //Carga el select de entidad
         $.ajax({
