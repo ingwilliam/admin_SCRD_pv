@@ -891,7 +891,7 @@ $(document).ready(function () {
           $.ajax({
               type: 'PUT',
               url: url_pv + 'Gruposevaluacion/confirmar/'+grupo,
-              data: "modulo=Jurados&token="+ token_actual.token
+              data: "modulo=Jurados&token="+ token_actual.token             
 
           }).done(function (data) {
 
