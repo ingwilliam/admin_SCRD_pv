@@ -94,11 +94,11 @@ $(document).ready(function () {
 
                             //Si la convocatoria fue publicada o cancelada
                             if(json.convocatoria.estado==5 || json.convocatoria.estado==32){
-                                $("#form_validator button,input,select,button[type=submit],textarea").attr("disabled","disabled");                                   
-                                $("#form_nuevo_ronda button,input,select,button[type=submit],textarea").attr("disabled","disabled");                                   
+                                $("#form_validator button,input,select,button[type=submit],textarea").attr("disabled","disabled");
+                                $("#form_nuevo_ronda button,input,select,button[type=submit],textarea").attr("disabled","disabled");
                                 $("#btn_guardar").css("display","none");
-                                $(".input-sm").css("display","none");                                       
-                                $(".paginate_button").css("display","none");                                                                           
+                                $(".input-sm").css("display","none");
+                                $(".paginate_button").css("display","none");
                                 $(".jqte_editor").prop('contenteditable','false');
                             }
 
@@ -290,7 +290,8 @@ function validator_form(token_actual) {
             },
             numero_ronda: {
                 validators: {
-                    notEmpty: {message: 'El numero de ronda es requerido'}
+                    notEmpty: {message: 'El numero de ronda es requerido'},
+                    integer: {message: 'Debe digitar un número'}
                 }
             },
             nombre_ronda: {
