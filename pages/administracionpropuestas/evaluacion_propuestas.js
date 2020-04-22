@@ -12,6 +12,7 @@ $(document).ready(function () {
     {
         //Verifica si el token actual tiene acceso de lectura
         permiso_lectura(token_actual, "Evaluación de propuestas");
+        $('.convocatorias-search').select2();
 
         //Carga el select de entidad
         $.ajax({
@@ -737,7 +738,8 @@ function cargar_criterios_evaluacion(token_actual, id_evaluacion){
             //Se establece los valores de la evaluación del perfil
 
             //grupo
-            $("#form_criterios").append('<fieldset class="criterios" '+( (json[r].evaluacion.estado >= 30 || json[r].ronda.estado >= 27 )? ' disabled="" ': '') +'>');
+            //$("#form_criterios").append('<fieldset class="criterios" '+( (json[r].evaluacion.estado >= 39 || json[r].ronda.estado >= 41 )? ' disabled="" ': '') +'>');
+            $("#form_criterios").append('<fieldset class="criterios" '+( (json[r].evaluacion_nombre_estado == 'Evaluada' || json[r].ronda_nombre_estado == 'Evaluada' )? ' disabled="" ': '') +'>');
 
             $.each(json[r].criterios, function (key, array) {
               //console.log("key-->"+key);
@@ -797,7 +799,9 @@ function cargar_criterios_evaluacion(token_actual, id_evaluacion){
 
             //$(".criterios").append('<div class="col-lg-12" style="text-align: right"><button type="button" class="btn btn-default '+( (json[r].evaluacion.estado >= 29) ? "disabled":' guardar_evaluacion_'+$("#id_ronda").val() )+'">Guardar</button></div>');
 
-            $(".btn_guardar_evaluacion").append('<button  class="btn btn-primary" id="guardar_evaluacion" '+( (json[r].evaluacion.estado >= 30 || json[r].ronda.estado >= 27 )? ' disabled="" ': '') + '>Guardar evaluación</button>');
+            //$(".btn_guardar_evaluacion").append('<button  class="btn btn-primary" id="guardar_evaluacion" '+( (json[r].evaluacion.estado >= 39 || json[r].ronda.estado >= 41 )? ' disabled="" ': '') + '>Guardar evaluación</button>');
+
+            $(".btn_guardar_evaluacion").append('<button  class="btn btn-primary" id="guardar_evaluacion" '+( (json[r].evaluacion_nombre_estado == 'Evaluada' || json[r].ronda_nombre_estado == 'Evaluada' )? ' disabled="" ': '') + '>Guardar evaluación</button>');
 
 
           });
