@@ -583,7 +583,7 @@ function cargar_tabla(token_actual) {
                 "render": function (data, type, row, meta) {
                     //Verificar cual es la categoria padre
                     var categoria = row.convocatoria;
-                    if (row.categoria != "") {
+                    if (row.categoria != null) {
                         row.convocatoria = row.categoria;
                         row.categoria = categoria;
                     }

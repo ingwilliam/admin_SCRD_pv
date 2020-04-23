@@ -393,7 +393,7 @@ $(document).ready(function () {
                                                                                     notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                                                                 } else
                                                                                 {                                                                                
-                                                                                    location.href = url_pv_admin + 'pages/propuestas/mis_propuestas.html?msg=Felicitaciones, su propuesta quedó inscrita en la plataforma.&msg_tipo=success';                                                                                                                                                                
+                                                                                    location.href = url_pv_admin + 'pages/propuestas/encuestas.html?id='+$("#propuesta").val()+'&msg=Felicitaciones, su propuesta quedó inscrita en la plataforma.&msg_tipo=success';                                                                                                                                                                
                                                                                 }
                                                                             }
                                                                         }
