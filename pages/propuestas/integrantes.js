@@ -408,6 +408,7 @@ function validator_form(token_actual) {
             url: $form.attr('action'),
             data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
         }).done(function (result) {
+            var result=result.trim();
             
             if (result == 'error')
             {
@@ -472,6 +473,8 @@ function cargar_tabla(token_actual)
             data: {"token": token_actual.token, "participante": $("#participante").attr('value'), "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "p": getURLParameter('p'), "tipo": $("#tipo").attr('value')}
         },
         "drawCallback": function (settings) {
+            $(".check_activar_t").attr("checked", "true");
+            $(".check_activar_f").removeAttr("checked");
             //Cargo el formulario, para crear o editar
             cargar_formulario(token_actual);
         },
@@ -483,6 +486,7 @@ function cargar_tabla(token_actual)
             {"data": "primer_apellido"},
             {"data": "segundo_apellido"},
             {"data": "rol"},
+            {"data": "activar_registro"},
             {"data": "acciones"}
         ]
     });
@@ -538,4 +542,41 @@ function cargar_formulario(token_actual)
             }
         });
     });
+    
+    //Permite activar o eliminar una categoria
+    $(".activar_categoria").click(function () {
+
+        var active = "false";
+        if ($(this).prop('checked')) {
+            active = "true";
+        }
+
+
+        $.ajax({
+            type: 'DELETE',
+            data: {"token": token_actual.token, "modulo": "Menu Participante", "active": active},
+            url: url_pv + 'Personasnaturales/eliminar_integrante/' + $(this).attr("title")
+        }).done(function (data) {
+            if (data == 'ok')
+            {
+                if (active == "true")
+                {
+                    notify("info", "ok", "Convocatorias:", "Se activó el integrante con éxito.");
+                } else
+                {
+                    notify("info", "ok", "Convocatorias:", "Se inactivo el integrante con éxito.");
+                }
+            } else
+            {
+                if (data == 'acceso_denegado')
+                {
+                    notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                } else
+                {
+                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                }
+            }
+        });
+    });
+    
 }

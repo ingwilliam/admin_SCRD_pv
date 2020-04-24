@@ -58,6 +58,10 @@ $(document).ready(function () {
                             if (typeof json.convocatoria.id === 'number') {
 
                                 //Si la convocatoria fue publicada o cancelada
+                                
+                                //Se inactiva debido a los formatos de contingencia del dia
+                                //23 de abril del 2020
+                                /*
                                 if(json.convocatoria.estado==5 || json.convocatoria.estado==32){
                                     
                                     $("#table_registros input,select,textarea").attr("disabled","disabled");                                       
@@ -69,6 +73,7 @@ $(document).ready(function () {
                                                                         
                                     $(".jqte_editor").prop('contenteditable','false');                                    
                                 }
+                                */
                             }
                         }
                     }
@@ -312,7 +317,10 @@ function cargar_formulario(token_actual)
                     $("#tipo_documento").append('<option value="">:: Seleccionar ::</option>');
                     if (json.tipo_documento.length > 0) {
                         $.each(json.tipo_documento, function (key, registro) {
-                            $("#tipo_documento").append('<option value="' + registro + '">' + registro + '</option>');
+                            if(registro!="Resolución")
+                            {
+                                $("#tipo_documento").append('<option value="' + registro + '">' + registro + '</option>');
+                            }
                         });
                     }
 
