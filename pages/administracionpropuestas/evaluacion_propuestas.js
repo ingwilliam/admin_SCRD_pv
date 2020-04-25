@@ -110,7 +110,7 @@ $(document).ready(function () {
         $.ajax({
                 type: 'GET',
                 data: { "token": token_actual.token,
-                        "tipo_estado": "evaluacion_propuesta"
+                        "tipo_estado": "propuestas_evaluacion"
                             },
                 url: url_pv + 'PropuestasEvaluacion/select_estado/',
                 success: function (data) {
