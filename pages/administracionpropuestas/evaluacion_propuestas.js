@@ -29,7 +29,8 @@ $(document).ready(function () {
                         notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                         break;
                     case 'error_token':
-                      location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                      //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                          notify("danger", "error_token", "URL:", "PropuestasEvaluacion/select_estado/");
                       break;
                     case 'acceso_denegado':
                       notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -122,7 +123,8 @@ $(document).ready(function () {
                         notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                         break;
                     case 'error_token':
-                      location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                      //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                        notify("danger", "error_token", "URL:", "PropuestasEvaluacion/select_estado/");
                       break;
                     case 'acceso_denegado':
                       notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -270,7 +272,8 @@ function cargar_select_convocatorias(token_actual, anio, entidad){
           notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
           break;
       case 'error_token':
-        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+            notify("danger", "error_token", "URL:", "PropuestasEvaluacion/select_convocatorias");
         break;
       case 'acceso_denegado':
         notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -314,7 +317,8 @@ function cargar_select_categorias(token_actual, convocatoria){
           notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
           break;
       case 'error_token':
-        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+            notify("danger", "error_token", "URL:", "PropuestasEvaluacion/select_categorias");
         break;
       case 'acceso_denegado':
         notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -359,7 +363,8 @@ function cargar_select_rondas(token_actual, convocatoria){
           notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
           break;
       case 'error_token':
-        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+          notify("danger", "error_token", "URL:", "Rondas/select_rondas");
         break;
       case 'acceso_denegado':
         notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -411,7 +416,8 @@ function cargar_tabla(token_actual){
             notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
             break;
         case 'error_token':
-          location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+          //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+            notify("danger", "error_token", "URL:", "Rondas/search/");
           break;
         case 'acceso_denegado':
           notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -596,6 +602,7 @@ function cargar_info_basica(token_actual, id_propuesta){
             break;
         case 'error_token':
           location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+          notify("danger", "error_token", "URL:", "PropuestasEvaluacion/propuestas/"+id_propuesta);
           break;
         case 'acceso_denegado':
           notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -716,7 +723,8 @@ function cargar_criterios_evaluacion(token_actual, id_evaluacion){
         notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
         break;
       case 'error_token':
-        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+      //  location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        notify("danger", "error_token", "URL:", 'PropuestasEvaluacion/evaluacionpropuestas/'+id_evaluacion);
         break;
       case 'acceso_denegado':
         notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
@@ -863,7 +871,8 @@ function evaluar_criterios(token_actual,  id_evaluacion){
         notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
         break;
       case 'error_token':
-        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        notify("danger", "error_token", "URL:", "PropuestasEvaluacion/evaluar_criterios");
         break;
       case 'acceso_denegado':
         notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
@@ -908,7 +917,8 @@ function confirmar_evaluacion(token_actual,  id_evaluacion){
         notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
         break;
       case 'error_token':
-        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        notify("danger", "error_token", "URL:", "PropuestasEvaluacion/confirmar_evaluacion");
         break;
       case 'acceso_denegado':
         notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
@@ -948,7 +958,8 @@ function cargar_info_impedimento(token_actual, id_evaluacion){
             notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
             break;
         case 'error_token':
-          location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+          //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+          notify("danger", "error_token", "URL:", 'PropuestasEvaluacion/evaluacionpropuestas/'+id_evaluacion+'/impedimentos');
           break;
         case 'acceso_denegado':
           notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -1014,7 +1025,8 @@ function declarar_impedimento(token_actual, id_evaluacion){
         notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
         break;
       case 'error_token':
-        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        notify("danger", "error_token", "URL:", 'PropuestasEvaluacion/evaluacionpropuestas/'+id_evaluacion+'/impedimentos');
         break;
       case 'acceso_denegado':
         notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
