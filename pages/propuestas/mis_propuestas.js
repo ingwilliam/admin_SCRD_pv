@@ -120,7 +120,15 @@ $(document).ready(function () {
                             else
                             {
                                 row.ver_propuesta = '<a href="'+href+'" ><button style="margin: 0 0 5px 0" type="button" class="btn btn-warning btn_tooltip" title="Ver propuesta"><span class="fa fa-file-text-o"></span></button></a><br/><button style="margin: 0 0 5px 0" type="button" onclick="anular_propuesta('+row.id_propuesta+')" class="btn btn-danger btn_tooltip" title="Anular propuesta" data-toggle="modal" data-target="#anular_propuesta"><span class="fa fa-times-circle"></span></button>';                            
-                            }            
+                            }
+                            
+                            if( row.id_estado!=7 && row.id_estado!=20 )
+                            {
+                                href_propuesta = "encuestas.html?id="+row.id_propuesta;                                        
+                                row.ver_propuesta = row.ver_propuesta+'<br/><a href="'+href_propuesta+'" ><button style="margin: 0 0 5px 0" type="button" class="btn btn-primary btn_tooltip" title="Ver encuesta"><span class="fa fa-edit"></span></button></a>';                            
+                            }
+                            
+                            
                             
                             if(row.fecha_subsanacion!=null)
                             {
