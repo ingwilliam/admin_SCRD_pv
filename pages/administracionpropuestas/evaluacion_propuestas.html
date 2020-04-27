@@ -82,7 +82,7 @@
                   <div class="col-lg-12">
                       <div class="panel panel-default">
                           <div class="panel-heading">
-                            Búsqueda de propuestas
+                            Búsqueda de propuestas a evaluar
                           </div>
                           <div class="panel-body">
                               <form id="formulario_principal" action="" class="formulario_principal" role="form" method="post">
@@ -133,14 +133,14 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6"  >
+                                    <!--div class="col-lg-6"  >
                                         <div class="form-group">
-                                            <label>Estado</label>
+                                            <label>Estado de la evaluación</label>
                                             <select id='estados' name="estados" class="form-control" >
                                                 <option value="">:: Seleccionar ::</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div-->
                                   </div>
 
                                   <div class="row">
@@ -192,7 +192,7 @@
                                                 <th>Código de la propuesta</th>
                                                 <th>Nombre de la propuesta</th>
                                                 <th>Total de la evaluación</th>
-                                                <th>Estado</th>
+                                                <th>Estado de la evaluación</th>
                                                 <th>Acciones</th>
                                             </tr>
                                         </thead>
@@ -371,6 +371,7 @@
 
                   <form class="impedimentoForm">
 
+                    <fieldset id="impedimentoForm_fieldset">
                     <div class="row">
                       <div class="col-lg-12" id="notificacion">
 
@@ -383,8 +384,9 @@
                 <div class="modal-footer">
 
                   <button type="button" class="btn btn-secondary" data-dismiss="modal" id="notificar_cancelar" >Cancelar</button>
-                  <button type="submit" class="btn btn-primary">Declararse impedido</button>
+                  <button type="submit" class="btn btn-primary" id="btn-submit">Declararse impedido</button>
                 </div>
+              </fieldset>
               </form>
 
               </div>

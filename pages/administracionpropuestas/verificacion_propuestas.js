@@ -276,7 +276,8 @@ $(document).ready(function () {
 
 
         $("#boton_confirma_administrativa_1").click(function () {
-
+            $("#numero_verificacion").val('');
+            
             //Valido que todos los documentos administrativos ya estan validados
             var requisitos_administrativos = $('#doc_administrativos_verificacion_1 .validar_administrativos:hidden[value=""]').toArray().length;
             if (requisitos_administrativos <= 0)
@@ -285,6 +286,7 @@ $(document).ready(function () {
                 //por subsanar o se deja igual
                 var propuesta = $("#propuesta").val();
                 var verificacion = 1;
+                $("#numero_verificacion").val(verificacion);
                 $.ajax({
                     type: 'POST',
                     url: url_pv + 'PropuestasVerificacion/valida_verificacion',
@@ -351,6 +353,7 @@ $(document).ready(function () {
         });
         
         $("#boton_confirma_administrativa_2").click(function () {            
+            $("#numero_verificacion").val('');
             //Valido que todos los documentos administrativos ya estan validados
             var requisitos_administrativos = $('#doc_administrativos_verificacion_2 .validar_administrativos:hidden[value=""]').toArray().length;
             if (requisitos_administrativos <= 0)
@@ -359,6 +362,7 @@ $(document).ready(function () {
                 //por subsanar o se deja igual
                 var propuesta = $("#propuesta").val();
                 var verificacion = 2;
+                $("#numero_verificacion").val(verificacion);
                 $.ajax({
                     type: 'POST',
                     url: url_pv + 'PropuestasVerificacion/valida_verificacion',
@@ -425,7 +429,8 @@ $(document).ready(function () {
         });
 
         $("#boton_confirma_tecnica_1").click(function () {
-
+            $("#numero_verificacion").val('');
+            
             var requisitos_tecnicos = $('#doc_tecnicos_verificacion_1 .validar_tecnicos:hidden[value=""]').toArray().length;
             
             if (requisitos_tecnicos <= 0)
@@ -434,6 +439,7 @@ $(document).ready(function () {
                 //por subsanar o se deja igual
                 var propuesta = $("#propuesta").val();
                 var verificacion = 1;
+                $("#numero_verificacion").val(verificacion);
                 $.ajax({
                     type: 'POST',
                     url: url_pv + 'PropuestasVerificacion/valida_verificacion',
@@ -506,11 +512,11 @@ $(document).ready(function () {
 function guardar_confirmacion(token_actual, estado_actual_propuesta,tipo_verificacion) {
 
     var propuesta = $("#propuesta").val();
-
+    
     $.ajax({
         type: 'POST',
         url: url_pv + 'PropuestasVerificacion/guardar_confirmacion',
-        data: {"token": token_actual.token, "modulo": "Verificación de propuestas", "propuesta": propuesta, "estado_actual_propuesta": estado_actual_propuesta, "tipo_verificacion": tipo_verificacion},
+        data: {"token": token_actual.token, "modulo": "Verificación de propuestas", "propuesta": propuesta, "estado_actual_propuesta": estado_actual_propuesta, "tipo_verificacion": tipo_verificacion,"verificacion": $("#numero_verificacion").val()},
     }).done(function (result) {
 
         if (result == 'error_metodo')
@@ -631,7 +637,8 @@ function cargar_tabla(token_actual) {
             {"data": "verificacion_administrativos"},
             {"data": "verificacion_tecnicos"},
             {"data": "btn_verificacion_1"},
-            {"data": "btn_verificacion_2"}            
+            {"data": "btn_verificacion_2"},
+            {"data": "ver_reporte"}
         ]
     });
 }
@@ -869,13 +876,15 @@ function cargar_verificacion_1(token_actual, propuesta) {
                     //Si la propuesta esta estado por
                     //Registrada
                     //Anulada
-                    //Por Subsanar
+                    //Por Subsanar -> id -> se elimina debido a que se puede verificar
+                    //                      la documentacion tecnica asi este por subsanar
+                    //                      ya que al momento se rechaza
                     //Subsanación Recibida
                     //Rechazada
                     //Habilitada
                     //subsanada
                     //Se inactiva en la 1 verificación los documetos tecnicos                    
-                    if (json.propuesta.estado == 7 || json.propuesta.estado == 20 || json.propuesta.estado == 21 || json.propuesta.estado == 22  || json.propuesta.estado == 23 || json.propuesta.estado == 24 || json.propuesta.estado == 31 )
+                    if (json.propuesta.estado == 7 || json.propuesta.estado == 20 || json.propuesta.estado == 22  || json.propuesta.estado == 23 || json.propuesta.estado == 24 || json.propuesta.estado == 31 )
                     {
                         
                         $("#doc_administrativos_verificacion_1").find('input,select,button,textarea').attr("disabled", "disabled");
