@@ -107,7 +107,7 @@ $(document).ready(function () {
 
 
         //Carga el select de estados
-        $.ajax({
+      /*  $.ajax({
                 type: 'GET',
                 data: { "token": token_actual.token,
                         "tipo_estado": "propuestas_evaluacion"
@@ -143,9 +143,10 @@ $(document).ready(function () {
                       break;
                     }
 
-
                 }
             });
+              //fin Carga el select de estados
+            */
 
         //carga la tabla con los criterios de busqueda
         $('#buscar').click(function(){
@@ -515,7 +516,7 @@ function cargar_tabla(token_actual){
                             return row.total_evaluacion;
                           },
                     },
-                    {"data": "Estado",
+                    {"data": "Estado de la evaluación",
                       render: function ( data, type, row ) {
                             return row.estado_evaluacion;
                           },
@@ -943,6 +944,7 @@ function confirmar_evaluacion(token_actual,  id_evaluacion){
 }
 
 function cargar_info_impedimento(token_actual, id_evaluacion){
+    $('#btn-submit').removeAttr("disabled");
 
     $.ajax({
         type: 'GET',
@@ -971,8 +973,20 @@ function cargar_info_impedimento(token_actual, id_evaluacion){
           if( json ){
 
             if( json.evaluacion.observacion != null ){
-              $("#notificacion").html(json.evaluacion.observacion);
+            //  $("#notificacion").html(json.evaluacion.observacion);
+                $("#notificacion").html(json.notificacion);
+                $("#fecha_creacion").html(json.fecha_creacion);
+                $("#tipo_documento").html(json.tipo_documento);
+                $("#numero_documento").html(json.numero_documento);
+                $("#nombre_jurado").html(json.nombre_jurado);
+                $("#nombre_jurado_2").html(json.nombre_jurado);
+                $("#notificacion_codigo_propuesta").html(json.codigo_propuesta);
+                $("#notificacion_nombre_propuesta").html(json.nombre_propuesta);
+                $("#correo_jurado").html(json.correo_jurado);
+                $("#motivo_impedimento").html(json.motivo_impedimento);
+                $('#btn-submit').attr("disabled","");
             }else {
+
                 //Se agrega el html de la notificación
                 $("#notificacion").html(json.notificacion);
                 //Se establecen los valores de los campos <span>
@@ -981,6 +995,8 @@ function cargar_info_impedimento(token_actual, id_evaluacion){
                 $("#numero_documento").html(json.numero_documento);
                 $("#nombre_jurado").html(json.nombre_jurado);
                 $("#nombre_jurado_2").html(json.nombre_jurado);
+                $("#notificacion_codigo_propuesta").html(json.codigo_propuesta);
+                $("#notificacion_nombre_propuesta").html(json.nombre_propuesta);
                 $("#correo_jurado").html(json.correo_jurado);
                 $("#motivo_impedimento").html('  <div class="form-group">'
                                                   +'<textarea class="form-control" rows="4" id="observacion_impedimento" name="observacion_impedimento" >'
