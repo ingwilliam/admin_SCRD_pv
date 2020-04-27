@@ -626,13 +626,17 @@ function crear_grupo(token_actual) {
 
 }
 
-
-function cargar_select_rondas_editar(token_actual, convocatoria, grupo) {
+/*
+ * 23-04-2020
+ * WILMER GUSTAVO MOGOLLÓN
+ * Se incluye el parametro categoría para que se despliegue la lista de rondas en editar
+ */
+function cargar_select_rondas_editar(token_actual, convocatoria, categoria, grupo) { //se agrega categoría
 
     $.ajax({
         type: 'GET',
         url: url_pv + 'Gruposevaluacion/select_rondas_editar',
-        data: {"token": token_actual.token, "convocatoria": convocatoria, "grupo": grupo},
+        data: {"token": token_actual.token, "convocatoria": convocatoria, "categoria": categoria, "grupo": grupo}, //se agrega categoría a data
     }).done(function (data) {
 
         switch (data) {
