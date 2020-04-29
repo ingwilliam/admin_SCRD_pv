@@ -30,7 +30,7 @@ $(document).ready(function () {
                         break;
                     case 'error_token':
                       //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                          notify("danger", "error_token", "URL:", "PropuestasEvaluacion/select_estado/");
+                        notify("danger", "error_token", "URL:", "PropuestasEvaluacion/select_estado/");
                       break;
                     case 'acceso_denegado':
                       notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -107,7 +107,7 @@ $(document).ready(function () {
 
 
         //Carga el select de estados
-      /*  $.ajax({
+        $.ajax({
                 type: 'GET',
                 data: { "token": token_actual.token,
                         "tipo_estado": "propuestas_evaluacion"
@@ -146,7 +146,7 @@ $(document).ready(function () {
                 }
             });
               //fin Carga el select de estados
-            */
+            
 
         //carga la tabla con los criterios de busqueda
         $('#buscar').click(function(){
