@@ -30,7 +30,7 @@ $(document).ready(function () {
                         break;
                     case 'error_token':
                       //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                          notify("danger", "error_token", "URL:", "PropuestasEvaluacion/select_estado/");
+                        notify("danger", "error_token", "URL:", "PropuestasEvaluacion/select_estado/");
                       break;
                     case 'acceso_denegado':
                       notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -107,7 +107,7 @@ $(document).ready(function () {
 
 
         //Carga el select de estados
-      /*  $.ajax({
+        $.ajax({
                 type: 'GET',
                 data: { "token": token_actual.token,
                         "tipo_estado": "propuestas_evaluacion"
@@ -123,8 +123,8 @@ $(document).ready(function () {
                         notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
                         break;
                     case 'error_token':
-                      //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                        notify("danger", "error_token", "URL:", "PropuestasEvaluacion/select_estado/");
+                      location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                        //notify("danger", "error_token", "URL:", "PropuestasEvaluacion/select_estado/");
                       break;
                     case 'acceso_denegado':
                       notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -146,11 +146,12 @@ $(document).ready(function () {
                 }
             });
               //fin Carga el select de estados
-            */
+
 
         //carga la tabla con los criterios de busqueda
         $('#buscar').click(function(){
            $('#resultado').focus();
+
             cargar_tabla(token_actual);
 
         });
@@ -193,63 +194,10 @@ $(document).ready(function () {
         });
 
 
-
-
-
-        //----------------------------------------------------------------
-
-
-/*
-
-        $("#exampleModal").on('hide.bs.modal', function(){
-          $('#filtro').val(null);
-          $('#palabra_clave').val(null);
-          $("#formulario_busqueda_banco").trigger("reset");
-       });
-
-        $("#evaluar").on('hide.bs.modal', function(){
-
-      });
-
-        $(".guardar_aplica_perfil").click(function(){
-
-          //Se evalua si algun radiobutton es seleccionado
-           if( $("input[name=option_aplica_perfil]:checked").length == 0 ){
-
-              notify("danger", "remove", "Usuario:", "Debe seleccionar si aplica el perfil o no");
-              return false;
-            }
-
-            if( $('.guardar_aplica_perfil').hasClass('disabled') ){
-                return false;
-            }else{
-                evaluar_perfil(token_actual, $("#id_jurados_postulados").val(),   $("#id_participante_sel").val() );
-            }
-
+        $("#confirmar_top").click(function(){
+          confirmar_top_individual(token_actual,  $('#rondas').val());
         });
 
-        $("#alertModalSelbaceptar").click(function(){
-          //  $("#alertModalSel").modal("hide");
-            //seleccionar_jurado(token_actual,  $("#id_jurados_postulados").val(),   $("#id_participante_sel").val() );
-            $('#select_categorias_2').hide();
-            $('#categorias').val( $('#categorias_2').val() );
-            $("#panel_tabs").show();
-
-          });
-
-          $("#notificar_aceptar").click(function(){
-
-              notificar(token_actual, $("#id_jurado_postulado").val() );
-          });
-
-          $("#notificarModal").on('hide.bs.modal', function(){
-              // $('.form_notificar').bootstrapValidator('resetFormData', true);
-               //$(".form_notificar").trigger("reset");
-            //$('.form_notificar').data('bootstrapValidator').destroy()
-
-        });
-
-        */
 
     }
 
@@ -267,14 +215,14 @@ function cargar_select_convocatorias(token_actual, anio, entidad){
 
     switch (data) {
       case 'error':
-        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
         break;
       case 'error_metodo':
-          notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+          notify("danger", "ok", "Usuario:","Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
           break;
       case 'error_token':
-        //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-            notify("danger", "error_token", "URL:", "PropuestasEvaluacion/select_convocatorias");
+        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        //notify("danger", "error_token", "URL:", "PropuestasEvaluacion/select_convocatorias");
         break;
       case 'acceso_denegado':
         notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -312,14 +260,14 @@ function cargar_select_categorias(token_actual, convocatoria){
 
     switch (data) {
       case 'error':
-        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
         break;
       case 'error_metodo':
-          notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+          notify("danger", "ok", "Usuario:","Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
           break;
       case 'error_token':
-        //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-            notify("danger", "error_token", "URL:", "PropuestasEvaluacion/select_categorias");
+        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        //notify("danger", "error_token", "URL:", "PropuestasEvaluacion/select_categorias");
         break;
       case 'acceso_denegado':
         notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -358,14 +306,14 @@ function cargar_select_rondas(token_actual, convocatoria){
 
     switch (data) {
       case 'error':
-        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
         break;
       case 'error_metodo':
           notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
           break;
       case 'error_token':
-        //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-          notify("danger", "error_token", "URL:", "Rondas/select_rondas");
+        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        //notify("danger", "error_token", "URL:", "Rondas/select_rondas");
         break;
       case 'acceso_denegado':
         notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -393,32 +341,30 @@ function cargar_select_rondas(token_actual, convocatoria){
   );
 }
 
-
 function cargar_tabla(token_actual){
 
-
     $("#notificacion_periodo").hide();
- //var data = JSON.stringify( $("#formulario_busqueda_banco").serializeArray() );
-  //var data =  $("#formulario_busqueda_banco").serializeArray();
-  //var data =  ( $('#filtro').val() == 'true' ? $("#formulario_busqueda_banco").serializeArray() : null)
+    //var data = JSON.stringify( $("#formulario_busqueda_banco").serializeArray() );
+    //var data =  $("#formulario_busqueda_banco").serializeArray();
+    //var data =  ( $('#filtro').val() == 'true' ? $("#formulario_busqueda_banco").serializeArray() : null)
 
-    //Establecer valores perdiodo de evaluación
+    //Se verifica si el usuario pertenece a un grupo de evaluación de la ronda
     $.ajax({
         type: 'GET',
-        url: url_pv + 'Rondas/search/'+ $('#rondas').val(),
+        url: url_pv + 'Gruposevaluacion/evaluador/ronda/'+ $('#rondas').val(),
         data: {"token": token_actual.token},
-    }).done(function (data) {
+    }).done( function (data) {
 
       switch (data) {
         case 'error':
-          notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+          notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
           break;
         case 'error_metodo':
-            notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            notify("danger", "ok", "Usuario:","Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
             break;
         case 'error_token':
-          //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-            notify("danger", "error_token", "URL:", "Rondas/search/");
+          location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+          //notify("danger", "error_token", "URL:", "Rondas/search/");
           break;
         case 'acceso_denegado':
           notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -426,124 +372,192 @@ function cargar_tabla(token_actual){
         default:
 
           var json = JSON.parse(data);
+            console.log(json);
+          if( json.id ){
 
-            $("#fecha_inicio_evaluacion").html(json.fecha_inicio_evaluacion.substr(0, 10));
-            $("#fecha_fin_evaluacion").html(json.fecha_fin_evaluacion.substr(0, 10));
+            if (  (json.active!= null) && json.active ){
+              //Establecer los valores del perdiodo de la evaluación
+              $.ajax({
+                  type: 'GET',
+                  url: url_pv + 'Rondas/search/'+ $('#rondas').val(),
+                  data: {"token": token_actual.token},
+              }).done(function (data) {
 
-            //tiempo restante
-            var inicio = new Date();
-            var fin = new Date( json.fecha_fin_evaluacion.substr(0, 10)+" 23:59:59" );
-            var x = new Date(fin.getDate() - inicio.getDate());
+                switch (data) {
+                  case 'error':
+                    notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    break;
+                  case 'error_metodo':
+                    notify("danger", "ok", "Usuario:","Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                    break;
+                  case 'error_token':
+                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    //notify("danger", "error_token", "URL:", "Rondas/search/");
+                    break;
+                  case 'acceso_denegado':
+                    notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
+                    break;
+                  default:
 
-            var dias = (fin.getTime()-inicio.getTime())/86400000;
-            var horas = ((fin.getTime()-inicio.getTime())%86400000)/3600000;
-            var minutos = (((fin.getTime()-inicio.getTime())%86400000)%3600000)/60000;
+                    var json = JSON.parse(data);
 
-            if(dias >= 0){
+                      $("#fecha_inicio_evaluacion").html(json.fecha_inicio_evaluacion.substr(0, 10));
+                      $("#fecha_fin_evaluacion").html(json.fecha_fin_evaluacion.substr(0, 10));
 
-                $("#notificacion_periodo").html('El periodo de evaluación es de '+json.fecha_inicio_evaluacion.substr(0, 10)
-                                   +' al '+json.fecha_fin_evaluacion.substr(0, 10)+'.'
-                                   +' Le quedan '+Math.trunc(dias)+' días, '
-                                   +Math.trunc(horas)+' horas y '
-                                   +Math.trunc(minutos)+' minutos para evaluar.');
+                      //tiempo restante
+                      var inicio = new Date();
+                      var fin = new Date( json.fecha_fin_evaluacion.substr(0, 10)+" 23:59:59" );
+                      var x = new Date(fin.getDate() - inicio.getDate());
+
+                      var dias = (fin.getTime()-inicio.getTime())/86400000;
+                      var horas = ((fin.getTime()-inicio.getTime())%86400000)/3600000;
+                      var minutos = (((fin.getTime()-inicio.getTime())%86400000)%3600000)/60000;
+
+                      if(dias >= 0){
+
+                          $("#notificacion_periodo").html('El periodo de evaluación es de '+json.fecha_inicio_evaluacion.substr(0, 10)
+                                             +' al '+json.fecha_fin_evaluacion.substr(0, 10)+'.'
+                                             +' Le quedan '+Math.trunc(dias)+' días, '
+                                             +Math.trunc(horas)+' horas y '
+                                             +Math.trunc(minutos)+' minutos para evaluar.');
+
+                      }else{
+                          $("#notificacion_periodo").html('El periodo de evaluación ya terminó, por lo tanto no puede evaluar las propuestas');
+                      }
+
+                      $("#notificacion_periodo").show();
+                      $("#confirmar_top").show();
 
 
-            }else{
-                $("#notificacion_periodo").html('El periodo de evaluación ya terminó, por lo tanto no puede evaluar las propuestas');
+                    break;
+                  }
+
+                }
+              );
+
+              //establece los valores de la tabla
+              $('#table_list').DataTable({
+                          "language": {
+                              "url": "../../dist/libraries/datatables/js/spanish.json"
+                          },
+                          "processing": true,
+                          "destroy": true,
+                          "serverSide": true,
+                          "lengthMenu": [10, 15, 20],
+                          "responsive": true,
+                          "searching":false,
+                          "ajax":{
+                              url : url_pv+"PropuestasEvaluacion/all_propuestas",
+                              data:
+                                      { "token": token_actual.token,
+                                        "ronda": $('#rondas').val(),
+                                        "estado":$('#estados').val()
+                                      },
+                              //async: false
+                            },
+                          "drawCallback": function (settings) {
+                               //$(".check_activar_t").attr("checked", "true");
+                               //$(".check_activar_f").removeAttr("checked");
+                               acciones_registro(token_actual);
+                                 //validator_form(token_actual);
+
+                              },
+                          "rowCallback": function( row, data, index ) {
+                            /*
+
+                                if ( data["aplica_perfil"] ){
+                                    $('td', row).css('background-color', '#dcf4dc');
+                                }
+                                else if ( !data["aplica_perfil"]){
+                                    $('td', row).css('background-color', '#f4dcdc');
+                                }
+                                */
+                            },
+                          "columns": [
+                              {"data": "Código de la propuesta",
+                                render: function ( data, type, row ) {
+                                      return row.codigo_propuesta;
+                                    },
+                              },
+                              {"data": "Nombre de la propuesta",
+                                render: function ( data, type, row ) {
+                                      return row.nombre_propuesta;
+                                    },
+                              },
+                              {"data": "Total de la evaluación",
+                                render: function ( data, type, row ) {
+                                      return row.total_evaluacion;
+                                    },
+                              },
+                              {"data": "Estado de la evaluación",
+                                render: function ( data, type, row ) {
+                                      return row.estado_evaluacion;
+                                    },
+                              },
+
+
+                              /*{"data": "Seleccionar",
+                                render: function ( data, type, row ) {
+                                      return ' <input title=\"'+row.id+'\" type=\"checkbox\" class=\"check_activar_'+row.active+'  activar_registro" '+(row.active? 'checked ':'')+' />';
+                                      },
+                              },*/
+                              {"data": "aciones",
+                                        render: function ( data, type, row ) {
+                                                    return '<button id="'+row.id_evaluacion+'" title="Evaluar propuesta" type="button" class="btn btn-primary btn_evaluar" data-toggle="modal" data-target="#evaluarModal" id_propuesta="'+row.id_propuesta+'">'
+                                                                +'<span class="glyphicon glyphicon-check"></span></button>'
+                                                           +'<button id="'+row.id_evaluacion+'" title="Confirmar evaluación" type="button" class="btn btn-success btn_confirmar"  >'
+                                                                +'<span class="glyphicon glyphicon-ok"></span></button>'
+                                                           +'<button id="'+row.id_evaluacion+'" title="Declararse impedido" type="button" class="btn btn-warning btn_notificar" data-toggle="modal" data-target="#impedimentoModal" >'
+                                                               +'<span class="fa fa-eye-slash"></span></button>' ;
+
+                                                    },
+                              }
+
+
+
+                          ]
+                      });
+
+
+            }else {
+              $('#table_list').DataTable({
+                          "language": {
+                              "url": "../../dist/libraries/datatables/js/spanish.json"
+                          },
+                          "lengthMenu": [10, 15, 20],
+                          "responsive": true,
+                          "searching":false,
+                          "data":{}
+                  });
+
+                notify("danger", "remove", "Usuario:", "No tiene perfil de evaluador para la ronda seleccionada.");
             }
 
-            $("#notificacion_periodo").show();
-            $("#confirmar_top").show();
+          }
+
+          if( !json ){
+
+            $('#table_list').DataTable({
+                        "language": {
+                            "url": "../../dist/libraries/datatables/js/spanish.json"
+                        },
+                        "lengthMenu": [10, 15, 20],
+                        "responsive": true,
+                        "searching":false,
+                        "data":{}
+                });
+
+              notify("danger", "remove", "Usuario:", "No tiene perfil de evaluador para la ronda seleccionada.");
+          }
 
 
           break;
-        }
 
       }
-    );
 
-    //establece los valores de la tabla
-    $('#table_list').DataTable({
-                "language": {
-                    "url": "../../dist/libraries/datatables/js/spanish.json"
-                },
-                "processing": true,
-                "destroy": true,
-                "serverSide": true,
-                "lengthMenu": [10, 15, 20],
-                "responsive": true,
-                "searching":false,
-                "ajax":{
-                    url : url_pv+"PropuestasEvaluacion/all_propuestas",
-                    data:
-                            { "token": token_actual.token,
-                              "ronda": $('#rondas').val(),
-                              "estado":$('#estados').val()
-                            },
-                    //async: false
-                  },
-                "drawCallback": function (settings) {
-                     //$(".check_activar_t").attr("checked", "true");
-                     //$(".check_activar_f").removeAttr("checked");
-                     acciones_registro(token_actual);
-                       //validator_form(token_actual);
-
-                    },
-                "rowCallback": function( row, data, index ) {
-                  /*
-
-                      if ( data["aplica_perfil"] ){
-                          $('td', row).css('background-color', '#dcf4dc');
-                      }
-                      else if ( !data["aplica_perfil"]){
-                          $('td', row).css('background-color', '#f4dcdc');
-                      }
-                      */
-                  },
-                "columns": [
-                    {"data": "Código de la propuesta",
-                      render: function ( data, type, row ) {
-                            return row.codigo_propuesta;
-                          },
-                    },
-                    {"data": "Nombre de la propuesta",
-                      render: function ( data, type, row ) {
-                            return row.nombre_propuesta;
-                          },
-                    },
-                    {"data": "Total de la evaluación",
-                      render: function ( data, type, row ) {
-                            return row.total_evaluacion;
-                          },
-                    },
-                    {"data": "Estado de la evaluación",
-                      render: function ( data, type, row ) {
-                            return row.estado_evaluacion;
-                          },
-                    },
+    });
 
 
-                    /*{"data": "Seleccionar",
-                      render: function ( data, type, row ) {
-                            return ' <input title=\"'+row.id+'\" type=\"checkbox\" class=\"check_activar_'+row.active+'  activar_registro" '+(row.active? 'checked ':'')+' />';
-                            },
-                    },*/
-                    {"data": "aciones",
-                              render: function ( data, type, row ) {
-                                          return '<button id="'+row.id_evaluacion+'" title="Evaluar propuesta" type="button" class="btn btn-primary btn_evaluar" data-toggle="modal" data-target="#evaluarModal" id_propuesta="'+row.id_propuesta+'">'
-                                                      +'<span class="glyphicon glyphicon-check"></span></button>'
-                                                 +'<button id="'+row.id_evaluacion+'" title="Confirmar evaluación" type="button" class="btn btn-success btn_confirmar"  >'
-                                                      +'<span class="glyphicon glyphicon-ok"></span></button>'
-                                                 +'<button id="'+row.id_evaluacion+'" title="Declararse impedido" type="button" class="btn btn-warning btn_notificar" data-toggle="modal" data-target="#impedimentoModal" >'
-                                                     +'<span class="fa fa-eye-slash"></span></button>' ;
-
-                                          },
-                    }
-
-
-
-                ]
-            });
 
 
 
@@ -596,14 +610,14 @@ function cargar_info_basica(token_actual, id_propuesta){
 
       switch (data) {
         case 'error':
-          notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+          notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
           break;
         case 'error_metodo':
-            notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            notify("danger", "ok", "Usuario:","Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
             break;
         case 'error_token':
           location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-          notify("danger", "error_token", "URL:", "PropuestasEvaluacion/propuestas/"+id_propuesta);
+          //notify("danger", "error_token", "URL:", "PropuestasEvaluacion/propuestas/"+id_propuesta);
           break;
         case 'acceso_denegado':
           notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -715,17 +729,17 @@ function cargar_criterios_evaluacion(token_actual, id_evaluacion){
 
     switch (data) {
       case 'Si':
-          notify("info", "ok", "Convocatorias:", "Se activó el registro con éxito.");
+          notify("info", "ok", "Usuario:", "Se activó el registro con éxito.");
           break;
       case 'No':
-            notify("info", "ok", "Convocatorias:", "Se desactivó el registro con éxito.");
+            notify("info", "ok", "Usuario:", "Se desactivó el registro con éxito.");
             break;
       case 'error':
-        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
         break;
       case 'error_token':
-      //  location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-        notify("danger", "error_token", "URL:", 'PropuestasEvaluacion/evaluacionpropuestas/'+id_evaluacion);
+        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        //notify("danger", "error_token", "URL:", 'PropuestasEvaluacion/evaluacionpropuestas/'+id_evaluacion);
         break;
       case 'acceso_denegado':
         notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
@@ -866,14 +880,14 @@ function evaluar_criterios(token_actual,  id_evaluacion){
 
     switch (data) {
       case 'error':
-        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
         break;
       case 'error_metodo':
-        notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        notify("danger", "ok", "Usuario:","Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
         break;
       case 'error_token':
-        //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-        notify("danger", "error_token", "URL:", "PropuestasEvaluacion/evaluar_criterios");
+        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        //notify("danger", "error_token", "URL:", "PropuestasEvaluacion/evaluar_criterios");
         break;
       case 'acceso_denegado':
         notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
@@ -885,7 +899,7 @@ function evaluar_criterios(token_actual,  id_evaluacion){
         notify("danger", "remove", "Usuario:", "Ya existe un usuario registrado con el mismo documento de identificación.");
         break;
       default:
-        notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
+        notify("success", "ok", "Usuario:", "Se actualizó el registro con éxito.");
         //$(".criterios").attr('disabled','');
           cargar_tabla(token_actual);
        break;
@@ -912,14 +926,14 @@ function confirmar_evaluacion(token_actual,  id_evaluacion){
 
     switch (data) {
       case 'error':
-        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
         break;
       case 'error_metodo':
-        notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        notify("danger", "ok", "Usuario:","Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
         break;
       case 'error_token':
-        //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-        notify("danger", "error_token", "URL:", "PropuestasEvaluacion/confirmar_evaluacion");
+        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        //notify("danger", "error_token", "URL:", "PropuestasEvaluacion/confirmar_evaluacion");
         break;
       case 'acceso_denegado':
         notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
@@ -931,7 +945,7 @@ function confirmar_evaluacion(token_actual,  id_evaluacion){
         notify("danger", "remove", "Usuario:", "Debe evaluar todos los criterios.");
         break;
       default:
-        notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
+        notify("success", "ok", "Usuario:", "Se actualizó el registro con éxito.");
         //$(".criterios").attr('disabled','');
           cargar_tabla(token_actual);
        break;
@@ -954,14 +968,14 @@ function cargar_info_impedimento(token_actual, id_evaluacion){
 
       switch (data) {
         case 'error':
-          notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+          notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
           break;
         case 'error_metodo':
-            notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+            notify("danger", "ok", "Usuario:","Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
             break;
         case 'error_token':
-          //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-          notify("danger", "error_token", "URL:", 'PropuestasEvaluacion/evaluacionpropuestas/'+id_evaluacion+'/impedimentos');
+          location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+          //notify("danger", "error_token", "URL:", 'PropuestasEvaluacion/evaluacionpropuestas/'+id_evaluacion+'/impedimentos');
           break;
         case 'acceso_denegado':
           notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
@@ -1035,14 +1049,14 @@ function declarar_impedimento(token_actual, id_evaluacion){
 
     switch (data) {
       case 'error':
-        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
         break;
       case 'error_metodo':
-        notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        notify("danger", "ok", "Usuario:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
         break;
       case 'error_token':
-        //location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-        notify("danger", "error_token", "URL:", 'PropuestasEvaluacion/evaluacionpropuestas/'+id_evaluacion+'/impedimentos');
+        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        //notify("danger", "error_token", "URL:", 'PropuestasEvaluacion/evaluacionpropuestas/'+id_evaluacion+'/impedimentos');
         break;
       case 'acceso_denegado':
         notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
@@ -1055,7 +1069,7 @@ function declarar_impedimento(token_actual, id_evaluacion){
           //cargar_datos_formulario(token_actual);
           break;
       default:
-          notify("success", "ok", "Convocatorias:", "Se notificó con éxito.");
+          notify("success", "ok", "Usuario:", "Se notificó con éxito.");
         //$(".criterios").attr('disabled','');
           cargar_tabla(token_actual);
        break;
@@ -1066,5 +1080,42 @@ function declarar_impedimento(token_actual, id_evaluacion){
 }
 
 function confirmar_top_individual(token_actual, id_ronda){
+
+  $.ajax({
+      type: 'PUT',
+      url: url_pv + 'PropuestasEvaluacion/confirmar_top_individual/ronda/'+id_ronda,
+      data:"&modulo=Evaluación de propuestas&token="+ token_actual.token
+
+  }).done(function (data) {
+
+    switch (data) {
+      case 'error':
+        notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        break;
+      case 'error_metodo':
+        notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+        break;
+      case 'error_token':
+        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+        //notify("danger", "error_token", "URL:", 'PropuestasEvaluacion/evaluacionpropuestas/'+id_evaluacion+'/impedimentos');
+        break;
+      case 'acceso_denegado':
+        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+        break;
+      case 'deshabilitado':
+        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+        break;
+      case 'error_validacion':
+        notify("danger", "remove", "Usuario:", "Tiene evaluaciones sin confirmar");
+        break;
+      default:
+          notify("success", "ok", "Usuario:", "Se confirmó con éxito.");
+        //$(".criterios").attr('disabled','');
+          cargar_tabla(token_actual);
+       break;
+     }
+
+  });
+
 
 }
