@@ -1114,18 +1114,23 @@ function cargar_verificacion_2(token_actual, propuesta) {
                     $('#doc_administrativos_verificacion_2 tr').remove();
                     $("#doc_administrativos_verificacion_2").append(html_table);
 
-                    $("#doc_administrativos_verificacion_2").find('input,select,button,textarea').attr("disabled", "disabled");
-                    $("#boton_confirma_administrativa_2").attr("disabled", "disabled");                                                
+                    
                     
                     //Si la propuesta esta estado por
                     //Subsanada
+                    //se inactiva funcionalidad debido a que simpre debe estar activa
+                    /*
+                    
+                    $("#doc_administrativos_verificacion_2").find('input,select,button,textarea').attr("disabled", "disabled");
+                    $("#boton_confirma_administrativa_2").attr("disabled", "disabled");                                                
+                    
                     if (json.propuesta.estado == 31)
                     {
                         
                         $("#doc_administrativos_verificacion_2").find('input,select,button,textarea').removeAttr("disabled");
                         $("#boton_confirma_administrativa_2").removeAttr("disabled");                                                                                               
                     }
-                    
+                    */
 
                 }
             }
