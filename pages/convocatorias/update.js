@@ -38,8 +38,8 @@ $(document).ready(function () {
             $("#id_cpj").attr('value', '');
             $("#perfiles_jurados_modal select option:selected").removeAttr("selected");
             $("#perfiles_jurados_modal select option:selected").prop("selected", false);
-            $("#perfiles_jurados_modal input[type=text] , form textarea").each(function () {
-                this.value = ''
+            $("#perfiles_jurados_modal input[type=text] , #perfiles_jurados_modal textarea").each(function () {
+                this.value = '';
             });
         });
 
@@ -584,7 +584,7 @@ $(document).ready(function () {
                             //Esta condicion es para que no muestre los perfiles en la tabla, con el fin de que l unico ingreso sea desde los check
                             if(tipo_participante.active!=null){
                                 if(tipo_participante.active==true){
-                                    $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + JSON.stringify(tipo_participante).replace(/\"/g, "&quot;") + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                    $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + tipo_participante.id_cp + '" title="' + tipo_participante.id + '" dir="' + tipo_participante.nombre + '" translate="' + tipo_participante.descripcion_cp + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                                 }
                             }                                                        
                                                         
@@ -629,11 +629,10 @@ $(document).ready(function () {
 
                     //para habilitar formulario de convocatoria participante
                     $(".btn-update-convocatoria-participante").click(function () {
-                        var json_update = JSON.parse($(this).attr("lang"));
-                        $("#id_cp").val(json_update.id_cp);
-                        $("#id_tipo_participante").val(json_update.id);
-                        $("#tipo_participante_cp").html(json_update.nombre);                                                
-                        CKEDITOR.instances.descripcion_cp.setData(json_update.descripcion_cp);
+                        $("#id_cp").val($(this).attr("lang"));
+                        $("#id_tipo_participante").val($(this).attr("title"));
+                        $("#tipo_participante_cp").html($(this).attr("dir"));
+                        CKEDITOR.instances.descripcion_cp.setData($(this).attr("translate"));
                     });
 
                     //Creamos los participantes en la convocatoria
@@ -1200,18 +1199,17 @@ function cargar_tabla_perfiles_participante(token_actual) {
                         //Esta condicion es para que no muestre los perfiles en la tabla, con el fin de que l unico ingreso sea desde los check
                         if(tipo_participante.active!=null){
                             if(tipo_participante.active==true){
-                                $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + JSON.stringify(tipo_participante).replace(/\"/g, "&quot;") + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + tipo_participante.id_cp + '" title="' + tipo_participante.id + '" dir="' + tipo_participante.nombre + '" translate="' + tipo_participante.descripcion_cp + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                             }
                         }
                     });
 
                     //para habilitar formulario de convocatoria participante
-                    $(".btn-update-convocatoria-participante").click(function () {
-                        var json_update = JSON.parse($(this).attr("lang"));
-                        $("#id_cp").val(json_update.id_cp);
-                        $("#id_tipo_participante").val(json_update.id);
-                        $("#tipo_participante_cp").html(json_update.nombre);
-                        CKEDITOR.instances.descripcion_cp.setData(json_update.descripcion_cp);                        
+                    $(".btn-update-convocatoria-participante").click(function () {                        
+                        $("#id_cp").val($(this).attr("lang"));
+                        $("#id_tipo_participante").val($(this).attr("title"));
+                        $("#tipo_participante_cp").html($(this).attr("dir"));
+                        CKEDITOR.instances.descripcion_cp.setData($(this).attr("translate"));                        
                     });
                 }
             }
