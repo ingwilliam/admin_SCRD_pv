@@ -34,11 +34,11 @@ $(document).ready(function () {
         });
 
         //Limpio el formulario de los perfiles de los jurados
-        $('#perfiles_jurados_modal').on('hidden.bs.modal', function () {
+        $('#perfiles_jurados_modal').on('hidden.bs.modal', function () {            
             $("#id_cpj").attr('value', '');
             $("#perfiles_jurados_modal select option:selected").removeAttr("selected");
             $("#perfiles_jurados_modal select option:selected").prop("selected", false);
-            $("#perfiles_jurados_modal input[type=text] , form textarea").each(function () {
+            $("#perfiles_jurados_modal input[type=text] , #perfiles_jurados_modal textarea").each(function () {
                 this.value = ''
             });
         });
@@ -543,7 +543,7 @@ $(document).ready(function () {
                                 checked = 'checked="checked"';
                             }
 
-                            $("#quienes_pueden_participar").append('<label class="checkbox-inline"><input class="tipo_participante tipo_participante_' + tipo_participante.id + '" value="' + tipo_participante.id + '" type="checkbox" ' + checked + '>' + tipo_participante.nombre + '</label>');
+                            $("#quienes_pueden_participar").append('<label class="checkbox-inline"><input class="tipo_participante tipo_participante_' + tipo_participante.id + '" value="' + tipo_participante.id + '" type="checkbox" ' + checked + ' disabled="disabled">' + tipo_participante.nombre + '</label>');
 
                             if (tipo_participante.descripcion == null)
                             {
@@ -598,6 +598,9 @@ $(document).ready(function () {
 
                     //para habilitar formulario de convocatoria participante
                     $(".btn-update-convocatoria-participante").click(function () {
+                        //William el error esta creando el json, mejor haga una consulta y listo
+                        //OJO
+                        alert($(this).attr("lang"));
                         var json_update = JSON.parse($(this).attr("lang"));
                         $("#id_cp").val(json_update.id_cp);
                         $("#id_tipo_participante").val(json_update.id);
