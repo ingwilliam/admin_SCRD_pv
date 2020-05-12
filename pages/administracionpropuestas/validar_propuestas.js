@@ -1114,8 +1114,7 @@ function cargar_verificacion_2(token_actual, propuesta) {
                     $('#doc_administrativos_verificacion_2 tr').remove();
                     $("#doc_administrativos_verificacion_2").append(html_table);
 
-                    
-                    
+                  
                     //Si la propuesta esta estado por
                     //Subsanada
                     //se inactiva funcionalidad debido a que simpre debe estar activa
