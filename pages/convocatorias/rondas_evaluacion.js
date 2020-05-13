@@ -694,7 +694,7 @@ function cargar_tabla_criterio(idRonda, token_actual) {
             },
             {"data": "active",
                 render: function (data, type, row) {
-                    return ' <input title=\"' + row.id + '\" type=\"checkbox\" class=\"check_activar_' + row.active + '  activar_registro" ' + (row.active ? 'checked ' : '') + ' />';
+                    return ' <input title=\"' + row.id + '\" type=\"checkbox\" class=\"check_activar_' + row.active + '  activar_registro_criterio" ' + (row.active ? 'checked ' : '') + ' />';
                 },
             },
             {"data": "aciones",
@@ -863,7 +863,11 @@ function acciones_criterio(token_actual) {
 
 
     //Permite activar o eliminar una registro
-    $(".activar_registro").click(function () {
+    /**
+    *Cesar Britto, 2020-05-12
+    * Se ajusta para que no cree conflicto con activar_registro de la ronda
+    */
+    $(".activar_registro_criterio").click(function () {
 
         //Cambio el estado del check
         var active = "false";
