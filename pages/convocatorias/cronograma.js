@@ -287,7 +287,7 @@ function validator_form(token_actual) {
                                 notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                             } else
                             {
-                                notify("info", "ok", "Convocatorias:", "Se edito el area con éxito.");
+                                notify("info", "ok", "Convocatorias:", "Se edito el evento con éxito.");
                                 cargar_tabla(token_actual);
                             }
                         }
@@ -412,7 +412,7 @@ function acciones_categoria(token_actual)
                     notify("info", "ok", "Convocatorias:", "Se activó el evento con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se eliminó el evento con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se inactivo el evento con éxito.");
                 }
             } else
             {

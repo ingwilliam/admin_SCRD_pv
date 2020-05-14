@@ -12,9 +12,9 @@ $(document).ready(function () {
         location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
     } else
     {
-        permiso_lectura(token_actual, "Convocatorias");
+        permiso_lectura(token_actual, "Convocatoriaspublicas");
 
-        $('#form_validator').attr('action', url_pv + 'Convocatorias/new');
+        $('#form_validator').attr('action', url_pv + 'Convocatoriaspublicas/new');
 
         //Establesco los text area html
         if (CKEDITOR.env.ie && CKEDITOR.env.version < 9)
@@ -62,36 +62,42 @@ $(document).ready(function () {
             }
             else
             {
-                var values_html = {modulo:"Convocatorias","variable":$("#variable").val(), value_CKEDITOR:CKEDITOR.instances.html_general.getData(), modulo:"Convocatorias", token:token_actual.token}; 
+                var values_html = {modulo:"Convocatoriaspublicas","variable":$("#variable").val(), value_CKEDITOR:CKEDITOR.instances.html_general.getData(), token:token_actual.token}; 
                 
                 //Realizo la peticion con el fin de editar el registro actual
                     $.ajax({
                         type: 'PUT',
-                        url: url_pv + 'Convocatorias/edit/' + $("#id").attr('value'),
+                        url: url_pv + 'Convocatoriaspublicas/edit/' + $("#id").attr('value'),
                         data: $.param(values_html)                        
                     }).done(function (result) {
-                        if (result == 'error')
+                        if (result == 'error_metodo')
                         {
                             notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                         } else
                         {
-                            if (result == 'error_token')
+                            if (result == 'error')
                             {
-                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                             } else
                             {
-                                if (result == 'acceso_denegado')
+                                if (result == 'error_token')
                                 {
-                                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                                 } else
                                 {
-                                    if (isNaN(result))
+                                    if (result == 'acceso_denegado')
                                     {
-                                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                                     } else
                                     {
-                                        notify("info", "ok", "Convocatorias:", "Se edito la convocatoria con éxito.");
-                                        $("#"+$("#variable").val()+"_html").val(CKEDITOR.instances.html_general.getData());                                                                                
+                                        if (isNaN(result))
+                                        {
+                                            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                        } else
+                                        {
+                                            notify("info", "ok", "Convocatorias:", "Se edito la convocatoria con éxito.");
+                                            $("#"+$("#variable").val()+"_html").val(CKEDITOR.instances.html_general.getData());                                                                                
+                                        }
                                     }
                                 }
                             }
@@ -110,7 +116,7 @@ $(document).ready(function () {
             if ($("#id_cp").val() != "") {
                 //Realizo la peticion con el fin de editar el registro del perfil de la convocatoria
                 
-                var values_perfil = {active:"TRUE", descripcion_perfil:CKEDITOR.instances.descripcion_cp.getData(), modulo:"Convocatorias", token:token_actual.token}; 
+                var values_perfil = {active:"TRUE", descripcion_perfil:CKEDITOR.instances.descripcion_cp.getData(), modulo:"Convocatoriaspublicas", token:token_actual.token}; 
                 
                 $.ajax({
                     type: 'PUT',
@@ -161,7 +167,7 @@ $(document).ready(function () {
                     $.ajax({
                         type: 'POST',
                         url: url_pv + 'Convocatoriasparticipantes/new/',
-                        data: "active=TRUE&descripcion_perfil=" + CKEDITOR.instances.descripcion_cp.getData() + "&convocatoria=" + $("#id").val() + "&tipo_participante=" + $("#id_tipo_participante").val() + "&modulo=Convocatorias&token=" + token_actual.token
+                        data: "active=TRUE&descripcion_perfil=" + CKEDITOR.instances.descripcion_cp.getData() + "&convocatoria=" + $("#id").val() + "&tipo_participante=" + $("#id_tipo_participante").val() + "&modulo=Convocatoriaspublicas&token=" + token_actual.token
                     }).done(function (result) {
 
                         if (result == 'error')
@@ -457,7 +463,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'GET',
             data: {"token": token_actual.token, "id": $("#id").attr('value')},
-            url: url_pv + 'Convocatorias/search/'
+            url: url_pv + 'Convocatoriaspublicas/search/'
         }).done(function (data) {
             if (data == 'error_metodo')
             {
@@ -552,8 +558,8 @@ $(document).ready(function () {
                                                         
                             //Esta condicion es para que no muestre los perfiles en la tabla, con el fin de que l unico ingreso sea desde los check
                             if(tipo_participante.active!=null){
-                                if(tipo_participante.active==true){
-                                    $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + JSON.stringify(tipo_participante).replace(/\"/g, "&quot;") + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                if(tipo_participante.active==true){                                    
+                                    $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + tipo_participante.id_cp + '" title="' + tipo_participante.id + '" dir="' + tipo_participante.nombre + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                                 }
                             }                                                        
                                                         
@@ -598,14 +604,37 @@ $(document).ready(function () {
 
                     //para habilitar formulario de convocatoria participante
                     $(".btn-update-convocatoria-participante").click(function () {
-                        //William el error esta creando el json, mejor haga una consulta y listo
-                        //OJO
-                        alert($(this).attr("lang"));
-                        var json_update = JSON.parse($(this).attr("lang"));
-                        $("#id_cp").val(json_update.id_cp);
-                        $("#id_tipo_participante").val(json_update.id);
-                        $("#tipo_participante_cp").html(json_update.nombre);                                                
-                        CKEDITOR.instances.descripcion_cp.setData(json_update.descripcion_cp);
+                        $("#id_cp").val($(this).attr("lang"));
+                        $("#id_tipo_participante").val($(this).attr("title"));
+                        $("#tipo_participante_cp").html($(this).attr("dir"));
+                        
+                        //Se carga el contenido html debido a que estaba presentando problemas al cargarlo desde una propiedad html
+                        $.ajax({
+                            type: 'GET',
+                            data: {"token": token_actual.token},
+                            url: url_pv + 'Convocatoriasparticipantes/search/'+$(this).attr("lang")
+                        }).done(function (data) {
+                            if (data == 'error_metodo')
+                            {
+                                notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                            } else
+                            {
+                                if (data == 'error_token')
+                                {
+                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                } else
+                                {
+                                    if (data == 'error')
+                                    {
+                                        notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+                                        var json = JSON.parse(data);                                        
+                                        CKEDITOR.instances.descripcion_cp.setData(json.descripcion_perfil);
+                                    }                                    
+                                }
+                            }
+                        }); 
                     });
 
                     //Creamos los participantes en la convocatoria
@@ -615,7 +644,7 @@ $(document).ready(function () {
                             $.ajax({
                                 type: 'POST',
                                 url: url_pv + 'Convocatoriasparticipantes/new/',
-                                data: "convocatoria=" + $("#id").val() + "&tipo_participante=" + $(this).val() + "&modulo=Convocatorias&token=" + token_actual.token
+                                data: "convocatoria=" + $("#id").val() + "&tipo_participante=" + $(this).val() + "&modulo=Convocatoriaspublicas&token=" + token_actual.token
                             }).done(function (result) {
 
                                 if (result == 'error')
@@ -650,7 +679,7 @@ $(document).ready(function () {
                             //Se realiza la peticion para desactivar la convocatoria participante
                             $.ajax({
                                 type: 'DELETE',
-                                data: {"token": token_actual.token, "modulo": "Convocatorias", "convocatoria": $("#id").val(), "tipo_participante": $(this).val()},
+                                data: {"token": token_actual.token, "modulo": "Convocatoriaspublicas", "convocatoria": $("#id").val(), "tipo_participante": $(this).val()},
                                 url: url_pv + 'Convocatoriasparticipantes/delete'
                             }).done(function (data) {
                                 if (data == 'error_token')
@@ -971,7 +1000,7 @@ $(document).ready(function () {
 function activar_registro(id, token_actual) {
     $.ajax({
         type: 'DELETE',
-        data: {"token": token_actual, "modulo": "Convocatorias"},
+        data: {"token": token_actual, "modulo": "Convocatoriaspublicas"},
         url: url_pv + 'Convocatoriasrecursos/delete/' + id
     }).done(function (data) {
         if (data == 'error_token')
@@ -1007,7 +1036,7 @@ function activar_perfil_jurado(id, convocatoria, token_actual) {
     //Se realiza la peticion para desactivar la convocatoria participante
     $.ajax({
         type: 'DELETE',
-        data: {"token": token_actual, "modulo": "Convocatorias", "convocatoria": convocatoria},
+        data: {"token": token_actual, "modulo": "Convocatoriaspublicas", "convocatoria": convocatoria},
         url: url_pv + 'Convocatoriasparticipantes/delete_perfil_jurado/' + id
     }).done(function (data) {
         if (data == 'error_token')
@@ -1146,18 +1175,45 @@ function cargar_tabla_perfiles_participante(token_actual) {
                         //Esta condicion es para que no muestre los perfiles en la tabla, con el fin de que l unico ingreso sea desde los check
                         if(tipo_participante.active!=null){
                             if(tipo_participante.active==true){
-                                $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + JSON.stringify(tipo_participante).replace(/\"/g, "&quot;") + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + tipo_participante.id_cp + '" title="' + tipo_participante.id + '" dir="' + tipo_participante.nombre + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                             }
                         }
                     });
 
                     //para habilitar formulario de convocatoria participante
                     $(".btn-update-convocatoria-participante").click(function () {
-                        var json_update = JSON.parse($(this).attr("lang"));
-                        $("#id_cp").val(json_update.id_cp);
-                        $("#id_tipo_participante").val(json_update.id);
-                        $("#tipo_participante_cp").html(json_update.nombre);
-                        CKEDITOR.instances.descripcion_cp.setData(json_update.descripcion_cp);                        
+                        $("#id_cp").val($(this).attr("lang"));
+                        $("#id_tipo_participante").val($(this).attr("title"));
+                        $("#tipo_participante_cp").html($(this).attr("dir"));
+                        
+                        //Se carga el contenido html debido a que estaba presentando problemas al cargarlo desde una propiedad html
+                        $.ajax({
+                            type: 'GET',
+                            data: {"token": token_actual.token},
+                            url: url_pv + 'Convocatoriasparticipantes/search/'+$(this).attr("lang")
+                        }).done(function (data) {
+                            if (data == 'error_metodo')
+                            {
+                                notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                            } else
+                            {
+                                if (data == 'error_token')
+                                {
+                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                } else
+                                {
+                                    if (data == 'error')
+                                    {
+                                        notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+                                        var json = JSON.parse(data);                                        
+                                        CKEDITOR.instances.descripcion_cp.setData(json.descripcion_perfil);
+                                    }                                    
+                                }
+                            }
+                        }); 
+                        
                     });
                 }
             }
@@ -1292,30 +1348,36 @@ function validator_form(token_actual) {
         //Realizo la peticion con el fin de editar el registro actual
         $.ajax({
             type: 'PUT',
-            url: url_pv + 'Convocatorias/edit/' + $("#id").attr('value'),
-            data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token
+            url: url_pv + 'Convocatoriaspublicas/edit/' + $("#id").attr('value'),
+            data: $.param(values) + "&modulo=Convocatoriaspublicas&token=" + token_actual.token
         }).done(function (result) {
-            if (result == 'error')
+            if (result == 'error_metodo')
             {
                 notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
-                if (result == 'error_token')
+                if (result == 'error')
                 {
-                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                 } else
                 {
-                    if (result == 'acceso_denegado')
+                    if (result == 'error_token')
                     {
-                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                     } else
                     {
-                        if (isNaN(result))
+                        if (result == 'acceso_denegado')
                         {
-                            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                         } else
                         {
-                            notify("info", "ok", "Convocatorias:", "Se edito la convocatoria con éxito.");
+                            if (isNaN(result))
+                            {
+                                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                            } else
+                            {
+                                notify("info", "ok", "Convocatorias:", "Se edito la convocatoria con éxito.");
+                            }
                         }
                     }
                 }
@@ -1324,10 +1386,6 @@ function validator_form(token_actual) {
 
         //$form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         bv.resetForm();
-        
-    
-    
-    
         
     });
 
@@ -1413,7 +1471,7 @@ function validator_form(token_actual) {
             $.ajax({
                 type: 'PUT',
                 url: url_pv + 'Convocatoriasparticipantes/edit/' + $("#id_cpj").attr('value'),
-                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token
+                data: $form.serialize() + "&modulo=Convocatoriaspublicas&token=" + token_actual.token
             }).done(function (result) {
                 if (result == 'error')
                 {
@@ -1487,7 +1545,7 @@ function validator_form(token_actual) {
             $.ajax({
                 type: 'POST',
                 url: url_pv + 'Convocatoriasrecursos/new/',
-                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria=" + $("#id").attr('value')
+                data: $form.serialize() + "&modulo=Convocatoriaspublicas&token=" + token_actual.token + "&convocatoria=" + $("#id").attr('value')
             }).done(function (result) {
 
                 if (result == 'error')
@@ -1521,7 +1579,7 @@ function validator_form(token_actual) {
             $.ajax({
                 type: 'PUT',
                 url: url_pv + 'Convocatoriasrecursos/edit/' + $("#id_bolsa").attr('value'),
-                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token
+                data: $form.serialize() + "&modulo=Convocatoriaspublicas&token=" + token_actual.token
             }).done(function (result) {
                 if (result == 'error')
                 {
@@ -1604,7 +1662,7 @@ function validator_form(token_actual) {
             $.ajax({
                 type: 'POST',
                 url: url_pv + 'Convocatoriasrecursos/new/',
-                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria=" + $("#id").attr('value')
+                data: $form.serialize() + "&modulo=Convocatoriaspublicas&token=" + token_actual.token + "&convocatoria=" + $("#id").attr('value')
             }).done(function (result) {
 
                 if (result == 'error')
@@ -1638,7 +1696,7 @@ function validator_form(token_actual) {
             $.ajax({
                 type: 'PUT',
                 url: url_pv + 'Convocatoriasrecursos/edit/' + $("#id_especie").attr('value'),
-                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token
+                data: $form.serialize() + "&modulo=Convocatoriaspublicas&token=" + token_actual.token
             }).done(function (result) {
                 if (result == 'error')
                 {

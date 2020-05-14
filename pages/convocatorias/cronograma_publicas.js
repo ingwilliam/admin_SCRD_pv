@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
 
     //Verifico si el token exite en el cliente y verifico que el token este activo en el servidor                
@@ -10,7 +11,7 @@ $(document).ready(function () {
     {
 
         //Verifica si el token actual tiene acceso de lectura
-        permiso_lectura(token_actual, "Convocatorias");
+        permiso_lectura(token_actual, "Convocatoriaspublicas");
 
         //Realizo la peticion para cargar el formulario
         if ($("#id").val() != "") {
@@ -22,22 +23,21 @@ $(document).ready(function () {
             CKEDITOR.config.height = 150;
             CKEDITOR.config.width = 'auto';
             CKEDITOR.replace('descripcion');
-
+            
             //Limpio el formulario de las categorias
             $('#nuevo_evento').on('hidden.bs.modal', function () {
                 CKEDITOR.instances.descripcion.setData('');
-                $("#orden").val("");
-                $("#requisto option[value='']").prop("selected", true);
-                $("#subsanable option[value='true']").prop("selected", true);
-                $("#obligatorio option[value='true']").prop("selected", true);
+                $("#fecha_inicio").val("");
+                $("#fecha_fin").val("");
+                $("#tipo_evento option[value='']").prop("selected", true);
                 $("#id_registro").val("");
             });
 
             //Realizo la peticion para cargar el formulario
             $.ajax({
                 type: 'GET',
-                data: {"token": token_actual.token, "id": $("#id").attr('value'), "tipo_requisito": "Tecnicos"},
-                url: url_pv + 'Convocatorias/search/'
+                data: {"token": token_actual.token, "id": $("#id").attr('value')},
+                url: url_pv + 'Convocatoriaspublicas/search/'
             }).done(function (data) {
                 if (data == 'error_metodo')
                 {
@@ -59,7 +59,7 @@ $(document).ready(function () {
                             if (typeof json.convocatoria.id === 'number') {
 
                                 //Agrego url para retornar
-                                $(".regresar").attr("onclick", "location.href='update.html?id=" + $("#id").attr('value') + "'");
+                                $(".regresar").attr("onclick", "location.href='update_publicas.html?id=" + $("#id").attr('value') + "'");
 
                                 //Limpio select de categorias
                                 $('#convocatoria').find('option').remove();
@@ -77,20 +77,7 @@ $(document).ready(function () {
                                 } else
                                 {
                                     $(".diferentes_requisitos").css("display", "none");
-                                }
-                                
-                                //Asigno la modalidad con el fin de determinar si es para jurados
-                                $("#modalidad").attr('value', json.convocatoria.modalidad);
-                                
-                                //Si la convocatoria fue publicada o cancelada
-                                if(json.convocatoria.estado==5 || json.convocatoria.estado==32){
-                                    $("#form_validator input,select,button[type=submit],textarea").attr("disabled","disabled");   
-                                    $("#table_cronogramas button,input,select,button[type=submit],textarea").attr("disabled","disabled");   
-                                    $(".input-sm").css("display","none");                                       
-                                    $(".paginate_button").css("display","none");                                                                           
-                                    CKEDITOR.instances.descripcion.config.readOnly = true;                                    
-                                }
-                                
+                                }                                                                                                
                             }
                         }
                     }
@@ -100,19 +87,37 @@ $(document).ready(function () {
             //Cargar datos de la tabla
             cargar_tabla(token_actual);
 
+            $('#tipo_evento').change(function () {
+                if ($(this).find('option:selected').attr("title") == "true")
+                {
+                    $(".es_periodo").css("display", "block");
+                    $(".no_es_periodo").css("display", "none");
+                } else
+                {
+                    $(".es_periodo").css("display", "none");
+                    $(".no_es_periodo").css("display", "block");
+                    $('#fecha_fin').val($('#fecha_inicio').val());
+                }
+                $('.form_nuevo_cronograma').bootstrapValidator('revalidateField', 'fecha_fin');
+            });
+
+            $('#fecha_inicio').change(function () {
+                if ($("#tipo_evento").find('option:selected').attr("title") == "false")
+                {
+                    $('#fecha_fin').val($('#fecha_inicio').val());
+                    //Se debe colocar debido a que el calendario es un componente diferente
+                    $('.form_nuevo_cronograma').bootstrapValidator('revalidateField', 'fecha_fin');
+                }
+
+            });
+
             //Cargo el formulario, para crear o editar
             $("#cargar_formulario").click(function () {
-                var tipo_requisito="Tecnicos";
-                //Valido si la modalidad es de jurados
-                if($("#modalidad").val()==2)
-                {
-                    tipo_requisito="JuradosTecnicos";
-                }
                 //Realizo la peticion para cargar el formulario
                 $.ajax({
                     type: 'GET',
-                    data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "id": $("#id_registro").attr('value'), "tipo_requisito": tipo_requisito},
-                    url: url_pv + 'Convocatoriasdocumentos/search/'
+                    data: {"token": token_actual.token, "convocatoria_padre_categoria": $("#id").attr('value'), "id": $("#id_registro").attr('value')},
+                    url: url_pv + 'Convocatoriascronogramas/search/'
                 }).done(function (data) {
                     if (data == 'error_metodo')
                     {
@@ -130,40 +135,22 @@ $(document).ready(function () {
                             } else
                             {
                                 var json = JSON.parse(data);
-                                //Cargo el select de los requisitos
-                                $('#requisito').find('option').remove();
-                                $("#requisito").append('<option value="">:: Seleccionar ::</option>');
-                                if (json.requisitos.length > 0) {
-                                    $.each(json.requisitos, function (key, requisito) {
-                                        $("#requisito").append('<option value="' + requisito.id + '" >' + requisito.nombre + '</option>');
-                                    });
-                                }
-
-                                //Cargo el select de archivos permitidos                                            
-                                $('#archivos_permitidos').find('option').remove();
-                                if (json.tipos_archivos_tecnicos.length > 0) {
-                                    $.each(json.tipos_archivos_tecnicos, function (key, archivo_permitido) {
-                                        var selected = '';
-                                        //Solo aplica cuando se carga para crear un nuevo registro
-                                        if (json.convocatoriadocumento.id == null && archivo_permitido == 'pdf')
+                                //Cargo el select de los tipos eventos
+                                $('#tipo_evento').find('option').remove();
+                                $("#tipo_evento").append('<option value="">:: Seleccionar ::</option>');
+                                if (json.tipos_eventos.length > 0) {
+                                    $.each(json.tipos_eventos, function (key, tipo_evento) {
+                                        var publico = "";
+                                        if (tipo_evento.publico)
                                         {
-                                            selected = 'selected="selected"';
+                                            publico = '(Público)';
                                         }
-                                        $("#archivos_permitidos").append('<option value="' + archivo_permitido + '" ' + selected + ' >' + archivo_permitido + '</option>');
-                                    });
-                                }
-
-                                //Cargo el select de tamaños permitidos                                            
-                                $('#tamano_permitido').find('option').remove();
-                                $("#tamano_permitido").append('<option value="">:: Seleccionar ::</option>');
-                                if (json.tamanos_permitidos.length > 0) {
-                                    $.each(json.tamanos_permitidos, function (key, tamano_permitido) {
-                                        $("#tamano_permitido").append('<option value="' + tamano_permitido + '" >' + tamano_permitido + '</option>');
+                                        $("#tipo_evento").append('<option title="' + tipo_evento.periodo + '" value="' + tipo_evento.id + '" >' + tipo_evento.nombre + ' ' + publico + '</option>');
                                     });
                                 }
 
                                 //Cargo el formulario con los datos
-                                $('#form_nuevo_documento').loadJSON(json.convocatoriadocumento);
+                                $('#form_nuevo_cronograma').loadJSON(json.convocatoriacronograma);
 
 
                             }
@@ -184,35 +171,34 @@ $(document).ready(function () {
 });
 
 function validator_form(token_actual) {
+    //Se debe colocar debido a que el calendario es un componente diferente
+    $('.calendario').on('changeDate show', function (e) {
+        $('.form_nuevo_cronograma').bootstrapValidator('revalidateField', 'fecha_inicio');
+        $('.form_nuevo_cronograma').bootstrapValidator('revalidateField', 'fecha_fin');
+    });
     //Validar el formulario
-    $('.form_nuevo_documento').bootstrapValidator({
+    $('.form_nuevo_cronograma').bootstrapValidator({
         feedbackIcons: {
             valid: 'glyphicon glyphicon-ok',
             invalid: 'glyphicon glyphicon-remove',
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
-            requisito: {
+            tipo_evento: {
                 validators: {
-                    notEmpty: {message: 'El requisito es requerido'}
+                    notEmpty: {message: 'El tipo de evento es requerido'}
                 }
             },
-            tamano_permitido: {
+            fecha_inicio: {
                 validators: {
-                    notEmpty: {message: 'El tamaño máximo es requerido'}
+                    notEmpty: {message: 'La fecha inicio es requerida'}
                 }
             },
-            archivos_permitidos: {
+            fecha_fin: {
                 validators: {
-                    notEmpty: {message: 'Los tipos de archivos son requeridos'}
+                    notEmpty: {message: 'La fecha fin es requerida'}
                 }
-            },
-            orden: {
-                validators: {
-                    notEmpty: {message: 'El orden es requerido'},
-                    numeric: {message: 'Debe ingresar solo numeros'}
-                }
-            },
+            }
         }
     }).on('success.form.bv', function (e) {
         // Prevent form submission
@@ -222,18 +208,17 @@ function validator_form(token_actual) {
 
         // Get the BootstrapValidator instance
         var bv = $form.data('bootstrapValidator');
-        
+
         var values=$form.serializeArray();        
         
         values.find(input => input.name == 'descripcion').value = CKEDITOR.instances.descripcion.getData();
-
-
+        
         if ($("#id_registro").val().length < 1) {
             //Se realiza la peticion con el fin de guardar el registro actual
             $.ajax({
                 type: 'POST',
-                url: url_pv + 'Convocatoriasdocumentos/new',
-                data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
+                url: url_pv + 'Convocatoriascronogramas/new',
+                data: $.param(values) + "&modulo=Convocatoriaspublicas&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
             }).done(function (result) {
 
                 if (result == 'error')
@@ -269,8 +254,8 @@ function validator_form(token_actual) {
             //Realizo la peticion con el fin de editar el registro actual
             $.ajax({
                 type: 'PUT',
-                url: url_pv + 'Convocatoriasdocumentos/edit/' + $("#id_registro").attr('value'),
-                data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
+                url: url_pv + 'Convocatoriascronogramas/edit/' + $("#id_registro").attr('value'),
+                data: $.param(values) + "&modulo=Convocatoriaspublicas&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
             }).done(function (result) {
                 if (result == 'error')
                 {
@@ -279,7 +264,7 @@ function validator_form(token_actual) {
                 {
                     if (result == 'error_token')
                     {
-                        location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                     } else
                     {
                         if (result == 'acceso_denegado')
@@ -292,7 +277,7 @@ function validator_form(token_actual) {
                                 notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                             } else
                             {
-                                notify("info", "ok", "Convocatorias:", "Se edita el documento con éxito.");
+                                notify("info", "ok", "Convocatorias:", "Se edito el evento con éxito.");
                                 cargar_tabla(token_actual);
                             }
                         }
@@ -304,11 +289,9 @@ function validator_form(token_actual) {
         $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         bv.resetForm();        
         CKEDITOR.instances.descripcion.setData('');
-        $("#orden").val("");
-        $("#requisto option[value='']").prop("selected", true);
-        $("#subsanable option[value='true']").prop("selected", true);
-        $("#obligatorio option[value='true']").prop("selected", true);
-        $("#id_registro").val("");
+        $("#fecha_inicio").val("");
+        $("#fecha_fin").val("");
+        $("#descripcion option[value='']").prop("selected", true);
         $('#nuevo_evento').modal('toggle');
     });
 
@@ -322,11 +305,11 @@ function cargar_tabla(token_actual)
         },
         "processing": true,
         "destroy": true,
-        "serverSide": true,
+        "serverSide": true,        
         "lengthMenu": [20, 30, 40],
         "ajax": {
-            url: url_pv + "Convocatoriasdocumentos/all",
-            data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "tipo_requisito": "Tecnicos"}
+            url: url_pv + "Convocatoriascronogramas/all",
+            data: {"token": token_actual.token, "convocatoria": $("#id").attr('value')}
         },
         "drawCallback": function (settings) {
             $(".check_activar_t").attr("checked", "true");
@@ -336,30 +319,17 @@ function cargar_tabla(token_actual)
         "columns": [
             {"data": "convocatoria"},
             {"data": "categoria"},
-            {"data": "requisito"},
-            {"data": "subsanable"},
-            {"data": "obligatorio"},
-            {"data": "orden"},
+            {"data": "tipo_evento"},
+            {"data": "fecha_inicio"},
+            {"data": "fecha_fin"},
             {"data": "descripcion"},
             {"data": "activar_registro"},
             {"data": "acciones"}
         ],
+        
         "columnDefs": [{
                 "targets": 0,
                 "render": function (data, type, row, meta) {
-                    if (row.subsanable == true) {
-                        row.subsanable = "Si";
-                    }
-                    if (row.subsanable == false) {
-                        row.subsanable = "No";
-                    }
-
-                    if (row.obligatorio == true) {
-                        row.obligatorio = "Si";
-                    }
-                    if (row.obligatorio == false) {
-                        row.obligatorio = "No";
-                    }
                     if (data == null) {
                         row.convocatoria = row.categoria;
                         row.categoria = "";
@@ -376,7 +346,7 @@ function cargar_tabla(token_actual)
 function activar_registro(id, token_actual) {
     $.ajax({
         type: 'DELETE',
-        data: {"token": token_actual, "modulo": "Convocatorias"},
+        data: {"token": token_actual, "modulo": "Convocatoriaspublicas"},
         url: url_pv + 'Convocatoriasrecursos/delete/' + id
     }).done(function (data) {
         if (data == 'Si' || data == 'No')
@@ -422,17 +392,17 @@ function acciones_categoria(token_actual)
         //Peticion para inactivar el evento
         $.ajax({
             type: 'DELETE',
-            data: {"token": token_actual.token, "modulo": "Convocatorias", "active": active},
-            url: url_pv + 'Convocatoriasdocumentos/delete/' + $(this).attr("title")
+            data: {"token": token_actual.token, "modulo": "Convocatoriaspublicas", "active": active},
+            url: url_pv + 'Convocatoriascronogramas/delete/' + $(this).attr("title")
         }).done(function (data) {
             if (data == 'Si' || data == 'No')
             {
                 if (data == 'Si')
                 {
-                    notify("info", "ok", "Convocatorias:", "Se activó el documento con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se activó el evento con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se inactivo el documento con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se inactivo el evento con éxito.");
                 }
             } else
             {
@@ -452,8 +422,8 @@ function acciones_categoria(token_actual)
         //Realizo la peticion para cargar el formulario
         $.ajax({
             type: 'GET',
-            data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "id": $(this).attr("title"), "tipo_requisito": "Tecnicos"},
-            url: url_pv + 'Convocatoriasdocumentos/search/'
+            data: {"token": token_actual.token, "convocatoria_padre_categoria": $("#id").attr('value'), "id": $(this).attr("title")},
+            url: url_pv + 'Convocatoriascronogramas/search/'
         }).done(function (data) {
             if (data == 'error_metodo')
             {
@@ -467,46 +437,35 @@ function acciones_categoria(token_actual)
                 {
                     var json = JSON.parse(data);
 
-                    //Cargo el select de los requisitos                                
-                    $('#requisito').find('option').remove();
-                    $("#requisito").append('<option value="">:: Seleccionar ::</option>');
-                    if (json.requisitos.length > 0) {
-                        $.each(json.requisitos, function (key, requisito) {
-                            $("#requisito").append('<option value="' + requisito.id + '" >' + requisito.nombre + '</option>');
-                        });
+                    if (json.es_periodo)
+                    {
+                        $(".es_periodo").css("display", "block");                        
+                        $(".no_es_periodo").css("display", "none");
+                    } 
+                    else
+                    {
+                        $(".es_periodo").css("display", "none");
+                        $(".no_es_periodo").css("display", "block");                        
                     }
 
-                    //Cargo el select de archivos permitidos                                            
-                    $('#archivos_permitidos').find('option').remove();
-                    if (json.tipos_archivos_tecnicos.length > 0) {
-                        $.each(json.tipos_archivos_tecnicos, function (key, archivo_permitido) {
-                            $("#archivos_permitidos").append('<option value="' + archivo_permitido + '" >' + archivo_permitido + '</option>');
+                    //Cargo el select de los tipos eventos
+                    $('#tipo_evento').find('option').remove();
+                    $("#tipo_evento").append('<option value="">:: Seleccionar ::</option>');
+                    if (json.tipos_eventos.length > 0) {
+                        $.each(json.tipos_eventos, function (key, tipo_evento) {
+                            var publico = "";
+                            if (tipo_evento.publico)
+                            {
+                                publico = '(Público)';
+                            }
+                            $("#tipo_evento").append('<option title="' + tipo_evento.periodo + '" value="' + tipo_evento.id + '" >' + tipo_evento.nombre + ' ' + publico + '</option>');
                         });
                     }
-
-                    //Cargo el select de tamaños permitidos                                            
-                    $('#tamano_permitido').find('option').remove();
-                    $("#tamano_permitido").append('<option value="">:: Seleccionar ::</option>');
-                    if (json.tamanos_permitidos.length > 0) {
-                        $.each(json.tamanos_permitidos, function (key, tamano_permitido) {
-                            $("#tamano_permitido").append('<option value="' + tamano_permitido + '" >' + tamano_permitido + '</option>');
-                        });
-                    }
-
 
                     //Cargo el formulario con los datos
-                    $('#form_nuevo_documento').loadJSON(json.convocatoriadocumento);
-                    $("#requisito option[value='" + json.convocatoriadocumento.requisito + "']").prop('selected', true);
-                    $("#archivos_permitidos option:selected").removeAttr("selected");
-                    $("#archivos_permitidos option:selected").prop("selected", false);
-                    $.each(JSON.parse(json.convocatoriadocumento.archivos_permitidos), function (i, e) {
-                        $("#archivos_permitidos option[value='" + e + "']").prop("selected", true);
-                    });
-                    $("#tamano_permitido option[value='" + json.convocatoriadocumento.tamano_permitido + "']").prop('selected', true);
-                    $("#subsanable option[value='" + json.convocatoriadocumento.subsanable + "']").prop('selected', true);
-                    $("#obligatorio option[value='" + json.convocatoriadocumento.obligatorio + "']").prop('selected', true);                    
-                    CKEDITOR.instances.descripcion.setData(json.convocatoriadocumento.descripcion);
-                    $("#id_registro").val(json.convocatoriadocumento.id);
+                    $('#form_nuevo_cronograma').loadJSON(json.convocatoriacronograma);                    
+                    CKEDITOR.instances.descripcion.setData(json.convocatoriacronograma.descripcion);
+                    $("#id_registro").val(json.convocatoriacronograma.id);
 
                 }
             }
@@ -518,3 +477,5 @@ function acciones_categoria(token_actual)
 
 
 }
+
+        

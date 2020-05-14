@@ -10,7 +10,7 @@ $(document).ready(function () {
     {
 
         //Verifica si el token actual tiene acceso de lectura
-        permiso_lectura(token_actual, "Convocatorias");
+        permiso_lectura(token_actual, "Convocatoriaspublicas");
 
         //Realizo la peticion para cargar el formulario
         if ($("#id").val() != "") {
@@ -37,7 +37,7 @@ $(document).ready(function () {
             $.ajax({
                 type: 'GET',
                 data: {"token": token_actual.token, "id": $("#id").attr('value'), "tipo_requisito": "Tecnicos"},
-                url: url_pv + 'Convocatorias/search/'
+                url: url_pv + 'Convocatoriaspublicas/search/'
             }).done(function (data) {
                 if (data == 'error_metodo')
                 {
@@ -59,7 +59,7 @@ $(document).ready(function () {
                             if (typeof json.convocatoria.id === 'number') {
 
                                 //Agrego url para retornar
-                                $(".regresar").attr("onclick", "location.href='update.html?id=" + $("#id").attr('value') + "'");
+                                $(".regresar").attr("onclick", "location.href='update_publicas.html?id=" + $("#id").attr('value') + "'");
 
                                 //Limpio select de categorias
                                 $('#convocatoria').find('option').remove();
@@ -80,16 +80,7 @@ $(document).ready(function () {
                                 }
                                 
                                 //Asigno la modalidad con el fin de determinar si es para jurados
-                                $("#modalidad").attr('value', json.convocatoria.modalidad);
-                                
-                                //Si la convocatoria fue publicada o cancelada
-                                if(json.convocatoria.estado==5 || json.convocatoria.estado==32){
-                                    $("#form_validator input,select,button[type=submit],textarea").attr("disabled","disabled");   
-                                    $("#table_cronogramas button,input,select,button[type=submit],textarea").attr("disabled","disabled");   
-                                    $(".input-sm").css("display","none");                                       
-                                    $(".paginate_button").css("display","none");                                                                           
-                                    CKEDITOR.instances.descripcion.config.readOnly = true;                                    
-                                }
+                                $("#modalidad").attr('value', json.convocatoria.modalidad);                                                                
                                 
                             }
                         }
@@ -233,7 +224,7 @@ function validator_form(token_actual) {
             $.ajax({
                 type: 'POST',
                 url: url_pv + 'Convocatoriasdocumentos/new',
-                data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
+                data: $.param(values) + "&modulo=Convocatoriaspublicas&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
             }).done(function (result) {
 
                 if (result == 'error')
@@ -270,7 +261,7 @@ function validator_form(token_actual) {
             $.ajax({
                 type: 'PUT',
                 url: url_pv + 'Convocatoriasdocumentos/edit/' + $("#id_registro").attr('value'),
-                data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
+                data: $.param(values) + "&modulo=Convocatoriaspublicas&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
             }).done(function (result) {
                 if (result == 'error')
                 {
@@ -376,7 +367,7 @@ function cargar_tabla(token_actual)
 function activar_registro(id, token_actual) {
     $.ajax({
         type: 'DELETE',
-        data: {"token": token_actual, "modulo": "Convocatorias"},
+        data: {"token": token_actual, "modulo": "Convocatoriaspublicas"},
         url: url_pv + 'Convocatoriasrecursos/delete/' + id
     }).done(function (data) {
         if (data == 'Si' || data == 'No')
@@ -422,7 +413,7 @@ function acciones_categoria(token_actual)
         //Peticion para inactivar el evento
         $.ajax({
             type: 'DELETE',
-            data: {"token": token_actual.token, "modulo": "Convocatorias", "active": active},
+            data: {"token": token_actual.token, "modulo": "Convocatoriaspublicas", "active": active},
             url: url_pv + 'Convocatoriasdocumentos/delete/' + $(this).attr("title")
         }).done(function (data) {
             if (data == 'Si' || data == 'No')

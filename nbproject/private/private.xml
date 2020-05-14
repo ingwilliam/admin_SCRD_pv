@@ -5,6 +5,7 @@
         <group>
             <file>file:/var/www/html/admin_SCRD_pv/pages/convocatorias/list_publicas.js</file>
             <file>file:/var/www/html/admin_SCRD_pv/pages/convocatorias/update_publicas.js</file>
+            <file>file:/var/www/html/admin_SCRD_pv/pages/convocatorias/update.html</file>
             <file>file:/var/www/html/admin_SCRD_pv/pages/convocatorias/update.js</file>
             <file>file:/var/www/html/admin_SCRD_pv/pages/convocatorias/update_publicas.html</file>
             <file>file:/var/www/html/admin_SCRD_pv/pages/administracionpropuestas/validar_propuestas.html</file>

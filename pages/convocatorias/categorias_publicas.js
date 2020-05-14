@@ -11,7 +11,7 @@ $(document).ready(function () {
     {
 
         //Verifica si el token actual tiene acceso de lectura
-        permiso_lectura(token_actual, "Convocatorias");
+        permiso_lectura(token_actual, "Convocatoriaspublicas");
 
         //Realizo la peticion para cargar el formulario
         if ($("#id").val() != "") {
@@ -26,14 +26,6 @@ $(document).ready(function () {
             CKEDITOR.replace('descripcion');
             CKEDITOR.replace('descripcion_cp');
             
-            //Limpio el formulario de las categorias
-            $('#nueva_convocatoria').on('hidden.bs.modal', function () {
-                CKEDITOR.instances.nuevo_descripcion.setData('');
-                $("#nuevo_nombre").val("");
-                $("#nuevo_orden").val("");
-                $("#nuevo_seudonimo option[value='false']").prop("selected", true);
-            });
-
             $('#editar_convocatoria').on('hidden.bs.modal', function () {
                 CKEDITOR.instances.nuevo_descripcion.setData('');
                 $("#nuevo_nombre").val("");
@@ -61,7 +53,7 @@ $(document).ready(function () {
             $.ajax({
                 type: 'GET',
                 data: {"token": token_actual.token, "id": $("#id").attr('value')},
-                url: url_pv + 'Convocatorias/search/'
+                url: url_pv + 'Convocatoriaspublicas/search/'
             }).done(function (data) {
                 if (data == 'error_metodo')
                 {
@@ -82,7 +74,7 @@ $(document).ready(function () {
 
                             if (typeof json.convocatoria.id === 'number') {
 
-                                $(".regresar").attr("onclick", "location.href='update.html?id=" + $("#id").attr('value') + "'");
+                                $(".regresar").attr("onclick", "location.href='update_publicas.html?id=" + $("#id").attr('value') + "'");
 
                                 //Valido si la convocatoria tiene categorias
                                 if (json.convocatoria.tiene_categorias == false)
@@ -94,27 +86,7 @@ $(document).ready(function () {
                                 //Valido si la convocatoria tiene categorias
                                 if (json.convocatoria.diferentes_categorias == false)
                                 {
-                                    $(".diferentes_requisitos").css("display", "none");
-                                    $(".diferentes_requisitos_disable").attr("disabled", "disabled");
-                                }
-                                
-                                //Si la convocatoria fue publicada o cancelada
-                                if(json.convocatoria.estado==5 || json.convocatoria.estado==32){
-                                    $("#form_validator input,select,button[type=submit],textarea").attr("disabled","disabled");   
-                                    $("#table_categorias button,input,select,button[type=submit],textarea").attr("disabled","disabled");   
-                                    $(".input-sm").css("display","none");                                       
-                                    $(".paginate_button").css("display","none");                                       
-                                    CKEDITOR.instances.nuevo_descripcion.config.readOnly = true;
-                                    CKEDITOR.instances.descripcion.config.readOnly = true;
-                                    CKEDITOR.instances.descripcion_cp.config.readOnly = true;
-                                    
-                                    if (json.convocatoria.diferentes_categorias == true)
-                                    {
-                                        $(".btn_categoria").removeAttr("disabled");
-                                        $(".validar_jurado").removeAttr("disabled");
-                                        $("#btn_perfiles_participantes").attr("disabled","disabled");
-                                    }
-                                    
+                                    $(".diferentes_requisitos").css("display", "none");                                    
                                 }
                                 
                             }
@@ -150,7 +122,7 @@ $(document).ready(function () {
             if ($("#id_cp").val() != "") {
                 //Realizo la peticion con el fin de editar el registro del perfil de la convocatoria
                 
-                var values_perfil = {active:"TRUE", descripcion_perfil:CKEDITOR.instances.descripcion_cp.getData(), modulo:"Convocatorias", token:token_actual.token}; 
+                var values_perfil = {active:"TRUE", descripcion_perfil:CKEDITOR.instances.descripcion_cp.getData(), modulo:"Convocatoriaspublicas", token:token_actual.token}; 
                 
                 $.ajax({
                     type: 'PUT',
@@ -201,7 +173,7 @@ $(document).ready(function () {
                     $.ajax({
                         type: 'POST',
                         url: url_pv + 'Convocatoriasparticipantes/new/',
-                        data: "active=TRUE&descripcion_perfil=" + CKEDITOR.instances.descripcion_cp.getData() + "&convocatoria=" + $("#id_categoria").val() + "&tipo_participante=" + $("#id_tipo_participante").val() + "&modulo=Convocatorias&token=" + token_actual.token
+                        data: "active=TRUE&descripcion_perfil=" + CKEDITOR.instances.descripcion_cp.getData() + "&convocatoria=" + $("#id_categoria").val() + "&tipo_participante=" + $("#id_tipo_participante").val() + "&modulo=Convocatoriaspublicas&token=" + token_actual.token
                     }).done(function (result) {
 
                         if (result == 'error')
@@ -255,78 +227,6 @@ $(document).ready(function () {
 });
 
 function validator_form(token_actual) {
-    //Validar el formulario
-    $('.form_nuevo_convocatoria').bootstrapValidator({
-        feedbackIcons: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-            nombre: {
-                validators: {
-                    notEmpty: {message: 'El nombre de la convocatoria es requerido'}
-                }
-            },
-            orden: {
-                validators: {
-                    notEmpty: {message: 'El orden es requerido'},
-                    numeric: {message: 'Debe ingresar solo numeros'}
-                }
-            },
-        }
-    }).on('success.form.bv', function (e) {
-        // Prevent form submission
-        e.preventDefault();
-        // Get the form instance
-        var $form = $(e.target);
-
-        // Get the BootstrapValidator instance
-        var bv = $form.data('bootstrapValidator');
-
-        var values=$form.serializeArray();        
-        
-        values.find(input => input.name == 'descripcion').value = CKEDITOR.instances.nuevo_descripcion.getData();
-
-
-        //Se realiza la peticion con el fin de guardar el registro actual
-        $.ajax({
-            type: 'POST',
-            url: url_pv + 'Convocatorias/new_categoria',
-            data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token
-        }).done(function (result) {
-
-            if (result == 'error')
-            {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-            } else
-            {
-                if (result == 'acceso_denegado')
-                {
-                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                } else
-                {
-                    if (isNaN(result)) {
-                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                    } else
-                    {
-                        notify("success", "ok", "Convocatorias:", "Se creó la categoría con éxito.");
-                        //Cargar datos de la tabla de categorias
-                        cargar_tabla(token_actual);
-                    }
-                }
-            }
-
-        });
-
-        $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
-        bv.resetForm();        
-        CKEDITOR.instances.nuevo_descripcion.setData('');
-        $("#nuevo_nombre").val("");
-        $("#nuevo_orden").val("");
-        $("#nuevo_seudonimo option[value='false']").prop("selected", true);
-    });
-
     //Validar el formulario de editar la categoria
     $('.form_edit_convocatoria').bootstrapValidator({
         feedbackIcons: {
@@ -380,8 +280,8 @@ function validator_form(token_actual) {
         //Se realiza la peticion con el fin de guardar el registro actual
         $.ajax({
             type: 'PUT',
-            url: url_pv + 'Convocatorias/edit_categoria/' + $("#id").attr('value'),
-            data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token
+            url: url_pv + 'Convocatoriaspublicas/edit_categoria/' + $("#id").attr('value'),
+            data: $.param(values) + "&modulo=Convocatoriaspublicas&token=" + token_actual.token
         }).done(function (result) {
 
             if (result == 'error')
@@ -389,18 +289,24 @@ function validator_form(token_actual) {
                 notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
-                if (result == 'acceso_denegado')
+                if (result == 'error_token')
                 {
-                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                    location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                 } else
                 {
-                    if (isNaN(result)) {
-                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                    if (result == 'acceso_denegado')
+                    {
+                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                     } else
                     {
-                        notify("success", "ok", "Convocatorias:", "Se edito la categoría con éxito.");
-                        //Cargar datos de la tabla de categorias
-                        cargar_tabla(token_actual);
+                        if (isNaN(result)) {
+                            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                        } else
+                        {
+                            notify("success", "ok", "Convocatorias:", "Se edito la categoría con éxito.");
+                            //Cargar datos de la tabla de categorias
+                            cargar_tabla(token_actual);
+                        }
                     }
                 }
             }
@@ -444,7 +350,7 @@ function validator_form(token_actual) {
             $.ajax({
                 type: 'POST',
                 url: url_pv + 'Convocatoriasrecursos/new/',
-                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria=" + $("#id_categoria").attr('value')
+                data: $form.serialize() + "&modulo=Convocatoriaspublicas&token=" + token_actual.token + "&convocatoria=" + $("#id_categoria").attr('value')
             }).done(function (result) {
 
                 if (result == 'error')
@@ -473,7 +379,7 @@ function validator_form(token_actual) {
             $.ajax({
                 type: 'PUT',
                 url: url_pv + 'Convocatoriasrecursos/edit/' + $("#id_bolsa").attr('value'),
-                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token
+                data: $form.serialize() + "&modulo=Convocatoriaspublicas&token=" + token_actual.token
             }).done(function (result) {
                 if (result == 'error')
                 {
@@ -550,7 +456,7 @@ function validator_form(token_actual) {
             $.ajax({
                 type: 'POST',
                 url: url_pv + 'Convocatoriasrecursos/new/',
-                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria=" + $("#id_categoria").attr('value')
+                data: $form.serialize() + "&modulo=Convocatoriaspublicas&token=" + token_actual.token + "&convocatoria=" + $("#id_categoria").attr('value')
             }).done(function (result) {
 
                 if (result == 'error')
@@ -585,7 +491,7 @@ function validator_form(token_actual) {
             $.ajax({
                 type: 'PUT',
                 url: url_pv + 'Convocatoriasrecursos/edit/' + $("#id_especie").attr('value'),
-                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token
+                data: $form.serialize() + "&modulo=Convocatoriaspublicas&token=" + token_actual.token
             }).done(function (result) {
                 if (result == 'error')
                 {
@@ -664,7 +570,7 @@ function validator_form(token_actual) {
             $.ajax({
                 type: 'POST',
                 url: url_pv + 'Convocatoriasparticipantes/new/',
-                data: $form.serialize() + "&tipo_participante="+$("#tipo_participante").val()+"&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria=" + $("#id_categoria").attr('value') + "&cantidad_perfil_jurado=" + $("#cantidad_perfil_jurado").val()
+                data: $form.serialize() + "&tipo_participante="+$("#tipo_participante").val()+"&modulo=Convocatoriaspublicas&token=" + token_actual.token + "&convocatoria=" + $("#id_categoria").attr('value') + "&cantidad_perfil_jurado=" + $("#cantidad_perfil_jurado").val()
             }).done(function (result) {
 
                 if (result == 'error')
@@ -704,7 +610,7 @@ function validator_form(token_actual) {
             $.ajax({
                 type: 'PUT',
                 url: url_pv + 'Convocatoriasparticipantes/edit/' + $("#id_cpj").attr('value'),
-                data: $form.serialize() + "&modulo=Convocatorias&token=" + token_actual.token
+                data: $form.serialize() + "&modulo=Convocatoriaspublicas&token=" + token_actual.token
             }).done(function (result) {
                 if (result == 'error')
                 {
@@ -763,7 +669,7 @@ function cargar_tabla(token_actual)
                 { orderable: false, targets: '_all' }
         ],
         "ajax": {
-            url: url_pv + "Convocatorias/all",
+            url: url_pv + "Convocatoriaspublicas/all",
             data: {"token": token_actual.token, "convocatoria": $("#id").attr('value')}
         },
         "drawCallback": function (settings) {
@@ -827,7 +733,7 @@ function acciones_categoria(token_actual)
         $.ajax({
             type: 'GET',
             data: {"token": token_actual.token, "id": $(this).attr("title")},
-            url: url_pv + 'Convocatorias/search/'
+            url: url_pv + 'Convocatoriaspublicas/search/'
         }).done(function (data) {
             if (data == 'error_metodo')
             {
@@ -852,9 +758,9 @@ function acciones_categoria(token_actual)
                                 checked = 'checked="checked"';
                             }
 
-                            $("#quienes_pueden_participar").append('<label class="checkbox-inline"><input class="tipo_participante tipo_participante_' + tipo_participante.id + '" value="' + tipo_participante.id + '" type="checkbox" ' + checked + '>' + tipo_participante.nombre + '</label>');
+                            $("#quienes_pueden_participar").append('<label class="checkbox-inline"><input class="tipo_participante tipo_participante_' + tipo_participante.id + '" value="' + tipo_participante.id + '" type="checkbox" ' + checked + ' disabled="disabled">' + tipo_participante.nombre + '</label>');
 
-                            $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + tipo_participante.id_cp + '" title="' + tipo_participante.id + '" dir="' + tipo_participante.nombre + '" translate="' + tipo_participante.descripcion_cp + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                            $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + tipo_participante.id_cp + '" title="' + tipo_participante.id + '" dir="' + tipo_participante.nombre + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                         });
                     }
 
@@ -902,7 +808,35 @@ function acciones_categoria(token_actual)
                         $("#id_cp").val($(this).attr("lang"));
                         $("#id_tipo_participante").val($(this).attr("title"));
                         $("#tipo_participante_cp").html($(this).attr("dir"));
-                        CKEDITOR.instances.descripcion_cp.setData($(this).attr("translate"));                                                                        
+                        
+                        //Se carga el contenido html debido a que estaba presentando problemas al cargarlo desde una propiedad html
+                        $.ajax({
+                            type: 'GET',
+                            data: {"token": token_actual.token},
+                            url: url_pv + 'Convocatoriasparticipantes/search/'+$(this).attr("lang")
+                        }).done(function (data) {
+                            if (data == 'error_metodo')
+                            {
+                                notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                            } else
+                            {
+                                if (data == 'error_token')
+                                {
+                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                } else
+                                {
+                                    if (data == 'error')
+                                    {
+                                        notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+                                        var json = JSON.parse(data);                                        
+                                        CKEDITOR.instances.descripcion_cp.setData(json.descripcion_perfil);
+                                    }                                    
+                                }
+                            }
+                        });
+                        
                     });
 
                     //Creamos los participantes en la convocatoria
@@ -913,7 +847,7 @@ function acciones_categoria(token_actual)
                             $.ajax({
                                 type: 'POST',
                                 url: url_pv + 'Convocatoriasparticipantes/new/',
-                                data: "convocatoria=" + $("#id_categoria").val() + "&tipo_participante=" + $(this).val() + "&modulo=Convocatorias&token=" + token_actual.token
+                                data: "convocatoria=" + $("#id_categoria").val() + "&tipo_participante=" + $(this).val() + "&modulo=Convocatoriaspublicas&token=" + token_actual.token
                             }).done(function (result) {
 
                                 if (result == 'error')
@@ -948,7 +882,7 @@ function acciones_categoria(token_actual)
                             //Se realiza la peticion para desactivar la convocatoria participante
                             $.ajax({
                                 type: 'DELETE',
-                                data: {"token": token_actual.token, "modulo": "Convocatorias", "convocatoria": $("#id_categoria").val(), "tipo_participante": $(this).val()},
+                                data: {"token": token_actual.token, "modulo": "Convocatoriaspublicas", "convocatoria": $("#id_categoria").val(), "tipo_participante": $(this).val()},
                                 url: url_pv + 'Convocatoriasparticipantes/delete'
                             }).done(function (data) {
                                 if (data == 'Si' || data == 'No')
@@ -958,7 +892,7 @@ function acciones_categoria(token_actual)
                                         notify("info", "ok", "Convocatorias:", "Se activó el perfil del participante con éxito.");
                                     } else
                                     {
-                                        notify("info", "ok", "Convocatorias:", "Se eliminó el perfil del participante con éxito.");
+                                        notify("info", "ok", "Convocatorias:", "Se inactivo el perfil del participante con éxito.");
                                     }
                                 } else
                                 {
@@ -1096,8 +1030,8 @@ function acciones_categoria(token_actual)
 
         $.ajax({
             type: 'DELETE',
-            data: {"token": token_actual.token, "modulo": "Convocatorias", "active": active},
-            url: url_pv + 'Convocatorias/delete_categoria/' + $(this).attr("title")
+            data: {"token": token_actual.token, "modulo": "Convocatoriaspublicas", "active": active},
+            url: url_pv + 'Convocatoriaspublicas/delete_categoria/' + $(this).attr("title")
         }).done(function (data) {
             if (data == 'ok')
             {
@@ -1106,7 +1040,7 @@ function acciones_categoria(token_actual)
                     notify("info", "ok", "Convocatorias:", "Se activó la categoría con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se eliminó el categoría con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se inactivo la categoría con éxito.");
                 }
             } else
             {
@@ -1170,7 +1104,7 @@ function cargar_tabla_registros(token_actual, tbody, tipo_recurso) {
 function activar_registro(id, token_actual) {
     $.ajax({
         type: 'DELETE',
-        data: {"token": token_actual, "modulo": "Convocatorias"},
+        data: {"token": token_actual, "modulo": "Convocatoriaspublicas"},
         url: url_pv + 'Convocatoriasrecursos/delete/' + id
     }).done(function (data) {
         if (data == 'Si' || data == 'No')
@@ -1206,7 +1140,7 @@ function activar_participante(tipo_participante, convocatoria, token_actual) {
     //Se realiza la peticion para desactivar la convocatoria participante
     $.ajax({
         type: 'DELETE',
-        data: {"token": token_actual, "modulo": "Convocatorias", "convocatoria": convocatoria, "tipo_participante": tipo_participante},
+        data: {"token": token_actual, "modulo": "Convocatoriaspublicas", "convocatoria": convocatoria, "tipo_participante": tipo_participante},
         url: url_pv + 'Convocatoriasparticipantes/delete'
     }).done(function (data) {
         if (data == 'Si' || data == 'No')
@@ -1218,7 +1152,7 @@ function activar_participante(tipo_participante, convocatoria, token_actual) {
                 $(".tipo_participante_" + tipo_participante).prop("checked", true);
             } else
             {
-                notify("info", "ok", "Convocatorias:", "Se eliminó el perfil del participante con éxito.");
+                notify("info", "ok", "Convocatorias:", "Se inactivo el perfil del participante con éxito.");
                 $(".tipo_participante_" + tipo_participante).attr('checked', false);
                 $(".tipo_participante_" + tipo_participante).prop("checked", false);
             }
@@ -1261,7 +1195,7 @@ function cargar_tabla_perfiles_participante(token_actual) {
                         {
                             checked = "checked='checked'";
                         }
-                        $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + tipo_participante.id_cp + '" title="' + tipo_participante.id + '" dir="' + tipo_participante.nombre + '" translate="' + tipo_participante.descripcion_cp + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                        $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + tipo_participante.id_cp + '" title="' + tipo_participante.id + '" dir="' + tipo_participante.nombre + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                     });
 
                     //para habilitar formulario de convocatoria participante
@@ -1269,7 +1203,35 @@ function cargar_tabla_perfiles_participante(token_actual) {
                         $("#id_cp").val($(this).attr("lang"));
                         $("#id_tipo_participante").val($(this).attr("title"));
                         $("#tipo_participante_cp").html($(this).attr("dir"));
-                        CKEDITOR.instances.descripcion_cp.setData($(this).attr("translate"));                                                                                                                        
+                        
+                        //Se carga el contenido html debido a que estaba presentando problemas al cargarlo desde una propiedad html
+                        $.ajax({
+                            type: 'GET',
+                            data: {"token": token_actual.token},
+                            url: url_pv + 'Convocatoriasparticipantes/search/'+$(this).attr("lang")
+                        }).done(function (data) {
+                            if (data == 'error_metodo')
+                            {
+                                notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                            } else
+                            {
+                                if (data == 'error_token')
+                                {
+                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                } else
+                                {
+                                    if (data == 'error')
+                                    {
+                                        notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+                                        var json = JSON.parse(data);                                        
+                                        CKEDITOR.instances.descripcion_cp.setData(json.descripcion_perfil);
+                                    }                                    
+                                }
+                            }
+                        });
+                        
                     });
                 }
             }
@@ -1347,7 +1309,7 @@ function activar_perfil_jurado(id, convocatoria, token_actual) {
     //Se realiza la peticion para desactivar la convocatoria participante
     $.ajax({
         type: 'DELETE',
-        data: {"token": token_actual, "modulo": "Convocatorias", "convocatoria": convocatoria},
+        data: {"token": token_actual, "modulo": "Convocatoriaspublicas", "convocatoria": convocatoria},
         url: url_pv + 'Convocatoriasparticipantes/delete_perfil_jurado/' + id
     }).done(function (data) {
         if (data == 'error_token')
@@ -1362,7 +1324,7 @@ function activar_perfil_jurado(id, convocatoria, token_actual) {
                     notify("info", "ok", "Convocatorias:", "Se activó el perfil del jurado con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se eliminó el perfil del jurado con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se inactivo el perfil del jurado con éxito.");
                 }
             } else
             {
