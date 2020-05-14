@@ -584,7 +584,7 @@ $(document).ready(function () {
                             //Esta condicion es para que no muestre los perfiles en la tabla, con el fin de que l unico ingreso sea desde los check
                             if(tipo_participante.active!=null){
                                 if(tipo_participante.active==true){
-                                    $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + tipo_participante.id_cp + '" title="' + tipo_participante.id + '" dir="' + tipo_participante.nombre + '" translate="' + tipo_participante.descripcion_cp + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                    $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + tipo_participante.id_cp + '" title="' + tipo_participante.id + '" dir="' + tipo_participante.nombre + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                                 }
                             }                                                        
                                                         
@@ -632,7 +632,34 @@ $(document).ready(function () {
                         $("#id_cp").val($(this).attr("lang"));
                         $("#id_tipo_participante").val($(this).attr("title"));
                         $("#tipo_participante_cp").html($(this).attr("dir"));
-                        CKEDITOR.instances.descripcion_cp.setData($(this).attr("translate"));
+                        
+                        //Se carga el contenido html debido a que estaba presentando problemas al cargarlo desde una propiedad html
+                        $.ajax({
+                            type: 'GET',
+                            data: {"token": token_actual.token},
+                            url: url_pv + 'Convocatoriasparticipantes/search/'+$(this).attr("lang")
+                        }).done(function (data) {
+                            if (data == 'error_metodo')
+                            {
+                                notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                            } else
+                            {
+                                if (data == 'error_token')
+                                {
+                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                } else
+                                {
+                                    if (data == 'error')
+                                    {
+                                        notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+                                        var json = JSON.parse(data);                                        
+                                        CKEDITOR.instances.descripcion_cp.setData(json.descripcion_perfil);
+                                    }                                    
+                                }
+                            }
+                        });                                                                                                
                     });
 
                     //Creamos los participantes en la convocatoria
@@ -1199,7 +1226,7 @@ function cargar_tabla_perfiles_participante(token_actual) {
                         //Esta condicion es para que no muestre los perfiles en la tabla, con el fin de que l unico ingreso sea desde los check
                         if(tipo_participante.active!=null){
                             if(tipo_participante.active==true){
-                                $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + tipo_participante.id_cp + '" title="' + tipo_participante.id + '" dir="' + tipo_participante.nombre + '" translate="' + tipo_participante.descripcion_cp + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
+                                $("#tbody_tipos_participantes").append('<tr><td>' + tipo_participante.nombre + '</td><td><button type="button" class="btn btn-warning btn-update-convocatoria-participante" lang="' + tipo_participante.id_cp + '" title="' + tipo_participante.id + '" dir="' + tipo_participante.nombre + '"><span class="glyphicon glyphicon-edit"></span></button></td></tr>');
                             }
                         }
                     });
@@ -1209,7 +1236,35 @@ function cargar_tabla_perfiles_participante(token_actual) {
                         $("#id_cp").val($(this).attr("lang"));
                         $("#id_tipo_participante").val($(this).attr("title"));
                         $("#tipo_participante_cp").html($(this).attr("dir"));
-                        CKEDITOR.instances.descripcion_cp.setData($(this).attr("translate"));                        
+                        
+                        //Se carga el contenido html debido a que estaba presentando problemas al cargarlo desde una propiedad html
+                        $.ajax({
+                            type: 'GET',
+                            data: {"token": token_actual.token},
+                            url: url_pv + 'Convocatoriasparticipantes/search/'+$(this).attr("lang")
+                        }).done(function (data) {
+                            if (data == 'error_metodo')
+                            {
+                                notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                            } else
+                            {
+                                if (data == 'error_token')
+                                {
+                                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                } else
+                                {
+                                    if (data == 'error')
+                                    {
+                                        notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+                                        var json = JSON.parse(data);                                        
+                                        CKEDITOR.instances.descripcion_cp.setData(json.descripcion_perfil);
+                                    }                                    
+                                }
+                            }
+                        });
+                        
                     });
                 }
             }

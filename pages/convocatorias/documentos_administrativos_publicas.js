@@ -10,7 +10,7 @@ $(document).ready(function () {
     {
 
         //Verifica si el token actual tiene acceso de lectura
-        permiso_lectura(token_actual, "Convocatorias");
+        permiso_lectura(token_actual, "Convocatoriaspublicas");
 
         //Realizo la peticion para cargar el formulario
         if ($("#id").val() != "") {
@@ -24,7 +24,7 @@ $(document).ready(function () {
             CKEDITOR.replace('descripcion');
 
             //Limpio el formulario de las categorias
-            $('#nuevo_evento').on('hidden.bs.modal', function () {
+            $('#nuevo_evento').on('hidden.bs.modal', function () {                
                 CKEDITOR.instances.descripcion.setData('');
                 $("#orden").val("");
                 $("#requisto option[value='']").prop("selected", true);
@@ -36,8 +36,8 @@ $(document).ready(function () {
             //Realizo la peticion para cargar el formulario
             $.ajax({
                 type: 'GET',
-                data: {"token": token_actual.token, "id": $("#id").attr('value'), "tipo_requisito": "Tecnicos"},
-                url: url_pv + 'Convocatorias/search/'
+                data: {"token": token_actual.token, "id": $("#id").attr('value'), "tipo_requisito": "Administrativos"},
+                url: url_pv + 'Convocatoriaspublicas/search/'
             }).done(function (data) {
                 if (data == 'error_metodo')
                 {
@@ -59,7 +59,7 @@ $(document).ready(function () {
                             if (typeof json.convocatoria.id === 'number') {
 
                                 //Agrego url para retornar
-                                $(".regresar").attr("onclick", "location.href='update.html?id=" + $("#id").attr('value') + "'");
+                                $(".regresar").attr("onclick", "location.href='update_publicas.html?id=" + $("#id").attr('value') + "'");
 
                                 //Limpio select de categorias
                                 $('#convocatoria').find('option').remove();
@@ -81,16 +81,7 @@ $(document).ready(function () {
                                 
                                 //Asigno la modalidad con el fin de determinar si es para jurados
                                 $("#modalidad").attr('value', json.convocatoria.modalidad);
-                                
-                                //Si la convocatoria fue publicada o cancelada
-                                if(json.convocatoria.estado==5 || json.convocatoria.estado==32){
-                                    $("#form_validator input,select,button[type=submit],textarea").attr("disabled","disabled");   
-                                    $("#table_cronogramas button,input,select,button[type=submit],textarea").attr("disabled","disabled");   
-                                    $(".input-sm").css("display","none");                                       
-                                    $(".paginate_button").css("display","none");                                                                           
-                                    CKEDITOR.instances.descripcion.config.readOnly = true;                                    
-                                }
-                                
+                                                                
                             }
                         }
                     }
@@ -102,13 +93,13 @@ $(document).ready(function () {
 
             //Cargo el formulario, para crear o editar
             $("#cargar_formulario").click(function () {
-                var tipo_requisito="Tecnicos";
+                var tipo_requisito="Administrativos";
                 //Valido si la modalidad es de jurados
                 if($("#modalidad").val()==2)
                 {
-                    tipo_requisito="JuradosTecnicos";
-                }
-                //Realizo la peticion para cargar el formulario
+                    tipo_requisito="JuradosAdministrativos";
+                }                
+                //Realizo la peticion para cargar el formulario                                
                 $.ajax({
                     type: 'GET',
                     data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "id": $("#id_registro").attr('value'), "tipo_requisito": tipo_requisito},
@@ -136,6 +127,15 @@ $(document).ready(function () {
                                 if (json.requisitos.length > 0) {
                                     $.each(json.requisitos, function (key, requisito) {
                                         $("#requisito").append('<option value="' + requisito.id + '" >' + requisito.nombre + '</option>');
+                                    });
+                                }
+                                
+                                //Cargo el select de los etapas                                
+                                $('#etapa').find('option').remove();
+                                $("#etapa").append('<option value="">:: Seleccionar ::</option>');
+                                if (json.etapas.length > 0) {
+                                    $.each(json.etapas, function (key, etapa) {                                        
+                                        $("#etapa").append('<option value="' + etapa + '" >' + etapa + '</option>');
                                     });
                                 }
 
@@ -197,14 +197,9 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'El requisito es requerido'}
                 }
             },
-            tamano_permitido: {
+            etapa: {
                 validators: {
-                    notEmpty: {message: 'El tamaño máximo es requerido'}
-                }
-            },
-            archivos_permitidos: {
-                validators: {
-                    notEmpty: {message: 'Los tipos de archivos son requeridos'}
+                    notEmpty: {message: 'La etapa es requerida'}
                 }
             },
             orden: {
@@ -227,13 +222,12 @@ function validator_form(token_actual) {
         
         values.find(input => input.name == 'descripcion').value = CKEDITOR.instances.descripcion.getData();
 
-
         if ($("#id_registro").val().length < 1) {
             //Se realiza la peticion con el fin de guardar el registro actual
             $.ajax({
                 type: 'POST',
                 url: url_pv + 'Convocatoriasdocumentos/new',
-                data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
+                data: $.param(values) + "&modulo=Convocatoriaspublicas&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
             }).done(function (result) {
 
                 if (result == 'error')
@@ -255,7 +249,7 @@ function validator_form(token_actual) {
                                 notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                             } else
                             {
-                                notify("success", "ok", "Convocatorias:", "Se creó la categoría con éxito.");
+                                notify("success", "ok", "Convocatorias:", "Se creó el documento administrativo con éxito.");
                                 //Cargar datos de la tabla de categorias
                                 cargar_tabla(token_actual);
                             }
@@ -270,7 +264,7 @@ function validator_form(token_actual) {
             $.ajax({
                 type: 'PUT',
                 url: url_pv + 'Convocatoriasdocumentos/edit/' + $("#id_registro").attr('value'),
-                data: $.param(values) + "&modulo=Convocatorias&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
+                data: $.param(values) + "&modulo=Convocatoriaspublicas&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
             }).done(function (result) {
                 if (result == 'error')
                 {
@@ -326,7 +320,7 @@ function cargar_tabla(token_actual)
         "lengthMenu": [20, 30, 40],
         "ajax": {
             url: url_pv + "Convocatoriasdocumentos/all",
-            data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "tipo_requisito": "Tecnicos"}
+            data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "tipo_requisito": "Administrativos"}
         },
         "drawCallback": function (settings) {
             $(".check_activar_t").attr("checked", "true");
@@ -376,7 +370,7 @@ function cargar_tabla(token_actual)
 function activar_registro(id, token_actual) {
     $.ajax({
         type: 'DELETE',
-        data: {"token": token_actual, "modulo": "Convocatorias"},
+        data: {"token": token_actual, "modulo": "Convocatoriaspublicas"},
         url: url_pv + 'Convocatoriasrecursos/delete/' + id
     }).done(function (data) {
         if (data == 'Si' || data == 'No')
@@ -422,7 +416,7 @@ function acciones_categoria(token_actual)
         //Peticion para inactivar el evento
         $.ajax({
             type: 'DELETE',
-            data: {"token": token_actual.token, "modulo": "Convocatorias", "active": active},
+            data: {"token": token_actual.token, "modulo": "Convocatoriaspublicas", "active": active},
             url: url_pv + 'Convocatoriasdocumentos/delete/' + $(this).attr("title")
         }).done(function (data) {
             if (data == 'Si' || data == 'No')
@@ -452,7 +446,7 @@ function acciones_categoria(token_actual)
         //Realizo la peticion para cargar el formulario
         $.ajax({
             type: 'GET',
-            data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "id": $(this).attr("title"), "tipo_requisito": "Tecnicos"},
+            data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "id": $(this).attr("title"), "tipo_requisito": "Administrativos"},
             url: url_pv + 'Convocatoriasdocumentos/search/'
         }).done(function (data) {
             if (data == 'error_metodo')
@@ -492,8 +486,16 @@ function acciones_categoria(token_actual)
                             $("#tamano_permitido").append('<option value="' + tamano_permitido + '" >' + tamano_permitido + '</option>');
                         });
                     }
-
-
+                    
+                    //Cargo el select de los etapas                                
+                    $('#etapa').find('option').remove();
+                    $("#etapa").append('<option value="">:: Seleccionar ::</option>');
+                    if (json.etapas.length > 0) {
+                        $.each(json.etapas, function (key, etapa) {                                        
+                            $("#etapa").append('<option value="' + etapa + '" >' + etapa + '</option>');
+                        });
+                    }
+                    
                     //Cargo el formulario con los datos
                     $('#form_nuevo_documento').loadJSON(json.convocatoriadocumento);
                     $("#requisito option[value='" + json.convocatoriadocumento.requisito + "']").prop('selected', true);
@@ -503,6 +505,7 @@ function acciones_categoria(token_actual)
                         $("#archivos_permitidos option[value='" + e + "']").prop("selected", true);
                     });
                     $("#tamano_permitido option[value='" + json.convocatoriadocumento.tamano_permitido + "']").prop('selected', true);
+                    $("#etapa option[value='" + json.convocatoriadocumento.etapa + "']").prop('selected', true);
                     $("#subsanable option[value='" + json.convocatoriadocumento.subsanable + "']").prop('selected', true);
                     $("#obligatorio option[value='" + json.convocatoriadocumento.obligatorio + "']").prop('selected', true);                    
                     CKEDITOR.instances.descripcion.setData(json.convocatoriadocumento.descripcion);
