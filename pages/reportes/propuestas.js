@@ -221,7 +221,7 @@ $(document).ready(function () {
                                         $("#reporte_propuestas_participantes").empty();
                                         $("#reporte_convocatorias_listado_contratistas").empty();
                                         $("#reporte_convocatorias_listado_no_inscritas").empty();
-                                        $("#reporte_convocatorias_listado_participantes").empty();
+                                        $("#reporte_convocatorias_listado_participantes").empty();                                                                                
                                         $(".fecha_actual").empty();
 
                                         var reporte_propuestas_estados = Morris.Bar({
@@ -272,6 +272,10 @@ $(document).ready(function () {
                                                     $("#reporte_convocatorias_listado_no_inscritas").html(json.reporte_convocatorias_listado_no_inscritas);
                                                     
                                                     $("#reporte_convocatorias_listado_participantes").html(json.reporte_convocatorias_listado_participantes);
+                                                    
+                                                    
+                                                    $("#reporte_planillas_evaluacion").html(json.reporte_planillas_evaluacion);
+                                                    
 
                                                     $('.reporte_convocatorias_listado_contratistas').click(function () {
                                                         var json = JSON.parse($(this).attr("rel"));
@@ -302,6 +306,18 @@ $(document).ready(function () {
                                                         });
 
                                                     });
+                                                    
+                                                    $('#btn_planillas').click(function () {
+                                                        var ronda = $("#ronda").val();
+                                                        if(ronda=="")
+                                                        {
+                                                            notify("danger", "remove", "Reportes:", "Debe seleccionar una ronda.");
+                                                        }
+                                                        else
+                                                        {                                                    
+                                                            window.open(url_pv_report+'reporte_planillas_evaluacion.php?ronda='+ronda, '_blank');
+                                                        }                                                
+                                                    }); 
 
                                                 }
                                             }
