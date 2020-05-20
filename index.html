@@ -37,7 +37,8 @@
         <link href="dist/libraries/bootstrap-notify-3.1.3/animate.css" rel="stylesheet" type="text/css"/>
         
         <link href="dist/css/main.css" rel="stylesheet" type="text/css"/>
-
+        
+        <link  rel="icon"   href="dist/img/scrd_logo.png" type="image/png" />
     </head>
 
     <body>
@@ -63,12 +64,12 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <input class="form-control" placeholder="E-mail" name="username" type="email" autofocus>
+                                                <input class="form-control" placeholder="Correo electrónico" id="username" name="username" type="email" autofocus>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <input class="form-control" placeholder="Contraseña" name="password" type="password" value="">
+                                                <input class="form-control" placeholder="Contraseña" id="password" name="password" type="password" value="">
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
@@ -131,41 +132,27 @@
                 //Verifico si el token exite en el cliente y verifico que el token este activo en el servidor
                 //Si el token no esta activo o se presenta un error se elimina la variable del session storage
                 var token = getLocalStorage(name_local_storage);
+                
                 if ((token != null) || (token != "") || (token != "undefined"))
-                {
-                    $.ajax({
-                        // En data puedes utilizar un objeto JSON, un array o un query string
+                {                    
+                    $.ajax({                        
                         data: {"token": token},
-                        //Cambiar a type: POST si necesario
-                        type: "POST",
-                        // URL a la que se enviará la solicitud Ajax
-                        url: url_pv + 'Session/verificar_token/',
-                    })
-                            .done(function (data, textStatus, jqXHR) {
-                                if (console && console.log) {
-                                    if (data == 'error_metodo')
-                                    {
-                                        notify("danger", "ok", "Login:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                                    } 
-                                    else
-                                    {
-                                        if (data == 'false')
-                                        {
-                                            removeLocalStorage(name_local_storage);
-                                        }
-                                    }
-                                }
-                            })
-                            .fail(function (jqXHR, textStatus, errorThrown) {
-                                if (console && console.log) {
-                                    notify("danger", "ok", "Login:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co " + textStatus);
-                                }
-                            });
-                            
+                        type: 'POST',
+                        url: url_pv + 'Session/verificar_token/'
+                    }).done(function (data) {
+                        if (data == 'error_metodo')
+                        {
+                            notify("danger", "ok", "Login:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                        } 
+                        else
+                        {
+                            if (data == 'false')
+                            {
+                                removeLocalStorage(name_local_storage);
+                            }
+                        }
+                    });
                 }
-
-                //Establesco la accion del formulario login
-                $('#form_validator').attr('action', url_pv + 'Session/iniciar_session/');
 
                 //Llamo la function para que valide el formulario de login
                 validator_form();
@@ -185,9 +172,9 @@
                     fields: {
                         username: {
                             validators: {
-                                notEmpty: {message: 'El email es requerido'},
+                                notEmpty: {message: 'El correo electrónico es requerido'},
                                 emailAddress: {
-                                    message: 'El email no es una dirección de correo electrónico válida'
+                                    message: 'El correo electrónico no es válido'
                                 }
                             }
                         },
@@ -207,52 +194,39 @@
                     // Get the BootstrapValidator instance
                     var bv = $form.data('bootstrapValidator');
 
-
                     $.ajax({
-                        // En data puedes utilizar un objeto JSON, un array o un query string
-                        data: $form.serialize(),
-                        //Cambiar a type: POST si necesario
-                        type: "POST",
-                        // URL a la que se enviará la solicitud Ajax
-                        url: $form.attr('action'),
-                    })
-                            .done(function (data, textStatus, jqXHR) {
-                                if (console && console.log) {
-                                    if (data == 'error_metodo')
-                                    {
-                                        notify("danger", "ok", "Login:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                                    } else
-                                    {
-                                        if (data == 'error_usuario')
-                                        {
-                                            notify("danger", "ok", "Login:", "El usuario no se encuentra registrado, por favor registrarse");
-                                        } else
-                                        {
-                                            if (data == 'error_clave')
-                                            {
-                                                notify("danger", "ok", "Login:", "El password no es el correcto");
-                                            } else
-                                            {
-                                                var json = JSON.parse(data);  
-                                                if (typeof json.usuario !== 'undefined') {
-                                                    setLocalStorage(name_local_storage,data);
-                                                    location.href='pages/index/index.html?msg=Bienvenido(a) '+json.usuario+' al Sistema de Convocatorias&msg_tipo=success';
-                                                }
-                                                else
-                                                {
-                                                    notify("danger", "ok", "Login:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                                                }
-                                            }
-                                        }
+                        type: 'POST',
+                        data: {"username": $("#username").val(), "password": $("#password").val()},
+                        url: url_pv + 'Session/iniciar_session/'
+                    }).done(function (data) {
+                        if (data == 'error_metodo')
+                        {
+                            notify("danger", "ok", "Login:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                        } else
+                        {
+                            if (data == 'error_usuario')
+                            {
+                                notify("danger", "ok", "Login:", "El usuario no se encuentra registrado, por favor ingresar a Solicite su usuario.");
+                            } else
+                            {
+                                if (data == 'error_clave')
+                                {
+                                    notify("danger", "ok", "Login:", "La contraseña no es la correcta, si no la recuerda por favor ingresar a ¿Olvidó su contraseña?.");
+                                } else
+                                {
+                                    var json = JSON.parse(data);  
+                                    if (typeof json.usuario !== 'undefined') {
+                                        setLocalStorage(name_local_storage,data);
+                                        location.href='pages/index/index.html?msg=Bienvenido(a) '+json.usuario+' al Sistema de Convocatorias&msg_tipo=success';
                                     }
-
+                                    else
+                                    {
+                                        notify("danger", "ok", "Login:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                    }
                                 }
-                            })
-                            .fail(function (jqXHR, textStatus, errorThrown) {
-                                if (console && console.log) {
-                                    notify("danger", "ok", "Login:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co " + textStatus);
-                                }
-                            });
+                            }
+                        }
+                    });
 
                     //$form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
                     bv.resetForm();
