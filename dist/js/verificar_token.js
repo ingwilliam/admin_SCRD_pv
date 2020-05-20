@@ -1,3 +1,6 @@
+/*
+ * Se inactiva problemas con la verificacion del token
+ * 19 de mayo 2020
 $(document).ready(function () {
 
     //Validar si el navegador soporta localStorage, si no lo soporta lo envia directamente a la pagina de error
@@ -51,5 +54,4 @@ $(document).ready(function () {
         });
     }     
 });
-
-            
+*/      
