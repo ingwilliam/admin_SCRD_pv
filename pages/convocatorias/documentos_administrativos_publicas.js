@@ -263,7 +263,7 @@ function validator_form(token_actual) {
             //Realizo la peticion con el fin de editar el registro actual
             $.ajax({
                 type: 'PUT',
-                url: url_pv + 'Convocatoriasdocumentos/edit/' + $("#id_registro").attr('value'),
+                url: url_pv + 'Convocatoriasdocumentos/edit_publico/' + $("#id_registro").attr('value'),
                 data: $.param(values) + "&modulo=Convocatoriaspublicas&token=" + token_actual.token + "&convocatoria_padre_categoria=" + $("#id").attr('value')
             }).done(function (result) {
                 if (result == 'error')
