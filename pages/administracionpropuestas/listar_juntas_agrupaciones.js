@@ -23,7 +23,7 @@ $(document).ready(function () {
                 notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
-                if (data == 'error')
+                if (data == 'error_token')
                 {
                     location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                 } else
@@ -117,7 +117,8 @@ $(document).ready(function () {
                             {"data": "propuesta"},
                             {"data": "codigo"},
                             {"data": "participante"},
-                            {"data": "ver_reporte"}                            
+                            {"data": "ver_propuesta"},                                                        
+                            {"data": "ver_reporte"}                                                                                    
                         ]
                     });
 
@@ -220,6 +221,7 @@ $(document).ready(function () {
                                                         {"data": "propuesta"},
                                                         {"data": "codigo"},
                                                         {"data": "participante"},
+                                                        {"data": "ver_propuesta"},                                                        
                                                         {"data": "ver_reporte"}                                                        
                                                     ]
                                                 });
