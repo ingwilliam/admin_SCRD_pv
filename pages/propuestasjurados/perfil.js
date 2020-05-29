@@ -452,7 +452,7 @@ function validator_form(token_actual) {
             },
             numero_documento: {
                 validators: {
-                    notEmpty: {message: 'El número de documento de identificación es requerido'},
+                    notEmpty: {message: 'El número de documento de identificación es requerido'}
 //                    numeric: {message: 'Debe ingresar solo numeros'}
                 }
             },
