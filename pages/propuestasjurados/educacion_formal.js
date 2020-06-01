@@ -181,6 +181,7 @@
                     $("#nivel_educacion").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
                 });
             }
+            
             //Cargos el select de areasconocimientos
             $('#area_conocimiento').find('option').remove();
             $("#area_conocimiento").append('<option value="">:: Seleccionar ::</option>');

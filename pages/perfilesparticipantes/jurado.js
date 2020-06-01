@@ -335,6 +335,7 @@ function validator_form(token_actual) {
     });
     //Validar el formulario
     $('.formulario_principal').bootstrapValidator({
+        
         feedbackIcons: {
             valid: 'glyphicon glyphicon-ok',
             invalid: 'glyphicon glyphicon-remove',
@@ -407,9 +408,11 @@ function validator_form(token_actual) {
         var $form = $(e.target);
         // Get the BootstrapValidator instance
         var bv = $form.data('bootstrapValidator');
+        
         if (typeof $("#idd").attr('value') === 'undefined' || $("#idd").val() == null || $("#idd").val() == '') {
 
 //  alert("nuevo!!!");
+//  alert("Continúe la inscripción en la sección “Convocatorias - Búsqueda de convocatorias”. Allí seleccione el tipo de programa y/o el tipo de convocatoria en el que desea participar.");
 //Se realiza la peticion con el fin de guardar el registro actual
             $.ajax({
                 type: 'POST',
@@ -445,11 +448,18 @@ function validator_form(token_actual) {
                         //cargar_tabla_criterio($("#convocatoria_ronda").attr('value'),token_actual);
                         $("#idd").val(data);
                         cargar_datos_formulario(token_actual);
+                        /*
+                         * 11-05-2020
+                         * Wilmer Gustavo Mogollón Duque
+                         * Se agrega alert con información pertinente a los pasos que debe seguir
+                         */
+                        alert("Continúe la inscripción en la sección “Convocatorias - Búsqueda de convocatorias”. Allí seleccione el tipo de programa y/o el tipo de convocatoria en el que desea participar.");
                         break;
                 }
 
             });
         } else {
+  
 
 //  alert("editado!!!");
 //Realizo la peticion con el fin de editar el registro actual
@@ -486,6 +496,12 @@ function validator_form(token_actual) {
                         //cargar_tabla_criterio($("#convocatoria_ronda").attr('value'),token_actual);
                         $("#idd").val(data);
                         cargar_datos_formulario(token_actual);
+                        /*
+                         * 11-05-2020
+                         * Wilmer Gustavo Mogollón Duque
+                         * Se agrega alert con información pertinente a los pasos que debe seguir
+                         */
+                        alert("Continúe la inscripción en la sección “Convocatorias - Búsqueda de convocatorias”. Allí seleccione el tipo de programa y/o el tipo de convocatoria en el que desea participar.");
                         break;
                 }
 

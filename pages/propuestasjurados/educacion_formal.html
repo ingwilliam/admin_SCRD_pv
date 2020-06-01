@@ -68,30 +68,35 @@
                     <!-- /.col-lg-12 -->
                     <div class="panel-body" style="text-align: right">
                         <button
-                        type="button"
-                        class="btn btn-default btn-circle btn-lg"
-                        onclick="" id="back_step"
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Ingresar la información básica."
-                        data-original-title="Ingresar la información básica."
-                        >
-                          <i class="fa fa-arrow-left"></i>
+                            type="button"
+                            class="btn btn-default btn-circle btn-lg"
+                            onclick="" id="back_step"
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="Ingresar la información básica."
+                            data-original-title="Ingresar la información básica."
+                            >
+                            <i class="fa fa-arrow-left"></i>
                         </button>
 
                         <button
-                        type="button"
-                        class="btn btn-default btn-circle btn-lg"
-                        onclick=""
-                        id="next_step"
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Ingresar la información sobre educación no formal."
-                        data-original-title="Ingresar la información sobre educación no formal."
-                        >
-                          <i class="fa fa-arrow-right"></i>
+                            type="button"
+                            class="btn btn-default btn-circle btn-lg"
+                            onclick=""
+                            id="next_step"
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="Ingresar la información sobre educación no formal."
+                            data-original-title="Ingresar la información sobre educación no formal."
+                            >
+                            <i class="fa fa-arrow-right"></i>
                         </button>
                     </div>
+                </div>
+                <!-- /.row -->
+                <!--11-05-2020 --- Wilmer Gustavo Mogollón Duque --- Se agrega información correspondiente de cada sección-->
+                <div class="alert alert-info">
+                    Formulario para el registro de información sobre la educación formal, para quienes participan en la categoría de experto con título universitario: acta de grado o diploma de pregrado, especialización, maestría o doctorado.
                 </div>
                 <!-- /.row -->
                 <div class="row">
@@ -102,92 +107,92 @@
                             </div>
                             <div class="panel-body">
                                 <form id="formulario_principal" action="" class="formulario_principal" role="form" method="post" enctype="multipart/form-data" style="display:none;">
-                                  <div class="row">
-                                      <div class="col-lg-6">
-                                          <div class="form-group">
-                                              <label>Nivel de educación<span class="icono_requerido">*</span></label>
-                                              <select class="form-control" name="nivel_educacion" id="nivel_educacion">
-                                                  <option value="">:: Seleccionar ::</option>
-                                              </select>
-                                          </div>
-                                      </div>
-                                      <div class="col-lg-6">
-                                          <div class="form-group">
-                                              <label>Titulo obtenido</label>
-                                              <input type="text" id="titulo" name="titulo" class="form-control">
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="row" style="display:none;" id="niveleseducativosextra">
-                                      <div class="col-lg-6">
-                                          <div class="form-group">
-                                              <label>Área de conocimineto<span class="icono_requerido">*</span></label>
-                                              <select class="form-control" name="area_conocimiento" id="area_conocimiento">
-                                                  <option value="">:: Seleccionar ::</option>
-                                              </select>
-                                          </div>
-                                      </div>
-                                      <div class="col-lg-6">
-                                          <div class="form-group">
-                                              <label>Núcleo básico<span class="icono_requerido">*</span></label>
-                                              <select class="form-control" name="nucleo_basico" id="nucleo_basico">
-                                                  <option value="" >:: Seleccionar ::</option>
-                                              </select>
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="row">
-                                      <div class="col-lg-6">
-                                          <div class="form-group">
-                                              <label>Institución Educativa<span class="icono_requerido">*</span></label>
-                                              <input type="text" id="institucion" name="institucion" class="form-control">
-                                          </div>
-                                      </div>
-                                      <div class="col-lg-6">
-                                          <div class="form-group">
-                                              <label>Ciudad<span class="icono_requerido">*</span></label>
-                                              <input type="text" id="ciudad_name" name="ciudad_name" class="form-control">
-                                              <input type="hidden" id="ciudad" name="ciudad" class="form-control">
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label>Fecha de graduación <span class="icono_requerido">*</span></label>
-                                            <div class="input-group date calendario" data-date="" data-date-format="yyyy-mm-dd" data-link-format="yyyy-mm-dd">
-                                                <input class="form-control" id="fecha_graduacion" name="fecha_graduacion" size="16" type="text" value="" readonly>
-                                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Nivel de educación<span class="icono_requerido">*</span></label>
+                                                <select class="form-control" name="nivel_educacion" id="nivel_educacion">
+                                                    <option value="">:: Seleccionar ::</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Titulo obtenido</label>
+                                                <input type="text" id="titulo" name="titulo" class="form-control">
                                             </div>
                                         </div>
                                     </div>
-                                      <div class="col-lg-6">
-                                          <div class="form-group">
-                                              <label>Graduado</label>
-                                              <input title="graduado" type="checkbox" id="graduado_check">
-                                              <input type="hidden" id="graduado" name="graduado">
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <label>Anexo (pdf), tamaño máximo 5mb.</label>
-                                            <input type="file" class="form-control" name="archivo" id="archivo" accept="application/pdf" >
+                                    <div class="row" style="display:none;" id="niveleseducativosextra">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Área de conocimineto<span class="icono_requerido">*</span></label>
+                                                <select class="form-control" name="area_conocimiento" id="area_conocimiento">
+                                                    <option value="">:: Seleccionar ::</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Núcleo básico<span class="icono_requerido">*</span></label>
+                                                <select class="form-control" name="nucleo_basico" id="nucleo_basico">
+                                                    <option value="" >:: Seleccionar ::</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                  </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Institución Educativa<span class="icono_requerido">*</span></label>
+                                                <input type="text" id="institucion" name="institucion" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Ciudad<span class="icono_requerido">*</span></label>
+                                                <input type="text" id="ciudad_name" name="ciudad_name" class="form-control">
+                                                <input type="hidden" id="ciudad" name="ciudad" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Fecha de graduación <span class="icono_requerido">*</span></label>
+                                                <div class="input-group date calendario" data-date="" data-date-format="yyyy-mm-dd" data-link-format="yyyy-mm-dd">
+                                                    <input class="form-control" id="fecha_graduacion" name="fecha_graduacion" size="16" type="text" value="" readonly>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Graduado</label>
+                                                <input title="graduado" type="checkbox" id="graduado_check">
+                                                <input type="hidden" id="graduado" name="graduado">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Anexo (pdf), tamaño máximo 5mb.</label>
+                                                <input type="file" class="form-control" name="archivo" id="archivo" accept="application/pdf" >
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="row">
                                         <div class="col-lg-12" style="text-align: right">
                                             <input type="hidden" id="id" name="id" />
-                                              <input type="hidden" id="idc" name="idc" />
-                                              <input type="hidden" id="idregistro" name="idregistro" />
+                                            <input type="hidden" id="idc" name="idc" />
+                                            <input type="hidden" id="idregistro" name="idregistro" />
                                             <button type="submit" class="btn btn-default">Guardar</button>
                                         </div>
                                     </div>
 
-                                     <!--input type="hidden" name="MAX_FILE_SIZE" value="5242880" /-->
+                                    <!--input type="hidden" name="MAX_FILE_SIZE" value="5242880" /-->
 
                                 </form>
 
