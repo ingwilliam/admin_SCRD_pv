@@ -139,8 +139,19 @@ $(document).ready(function () {
                                 row.ver_reporte='<a href="'+url_pv_report+'reporte_propuesta_inscrita.php?id='+row.id_propuesta+'&token='+row.token+'" target="_blank"><button type="button" class="btn btn-danger btn_tooltip" title="Reporte de propuesta inscrita"><span class="fa fa-bar-chart-o"></span></button></a>';
                             }
                             
-                            
-                            row.estado="<b>"+row.estado+"</b>";
+                            //Valido que sea los edtados en
+                            //21 por subsanar
+                            //23 rechazada
+                            //24 habilitada
+                            //33 Recomendada como Ganadora                              
+                            if( row.id_estado===21 || row.id_estado===23 || row.id_estado===24 || row.id_estado===33)
+                            {
+                                row.estado="<b>Inscrita</b>";
+                            }
+                            else
+                            {
+                                row.estado="<b>"+row.estado+"</b>";
+                            }                                                        
                             
                             var categoria = row.convocatoria;
                             
