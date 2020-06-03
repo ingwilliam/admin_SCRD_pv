@@ -422,6 +422,16 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'El sexo es requerido'}
                 }
             },
+            pais: {
+                validators: {
+                    notEmpty: {message: 'El país de residencia es requerido'}
+                }
+            },
+            departamento: {
+                validators: {
+                    notEmpty: {message: 'El departamento de residencia es requerido'}
+                }
+            },
             ciudad_residencia: {
                 validators: {
                     notEmpty: {message: 'La ciudad de residencia es requerida, seleccione país y departamento de residencia'}
