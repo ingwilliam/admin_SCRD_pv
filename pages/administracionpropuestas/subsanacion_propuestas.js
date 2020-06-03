@@ -298,7 +298,7 @@ $(document).ready(function () {
                                     {
                                         if (data == 'ingresar')
                                         {
-                                            notify("success", "ok", "Subsanación:", "Se envia las nostificaciones con éxito.");
+                                            notify("success", "ok", "Subsanación:", "Se envia las notificaciones con éxito.");
                                             $('#table_list').DataTable().draw();
 
                                         } else
