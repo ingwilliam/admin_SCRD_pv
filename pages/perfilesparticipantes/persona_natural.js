@@ -73,132 +73,245 @@ $(document).ready(function () {
             }
         });
 
-        //Cargos el autocomplete de ciudad de residencia
-        $("#ciudad_residencia_name").autocomplete({
-            source: json_ciudades,
-            minLength: 2,
-            select: function (event, ui) {
-                $(this).val(ui.item ? ui.item : " ");
-                $("#ciudad_residencia").val(ui.item.id);
-            },
-            change: function (event, ui) {
-                if (!ui.item) {
-                    this.value = '';
-                    $('.formulario_principal').bootstrapValidator('revalidateField', 'ciudad_residencia_name');
-                    $("#ciudad_residencia").val("");
+        //Cargar el select de Pais
+        $.ajax({
+            type: 'GET',
+            data: {"token": token_actual.token},
+            url: url_pv + 'Paises/select'
+        }).done(function (data) {
+            if (data == 'error_metodo')
+            {
+                notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+            } else
+            {
+                if (data == 'error')
+                {
+                    notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                } else
+                {
+                    var json = JSON.parse(data);
+                    $("#pais").append('<option value="">:: Seleccionar ::</option>');
+                    if (json.length > 0) {
+                        $.each(json, function (key, pais) {
+                            $("#pais").append('<option value="' + pais.id + '">' + pais.nombre + '</option>');
+                        });
+                    }
                 }
-                //else { Return your label here }
             }
+        });
+
+        //cargar select departamento
+        $('#pais').on('change', function () {
+            var pais = $(this).val();
+            $('#departamento').find('option').remove();
+            $('#ciudad_residencia').find('option').remove();
+            $.ajax({
+                type: 'GET',
+                data: {"token": token_actual.token, "pais": pais},
+                url: url_pv + 'Departamentos/select'
+            }).done(function (data) {
+                if (data == 'error_metodo')
+                {
+                    notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                } else
+                {
+                    if (data == 'error')
+                    {
+                        notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                    } else
+                    {
+                        var json = JSON.parse(data);
+                        $("#departamento").append('<option value="">:: Seleccionar ::</option>');
+                        $("#ciudad_residencia").append('<option value="">:: Seleccionar ::</option>');
+                        if (json.length > 0) {
+                            $.each(json, function (key, value) {
+                                $("#departamento").append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                            });
+                        }
+                    }
+                }
+            });
+        });
+        
+        // Cargar Ciudad
+        $('#departamento').on('change', function () {
+            var departamento = $(this).val();
+            $('#ciudad_residencia').find('option').remove();
+            $.ajax({
+                type: 'GET',
+                data: {"token": token_actual.token, "departamento": departamento},
+                url: url_pv + 'Ciudades/select'
+            }).done(function (data) {
+                if (data == 'error_metodo')
+                {
+                    notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                } else
+                {
+                    if (data == 'error')
+                    {
+                        notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                    } else
+                    {
+                        var json = JSON.parse(data);
+                        $("#ciudad_residencia").append('<option value="">:: Seleccionar ::</option>');
+                        if (json.length > 0) {
+                            $.each(json, function (key, value) {
+                                $("#ciudad_residencia").append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                            });
+                        }
+                    }
+                }
+            });
         });
 
         //Realizo la peticion para cargar el formulario
         $.ajax({
-            type: 'GET',
+            type: 'GET',            
             data: {"token": token_actual.token, "id": $("#id").attr('value')},
             url: url_pv + 'Personasnaturales/search/'
         }).done(function (data) {
-            if (data == 'error_metodo')
+            var json = JSON.parse(data);
+            
+            //Error del metodo
+            if (json.error === 1)
             {
                 notify("danger", "ok", "Persona natural:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
-                if (data == 'error_token')
+                //Error del token
+                if (json.error === 2)
                 {
                     location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                } else
+                } 
+                else
                 {
-                    var json = JSON.parse(data);
+                    //valido que no hay errores
+                    if (json.error === 0)
+                    {
+                        json=json.respuesta;
+                        
+                        $('#departamento').find('option').remove();
+                        $("#departamento").append('<option value="">:: Seleccionar ::</option>');
+                        if (json.departamentos.length > 0) {
+                            $.each(json.departamentos, function (key, departamento) {
+                                var selected = '';
+                                if(departamento.id == json.departamento_residencia_id)
+                                {
+                                    selected = 'selected="selected"';
+                                }
+                                $("#departamento").append('<option value="' + departamento.id + '" '+selected+' >' + departamento.nombre + '</option>');
+                            });
+                        }
 
-                    //Cargos el select de tipo de documento
-                    $('#tipo_documento').find('option').remove();
-                    $("#tipo_documento").append('<option value="">:: Seleccionar ::</option>');
-                    if (json.tipo_documento.length > 0) {
-                        $.each(json.tipo_documento, function (key, array) {
-                            var selected = '';
-                            if (array.id == json.participante.tipo_documento)
-                            {
-                                selected = 'selected="selected"';
-                            }
-                            $("#tipo_documento").append('<option value="' + array.id + '" ' + selected + ' >' + array.descripcion + '</option>');
-                        });
-                    }
-                    //Cargos el select de sexo
-                    $('#sexo').find('option').remove();
-                    $("#sexo").append('<option value="">:: Seleccionar ::</option>');
-                    if (json.sexo.length > 0) {
-                        $.each(json.sexo, function (key, array) {
-                            var selected = '';
-                            if (array.id == json.participante.sexo)
-                            {
-                                selected = 'selected="selected"';
-                            }
-                            $("#sexo").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
-                        });
-                    }
-                    //Cargos el select de orientacion sexual
-                    $('#orientacion_sexual').find('option').remove();
-                    $("#orientacion_sexual").append('<option value="">:: Seleccionar ::</option>');
-                    if (json.orientacion_sexual.length > 0) {
-                        $.each(json.orientacion_sexual, function (key, array) {
-                            var selected = '';
-                            if (array.id == json.participante.orientacion_sexual)
-                            {
-                                selected = 'selected="selected"';
-                            }
-                            $("#orientacion_sexual").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
-                        });
-                    }
-                    //Cargos el select de identidad genero
-                    $('#identidad_genero').find('option').remove();
-                    $("#identidad_genero").append('<option value="">:: Seleccionar ::</option>');
-                    if (json.orientacion_sexual.length > 0) {
-                        $.each(json.identidad_genero, function (key, array) {
-                            var selected = '';
-                            if (array.id == json.participante.identidad_genero)
-                            {
-                                selected = 'selected="selected"';
-                            }
-                            $("#identidad_genero").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
-                        });
-                    }
-                    //Cargos el select de grupo etnico
-                    $('#grupo_etnico').find('option').remove();
-                    $("#grupo_etnico").append('<option value="">:: Seleccionar ::</option>');
-                    if (json.grupo_etnico.length > 0) {
-                        $.each(json.grupo_etnico, function (key, array) {
-                            var selected = '';
-                            if (array.id == json.participante.grupo_etnico)
-                            {
-                                selected = 'selected="selected"';
-                            }
-                            $("#grupo_etnico").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
-                        });
-                    }
-                    //Cargos el select de estrato
-                    $('#estrato').find('option').remove();
-                    $("#estrato").append('<option value="">:: Seleccionar ::</option>');
-                    if (json.estrato.length > 0) {
-                        $.each(json.estrato, function (key, array) {
-                            var selected = '';
-                            if (array == json.participante.estrato)
-                            {
-                                selected = 'selected="selected"';
-                            }
-                            $("#estrato").append('<option value="' + array + '" ' + selected + ' >' + array + '</option>');
-                        });
-                    }
+                        $('#ciudad_residencia').find('option').remove();
+                        $("#ciudad_residencia").append('<option value="">:: Seleccionar ::</option>');
+                        if (json.ciudades.length > 0) {
+                            $.each(json.ciudades, function (key, ciudad) {
+                                var selected = '';
+                                if(ciudad.id == json.ciudad_residencia_id)
+                                {
+                                    selected = 'selected="selected"';
+                                }
+                                $("#ciudad_residencia").append('<option value="' + ciudad.id + '" '+selected+' >' + ciudad.nombre + '</option>');
+                            });
+                        }
+                        
+                        
+                        //Cargos el select de tipo de documento
+                        $('#tipo_documento').find('option').remove();
+                        $("#tipo_documento").append('<option value="">:: Seleccionar ::</option>');
+                        if (json.tipo_documento.length > 0) {
+                            $.each(json.tipo_documento, function (key, array) {
+                                var selected = '';
+                                if (array.id == json.participante.tipo_documento)
+                                {
+                                    selected = 'selected="selected"';
+                                }
+                                $("#tipo_documento").append('<option value="' + array.id + '" ' + selected + ' >' + array.descripcion + '</option>');
+                            });
+                        }
+                        //Cargos el select de sexo
+                        $('#sexo').find('option').remove();
+                        $("#sexo").append('<option value="">:: Seleccionar ::</option>');
+                        if (json.sexo.length > 0) {
+                            $.each(json.sexo, function (key, array) {
+                                var selected = '';
+                                if (array.id == json.participante.sexo)
+                                {
+                                    selected = 'selected="selected"';
+                                }
+                                $("#sexo").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
+                            });
+                        }
+                        //Cargos el select de orientacion sexual
+                        $('#orientacion_sexual').find('option').remove();
+                        $("#orientacion_sexual").append('<option value="">:: Seleccionar ::</option>');
+                        if (json.orientacion_sexual.length > 0) {
+                            $.each(json.orientacion_sexual, function (key, array) {
+                                var selected = '';
+                                if (array.id == json.participante.orientacion_sexual)
+                                {
+                                    selected = 'selected="selected"';
+                                }
+                                $("#orientacion_sexual").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
+                            });
+                        }
+                        //Cargos el select de identidad genero
+                        $('#identidad_genero').find('option').remove();
+                        $("#identidad_genero").append('<option value="">:: Seleccionar ::</option>');
+                        if (json.orientacion_sexual.length > 0) {
+                            $.each(json.identidad_genero, function (key, array) {
+                                var selected = '';
+                                if (array.id == json.participante.identidad_genero)
+                                {
+                                    selected = 'selected="selected"';
+                                }
+                                $("#identidad_genero").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
+                            });
+                        }
+                        //Cargos el select de grupo etnico
+                        $('#grupo_etnico').find('option').remove();
+                        $("#grupo_etnico").append('<option value="">:: Seleccionar ::</option>');
+                        if (json.grupo_etnico.length > 0) {
+                            $.each(json.grupo_etnico, function (key, array) {
+                                var selected = '';
+                                if (array.id == json.participante.grupo_etnico)
+                                {
+                                    selected = 'selected="selected"';
+                                }
+                                $("#grupo_etnico").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
+                            });
+                        }
+                        //Cargos el select de estrato
+                        $('#estrato').find('option').remove();
+                        $("#estrato").append('<option value="">:: Seleccionar ::</option>');
+                        if (json.estrato.length > 0) {
+                            $.each(json.estrato, function (key, array) {
+                                var selected = '';
+                                if (array == json.participante.estrato)
+                                {
+                                    selected = 'selected="selected"';
+                                }
+                                $("#estrato").append('<option value="' + array + '" ' + selected + ' >' + array + '</option>');
+                            });
+                        }
 
-                    //Asigno el nombre de las barrio
-                    $("#barrio_residencia_name").val(json.barrio_residencia_name);
+                        //Asigno el nombre de las barrio
+                        $("#barrio_residencia_name").val(json.barrio_residencia_name);
 
-                    //Asigno el nombre de las ciudades
-                    $("#ciudad_nacimiento_name").val(json.ciudad_nacimiento_name);
-                    $("#ciudad_residencia_name").val(json.ciudad_residencia_name);
+                        //Asigno el nombre de las ciudades
+                        $("#ciudad_nacimiento_name").val(json.ciudad_nacimiento_name);                        
 
-                    //Cargo el formulario con los datos
-                    $('#formulario_principal').loadJSON(json.participante);
+                        //Cargo el formulario con los datos
+                        $('#formulario_principal').loadJSON(json.participante);
+                        
+                        $("#pais option[value='" + json.pais_residencia_id + "']").prop('selected', true);
+                    }
+                    else
+                    {
+                        notify("danger", "ok", "Persona natural:", "Se registro un error al cargar el registro, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                    }                    
                 }
-
             }
         });
 
@@ -248,9 +361,19 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'El sexo es requerido'}
                 }
             },
-            ciudad_residencia_name: {
+            pais: {
                 validators: {
-                    notEmpty: {message: 'La ciudad de residencia es requerida'}
+                    notEmpty: {message: 'El país de residencia es requerido'}
+                }
+            },
+            departamento: {
+                validators: {
+                    notEmpty: {message: 'El departamento de residencia es requerido'}
+                }
+            },
+            ciudad_residencia: {
+                validators: {
+                    notEmpty: {message: 'La ciudad de residencia es requerida, seleccione país y departamento de residencia'}
                 }
             },
             direccion_residencia: {
@@ -291,47 +414,53 @@ function validator_form(token_actual) {
             url: $form.attr('action'),
             data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
         }).done(function (result) {
-            if (result == 'error_metodo')
+            var json = JSON.parse(result);
+                        
+            if (json.error === 1)
             {
                 notify("danger", "ok", "Persona natural:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
-                if (result == 'error')
+                if (json.error === 2)
                 {
-                    notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                 } else
                 {
-                    if (result == 'error_token')
+                    if (json.error === 3)
                     {
-                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                     } else
                     {
-                        if (result == 'acceso_denegado')
+                        if (json.error === 4)
                         {
-                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                            notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                         } else
                         {
-                            if (result == 'error_usuario_perfil')
+                        
+                            if (json.error === 5)
                             {
                                 notify("danger", "ok", "Persona natural:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                             } else
                             {
-                                if (result == 'participante_existente')
+                                if (json.error === 6)
                                 {
-                                    notify("danger", "ok", "Persona natural:", "El participante que intenta ingresar ya se encuentra registrado en la base de datos, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                    notify("danger", "ok", "Persona natural:", json.mensaje);
                                 } else
                                 {
-                                    if (isNaN(result)) {
-                                        notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                                    } else
+                                    if (json.error === 0)
                                     {
-                                      /**
-                                      *Cesar Britto, 2020-02-28.
-                                      *Se realiza el ajuste para cuando se crea perfil de pn
-                                      */
-                                        $("#id").val(result);
-                                        notify("success", "ok", "Persona natural:", "Se actualizo con el éxito el participante como persona natural.");
+                                        /**
+                                        *Cesar Britto, 2020-02-28.
+                                        *Se realiza el ajuste para cuando se crea perfil de pn
+                                        */
+                                          $("#id").val(json.respuesta);
+                                          notify("success", "ok", "Persona natural:", "Se actualizo con el éxito el participante como persona natural.");
                                     }
+                                    else
+                                    {
+                                        notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                    }
+
                                 }
                             }
                         }

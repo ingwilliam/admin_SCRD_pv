@@ -75,7 +75,7 @@ $(document).ready(function () {
                         "processing": true,
                         "serverSide": true,
                         "ordering": false,
-                        "lengthMenu": [20, 30, 40],
+                        "lengthMenu": [50, 75, 100],
                         "ajax": {
                             url: url_pv + "PropuestasBusquedas/buscar_propuestas",
                             data: function (d) {
@@ -94,8 +94,9 @@ $(document).ready(function () {
                         "columnDefs": [{
                         "targets": 0,
                         "render": function (data, type, row, meta) {
+                                    //Verificar cual es la categoria padre
                                     var categoria = row.convocatoria;
-                                    if (row.categoria != "") {
+                                    if (row.categoria != null) {
                                         row.convocatoria = row.categoria;
                                         row.categoria = categoria;
                                     }
@@ -181,7 +182,7 @@ $(document).ready(function () {
                                                     "processing": true,
                                                     "serverSide": true,
                                                     "ordering": false,
-                                                    "lengthMenu": [20, 30, 40],
+                                                    "lengthMenu": [50, 75, 100],
                                                     "ajax": {
                                                         url: url_pv + "PropuestasBusquedas/buscar_propuestas",
                                                         data: function (d) {
@@ -200,8 +201,9 @@ $(document).ready(function () {
                                                     "columnDefs": [{
                                                     "targets": 0,
                                                     "render": function (data, type, row, meta) {
+                                                                //Verificar cual es la categoria padre
                                                                 var categoria = row.convocatoria;
-                                                                if (row.categoria != "") {
+                                                                if (row.categoria != null) {
                                                                     row.convocatoria = row.categoria;
                                                                     row.categoria = categoria;
                                                                 }

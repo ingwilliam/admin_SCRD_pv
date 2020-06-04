@@ -431,10 +431,10 @@ function acciones_categoria(token_actual)
             {
                 if (data == 'Si')
                 {
-                    notify("info", "ok", "Convocatorias:", "Se activó el evento con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se activó el documento con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se eliminó el evento con éxito.");
+                    notify("info", "ok", "Convocatorias:", "Se inactivo el documento con éxito.");
                 }
             } else
             {

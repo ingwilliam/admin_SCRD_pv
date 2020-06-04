@@ -1029,8 +1029,7 @@ function acciones_categoria(token_actual)
                     } else
                     {
                         $(".class_bolsa_concursable").attr("disabled", "disabled");
-                        $("input[name='numero_estimulos']").removeAttr("disabled");
-                        $("#descripcion_bolsa").val("");
+                        $("input[name='numero_estimulos']").removeAttr("disabled");                        
                     }
 
                     //Se realiza este set en cada text area html debido a que jste no es compatible con load json                    
