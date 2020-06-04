@@ -334,8 +334,9 @@
                                  render: function ( data, type, row ) {
                                              return '<button id="'+row.id+'"  title="Postularse" type="button" class="btn btn-warning btn_cargar_b" data-toggle="modal" data-target="#perfil_info\">'
                                                  +'<span class=" 	glyphicon glyphicon-check"></span></button>'
-                                                 +'<button name="'+row.id+'"  title="Enlace de la convocatoria" type="button" class="btn btn-warning btn_link">'
-                                                 +'<span class="glyphicon glyphicon-link"></span></button>';
+//                                                 +'<button name="'+row.id+'" onclick="http://sicon.scrd.gov.co/site_SCRD_pv/publicar.html?id='+row.id+'"  title="Enlace de la convocatoria" type="button" class="btn btn-info btn_link">'
+//                                                 +'<span class="glyphicon glyphicon-link"></span></button>'
+                                                 +'<a href="http://sicon.scrd.gov.co/site_SCRD_pv/publicar.html?id='+row.id+'" title="Enlace de la convocatoria" target="_blank" class="btn btn-info" role="button">Ver convocatoria</a>';
                                              },
                        }
 
