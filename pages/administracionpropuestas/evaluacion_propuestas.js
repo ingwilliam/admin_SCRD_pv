@@ -401,6 +401,12 @@ function cargar_tabla(token_actual){
 
                     var json = JSON.parse(data);
 
+                    if( json.estado == 'En deliberación'){
+                        $("#notificacion_periodo").html('Ronda en deliberación.');
+                    }
+
+                    if( json.estado == 'Habilitada'){
+
                       $("#fecha_inicio_evaluacion").html(json.fecha_inicio_evaluacion.substr(0, 10));
                       $("#fecha_fin_evaluacion").html(json.fecha_fin_evaluacion.substr(0, 10));
 
@@ -413,7 +419,7 @@ function cargar_tabla(token_actual){
                       var horas = ((fin.getTime()-inicio.getTime())%86400000)/3600000;
                       var minutos = (((fin.getTime()-inicio.getTime())%86400000)%3600000)/60000;
 
-                      if(dias >= 0){
+                      if( dias >= 0 ){
 
                           $("#notificacion_periodo").html('El periodo de evaluación es de '+json.fecha_inicio_evaluacion.substr(0, 10)
                                              +' al '+json.fecha_fin_evaluacion.substr(0, 10)+'.'
@@ -422,11 +428,18 @@ function cargar_tabla(token_actual){
                                              +Math.trunc(minutos)+' minutos para evaluar.');
 
                       }else{
-                          $("#notificacion_periodo").html('El periodo de evaluación ya terminó, por lo tanto no puede evaluar las propuestas');
+                          $("#notificacion_periodo").html('El periodo de evaluación ya terminó, por lo tanto no puede evaluar las propuestas.');
                       }
 
-                      $("#notificacion_periodo").show();
-                      $("#confirmar_top").show();
+                    }
+
+
+                    if( json.estado == 'Evaluada'){
+                        $("#notificacion_periodo").html('La ronda está evaluada.');
+                    }
+
+                    $("#notificacion_periodo").show();
+                    $("#confirmar_top").show();
 
 
                     break;
