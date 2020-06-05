@@ -157,7 +157,14 @@
                     <div class="panel-body" style="text-align: right">
                       <button type="button" class="btn btn-success btn-circle btn-lg" id="deliberar" title="Deliberar"><i class="fa  fa-mail-reply "></i>
                       </button>
-
+                      <button type="button"
+                        class="btn btn-primary btn-circle btn-lg"
+                        id="top_general"
+                        title="Confirma top general"
+                        data-toggle="modal"
+                        data-target="#top_generalModal" >
+                        <i class="fa fa-check-square-o "></i>
+                      </button>
                     </div>
                   </div>
 
@@ -209,7 +216,7 @@
         </div>
         <!-- /#wrapper -->
 
-        <!-- Modal evaluar propuesta-->
+        <!-- Modal evaluacion de la propuesta-->
         <div class="modal fade" id="evaluarModal" tabindex="-1" role="dialog" aria-labelledby="evaluarModalLabel" >
             <div class="modal-dialog modal-lg " role="document">
               <div class="modal-content">
@@ -289,6 +296,146 @@
                 <div class="modal-footer">
 
                   <button type="button" class="btn btn-secondary" data-dismiss="modal" id="notificar_cancelar" >Aceptar</button>
+                  <!--button type="button" class="btn btn-primary" id="baceptar" style="display:none;">Aceptar</button-->
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        <!-- Modal -->
+
+        <!-- Modal confirmar top general-->
+        <div class="modal fade" id="top_generalModal" tabindex="-1" role="dialog" aria-labelledby="top_generalModalLabel" >
+            <div class="modal-dialog modal-lg " role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="top_generalModalLabel">Top general</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form id="form_top_general" role="form">
+                    <fieldset id="fieldset_top_general">                     
+
+                      <div class="panel panel-info">
+                            <div class="panel-heading">
+                                Información básica
+                            </div>
+                            <div class="panel-body">
+
+                                <div class="row">
+                                  <div class="col-lg-12">
+                                    <h5><b>Convocatoria:</b></h5>
+                                    <span id="nombre_convocatoria"></span>
+                                  </div>
+                                  <div class="col-lg-6">
+                                    <h5><b>Ronda:</b></h5>
+                                    <span id="nombre_ronda"></span>
+                                  </div>
+                                  <div class="col-lg-6">
+                                    <h5><b>Descripción:</b></h5>
+                                    <span id="descripcion_ronda"></span>
+                                  </div>
+                                  <div class="col-lg-6">
+                                    <h5><b>Fecha inicio de la evaluación:</b></h5>
+                                    <span id="fecha_inicio_evaluacion"></span>
+                                  </div>
+                                  <div class="col-lg-6">
+                                    <h5><b>Fecha fin de la evaluación:</b></h5>
+                                    <span id="fecha_fin_evaluacion"></span>
+                                  </div>
+                                  <div class="col-lg-6">
+                                    <h5><b>Fecha de deliberación:</b></h5>
+                                    <span id="fecha_deliberacion"></span>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-lg-6">
+                                    <div class="form-group">
+                                            <label>Total ganadores:</label>
+                                            <input id="total_ganadores" name="total_ganadores" class="form-control" title="Total de ganadores de la ronda">
+                                            <!--p class="help-block">Digite el total de ganadores para la ronda.</p-->
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-6">
+                                    <div class="form-group">
+                                            <label>Total suplentes:</label>
+                                            <input id="total_suplentes" name="total_suplentes" class="form-control" title="Total de suplentes de la ronda">
+                                            <!--p class="help-block">Digite el total de ganadores para la ronda.</p-->
+                                    </div>
+                                  </div>
+
+                                </div>
+
+                          </div>
+                      </div>
+                      <div class="panel panel-info">
+                          <div class="panel-heading">
+                              Recomendación de ganadores
+                          </div>
+                          <div class="panel-body">
+                              <div class="row">
+                                <div class="col-lg-12">
+                                    <table id="table_recomendacion_ganadores" class="table" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Código de la propuesta</th>
+                                                <th>Nombre de la propuesta</th>
+                                                <th>Top general</th>
+                                            </tr>
+                                        </thead>
+
+                                    </table>
+                                </div>
+                              </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-info">
+                          <div class="panel-heading">
+                              Aspectos destacados de las propuestas ganadoras
+                          </div>
+                          <div class="panel-body">
+                              <div class="row">
+                                <div class="col-lg-12">
+                                  <textarea id="aspectos" name="aspectos" class="form-control" rows="3" ></textarea>
+                                </div>
+                              </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-info">
+                          <div class="panel-heading">
+                              Recomendaciones para la ejecución de las propuestas ganadoras
+                          </div>
+                          <div class="panel-body">
+                              <div class="row">
+                                <div class="col-lg-12">
+                                  <textarea id="recomendaciones" name="recomendaciones" class="form-control" rows="3"></textarea>
+                                </div>
+                              </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-info">
+                          <div class="panel-heading">
+                              Comentarios generales sobre la convocatoria y las propuestas participantes
+                          </div>
+                          <div class="panel-body">
+                              <div class="row">
+                                <div class="col-lg-12">
+                                  <textarea id="comentarios" name="comentarios" class="form-control" rows="3"></textarea>
+                                </div>
+                              </div>
+                        </div>
+                      </div>
+
+                    </fieldset>
+                  </form>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" id="btn_declarar_desierta" >Declarar desierta</button>
+                  <button type="button" class="btn btn-secondary" id="btn_aceptar_top" >Aceptar top general</button>
                   <!--button type="button" class="btn btn-primary" id="baceptar" style="display:none;">Aceptar</button-->
                 </div>
 
