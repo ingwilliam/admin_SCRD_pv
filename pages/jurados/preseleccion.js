@@ -61,7 +61,7 @@ $(document).ready(function () {
             //$("#exampleModal").modal("toggle");
         });
 
-        $('#busqueda_avanzada').click(function () {
+        $('#formulario_busqueda_banco').click(function () {
             //$("#formulario_busqueda_banco").submit();
             //$('#resultado').focus();
             //$('#filtro').val(true);
@@ -158,6 +158,9 @@ $(document).ready(function () {
         });
 
 
+
+
+
     }
 
 });
@@ -195,6 +198,26 @@ function init(token_actual) {
                         $("#banco_jurado").append('<option value="' + convocatoria_jurado.id + '" >' + convocatoria_jurado.nombre + '</option>');
                     });
                 }
+                
+                /*
+                 * 20-05-2020
+                 * Wilmer Gustavo Mogollón Duque
+                 * Se agregan acciones para listar área de conocimiento y nucleo básico del conocimiento
+                 */
+
+                //Cargos el select de areasconocimientos
+                $('#area_conocimiento').find('option').remove();
+                $("#area_conocimiento").append('<option value="">:: Seleccionar ::</option>');
+                if (json.area_conocimientos.length > 0) {
+                    $.each(json.area_conocimientos, function (key, array) {
+                        $("#area_conocimiento").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
+                    });
+                }
+
+                //cargar_select_nucleobasico
+                $('#area_conocimiento').change(function () {
+                    cargar_select_nucleobasico(token_actual, $('#area_conocimiento').val());
+                });
 
                 //Cargos el select de entidad
                 $('#entidad').find('option').remove();
@@ -326,6 +349,7 @@ function cargar_tabla(token_actual) {
         "lengthMenu": [10, 15, 20],
         "responsive": true,
         "searching": false,
+        "order": [[5, "desc"]],
         "ajax": {
             url: url_pv + "Juradospreseleccion/all_preseleccionados",
             data:
@@ -2078,3 +2102,54 @@ function postular(token_actual, postulacion, participante) {
     });
 
 }
+
+
+
+/*
+ * 20-05-2020
+ * Wilmer GUstavo Mogollón Duque
+ * Se agrega función para listar nucleo básico del conocimiento según el área de conocimiento escogida
+ */
+
+function cargar_select_nucleobasico(token_actual, id_areasconocimientos, set_value){
+
+
+    $.ajax({
+        type: 'GET',
+        url: url_pv + 'PropuestasJurados/select_nucleobasico',
+        data: {"token": token_actual.token, "id": id_areasconocimientos },
+    }).done(function (data) {
+
+      switch (data) {
+        case 'error':
+          notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+          break;
+        case 'error_metodo':
+            notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+            break;
+        case 'error_token':
+          location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+          break;
+        case 'acceso_denegado':
+          notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
+          break;
+        default:
+          var json = JSON.parse(data);
+
+          //Cargos el select de areasconocimientos
+          $('#nucleo_basico').find('option').remove();
+          $("#nucleo_basico").append('<option value="">:: Seleccionar ::</option>');
+          if ( json != null && json.length > 0) {
+              $.each(json, function (key, array) {
+                  $("#nucleo_basico").append('<option value="' + array.id + '" >' + array.nombre + '</option>');
+              });
+          }
+
+          $("#nucleo_basico").val(set_value);
+
+          break;
+        }
+
+      }
+    );
+  }

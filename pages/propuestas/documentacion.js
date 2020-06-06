@@ -321,6 +321,11 @@ $(document).ready(function () {
                                                                                 {
                                                                                     nombre_requisito="No ha ingresado el representante de la agrupación.";
                                                                                 }
+                                                                                
+                                                                                if(documento.nombre=="FPropuesta")
+                                                                                {                                                                                    
+                                                                                    nombre_requisito="No ha ingresado información en el formulario de la propuesta.";
+                                                                                }
 
                                                                                 html_table = html_table + '<li>' + nombre_requisito + '</li>';
                                                                             });

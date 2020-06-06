@@ -132,22 +132,95 @@ $(document).ready(function () {
                                                     }
                                                 });
 
-                                                //Cargos el autocomplete de ciudad de residencia
-                                                $("#ciudad_residencia_name").autocomplete({
-                                                    source: json_ciudades,
-                                                    minLength: 2,
-                                                    select: function (event, ui) {
-                                                        $(this).val(ui.item ? ui.item : " ");
-                                                        $("#ciudad_residencia").val(ui.item.id);
-                                                    },
-                                                    change: function (event, ui) {
-                                                        if (!ui.item) {
-                                                            this.value = '';
-                                                            $('.formulario_principal').bootstrapValidator('revalidateField', 'ciudad_residencia_name');
-                                                            $("#ciudad_residencia").val("");
+                                                //Cargar el select de Pais
+                                                $.ajax({
+                                                    type: 'GET',
+                                                    data: {"token": token_actual.token},
+                                                    url: url_pv + 'Paises/select'
+                                                }).done(function (data) {
+                                                    if (data == 'error_metodo')
+                                                    {
+                                                        notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                                    } else
+                                                    {
+                                                        if (data == 'error')
+                                                        {
+                                                            notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                                                        } else
+                                                        {
+                                                            var json = JSON.parse(data);
+                                                            $("#pais").append('<option value="">:: Seleccionar ::</option>');
+                                                            if (json.length > 0) {
+                                                                $.each(json, function (key, pais) {
+                                                                    $("#pais").append('<option value="' + pais.id + '">' + pais.nombre + '</option>');
+                                                                });
+                                                            }
                                                         }
-                                                        //else { Return your label here }
                                                     }
+                                                });
+
+                                                //cargar select departamento
+                                                $('#pais').on('change', function () {
+                                                    var pais = $(this).val();
+                                                    $('#departamento').find('option').remove();
+                                                    $('#ciudad_residencia').find('option').remove();
+                                                    $.ajax({
+                                                        type: 'GET',
+                                                        data: {"token": token_actual.token, "pais": pais},
+                                                        url: url_pv + 'Departamentos/select'
+                                                    }).done(function (data) {
+                                                        if (data == 'error_metodo')
+                                                        {
+                                                            notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                                        } else
+                                                        {
+                                                            if (data == 'error')
+                                                            {
+                                                                notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                                                            } else
+                                                            {
+                                                                var json = JSON.parse(data);
+                                                                $("#departamento").append('<option value="">:: Seleccionar ::</option>');
+                                                                $("#ciudad_residencia").append('<option value="">:: Seleccionar ::</option>');
+                                                                if (json.length > 0) {
+                                                                    $.each(json, function (key, value) {
+                                                                        $("#departamento").append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                                                                    });
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                });
+
+                                                // Cargar Ciudad
+                                                $('#departamento').on('change', function () {
+                                                    var departamento = $(this).val();
+                                                    $('#ciudad_residencia').find('option').remove();
+                                                    $.ajax({
+                                                        type: 'GET',
+                                                        data: {"token": token_actual.token, "departamento": departamento},
+                                                        url: url_pv + 'Ciudades/select'
+                                                    }).done(function (data) {
+                                                        if (data == 'error_metodo')
+                                                        {
+                                                            notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                                        } else
+                                                        {
+                                                            if (data == 'error')
+                                                            {
+                                                                notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                                                            } else
+                                                            {
+                                                                var json = JSON.parse(data);
+                                                                $("#ciudad_residencia").append('<option value="">:: Seleccionar ::</option>');
+                                                                if (json.length > 0) {
+                                                                    $.each(json, function (key, value) {
+                                                                        $("#ciudad_residencia").append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                                                                    });
+                                                                }
+                                                            }
+                                                        }
+                                                    });
                                                 });
 
                                                 //Realizo la peticion para cargar el formulario
@@ -190,6 +263,31 @@ $(document).ready(function () {
                                                                             $("#formulario_principal input,select,button[type=submit]").removeAttr("disabled");   
                                                                         }
 
+                                                                        $('#departamento').find('option').remove();
+                                                                        $("#departamento").append('<option value="">:: Seleccionar ::</option>');
+                                                                        if (json.departamentos.length > 0) {
+                                                                            $.each(json.departamentos, function (key, departamento) {
+                                                                                var selected = '';
+                                                                                if(departamento.id == json.departamento_residencia_id)
+                                                                                {
+                                                                                    selected = 'selected="selected"';
+                                                                                }
+                                                                                $("#departamento").append('<option value="' + departamento.id + '" '+selected+' >' + departamento.nombre + '</option>');
+                                                                            });
+                                                                        }
+
+                                                                        $('#ciudad_residencia').find('option').remove();
+                                                                        $("#ciudad_residencia").append('<option value="">:: Seleccionar ::</option>');
+                                                                        if (json.ciudades.length > 0) {
+                                                                            $.each(json.ciudades, function (key, ciudad) {
+                                                                                var selected = '';
+                                                                                if(ciudad.id == json.ciudad_residencia_id)
+                                                                                {
+                                                                                    selected = 'selected="selected"';
+                                                                                }
+                                                                                $("#ciudad_residencia").append('<option value="' + ciudad.id + '" '+selected+' >' + ciudad.nombre + '</option>');
+                                                                            });
+                                                                        }
 
                                                                         //Cargos el select de tipo de documento
                                                                         $('#tipo_documento').find('option').remove();
@@ -274,11 +372,12 @@ $(document).ready(function () {
                                                                         $("#barrio_residencia_name").val(json.barrio_residencia_name);
 
                                                                         //Asigno el nombre de las ciudades
-                                                                        $("#ciudad_nacimiento_name").val(json.ciudad_nacimiento_name);
-                                                                        $("#ciudad_residencia_name").val(json.ciudad_residencia_name);
+                                                                        $("#ciudad_nacimiento_name").val(json.ciudad_nacimiento_name);                                                                        
 
                                                                         //Cargo el formulario con los datos
                                                                         $('#formulario_principal').loadJSON(json.participante);
+                                                                        
+                                                                        $("#pais option[value='" + json.pais_residencia_id + "']").prop('selected', true);
                                                                     }
                                                                 }
 
@@ -346,7 +445,7 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'El sexo es requerido'}
                 }
             },
-            ciudad_residencia_name: {
+            ciudad_residencia: {
                 validators: {
                     notEmpty: {message: 'La ciudad de residencia es requerida'}
                 }

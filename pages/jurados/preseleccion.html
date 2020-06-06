@@ -209,24 +209,34 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label>Convocatoria de Jurados</label>
-                                        <select id='banco_jurado' name="banco_jurado" class="form-control " role="form">
+
+                                        <label>Convocatoria de Jurados</label><br/>
+                                        <div class="alert alert-info">
+                                            <small>Por favor seleccione la convocatoria de banco de jurados de la cual desea importar las hojas de vida.</small>
+                                        </div>
+                                        <select id='banco_jurado' name="banco_jurado" class="form-control ">
                                             <option value="">:: Seleccionar ::</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>Palabra clave</label>
+                                        <div class="alert alert-info">
+                                            <small>En este campos usted podrá incluir una serie de palabras clave que le facilitarán realizar la búsqueda.</small>
+                                        </div>
                                         <input type="text"  id="palabra_clave" name="palabra_clave" class="form-control">
                                     </div>
                                 </div>
                             </div>
+                            <br/>
+
+                            
 
                             <div class="form-group row col-lg-12">
-                                <div class="col-sm-12">Participa en la categoria de</div>
+                                <div class="col-sm-12"><label>Participa en la categoria de</label></div>
                                 <!--div class="col-sm-6">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="experto_con" name="experto_con" class="form-control">
@@ -236,73 +246,95 @@
                                     </div>
       
                                 </div-->
-                                <div class="col-sm-6">
-
+                                <div class="col-sm-12">
+                                    <div class="alert alert-info">
+                                        <small>Si requiere jurados que sean expertos sin título universitario, por favor seleccione esta casilla.</small>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="experto_sin"  name="experto_sin" class="form-control">
                                         <label class="form-check-label" for="gridCheck1">
                                             Experto sin titulo universitario
                                         </label>
                                     </div>
-
                                 </div>
                             </div>
+                            
+                            <div class="row" id="niveleseducativosextra">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Área de conocimineto</label>
+                                        <select class="form-control" name="area_conocimiento" id="area_conocimiento">
+                                            <option value="">:: Seleccionar ::</option>
+                                        </select>
+                                    </div>
+                                </div>
+<!--                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Núcleo básico</label>
+                                        <select class="form-control" name="nucleo_basico" id="nucleo_basico">
+                                            <option value="" >:: Seleccionar ::</option>
+                                        </select>
+                                    </div>
+                                </div>-->
+                            </div>
 
-                            <!--div class="form-group row col-lg-12">
-        
-                              <div class="col-sm-12">Educación Formal</div>
-                                  <div class="col-sm-6">
-                                      <div class="form-check">
-                                          <input class="form-check-input" type="checkbox" id="basica_secundaria" name="basica_secundaria" class="form-control">
-                                          <label class="form-check-label" for="gridCheck1">
-                                              Básica secundaria
-                                          </label>
-                                      </div>
-                                  </div>
-                                  <div class="col-sm-6">
-                                      <div class="form-check">
-                                          <input class="form-check-input" type="checkbox" id="tecnica" name="tecnica" class="form-control">
-                                          <label class="form-check-label" for="gridCheck1">
-                                                Técnica
-                                          </label>
-                                      </div>
-                                  </div>
-        
-                                  <div class="col-sm-6">
-                                      <div class="form-check">
-                                          <input class="form-check-input" type="checkbox" id="tecnologica" name="tecnologica"  class="form-control">
-                                          <label class="form-check-label" for="gridCheck1">
-                                                Tecnológica
-                                          </label>
-                                      </div>
-                                  </div>
-        
-                                  <div class="col-sm-6">
-                                      <div class="form-check">
-                                          <input class="form-check-input" type="checkbox" id="especializacion" name="especializacion" class="form-control">
-                                          <label class="form-check-label" for="gridCheck1">
-                                                Especialización
-                                          </label>
-                                      </div>
-                                  </div>
-                                  <div class="col-sm-6">
-                                      <div class="form-check">
-                                          <input class="form-check-input" type="checkbox" id="maestria" name="maestria" class="form-control">
-                                          <label class="form-check-label" for="gridCheck1">
-                                                Maestría
-                                          </label>
-                                      </div>
-                                  </div>
-                                  <div class="col-sm-6">
-                                      <div class="form-check">
-                                          <input class="form-check-input" type="checkbox" id="doctorado" name="doctorado" class="form-control">
-                                          <label class="form-check-label" for="gridCheck1">
-                                                Doctorado
-                                          </label>
-                                      </div>
-                                  </div>
-        
-                              </div-->
+<!--                            <div class="form-group row col-lg-12">
+
+                                <div class="col-sm-12">Educación Formal</div>
+                                <div class="col-sm-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="basica_secundaria" name="basica_secundaria" class="form-control">
+                                        <label class="form-check-label" for="gridCheck1">
+                                            Básica secundaria
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="tecnica" name="tecnica" class="form-control">
+                                        <label class="form-check-label" for="gridCheck1">
+                                            Técnica
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="tecnologica" name="tecnologica"  class="form-control">
+                                        <label class="form-check-label" for="gridCheck1">
+                                            Tecnológica
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="especializacion" name="especializacion" class="form-control">
+                                        <label class="form-check-label" for="gridCheck1">
+                                            Especialización
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="maestria" name="maestria" class="form-control">
+                                        <label class="form-check-label" for="gridCheck1">
+                                            Maestría
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="doctorado" name="doctorado" class="form-control">
+                                        <label class="form-check-label" for="gridCheck1">
+                                            Doctorado
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>-->
 
                             <div class="form-group row col-lg-12">
                                 <div class="col-sm-12">Experiencia Profesional</div>
@@ -354,7 +386,7 @@
                                 <div class="col-sm-12">Experiencia como jurado</div>
                                 <div class="col-sm-6">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="exp_jurado" name="exp_jurado" class="form-control">
+                                        <input class="form-check-input" type="checkbox" id="exp_jurado" name="exp_jurado"  class="form-control">
                                         <label class="form-check-label" for="gridCheck1">
                                             Que tenga experiencia como jurado?
                                         </label>
@@ -366,7 +398,7 @@
                                 <div class="col-sm-12">Reconocimientos</div>
                                 <div class="col-sm-6">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="reconocimiento" name="reconocimiento" class="form-control">
+                                        <input class="form-check-input" type="checkbox" id="reconocimiento" name="reconocimiento"  class="form-control">
                                         <label class="form-check-label" for="gridCheck1">
                                             Que tenga reconocimientos?
                                         </label>
@@ -378,7 +410,7 @@
                                 <div class="col-sm-12">Publicaciones</div>
                                 <div class="col-sm-6">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="publicaciones" name="publicaciones" class="form-control">
+                                        <input class="form-check" type="checkbox" id="publicaciones" name="publicaciones"  class="form-control">
                                         <label class="form-check-label" for="gridCheck1">
                                             Que tenga publicaciones?
                                         </label>
@@ -389,19 +421,21 @@
                             <div class="row">
                                 <input type="hidden" id="filtro" name="filtro">
                             </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary" id="buscar_banco" title="Buscar en el banco">Buscar</button>
+                            </div>
+                        </form>
+
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary" id="buscar_banco" title="Buscar en el banco">Buscar</button>
-                    </div>
-                    </form>
 
                 </div>
             </div>
         </div>
         <!-- Modal -->
 
-        
+
         <!-- Modal evaluar hoja de vida-->
         <div class="modal fade" id="evaluar" tabindex="-1" role="dialog" aria-labelledby="evaluarLabel" >
             <div class="modal-dialog modal-lg" role="document">

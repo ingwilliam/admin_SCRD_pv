@@ -5,6 +5,12 @@ $(document).ready(function () {
     $("#notificacion_periodo").hide();
     $("#deliberar").hide();
     $("#confirmar_top_general").hide();
+    /*
+     * 06-06-2020
+     * Wilmer Gustavo Mogollón Duque
+     * Se agrega el botón top_general al hide
+     */
+    $("#top_general").hide();
 
     //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
     if ($.isEmptyObject(token_actual)) {
@@ -116,8 +122,9 @@ $(document).ready(function () {
         });
 
 
-        $("#deliberar").click(function(){
+        $("#baceptar").click(function(){
           deliberar(token_actual, $('#rondas').val());
+          $('#exampleModal').modal('toggle');
         });
 
         $("#top_general").click(function(){
@@ -132,10 +139,34 @@ $(document).ready(function () {
           cargar_tabla_ganadores(token_actual);
         });
 
-        $("#btn_aceptar_top").click(function(){
+        $("#baceptartop").click(function(){
           confirmar_top_general(token_actual,  $('#rondas').val());
+          $('#exampleModaltop').modal('toggle');
         });
+        
+        /*
+         * 06-06-2020
+         * Wilmer Gustavo Mogollón Duque
+         * Se incorporan acciones a los botones para que muestre un mensaje de alerta
+         */
+        
+        //deliberar
+         $("#deliberar").click(function(){
 
+               $("#mensaje").show();
+               $("#bcancelar").show();
+               $("#baceptar").show();
+
+         });
+         
+         //Aceptar top generar
+         $("#btn_aceptar_top").click(function(){
+
+               $("#mensajetop").show();
+               $("#bcancelartop").show();
+               $("#baceptartop").show();
+
+         });
 
     }
 
@@ -278,10 +309,17 @@ function cargar_select_rondas(token_actual, convocatoria){
 }
 
 function cargar_tabla(token_actual){
+    
+    /*
+     * 06-06-2020
+     * Wilmer Gustavo Mogollón Duque
+     * Se agrega el botón top_general al show
+     */
 
     $("#notificacion_periodo").hide();
       $("#deliberar").show();
       $("#confirmar_top_general").show();
+      $("#top_general").show();
     //var data = JSON.stringify( $("#formulario_busqueda_banco").serializeArray() );
     //var data =  $("#formulario_busqueda_banco").serializeArray();
     //var data =  ( $('#filtro').val() == 'true' ? $("#formulario_busqueda_banco").serializeArray() : null)

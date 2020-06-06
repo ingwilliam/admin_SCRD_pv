@@ -912,6 +912,42 @@ function cargar_verificacion_1(token_actual, propuesta) {
                     {
                         $("#contratistas").css("display","none");
                     }
+                    
+                    if(json.html_propuestas!="")
+                    {
+                        $("#propuestas_pn").css("display","block");                                                                    
+                        $( ".tr_propuestas" ).remove();
+                        $( "#body_propuestas_pn" ).append(json.html_propuestas);
+                        
+                    }
+                    else
+                    {
+                        $("#propuestas_pn").css("display","none");
+                    }
+                    
+                    if(json.html_propuestas_ganadoras!="")
+                    {
+                        $("#propuestas_ganadoras_pn").css("display","block");                                                                    
+                        $( ".tr_propuestas_ganadoras" ).remove();
+                        $( "#body_propuestas_ganadoras_pn" ).append(json.html_propuestas_ganadoras);
+                        
+                    }
+                    else
+                    {
+                        $("#propuestas_ganadoras_pn").css("display","none");
+                    }
+                    
+                    if(json.html_propuestas_jurados_seleccionados!="")
+                    {
+                        $("#jurados_seleccionados").css("display","block");                                                                    
+                        $( ".tr_jurados_seleccionados" ).remove();
+                        $( "#body_jurados_seleccionados" ).append(json.html_propuestas_jurados_seleccionados);
+                        
+                    }
+                    else
+                    {
+                        $("#jurados_seleccionados").css("display","none");
+                    }
 
                 }
             }

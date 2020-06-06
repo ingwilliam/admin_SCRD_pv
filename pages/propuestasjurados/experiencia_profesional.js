@@ -172,7 +172,7 @@
                  "processing": true,
                  "destroy": true,
                  "serverSide": true,
-                 "lengthMenu": [10, 15, 20],
+                 "lengthMenu": [10, 15, 20, 30, 50, 100], //07-05-2020 Wilmer Mogollón -se agregan valores al array
                  "responsive": true,
                  "ajax":{
                      url : url_pv+"PropuestasJurados/all_experiencia_laboral",
