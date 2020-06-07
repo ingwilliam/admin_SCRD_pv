@@ -166,10 +166,18 @@
                                     class="btn btn-primary btn-circle btn-lg"
                                     id="top_general"
                                     title="Confirma top general"
+                                    data-target="#top_generalModal"
+                                    >
+                                <i class="fa fa-check-square-o "></i>
+                            </button>
+                            <!--button type="button"
+                                    class="btn btn-primary btn-circle btn-lg"
+                                    id="top_general"
+                                    title="Confirma top general"
                                     data-toggle="modal"
                                     data-target="#top_generalModal" >
                                 <i class="fa fa-check-square-o "></i>
-                            </button>
+                            </button-->
                         </div>
                     </div>
 
@@ -313,6 +321,7 @@
         <!-- Modal confirmar top general-->
         <div class="modal fade" id="top_generalModal" tabindex="-1" role="dialog" aria-labelledby="top_generalModalLabel" >
             <div class="modal-dialog modal-lg " role="document">
+
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="top_generalModalLabel">Top general</h5>
@@ -322,7 +331,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="form_top_general" role="form">
-                            <fieldset id="fieldset_top_general">                     
+                            <fieldset id="fieldset_top_general">
 
                                 <div class="panel panel-info">
                                     <div class="panel-heading">
@@ -434,8 +443,8 @@
                                     </div>
                                 </div>
 
-                            </fieldset>
-                        </form>
+                              </fieldset>
+                          </form>
                     </div>
 
                     <div class="modal-footer">
@@ -443,8 +452,6 @@
                         <button type="button" class="btn btn-secondary" id="btn_aceptar_top" data-toggle="modal" data-target="#exampleModaltop">Aceptar top general</button>
                         <!--button type="button" class="btn btn-primary" id="baceptar" style="display:none;">Aceptar</button-->
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -480,26 +487,26 @@
             </div>
         </div>
         <!-- Modal -->
-        
+
         <!-- Modal enviar a aceptar top general -->
-        <div class="modal fade" id="exampleModaltop" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="exampleModaltop" tabindex="-1" role="dialog" aria-labelledby="exampleModaltopLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <!--h5 class="modal-title" id="exampleModalLabel">Modal title</h5-->
+                        <h5 class="modal-title" id="exampleModaltopLabel"></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
 
                     <div class="modal-body">
-                        <div id="mensajetop" style="display:none;">
-                            ¿Está seguro de acpeptar el top general?<br/>
+                        <div id="mensajetop">
+                            ¿Está seguro de aceptar el top general?<br/>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="bcancelartop" style="display:none;">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="baceptartop" style="display:none;">Aceptar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="bcancelartop" >Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="baceptartop" >Aceptar</button>
                     </div>
                 </div>
             </div>
