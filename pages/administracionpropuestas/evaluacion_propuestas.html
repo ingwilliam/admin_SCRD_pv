@@ -70,145 +70,145 @@
             </nav>
 
             <div id="page-wrapper">
-              <div class="loading centrado-porcentual"></div>
-              <div class="row">
-                  <div class="col-lg-12">
-                      <h1 class="page-header">Evaluación de propuestas</h1>
-                  </div>
-                  <!-- /.col-lg-12 -->
-              </div>
-              <!-- /.row -->
-              <div class="row">
-                  <div class="col-lg-12">
-                      <div class="panel panel-default">
-                          <div class="panel-heading">
-                            Búsqueda de propuestas a evaluar
-                          </div>
-                          <div class="panel-body">
-                              <form id="formulario_principal" action="" class="formulario_principal" role="form" method="post">
-
-                                  <div class="row">
-                                  	<div class="col-lg-6">
-                                         <div class="form-group">
-                                             <label>Año</label>
-                                             <select id='anio' name="anio" class="form-control" >
-                                                 <option value="">:: Seleccionar ::</option>
-                                             </select>
-                                         </div>
-                                     </div>
-                                     <div class="col-lg-6">
-                                         <div class="form-group">
-                                             <label>Entidad</label>
-                                             <select id='entidad' name="entidad" class="form-control" >
-                                                 <option value="">:: Seleccionar ::</option>
-                                             </select>
-                                         </div>
-                                     </div>
-                                  </div>
-                                  <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label>Convocatoria</label>
-                                            <select id='convocatorias' name="convocatorias" class="form-control convocatorias-search" >
-                                                <option value="">:: Seleccionar ::</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6" id="select_categorias" >
-                                        <div class="form-group">
-                                            <label>Categorias</label>
-                                            <select id='categorias' name="categorias" class="form-control" disabled="" >
-                                                <option value="">:: Seleccionar ::</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                  </div>
-
-                                   <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label>Ronda de evaluación</label>
-                                            <select id='rondas' name="rondas" class="form-control" >
-                                                <option value="">:: Seleccionar ::</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6"  >
-                                        <div class="form-group">
-                                            <label>Estado de la evaluación</label>
-                                            <select id='estados' name="estados" class="form-control" >
-                                                <option value="">:: Seleccionar ::</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                  </div>
-
-                                  <div class="row">
-                                      <div class="col-lg-12" style="text-align: right">
-                                          <input type="hidden" id="idd" name="idd" />
-                                          <button type="button" class="btn btn-default" id="buscar" title="Buscar">Buscar</button>
-
-                                      </div>
-                                  </div>
-                              </form>
-                          </div>
-                          <!-- /.panel-body -->
-                      </div>
-                      <!-- /.panel -->
-                  </div>
-                  <!-- /.col-lg-12 -->
-              </div>
-              <div class="row">
-                  <div class="col-lg-12">
-                    <!-- /.col-lg-12 -->
-                    <div class="panel-body" style="text-align: right">
-                      <button type="button" class="btn btn-success btn-circle btn-lg" id="confirmar_top" title="Confirmar top individual"><i class="fa  fa-check-square-o "></i>
-                      </button>
-
+                <div class="loading centrado-porcentual"></div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">Evaluación de propuestas</h1>
                     </div>
-                  </div>
-
-              </div>
-			       <div class="row">
-                 <div class="col-lg-12">
-                 	<div class="alert alert-danger" id="notificacion_periodo">
-                 	</div>
-                 </div>
-              </div>
-
-              <div class="row">
-                  <div class="col-lg-12">
-                      <div class="panel panel-default"  id="resultado" tabindex="0">
-                          <div class="panel-heading">
-                              Resultado de la búsqueda
-                          </div>
-                          <div class="panel-body">
-                            <!-- tabla experiencia laboral-->
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <table id="table_list" class="table" style="width: 100%;">
-                                        <thead>
-                                            <tr>
-                                                <th>Código de la propuesta</th>
-                                                <th>Nombre de la propuesta</th>
-                                                <th>Total de la evaluación</th>
-                                                <th>Estado de la evaluación</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Búsqueda de propuestas a evaluar
                             </div>
-                                <!-- /.row -->
-                          </div>
-                          <!-- /.panel-body -->
-                      </div>
-                      <!-- /.panel -->
-                  </div>
+                            <div class="panel-body">
+                                <form id="formulario_principal" action="" class="formulario_principal" role="form" method="post">
 
-                  <!-- /.col-lg-12 -->
-              </div>
-              <!-- /.row -->
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Año</label>
+                                                <select id='anio' name="anio" class="form-control" >
+                                                    <option value="">:: Seleccionar ::</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Entidad</label>
+                                                <select id='entidad' name="entidad" class="form-control" >
+                                                    <option value="">:: Seleccionar ::</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Convocatoria</label>
+                                                <select id='convocatorias' name="convocatorias" class="form-control convocatorias-search" >
+                                                    <option value="">:: Seleccionar ::</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6" id="select_categorias" >
+                                            <div class="form-group">
+                                                <label>Categorias</label>
+                                                <select id='categorias' name="categorias" class="form-control" disabled="" >
+                                                    <option value="">:: Seleccionar ::</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Ronda de evaluación</label>
+                                                <select id='rondas' name="rondas" class="form-control" >
+                                                    <option value="">:: Seleccionar ::</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6"  >
+                                            <div class="form-group">
+                                                <label>Estado de la evaluación</label>
+                                                <select id='estados' name="estados" class="form-control" >
+                                                    <option value="">:: Seleccionar ::</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-12" style="text-align: right">
+                                            <input type="hidden" id="idd" name="idd" />
+                                            <button type="button" class="btn btn-default" id="buscar" title="Buscar">Buscar</button>
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- /.col-lg-12 -->
+                        <div class="panel-body" style="text-align: right">
+                            <button type="button" class="btn btn-success btn-circle btn-lg" id="confirmar_top" title="Confirmar top individual"><i class="fa  fa-check-square-o "></i>
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="alert alert-danger" id="notificacion_periodo">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default"  id="resultado" tabindex="0">
+                            <div class="panel-heading">
+                                Resultado de la búsqueda
+                            </div>
+                            <div class="panel-body">
+                                <!-- tabla experiencia laboral-->
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <table id="table_list" class="table" style="width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Código de la propuesta</th>
+                                                    <th>Nombre de la propuesta</th>
+                                                    <th>Total de la evaluación</th>
+                                                    <th>Estado de la evaluación</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- /.row -->
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                    </div>
+
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
 
             </div>
             <!-- /#page-wrapper -->
@@ -219,182 +219,214 @@
         <!-- Modal evaluar propuesta-->
         <div class="modal fade" id="evaluarModal" tabindex="-1" role="dialog" aria-labelledby="evaluarModalLabel" >
             <div class="modal-dialog modal-lg " role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="evaluarModalLabel">Evaluar propuesta</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="evaluarModalLabel">Evaluar propuesta</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
 
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a href="#informacion" data-toggle="tab">Información de la propuesta</a>
-                        </li>
-                        <li><a href="#evaluacion" data-toggle="tab">Evaluación de la propuesta</a>
-                        </li>
-                    </ul>
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#informacion" data-toggle="tab">Información de la propuesta</a>
+                            </li>
+                            <li><a href="#evaluacion" data-toggle="tab">Evaluación de la propuesta</a>
+                            </li>
+                        </ul>
 
-                    <!-- Tab panes -->
-                    <div class="tab-content">
+                        <!-- Tab panes -->
+                        <div class="tab-content">
 
-                    	<!-- Panel de información de la propuesta -->
-                        <div class="tab-pane fade in active" id="informacion">
+                            <!-- Panel de información de la propuesta -->
+                            <div class="tab-pane fade in active" id="informacion">
 
-		                    <div class="panel panel-info">
-		                        <div class="panel-heading">
-		                            Información básica
-		                        </div>
-		                        <div class="panel-body">
-		                            <div class="row">
-		                            	<div class="col-lg-6">
-		                            		<h5><b>Código de la propuesta:</b></h5>
-		                            		<span id="codigo_propuesta"></span>
-		                            	</div>
-		                            	<div class="col-lg-6">
-		                            		<h5><b>Nombre de la propuesta:</b></h5>
-		                            		<span id="nombre_propuesta"></span>
-		                            	</div>
-		                            	<div class="col-lg-12">
-		                            		<h5><b>Resumen de la propuesta:</b></h5>
-		                            		<span id="resumen_propuesta"></span>
-		                            	</div>
-		                            	<div class="col-lg-12">
-		                            		<h5><b>Objetivo de la propuesta:</b></h5>
-		                            		<span id="objetivo_propuesta"></span>
-		                            	</div>
-		                            	<div class="col-lg-6">
-		                            		<h5><b>¿La propuesta se desarrollara en Bogotá D.C.?</b></h5>
-		                            		<span id="bogota_propuesta"></span>
-		                            	</div>
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        Información básica
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <h5><b>Código de la propuesta:</b></h5>
+                                                <span id="codigo_propuesta"></span>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <h5><b>Nombre de la propuesta:</b></h5>
+                                                <span id="nombre_propuesta"></span>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <h5><b>Resumen de la propuesta:</b></h5>
+                                                <span id="resumen_propuesta"></span>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <h5><b>Objetivo de la propuesta:</b></h5>
+                                                <span id="objetivo_propuesta"></span>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <h5><b>¿La propuesta se desarrollara en Bogotá D.C.?</b></h5>
+                                                <span id="bogota_propuesta"></span>
+                                            </div>
 
-		                            	<div id="parametros_propuesta">
-		                            	</div>
-		                            </div>
-		                    	</div>
+                                            <div id="parametros_propuesta">
+                                            </div>
+                                        </div>
+                                    </div>
 
-                        	</div>
+                                </div>
 
-                        	<div class="panel panel-info">
-		                        <div class="panel-heading">
-		                            Documentos técnicos
-		                        </div>
-		                        <div class="panel-body">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        Documentos técnicos
+                                    </div>
+                                    <div class="panel-body">
 
-		                          	<div class="table-responsive">
-		                          	 <h4>Archivos</h4>
- 									 <p>Documentos cargados en el sistema:</p>
-									  <table class="table table-hover table-striped">
-									    <thead>
-									      <tr>
-									        <th>Documento</th>
-									        <th>Descripcion</th>
-									        <th>Tipo</th>
-									        <th>Acciones</th>
-									      </tr>
-									    </thead>
-									     <tbody id="archivos_table">
+                                        <div class="table-responsive">
+                                            <h4>Archivos</h4>
+                                            <p>Documentos cargados en el sistema:</p>
+                                            <table class="table table-hover table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Documento</th>
+                                                        <th>Descripcion</th>
+                                                        <th>Tipo</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="archivos_table">
 
-									     </tbody>
-									  </table>
-									</div>
+                                                </tbody>
+                                            </table>
+                                        </div>
 
-									<div class="table-responsive">
-									 <h4>Links</h4>
- 									 <p>Links de acceso a los recursos web:</p>
-									  <table class="table table-hover table-striped">
-									    <thead>
-									      <tr>
-									        <th>Documento</th>
-									        <th>Descripcion</th>
-									        <th>Tipo</th>
-									          <th>Acciones</th>
-									      </tr>
-									    </thead>
-									     <tbody id="links_table">
+                                        <div class="table-responsive">
+                                            <h4>Links</h4>
+                                            <p>Links de acceso a los recursos web:</p>
+                                            <table class="table table-hover table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Documento</th>
+                                                        <th>Descripcion</th>
+                                                        <th>Tipo</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="links_table">
 
-									     </tbody>
-									  </table>
-									</div>
-		                    	</div>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
 
-                        	</div>
+                                </div>
+
+                            </div>
+
+                            <!-- Panel de evaluación -->
+                            <div class="tab-pane fade" id="evaluacion">
+
+                                <div class="panel panel-info" id="evaluar" >
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">Evaluar</h4>
+                                    </div>
+                                    <div class="panel-body" >
+                                        <form role="form" id="form_criterios">
+                                        </form>
+                                        <div class="col-lg-12 btn_guardar_evaluacion" style="text-align: right">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
 
                         </div>
 
-                        <!-- Panel de evaluación -->
-                        <div class="tab-pane fade" id="evaluacion">
-
-                            <div class="panel panel-info" id="evaluar" >
-                            	<div class="panel-heading">
-                                	<h4 class="panel-title">Evaluar</h4>
-                                </div>
-                                <div class="panel-body" >
-                                	<form role="form" id="form_criterios">
-                                  </form>
-									                <div class="col-lg-12 btn_guardar_evaluacion" style="text-align: right">
-
-									                </div>
-                                </div>
-                           </div>
-
-			            </div>
-
                     </div>
 
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="notificar_cancelar" >Cancelar</button>
+                        <!--button type="button" class="btn btn-primary" id="baceptar" style="display:none;">Aceptar</button-->
+                    </div>
+
+
                 </div>
-
-                <div class="modal-footer">
-
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal" id="notificar_cancelar" >Cancelar</button>
-                  <!--button type="button" class="btn btn-primary" id="baceptar" style="display:none;">Aceptar</button-->
-                </div>
-
-
-              </div>
             </div>
-          </div>
+        </div>
         <!-- Modal -->
 
         <!-- Modal notificar impedimento-->
         <div class="modal fade" id="impedimentoModal" tabindex="-1" role="dialog" aria-labelledby="impedimentoModalLabel" >
             <div class="modal-dialog " role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="impedimentoModalLabel">Declaración de impedimento</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="impedimentoModalLabel">Declaración de impedimento</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
 
-                  <form class="impedimentoForm">
+                        <form class="impedimentoForm">
 
-                    <fieldset id="impedimentoForm_fieldset">
-                    <div class="row">
-                      <div class="col-lg-12" id="notificacion">
+                            <fieldset id="impedimentoForm_fieldset">
+                                <div class="row">
+                                    <div class="col-lg-12" id="notificacion">
 
-                      </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="modal-footer">
+
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="notificar_cancelar" >Cancelar</button>
+                                    <button type="submit" class="btn btn-primary" id="btn-submit">Declararse impedido</button>
+                                </div>
+                            </fieldset>
+                        </form>
                     </div>
 
-
                 </div>
-
-                <div class="modal-footer">
-
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal" id="notificar_cancelar" >Cancelar</button>
-                  <button type="submit" class="btn btn-primary" id="btn-submit">Declararse impedido</button>
-                </div>
-              </fieldset>
-              </form>
-
-              </div>
             </div>
-          </div>
+        </div>
         <!-- Modal -->
 
-		 <input type="hidden" id="id_evaluacion">
+        <!--
+            06-06-2020
+            Wilmer Gustavo Mogollón Duque
+            Se agrega modal para notificación al confirmar la evaluación.
+        -->
+
+        <!-- Modal enviar confirmar evaluación -->
+        <div class="modal fade" id="confirma_eval" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!--h5 class="modal-title" id="exampleModalLabel">Modal title</h5-->
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div id="mensaje_eval" style="display:none;">
+                            ¿Está seguro de confirmar la evaluación?<br/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="bcancelar_eval" style="display:none;">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="baceptar_eval" style="display:none;">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+
+        <input type="hidden" id="id_evaluacion">
 
         <!-- jQuery -->
         <script src="../../vendor/jquery/jquery.min.js"></script>
