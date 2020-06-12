@@ -170,14 +170,20 @@
                                     >
                                 <i class="fa fa-check-square-o "></i>
                             </button>
-                            <!--button type="button"
-                                    class="btn btn-primary btn-circle btn-lg"
-                                    id="top_general"
-                                    title="Confirma top general"
+                            <!--
+                            12-06-2020
+                            Wilmer Gustavo Mogollón Duque
+                            Se incorpora botón generar_acta
+                            -->
+                            <button type="button"
+                                    class="btn btn-info btn-circle btn-lg"
+                                    id="genera_acta"
                                     data-toggle="modal"
-                                    data-target="#top_generalModal" >
+                                    title="Generar acta"
+                                    data-target="#genera_acta_modal"
+                                    >
                                 <i class="fa fa-check-square-o "></i>
-                            </button-->
+                            </button>
                         </div>
                     </div>
 
@@ -488,6 +494,7 @@
         </div>
         <!-- Modal -->
 
+
         <!-- Modal enviar a aceptar top general -->
         <div class="modal fade" id="exampleModaltop" tabindex="-1" role="dialog" aria-labelledby="exampleModaltopLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -507,6 +514,37 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" id="bcancelartop" >Cancelar</button>
                         <button type="button" class="btn btn-primary" id="baceptartop" >Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        
+        <!--
+            12-06-2020
+            Wilmer Gustavo Mogollón Duque
+            Se agrega modal para notificación al generar acta.
+        -->
+
+        <!-- Modal enviar a deliberar -->
+        <div class="modal fade" id="genera_acta_modal" tabindex="-1" role="dialog" aria-labelledby="genera_acta_modalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!--h5 class="modal-title" id="exampleModalLabel">Modal title</h5-->
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div id="mensajegn" style="display:none;">
+                            ¿Está seguro de generar el acta de deliberación?<br/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="bcancelargn" style="display:none;">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="baceptargn" style="display:none;">Aceptar</button>
                     </div>
                 </div>
             </div>

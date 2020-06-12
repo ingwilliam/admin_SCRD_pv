@@ -197,6 +197,16 @@ $(document).ready(function () {
         $("#confirmar_top").click(function () {
             confirmar_top_individual(token_actual, $('#rondas').val());
         });
+        
+        /*
+         * 10-06-2020
+         * Wilmer Gustavo Mogollón Duque
+         * Se agrega acción a botón confirmar_top_deliberacion para confirmar top individual en deliberación,
+         * esto con el fin de no tener que confirmar evaluación por evaluación
+         */
+        $("#confirmar_top_deliberacion").click(function () {
+            confirmar_top_individual_deliberacion(token_actual, $('#rondas').val());
+        });
 
 
     }
@@ -403,12 +413,20 @@ function cargar_tabla(token_actual) {
 
                                     if (json.estado == 'En deliberación') {
                                         $("#notificacion_periodo").html('Ronda en deliberación.');
+                                        /*
+                                         * 10-06-2020 
+                                         * Wilmer Gustavo Mogollón Duque
+                                         * Se agrega botón confirmar_top_deliberacion para confirmar top en deliberación
+                                         */
+                                        $("#confirmar_top_deliberacion").show();
+
                                     }
 
                                     if (json.estado == 'Habilitada') {
 
                                         $("#fecha_inicio_evaluacion").html(json.fecha_inicio_evaluacion.substr(0, 10));
                                         $("#fecha_fin_evaluacion").html(json.fecha_fin_evaluacion.substr(0, 10));
+
 
                                         //tiempo restante
                                         var inicio = new Date();
@@ -427,6 +445,13 @@ function cargar_tabla(token_actual) {
                                                     + Math.trunc(horas) + ' horas y '
                                                     + Math.trunc(minutos) + ' minutos para evaluar.');
 
+                                            /*
+                                             * 10-06-2020 
+                                             * Wilmer Gustavo Mogollón Duque
+                                             * Se agrega botón confirmar_top para confirmar top en evaluación
+                                             */
+                                            $("#confirmar_top").show();
+
                                         } else {
                                             $("#notificacion_periodo").html('El periodo de evaluación ya terminó, por lo tanto no puede evaluar las propuestas.');
                                         }
@@ -438,8 +463,16 @@ function cargar_tabla(token_actual) {
                                         $("#notificacion_periodo").html('La ronda está evaluada.');
                                     }
 
+
+                                    /*
+                                     * 10-06-2020
+                                     * Wilmer Gustavo Mogollón Duque
+                                     * Acá solo se muestra el div de información de la ronda, el botón de confirmar 
+                                     * top solo aparecerá en los casos que la ronda esté habilitada
+                                     * o en deliberación
+                                     */
+
                                     $("#notificacion_periodo").show();
-                                    $("#confirmar_top").show();
 
 
                                     break;
@@ -787,7 +820,7 @@ function cargar_criterios_evaluacion(token_actual, id_evaluacion) {
 
                     //grupo
                     //$("#form_criterios").append('<fieldset class="criterios" '+( (json[r].evaluacion.estado >= 39 || json[r].ronda.estado >= 41 )? ' disabled="" ': '') +'>');
-                    $("#form_criterios").append('<fieldset class="criterios" ' + ((json[r].evaluacion_nombre_estado == 'Evaluada' || json[r].ronda_nombre_estado == 'Evaluada'  || json[r].evaluacion_nombre_estado == 'Confirmada') ? ' disabled="" ' : '') + '>');
+                    $("#form_criterios").append('<fieldset class="criterios" ' + ((json[r].evaluacion_nombre_estado == 'Evaluada' || json[r].ronda_nombre_estado == 'Evaluada' || json[r].evaluacion_nombre_estado == 'Confirmada') ? ' disabled="" ' : '') + '>');
 
                     $.each(json[r].criterios, function (key, array) {
                         //console.log("key-->"+key);
@@ -1109,6 +1142,54 @@ function confirmar_top_individual(token_actual, id_ronda) {
     $.ajax({
         type: 'PUT',
         url: url_pv + 'PropuestasEvaluacion/confirmar_top_individual/ronda/' + id_ronda,
+        data: "&modulo=Evaluación de propuestas&token=" + token_actual.token
+
+    }).done(function (data) {
+
+        switch (data) {
+            case 'error':
+                notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                break;
+            case 'error_metodo':
+                notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                break;
+            case 'error_token':
+                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                //notify("danger", "error_token", "URL:", 'PropuestasEvaluacion/evaluacionpropuestas/'+id_evaluacion+'/impedimentos');
+                break;
+            case 'acceso_denegado':
+                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                break;
+            case 'deshabilitado':
+                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                break;
+            case 'error_validacion':
+                notify("danger", "remove", "Usuario:", "Tiene evaluaciones sin confirmar");
+                break;
+            default:
+                notify("success", "ok", "Usuario:", "Se confirmó con éxito.");
+                //$(".criterios").attr('disabled','');
+                cargar_tabla(token_actual);
+                break;
+        }
+
+    });
+
+
+}
+
+
+/*
+ * 10-06-2020
+ * Wilmer Gustavo Mogollón Duque
+ * Se agrega nueva función confirmar_top_individual_deliberación,
+ * esto con el fin de no tener que confirmar evaluación por evaluación
+ */
+function confirmar_top_individual_deliberacion(token_actual, id_ronda) {
+
+    $.ajax({
+        type: 'PUT',
+        url: url_pv + 'PropuestasEvaluacion/confirmar_top_individual_deliberacion/ronda/' + id_ronda,
         data: "&modulo=Evaluación de propuestas&token=" + token_actual.token
 
     }).done(function (data) {
