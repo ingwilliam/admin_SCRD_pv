@@ -86,7 +86,7 @@ function cargar_tabla(id, token_actual) {
         "lengthMenu": [10, 15, 20],
         "responsive":true,
         "ajax": {
-            url: url_pv + "Rondas/all_convocatoria",
+            url: url_pv + "Rondas/all_convocatoria_ajustar",
             data: {"token": token_actual.token, "idcat": id}
         },
         columnDefs: [
@@ -352,7 +352,7 @@ function validator_form(token_actual) {
             //Realizo la peticion con el fin de editar el registro actual
             $.ajax({
                 type: 'PUT',
-                url: url_pv + 'Rondas/edit/' + $("#id_registro").attr('value'),
+                url: url_pv + 'Rondas/edit_rondas/' + $("#id_registro").attr('value'),
                 data: $form.serialize() + "&modulo=Rondas&token=" + token_actual.token
             }).done(function (result) {
                 switch (result) {
@@ -409,7 +409,7 @@ function acciones_ronda(token_actual) {
         $.ajax({
             type: 'DELETE',
             data: {"token": token_actual.token, "modulo": "Rondas", "active": active},
-            url: url_pv + 'Rondas/delete/' + $(this).attr("title")
+            url: url_pv + 'Rondas/delete_ajustar/' + $(this).attr("title")
         }).done(function (result) {
 
 

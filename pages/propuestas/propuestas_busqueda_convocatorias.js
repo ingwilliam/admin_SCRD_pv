@@ -26,8 +26,7 @@ $(document).ready(function () {
                 if (data == 'error_token')
                 {
                     location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                } 
-                else
+                } else
                 {
                     var json = JSON.parse(data);
 
@@ -65,7 +64,7 @@ $(document).ready(function () {
                             $("#enfoque").append('<option value="' + enfoque.id + '"  >' + enfoque.nombre + '</option>');
                         });
                     }
-                    
+
                     $("#modalidad").append('<option value="">:: Seleccionar ::</option>');
                     if (json.modalidades.length > 0) {
                         $.each(json.modalidades, function (key, modalidad) {
@@ -80,10 +79,18 @@ $(document).ready(function () {
                         });
                     }
 
+                    //Cargos el select de convocatorias jurado
+                    $("#banco_jurado").append('<option value="">:: Seleccionar ::</option>');
+                    if (json.convocatorias_jurados.length > 0) {
+                        $.each(json.convocatorias_jurados, function (key, convocatoria_jurado) {
+                            $("#banco_jurado").append('<option value="' + convocatoria_jurado.nombre + '" >' + convocatoria_jurado.nombre + '</option>');
+                        });
+                    }
+
                     $("#estado").append('<option value="">:: Seleccionar ::</option>');
                     $("#estado").append('<option value="5">Publicada</option>');
                     $("#estado").append('<option value="51">Abierta</option>');
-                    $("#estado").append('<option value="52">Cerrada</option>');                    
+                    $("#estado").append('<option value="52">Cerrada</option>');
 
                 }
             }
@@ -111,6 +118,8 @@ $(document).ready(function () {
                     params.modalidad = $('#modalidad').val();
                     params.programa = $('#programa').val();
                     params.nombre = $('#nombre').val();
+                    params.bancojurados = $('#bancojurados').val();
+                    params.banco_jurado = $('#banco_jurado').val();
                     params.estado = $('#estado').val();
                     d.params = JSON.stringify(params);
                     d.token = token_actual.token;
@@ -134,11 +143,11 @@ $(document).ready(function () {
             ],
             "columnDefs": [{
                     "targets": 0,
-                    "render": function (data, type, row, meta) {                                    
-                        if(row.modalidad==2)
+                    "render": function (data, type, row, meta) {
+                        if (row.modalidad == 2)
                         {
-                            row.entidad="Todas";    
-                        }                        
+                            row.entidad = "Todas";
+                        }
                         return row.estado_convocatoria;
                     }
                 }
@@ -164,7 +173,7 @@ $(document).ready(function () {
         $('#enfoque').change(function () {
             dataTable.draw();
         });
-        
+
         $('#modalidad').change(function () {
             dataTable.draw();
         });
@@ -175,6 +184,29 @@ $(document).ready(function () {
 
         $('#estado').change(function () {
             dataTable.draw();
+        });
+        $('#banco_jurado').change(function () {
+            dataTable.draw();
+        });
+        
+        $('#bancojurados').change(function () {
+            var checkbox = document.getElementById('bancojurados');
+            var checked = checkbox.checked;
+            alert(checked);
+
+            if (checked === true)
+            {
+                alert("entre");
+
+                $('#bancojurados').val() == "Banco de jurados 2020";
+                alert($('#nombre').val());
+                dataTable.draw();
+            } else
+            {
+                alert("no entre");
+                $('#bancojurados').val() == "";
+                dataTable.draw();
+            }
         });
 
         $('#nombre').on('keyup', function () {
@@ -189,7 +221,7 @@ $(document).ready(function () {
                 }
             }
         });
-
+        
     }
 });
 
@@ -201,14 +233,13 @@ function form_tipo_convocatoria(page, id)
     //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
     if ($.isEmptyObject(token_actual)) {
         location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-    } 
-    else
+    } else
     {
         //Realizo la peticion para cargar el formulario
         $.ajax({
             type: 'POST',
             data: {"token": token_actual.token},
-            url: url_pv + 'PropuestasBusquedasConvocatorias/validar_acceso/'+id
+            url: url_pv + 'PropuestasBusquedasConvocatorias/validar_acceso/' + id
         }).done(function (data) {
             if (data == 'error_metodo')
             {
@@ -218,32 +249,28 @@ function form_tipo_convocatoria(page, id)
                 if (data == 'error_token')
                 {
                     location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                } 
-                else
+                } else
                 {
                     if (data == 'error_fecha_cierre')
                     {
                         notify("danger", "ok", "Convocatorias:", "La convocatoria ya no se encuentra disponible para inscribir su propuesta.");
-                    } 
-                    else
+                    } else
                     {
                         if (data == 'error_fecha_apertura')
                         {
                             notify("danger", "ok", "Convocatorias:", "La convocatoria esta en estado publicada, por favor revisar la fecha de apertura en el cronograma de la convocatoria.");
-                        } 
-                        else
+                        } else
                         {
                             if (data == 'error_maximo')
                             {
                                 notify("danger", "ok", "Convocatorias:", "Ya tiene el máximo de propuestas guardadas permitidas para esta convocatoria, para visualizar sus propuestas por favor ingrese al menú Mis propuestas.");
-                            } 
-                            else
-                            {    
+                            } else
+                            {
                                 if (data == 'ingresar')
                                 {
                                     var redirect = "";
                                     //Modalidades
-                                    if (page == 1 || page == 3 || page == 4 || page == 6 || page == 5|| page == 8)
+                                    if (page == 1 || page == 3 || page == 4 || page == 6 || page == 5 || page == 8)
                                     {
                                         redirect = "/propuestas/perfiles";
                                     }
@@ -253,51 +280,49 @@ function form_tipo_convocatoria(page, id)
                                         redirect = "/propuestasjurados/perfil";
                                     }
 
-                                    window.location.href = url_pv_admin + 'pages'+redirect+ ".html?m=" + page + "&id=" + id+ "&p=0";
+                                    window.location.href = url_pv_admin + 'pages' + redirect + ".html?m=" + page + "&id=" + id + "&p=0";
                                 }
                             }
                         }
                     }
                 }
             }
-        });                    
-    }    
+        });
+    }
 }
 
 function cargar_cronograma(token_actual)
 {
     $(".cargar_cronograma").click(function () {
         var title = $(this).attr("title");
-        
+
         //Realizo la peticion para cargar el formulario
         $.ajax({
             type: 'POST',
             data: {"token": token_actual.token},
-            url: url_pv + 'PropuestasBusquedasConvocatorias/cargar_cronograma/'+title
+            url: url_pv + 'PropuestasBusquedasConvocatorias/cargar_cronograma/' + title
         }).done(function (data) {
             if (data == 'error_metodo')
             {
                 notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-            } 
-            else
+            } else
             {
                 if (data == 'error_token')
                 {
                     location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                } 
-                else
+                } else
                 {
-                    var json = JSON.parse(data);               
-                    var html_table='';    
-                    $( "#table_cronogramas" ).html(html_table);
-                    html_table = html_table+'<table class="table table-hover table-bordered"><thead><tr><th>Tipo de evento</th><th>Fecha(s)</th><th>Descripción</th></tr></thead><tbody>';                    
-                    $.each(json, function (key2, evento) {                     
-                        html_table = html_table+'<tr><td>'+evento.tipo_evento+'</td><td>'+evento.fecha+'</td><td>'+evento.descripcion+'</td></tr>';                                                    
+                    var json = JSON.parse(data);
+                    var html_table = '';
+                    $("#table_cronogramas").html(html_table);
+                    html_table = html_table + '<table class="table table-hover table-bordered"><thead><tr><th>Tipo de evento</th><th>Fecha(s)</th><th>Descripción</th></tr></thead><tbody>';
+                    $.each(json, function (key2, evento) {
+                        html_table = html_table + '<tr><td>' + evento.tipo_evento + '</td><td>' + evento.fecha + '</td><td>' + evento.descripcion + '</td></tr>';
                     });
-                    html_table = html_table+'</tbody></table>';                        
+                    html_table = html_table + '</tbody></table>';
 
-                    $( "#table_cronogramas" ).html(html_table);
-                }                
+                    $("#table_cronogramas").html(html_table);
+                }
             }
         });
     });
