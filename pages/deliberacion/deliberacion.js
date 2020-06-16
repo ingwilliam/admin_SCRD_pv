@@ -6,6 +6,7 @@ $(document).ready(function () {
     $("#deliberar").hide();
     $("#confirmar_top_general").hide();
     $("#genera_acta").hide();
+    $("#asignar_estimulo").hide();
     /*
      * 06-06-2020
      * Wilmer Gustavo Mogollón Duque
@@ -134,16 +135,21 @@ $(document).ready(function () {
         });
 
 
-        $("#total_ganadores").keyup(function () {
+        $("#total_ganadores").change(function () {
+//            if($("#total_ganadores").val!=null){
             cargar_tabla_ganadores(token_actual);
+//            }
         });
-        $("#total_suplentes").keyup(function () {
+        $("#total_suplentes").change(function () {
+//            if($("#total_ganadores").val!=null){
             cargar_tabla_ganadores(token_actual);
+//            }
         });
 
         $("#baceptartop").click(function () {
             confirmar_top_general(token_actual, $('#rondas').val());
             $('#exampleModaltop').modal('hide');
+            $('#top_generalModal').modal('hide');
         });
 
         /*
@@ -189,11 +195,58 @@ $(document).ready(function () {
          
          });*/
 
+        $("#form_top_general").bootstrapValidator({
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                comentarios: {
+                    enabled: false,
+                    validators: {
+                        notEmpty: {
+                            message: 'Debe digitar los comentarios generales sobre la convocatoria y las propuestas participantes.'
+                        }
+                    }
+                },
+            }
+        })
+
         //Declaración desierta
         $("#btn_declarar_desierta").click(function () {
 
-            declarar_convocatoria_desierta(token_actual, $('#rondas').val());
+
+            $('#form_top_general').bootstrapValidator('enableFieldValidators', 'comentarios', true);
+            $('#form_top_general').bootstrapValidator('validateField', 'comentarios');
+
+            $("#mensajeds").show();
+            $("#bcancelards").show();
+            $("#baceptards").show();
+
         });
+
+        $("#baceptards").click(function () {
+            declarar_convocatoria_desierta(token_actual, $('#rondas').val());
+            $('#genera_acta_modal_desierta').modal('hide');
+            $('#top_generalModal').modal('hide');
+        });
+        
+        $("#baceptarasg").click(function () {
+            asignar_monto(token_actual, $('#rondas').val());
+            $('#asignar_monto').modal('hide');
+        });
+
+
+        /*
+         * 15-06-2020
+         * Wilmer Gistavo Mogollón Duque
+         * Se agrega acción al botón  para llamar a la función 
+         */
+        $("#asignar_estimulo").click(function () {
+            cargar_info_top_general_asignar(token_actual, $('#rondas').val());
+        });
+
 
     }
 
@@ -348,6 +401,7 @@ function cargar_tabla(token_actual) {
     $("#confirmar_top_general").show();
     $("#top_general").show();
     $("#genera_acta").show();
+    $("#asignar_estimulo").show();
     //var data = JSON.stringify( $("#formulario_busqueda_banco").serializeArray() );
     //var data =  $("#formulario_busqueda_banco").serializeArray();
     //var data =  ( $('#filtro').val() == 'true' ? $("#formulario_busqueda_banco").serializeArray() : null)
@@ -876,14 +930,13 @@ function cargar_tabla_ganadores(token_actual) {
 
         },
         "rowCallback": function (row, data, index) {
-             
-             if ( data["roll"] === 'ganador'){
-             $('td', row).css('background-color', '#dcf4dc');
-             }
-             else if ( data["roll"] === 'suplente' ){
-             $('td', row).css('background-color', '#f4dcdc');
-             }
-             
+
+            if (data["roll"] === 'ganador') {
+                $('td', row).css('background-color', '#dcf4dc');
+            } else if (data["roll"] === 'suplente') {
+                $('td', row).css('background-color', '#f4dcdc');
+            }
+
         },
         "columns": [
             {"data": "Código de la propuesta",
@@ -928,6 +981,267 @@ function cargar_tabla_ganadores(token_actual) {
 
 
 }
+
+function cargar_info_top_general_asignar(token_actual, id_ronda) {
+    var id_convocatoria;
+    $("#fieldset_top_general").removeAttr("disabled");
+
+    //se verifica que las evaluaciones esten confirmadas
+    $.ajax({
+        type: 'GET',
+        url: url_pv + 'Deliberacion/validar_confirmacion/ronda/' + id_ronda,
+        data: {"token": token_actual.token},
+    }).done(function (data) {
+
+        switch (data) {
+            case 'error':
+                notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                break;
+            case 'error_metodo':
+                notify("danger", "ok", "Usuario:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                break;
+            case 'error_token':
+                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                //notify("danger", "error_token", "URL:", "PropuestasEvaluacion/propuestas/"+id_propuesta);
+                break;
+            case 'acceso_denegado':
+                notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
+                break;
+            case 'error_confirmacion':
+                notify("danger", "remove", "Usuario:", "Hay evaluaciones sin confirmar.");
+                break;
+            case 'exito':
+
+                $("#asignar_estimulo_Modal").modal('show');
+
+                //Información de la ronda y la convocatoria
+                $.ajax({
+                    type: 'GET',
+                    url: url_pv + 'Rondas/search/' + id_ronda,
+                    data: {"token": token_actual.token},
+                }).done(function (data) {
+
+                    switch (data) {
+                        case 'error':
+                            notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            break;
+                        case 'error_metodo':
+                            notify("danger", "ok", "Usuario:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                            break;
+                        case 'error_token':
+                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                            //notify("danger", "error_token", "URL:", "PropuestasEvaluacion/propuestas/"+id_propuesta);
+                            break;
+                        case 'acceso_denegado':
+                            notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
+                            break;
+                        default:
+
+                            var json = JSON.parse(data);
+
+                            if (json.id) {
+
+//                                if (json.estado == 'Evaluada') {
+//                                    $("#fieldset_top_general").attr("disabled", "");
+//                                }
+
+                                $("#nombre_ronda").html(json.nombre_ronda);
+                                $("#descripcion_ronda").html(json.descripcion_ronda);
+                                $("#fecha_inicio_evaluacion").html(json.fecha_inicio_evaluacion);
+                                $("#fecha_fin_evaluacion").html(json.fecha_fin_evaluacion);
+                                $("#fecha_deliberacion").html(json.fecha_deliberacion);
+                                $("#total_ganadores").val(json.total_ganadores);
+                                $("#total_suplentes").val(json.total_suplentes);
+                                $("#aspectos").val(json.aspectos);
+                                $("#recomendaciones").val(json.recomendaciones);
+                                $("#comentarios").val(json.comentarios);
+
+                                id_convocatoria = json.convocatoria;
+
+                                //información de la convocatoria
+                                $.ajax({
+                                    type: 'GET',
+                                    url: url_pv + 'Convocatorias/convocatoria/' + id_convocatoria,
+                                    data: {"token": token_actual.token},
+                                }).done(function (data) {
+
+                                    switch (data) {
+                                        case 'error':
+                                            notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                            break;
+                                        case 'error_metodo':
+                                            notify("danger", "ok", "Usuario:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                            break;
+                                        case 'error_token':
+                                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                            //notify("danger", "error_token", "URL:", "PropuestasEvaluacion/propuestas/"+id_propuesta);
+                                            break;
+                                        case 'acceso_denegado':
+                                            notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
+                                            break;
+                                        default:
+
+                                            var json = JSON.parse(data);
+
+                                            if (json.id) {
+                                                var categoria = "";
+
+                                                //Si se seleccionó una categoria, se busca el nombre y se concatena con el nombre de la convocatoria
+                                                if ($("categorias").val() != undefined && $("categorias").val() != null) {
+
+                                                    //información de la categoria
+                                                    $.ajax({
+                                                        type: 'GET',
+                                                        url: url_pv + 'Convocatorias/categoria/' + $("categorias").val(),
+                                                        data: {"token": token_actual.token},
+                                                    }).done(function (data) {
+
+                                                        switch (data) {
+                                                            case 'error':
+                                                                notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                                break;
+                                                            case 'error_metodo':
+                                                                notify("danger", "ok", "Usuario:", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                                                                break;
+                                                            case 'error_token':
+                                                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                                                //notify("danger", "error_token", "URL:", "PropuestasEvaluacion/propuestas/"+id_propuesta);
+                                                                break;
+                                                            case 'acceso_denegado':
+                                                                notify("danger", "remove", "Usuario:", "No tiene permisos acceder a la información.");
+                                                                break;
+                                                            default:
+
+                                                                var json2 = JSON.parse(data);
+
+                                                                if (json2.id) {
+                                                                    categoria = json2.nombre;
+                                                                }
+
+                                                        }//fin switch
+
+                                                    });
+
+                                                }
+
+                                                //si existe la categoria se concatena con el nombre de la convocatoria
+                                                $("#nombre_convocatoria").html(json.nombre + (categoria != "" ? "-" + categoria : categoria));
+
+
+                                            }
+
+                                    }//fin switch
+
+                                });
+
+                                cargar_tabla_ganadores_asignar(token_actual);
+                            }
+
+
+
+                    }//fin switch
+
+                });
+
+
+                break;
+        }//fin switch
+
+    });
+
+
+
+
+
+}
+
+function cargar_tabla_ganadores_asignar(token_actual) {
+
+    //establece los valores de la tabla
+    $('#table_recomendacion_ganadores_asignar').DataTable({
+        "language": {
+            "url": "../../dist/libraries/datatables/js/spanish.json"
+        },
+        "processing": true,
+        "destroy": true,
+        "serverSide": true,
+        "lengthMenu": [10, 15, 20],
+        "responsive": true,
+        "searching": false,
+        "ajax": {
+            url: url_pv + "Deliberacion/recomendacion_ganadores",
+            data:
+                    {"token": token_actual.token,
+                        "ronda": $('#rondas').val(),
+                        "total_ganadores": $('#total_ganadores').val(),
+                        "total_suplentes": $('#total_suplentes').val(),
+                    },
+            //async: false
+        },
+        "drawCallback": function (settings) {
+            //$(".check_activar_t").attr("checked", "true");
+            //$(".check_activar_f").removeAttr("checked");
+            acciones_registro(token_actual);
+            //validator_form(token_actual);
+
+        },
+        "rowCallback": function (row, data, index) {
+
+            if (data["roll"] === 'ganador') {
+                $('td', row).css('background-color', '#dcf4dc');
+            } else if (data["roll"] === 'suplente') {
+                $('td', row).css('background-color', '#f4dcdc');
+            }
+
+        },
+        "columns": [
+            {"data": "Código de la propuesta",
+                render: function (data, type, row) {
+                    return row.codigo;
+                },
+            },
+            {"data": "Nombre de la propuesta",
+                render: function (data, type, row) {
+                    return row.nombre;
+                },
+            },
+            {"data": "Top general",
+                render: function (data, type, row) {
+                    return row.promedio;
+                },
+            },
+            /*{"data": "Estado de la evaluación",
+             render: function ( data, type, row ) {
+             return row.estado_evaluacion;
+             },
+             },*/
+
+
+            /*{"data": "Seleccionar",
+             render: function ( data, type, row ) {
+             return ' <input title=\"'+row.id+'\" type=\"checkbox\" class=\"check_activar_'+row.active+'  activar_registro" '+(row.active? 'checked ':'')+' />';
+             },
+             },*/
+            {"data": "aciones",
+                render: function (data, type, row) {
+                    return '<button id="' + row.id + '" title="Asignar estímulo" type="button" class="btn btn-warning btn_ver" data-toggle="modal" data-target="#asignar_monto" id_propuesta="' + row.id + '">'
+                            + '<span class="glyphicon glyphicon-usd"></span></button>';
+
+                },
+            }
+
+
+
+        ]
+    });
+
+
+}
+
+
+
+
+
 
 function confirmar_top_general(token_actual, id_ronda) {
 
@@ -983,18 +1297,22 @@ function confirmar_top_general(token_actual, id_ronda) {
 
 
 function generar_acta_preseleccionados(token_actual, id_ronda) {
-    
-    console.log(id_ronda);
+
+    window.open(url_pv + "FormatosDoc/acta_recomendacion_preseleccionados/ronda/" + id_ronda, "_blank");
+
+}
+
+function declarar_convocatoria_desierta(token_actual, id_ronda) {
 
     $.ajax({
-        type: 'post',
-        url: url_pv + 'FormatosDoc/acta_recomendacion_preseleccionados/ronda/' + id_ronda,
-//        data: "&modulo=Deliberación&token=" + token_actual.token
-//                + "&total_ganadores=" + $('#total_ganadores').val()
-//                + "&total_suplentes=" + $('#total_suplentes').val()
-//                + "&aspectos=" + $('#aspectos').val()
-//                + "&recomendaciones=" + $('#recomendaciones').val()
-//                + "&comentarios=" + $('#comentarios').val()
+        type: 'PUT',
+        url: url_pv + 'Deliberacion/declarar_desierta_convocatoria/ronda/' + id_ronda,
+        data: "&modulo=Deliberación&token=" + token_actual.token
+                + "&total_ganadores=" + $('#total_ganadores').val()
+                + "&total_suplentes=" + $('#total_suplentes').val()
+                + "&aspectos=" + $('#aspectos').val()
+                + "&recomendaciones=" + $('#recomendaciones').val()
+                + "&comentarios=" + $('#comentarios').val()
 
     }).done(function (data) {
 
@@ -1019,9 +1337,9 @@ function generar_acta_preseleccionados(token_actual, id_ronda) {
                 notify("danger", "remove", "Usuario:", "Tiene evaluaciones sin confirmar");
                 break;
             default:
-                notify("success", "ok", "Usuario:", "Se generó el acta con éxito.");
+                notify("success", "ok", "Usuario:", "Se actualizó con éxito.");
                 //$(".criterios").attr('disabled','');
-                cargar_tabla_ganadores(token_actual);
+                //cargar_tabla_ganadores(token_actual);
                 break;
         }
 
@@ -1030,11 +1348,19 @@ function generar_acta_preseleccionados(token_actual, id_ronda) {
 
 }
 
-function declarar_convocatoria_desierta(token_actual, id_ronda) {
+/*
+ * 15-06-2020
+ * Wilmer Gustavo Mogollón Duque
+ * Se incorpora la función asignar_monto
+ */
+
+function asignar_monto(token_actual, id_ronda) {
+    
+    alert(id_ronda);
 
     $.ajax({
         type: 'PUT',
-        url: url_pv + 'Deliberacion/declarar_desierta_convocatoria/ronda/' + id_ronda,
+        url: url_pv + 'Deliberacion/asignar_monto/propuesta/' + id_ronda,
         data: "&modulo=Deliberación&token=" + token_actual.token
                 + "&total_ganadores=" + $('#total_ganadores').val()
                 + "&total_suplentes=" + $('#total_suplentes').val()
