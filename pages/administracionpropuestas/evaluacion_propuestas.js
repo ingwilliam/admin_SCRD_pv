@@ -204,8 +204,23 @@ $(document).ready(function () {
          * Se agrega acción a botón confirmar_top_deliberacion para confirmar top individual en deliberación,
          * esto con el fin de no tener que confirmar evaluación por evaluación
          */
+//        $("#confirmar_top_deliberacion").click(function () {
+//            confirmar_top_individual_deliberacion(token_actual, $('#rondas').val());
+//        });
+        
+        
+        //deliberar
         $("#confirmar_top_deliberacion").click(function () {
+
+            $("#mensaject").show();
+            $("#bcancelarct").show();
+            $("#baceptarct").show();
+
+        });
+
+        $("#baceptarct").click(function () {
             confirmar_top_individual_deliberacion(token_actual, $('#rondas').val());
+            $('#confirmar_top_individual_modal').modal('hide');
         });
 
 
