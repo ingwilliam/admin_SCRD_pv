@@ -82,8 +82,8 @@ $(document).ready(function () {
                                 //Asigno la modalidad con el fin de determinar si es para jurados
                                 $("#modalidad").attr('value', json.convocatoria.modalidad);
                                 
-                                //Si la convocatoria fue publicada o cancelada
-                                if(json.convocatoria.estado==5 || json.convocatoria.estado==32){
+                                //Si la convocatoria fue publicada o cancelada o suspendida
+                                if(json.convocatoria.estado==5 || json.convocatoria.estado==32 || json.convocatoria.estado==43  || json.convocatoria.estado==45){
                                     $("#form_validator input,select,button[type=submit],textarea").attr("disabled","disabled");   
                                     $("#table_cronogramas button,input,select,button[type=submit],textarea").attr("disabled","disabled");   
                                     $(".input-sm").css("display","none");                                       
