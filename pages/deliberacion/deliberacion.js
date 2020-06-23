@@ -5,8 +5,9 @@ $(document).ready(function () {
     $("#notificacion_periodo").hide();
     $("#deliberar").hide();
     $("#confirmar_top_general").hide();
-    $("#genera_acta").hide();
+    $("#anular_deliberacion").hide();
     $("#asignar_estimulo").hide();
+    $("#genera_acta").hide();
     /*
      * 06-06-2020
      * Wilmer Gustavo Mogollón Duque
@@ -115,12 +116,25 @@ $(document).ready(function () {
         });
 
 
+
+        /*
+         * 20-06-2020
+         * Wilmer Gustavo Mogollón Duque
+         * Agrego un if para controlar que seleccione la ronda de evaluación
+         */
+
+
         //carga la tabla con los criterios de busqueda
         $('#buscar').click(function () {
-            $('#resultado').focus();
 
-            validator_form(token_actual);
-            cargar_tabla(token_actual);
+            if ($('#rondas').val() === "") {
+                alert("Debe seleccionar la ronda de evaluación");
+            } else {
+                $('#resultado').focus();
+                validator_form(token_actual);
+                cargar_tabla(token_actual);
+            }
+
 
         });
 
@@ -133,20 +147,17 @@ $(document).ready(function () {
 
 
         $("#total_ganadores").change(function () {
-//            if($("#total_ganadores").val!=null){
             cargar_tabla_ganadores(token_actual);
-//            }
         });
         $("#total_suplentes").change(function () {
-//            if($("#total_ganadores").val!=null){
             cargar_tabla_ganadores(token_actual);
-//            }
         });
 
         $("#baceptartop").click(function () {
             confirmar_top_general(token_actual, $('#rondas').val());
             $('#exampleModaltop').modal('hide');
             $('#top_generalModal').modal('hide');
+
         });
 
         /*
@@ -163,13 +174,12 @@ $(document).ready(function () {
             $("#baceptar").show();
 
         });
-        
+
         $("#baceptar").click(function () {
-            
-            
+
             deliberar(token_actual, $('#rondas').val());
             $('#exampleModal').modal('toggle');
-            
+
         });
         /*
          * 12-06-2020
@@ -192,35 +202,96 @@ $(document).ready(function () {
         });
 
         //Aceptar top generar
-        /*$("#btn_aceptar_top").click(function(){
-         
-         $("#mensajetop").show();
-         $("#bcancelartop").show();
-         $("#baceptartop").show();
-         
-         });*/
+        $("#btn_aceptar_top").click(function () {
 
-        $("#form_top_general").bootstrapValidator({
+            validator_form_confirmar(token_actual);
+
+        });
+
+
+        /*
+         * 22-06-2020
+         * Wilmer Gustavo Mogollón Duque
+         * Se incorpora la acción para el botón anular_deliberacion
+         */
+        //Anular deliberación
+        
+        $("#anular_deliberacion").click(function () {
+
+            $("#mensaje_anular").show();
+            $("#bcancelar_anular").show();
+            $("#baceptar_anular").show();
+
+        });
+        
+        $("#baceptar_anular").click(function () {
+
+            anular_deliberacion(token_actual, $('#rondas').val());
+            $('#anular_deliberacionModal').modal('hide');
+
+        });
+
+//        $("#form_top_general").bootstrapValidator({
+//            feedbackIcons: {
+//                valid: 'glyphicon glyphicon-ok',
+//                invalid: 'glyphicon glyphicon-remove',
+//                validating: 'glyphicon glyphicon-refresh'
+//            },
+//            fields: {
+//                comentarios: {
+//                    enabled: false,
+//                    validators: {
+//                        notEmpty: {
+//                            message: 'Debe digitar los comentarios generales sobre la convocatoria y las propuestas participantes.'
+//                        }
+//                    }
+//                },
+//            }
+//        })
+
+        //validador formulario Notificación de impedimento
+        $('#form_top_general').bootstrapValidator({
+
             feedbackIcons: {
                 valid: 'glyphicon glyphicon-ok',
                 invalid: 'glyphicon glyphicon-remove',
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
+                total_ganadores: {
+                    validators: {
+                        notEmpty: {message: 'El número de ganadores es requerido'}
+                    }
+                },
+                total_suplentes: {
+                    validators: {
+                        notEmpty: {message: 'El número de ganadores es requerido'}
+                    }
+                },
+                aspectos: {
+                    validators: {
+                        notEmpty: {message: 'La descripción de los aspectos es requerida'}
+                    }
+                },
+                recomendaciones: {
+                    validators: {
+                        notEmpty: {message: 'La descripción de las recomendaciones es requerida'}
+                    }
+                },
                 comentarios: {
                     enabled: false,
                     validators: {
-                        notEmpty: {
-                            message: 'Debe digitar los comentarios generales sobre la convocatoria y las propuestas participantes.'
-                        }
+                        notEmpty: {message: 'La descripción de los aspectos es requerida'}
                     }
-                },
+                }
             }
-        })
+        });
+
+
+
 
         //Declaración desierta
         $("#btn_declarar_desierta").click(function () {
-
 
             $('#form_top_general').bootstrapValidator('enableFieldValidators', 'comentarios', true);
             $('#form_top_general').bootstrapValidator('validateField', 'comentarios');
@@ -260,8 +331,8 @@ $(document).ready(function () {
         $("#asignar_estimulo").click(function () {
             cargar_info_top_general_asignar(token_actual, $('#rondas').val());
         });
-        
-        
+
+
         validator_form(token_actual);
 
 
@@ -420,12 +491,18 @@ function cargar_tabla(token_actual) {
      */
 
     $("#notificacion_periodo").hide();
-    $("#deliberar").show();
-    $("#confirmar_top_general").show();
-    $("#top_general").show();
-    $("#genera_acta").show();
-    $("#asignar_estimulo").show();
     
+
+    //Muestro los botones
+    $("#deliberar").show();
+    $("#confirmar_top_general").show().slow;
+    $("#top_general").show().slow;
+    $("#anular_deliberacion").show().slow;
+    $("#genera_acta").show().slow;
+    $("#asignar_estimulo").show().slow;
+
+    
+
     //var data = JSON.stringify( $("#formulario_busqueda_banco").serializeArray() );
     //var data =  $("#formulario_busqueda_banco").serializeArray();
     //var data =  ( $('#filtro').val() == 'true' ? $("#formulario_busqueda_banco").serializeArray() : null)
@@ -760,7 +837,7 @@ function cargar_evaluaciones(token_actual, id_propuesta) {
 }
 
 function deliberar(token_actual, id_ronda) {
-    
+
 
     $.ajax({
         type: 'POST',
@@ -1474,13 +1551,59 @@ function asignar_monto(token_actual, id_propuesta, monto_asignado) {
 
 
 }
+/*
+ * 22-06-2020
+ * Wilmer Gustavo Mogollón Duque
+ * Se agrega función anular_deliberacion 
+ */
+function anular_deliberacion(token_actual, id_ronda) {
+
+
+    $.ajax({
+        type: 'PUT',
+        url: url_pv + 'Deliberacion/anular_deliberacion/ronda/' + id_ronda,
+        data: "&modulo=Deliberación&token=" + token_actual.token
+
+    }).done(function (data) {
+
+        switch (data) {
+            case 'error':
+                notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                break;
+            case 'error_metodo':
+                notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                break;
+            case 'error_token':
+                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                //notify("danger", "error_token", "URL:", 'PropuestasEvaluacion/evaluacionpropuestas/'+id_evaluacion+'/impedimentos');
+                break;
+            case 'acceso_denegado':
+                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                break;
+            case 'deshabilitado':
+                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                break;
+            case 'error_validacion':
+                notify("danger", "remove", "Usuario:", "Tiene evaluaciones sin confirmar");
+                break;
+            default:
+                notify("success", "ok", "Usuario:", "Se anuló la deliberación con éxito.");
+                //$(".criterios").attr('disabled','');
+                //cargar_tabla_ganadores(token_actual);
+                break;
+        }
+
+    });
+
+
+}
 
 function validator_form(token_actual) {
 
 
     //Validar el formulario
     $('.formulario_principal').bootstrapValidator({
-        
+
         feedbackIcons: {
             valid: 'glyphicon glyphicon-ok',
             invalid: 'glyphicon glyphicon-remove',
