@@ -150,9 +150,13 @@ $(document).ready(function () {
 
         //carga la tabla con los criterios de busqueda
         $('#buscar').click(function () {
-            $('#resultado').focus();
+            if ($('#rondas').val() === "") {
+                alert("Debe seleccionar la ronda de evaluación");
+            } else {
+                $('#resultado').focus();
+                cargar_tabla(token_actual);
+            }
 
-            cargar_tabla(token_actual);
 
         });
 
@@ -197,18 +201,14 @@ $(document).ready(function () {
         $("#confirmar_top").click(function () {
             confirmar_top_individual(token_actual, $('#rondas').val());
         });
-        
+
         /*
          * 10-06-2020
          * Wilmer Gustavo Mogollón Duque
          * Se agrega acción a botón confirmar_top_deliberacion para confirmar top individual en deliberación,
          * esto con el fin de no tener que confirmar evaluación por evaluación
          */
-//        $("#confirmar_top_deliberacion").click(function () {
-//            confirmar_top_individual_deliberacion(token_actual, $('#rondas').val());
-//        });
-        
-        
+
         //deliberar
         $("#confirmar_top_deliberacion").click(function () {
 
@@ -1012,7 +1012,7 @@ function confirmar_evaluacion(token_actual, id_evaluacion) {
                 notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                 break;
             case 'deshabilitado':
-                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                notify("danger", "remove", "Usuario:", "Esta evaluación ya fue confirmada, por lo tanto no puede editar la información.");
                 break;
             case 'criterio_null':
                 notify("danger", "remove", "Usuario:", "Debe evaluar todos los criterios.");
