@@ -86,7 +86,7 @@
 
                             <!-- cuerpo del diálogo -->
                             <div class="modal-body">
-                                <form id="formulario_principal" action="" class="formulario_principal" role="form" method="post" enctype="multipart/form-data">                                    
+                                <form id="formulario_principal" action="" class="formulario_principal" role="form" method="post" enctype="multipart/form-data">                                                                        
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="form-group">
@@ -94,6 +94,17 @@
                                                 <input type="text" name="rol" class="form-control">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>¿Representante?<span class="icono_requerido">*</span></label>
+                                                <select id='representante' name="representante" class="form-control" >                                                    
+                                                    <option value="true">Sí</option>
+                                                    <option value="false" selected="selected">No</option>
+                                                </select>                                                
+                                            </div>                                                                                                                                                                                                                                                                                                        
+                                        </div> 
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-6">
@@ -180,6 +191,7 @@
                                         <table id="table_registros" class="table">
                                             <thead>
                                                 <tr>
+                                                    <th>¿Representante?</th>
                                                     <th>Tipo de documento de identificación</th>
                                                     <th>Número de documento de identificación</th>
                                                     <th>Primer nombre</th>
