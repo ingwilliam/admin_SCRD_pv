@@ -205,6 +205,7 @@ function cargar_tabla(token_actual)
         "processing": true,
         "destroy": true,
         "serverSide": true,
+        "ordering": false,
         "lengthMenu": [10, 20, 30],
         "ajax": {
             url: url_pv + "PropuestasJuntasAgrupaciones/cargar_tabla_integrantes",            
@@ -217,6 +218,7 @@ function cargar_tabla(token_actual)
             cargar_formulario(token_actual);
         },
         "columns": [
+            {"data": "representante"},
             {"data": "tipo_documento"},
             {"data": "numero_documento"},
             {"data": "primer_nombre"},
@@ -225,6 +227,21 @@ function cargar_tabla(token_actual)
             {"data": "segundo_apellido"},
             {"data": "rol"},            
             {"data": "acciones"}
+        ],
+        "columnDefs": [{
+                "targets": 0,
+                "render": function (data, type, row, meta) {
+                    if (row.representante == true)
+                    {
+                        row.representante = "Sí";
+                    }
+                    else
+                    {
+                        row.representante = "No";
+                    }
+                    return row.representante;
+                }
+            }
         ]
     });
 
@@ -257,6 +274,8 @@ function cargar_formulario(token_actual)
                     $('#formulario_principal').loadJSON(json.participante);
                     
                     $('#por_que_actualiza_text').html(json.por_que_actualiza_text);                    
+                    
+                    $("#representante option[value='" + json.participante.representante + "']").prop('selected', true);
                     
                     $('#nuevo_integrante').modal('toggle');
                 }
