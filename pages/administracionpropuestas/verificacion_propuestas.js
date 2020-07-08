@@ -937,6 +937,18 @@ function cargar_verificacion_1(token_actual, propuesta) {
                         $("#propuestas_ganadoras_pn").css("display","none");
                     }
                     
+                    if(json.html_ganadoras_anios_anteriores!="")
+                    {
+                        $("#ganadoras_anios_anteriores").css("display","block");                                                                    
+                        $( ".tr_ganador_anio_anterior" ).remove();
+                        $( "#body_ganadoras_anios_anteriores" ).append(json.html_ganadoras_anios_anteriores);
+                        
+                    }
+                    else
+                    {
+                        $("#ganadoras_anios_anteriores").css("display","none");
+                    }
+                    
                     if(json.html_propuestas_jurados_seleccionados!="")
                     {
                         $("#jurados_seleccionados").css("display","block");                                                                    

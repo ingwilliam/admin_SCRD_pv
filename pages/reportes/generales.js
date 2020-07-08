@@ -84,6 +84,7 @@ $(document).ready(function () {
                                 var json = JSON.parse(data);
 
                                 $("#reporte_pn").empty();
+                                $("#reporte_ganadores").empty();
                                 $(".fecha_actual").empty();
 
                                 if (json.error == 'error_metodo')
@@ -104,6 +105,7 @@ $(document).ready(function () {
                                             $("#reportes_propuestas").css("display", "block");
 
                                             $("#reporte_pn").html(json.reporte_pn);
+                                            $("#reporte_ganadores").html(json.reporte_ganadores);
                                             $(".fecha_actual").html(json.fecha_actual);
                                             
                                             //Valido que sea solo numeros
@@ -121,7 +123,17 @@ $(document).ready(function () {
                                                 {                                                    
                                                     window.open(url_pv_report+'reporte_persona_natural.php?token='+token_actual.token+'&nd='+numero_documento+'&anio='+$("#anio").val(), '_blank');
                                                 }                                                
-                                            });                                            
+                                            });         
+                                            
+                                            $('.reporte_propuestas_ganadoras').click(function () {
+                                                var json = JSON.parse( $(this).attr("rel") );
+
+                                                $.AjaxDownloader({
+                                                    data: json,
+                                                    url: url_pv + 'ConvocatoriasFormatos/reporte_ganadores_xls/'
+                                                });
+
+                                            });
 
                                         }
                                     }

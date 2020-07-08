@@ -28,6 +28,8 @@ $(document).ready(function () {
                     location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                 } else
                 {
+                    
+                    
                     var json = JSON.parse(data);
 
                     $("#anio").append('<option value="">:: Seleccionar ::</option>');
@@ -80,18 +82,21 @@ $(document).ready(function () {
                     }
 
                     //Cargos el select de convocatorias jurado
+                    //WILLIAM BARBOSA 19 DE JUNIO DEL 2020
+                    //Se elimina debido a que el componente no esta creado en el HTML
+                    /*
                     $("#banco_jurado").append('<option value="">:: Seleccionar ::</option>');
                     if (json.convocatorias_jurados.length > 0) {
                         $.each(json.convocatorias_jurados, function (key, convocatoria_jurado) {
                             $("#banco_jurado").append('<option value="' + convocatoria_jurado.nombre + '" >' + convocatoria_jurado.nombre + '</option>');
                         });
                     }
-
+                    */
                     $("#estado").append('<option value="">:: Seleccionar ::</option>');
                     $("#estado").append('<option value="5">Publicada</option>');
                     $("#estado").append('<option value="51">Abierta</option>');
                     $("#estado").append('<option value="52">Cerrada</option>');
-
+                    
                 }
             }
         });
@@ -119,7 +124,9 @@ $(document).ready(function () {
                     params.programa = $('#programa').val();
                     params.nombre = $('#nombre').val();
                     params.bancojurados = $('#bancojurados').val();
-                    params.banco_jurado = $('#banco_jurado').val();
+                    //WILLIAM BARBOSA 19 DE JUNIO DEL 2020
+                    //Se elimina debido a que el componente no esta creado en el HTML
+                    //params.banco_jurado = $('#banco_jurado').val();
                     params.estado = $('#estado').val();
                     d.params = JSON.stringify(params);
                     d.token = token_actual.token;
@@ -185,10 +192,15 @@ $(document).ready(function () {
         $('#estado').change(function () {
             dataTable.draw();
         });
+        
+        //WILLIAM BARBOSA 19 DE JUNIO DEL 2020
+        //Se elimina debido a que el componente no esta creado en el HTML
+        /*
         $('#banco_jurado').change(function () {
             dataTable.draw();
         });
-        
+        */
+       
         $('#bancojurados').change(function () {
             var checkbox = document.getElementById('bancojurados');
             var checked = checkbox.checked;
