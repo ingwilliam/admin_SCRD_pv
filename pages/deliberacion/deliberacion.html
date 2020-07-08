@@ -82,6 +82,31 @@
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h5>Para tener en cuenta</h5>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+
+
+                                        <p><strong>Antes de comenzar, lea por favor el siguiente contenido que le indicará algunos aspectos importantes para tener en cuenta:</strong></p>
+                                        <ul>
+                                            <li><strong>Rondas de evaluación:</strong> Es necesario verificar que las rondas que se crearon para ésta convocatoria cuenten con la información correspondiente.</li>
+                                            <li><strong>Criterios de evaluación:</strong> Los criterios de evaluación deben estar registrados en la aplicación en su totalidad para cada una de las rondas de evaluación.</li>
+                                            <li><strong>Grupos de evaluación:</strong> Los grupos de evaluación deben estar registrados en la aplicación en su totalidad para cada una de las rondas de evaluación.  </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- /.row -->
                 <div class="row">
                     <div class="col-lg-12">
@@ -160,24 +185,62 @@
                     <div class="col-lg-12">
                         <!-- /.col-lg-12 -->
                         <div class="panel-body" style="text-align: right">
-                            <button type="button" class="btn btn-success btn-circle btn-lg" id="deliberar" title="Deliberar" data-toggle="modal" data-target="#exampleModal"><i class="fa  fa-mail-reply "></i>
+                            <button type="button" 
+                                    class="btn btn-success btn-circle btn-lg" 
+                                    id="deliberar" title="Deliberar" 
+                                    data-toggle="modal" data-target="#exampleModal">
+                                <i class="fa  fa-mail-reply "></i>
                             </button>
+                            
+                            <!--
+                            22-06-2020
+                            Wilmer Gustavo Mogollón Duque
+                            Se incorpora botón anular_deliberacion
+                            -->
+                            
+                            <button type="button"
+                                    class="btn btn-danger btn-circle btn-lg"
+                                    id="anular_deliberacion"
+                                    title="Anular deliberación"
+                                    data-toggle="modal" data-target="#anular_deliberacionModal">
+                                <i class="fa fa-step-backward "></i>
+                            </button>
+                            
                             <button type="button"
                                     class="btn btn-primary btn-circle btn-lg"
                                     id="top_general"
                                     title="Confirma top general"
-                                    data-target="#top_generalModal"
-                                    >
+                                    data-target="#top_generalModal">
                                 <i class="fa fa-check-square-o "></i>
                             </button>
-                            <!--button type="button"
-                                    class="btn btn-primary btn-circle btn-lg"
-                                    id="top_general"
-                                    title="Confirma top general"
+                            
+                            
+                            
+                            <!--
+                            15-06-2020
+                            Wilmer Gustavo Mogollón Duque
+                            Se incorpora botón asignar_estimulo
+                            -->
+                            <button type="button"
+                                    class="btn btn-alert btn-circle btn-lg"
+                                    id="asignar_estimulo"
+                                    title="Asignar estímulo"
+                                    data-target="#asignar_estimulo_Modal">
+                                <i class="fa fa-money "></i>
+                            </button>
+                            <!--
+                            12-06-2020
+                            Wilmer Gustavo Mogollón Duque
+                            Se incorpora botón generar_acta
+                            -->
+                            <button type="button"
+                                    class="btn btn-info btn-circle btn-lg"
+                                    id="genera_acta"
                                     data-toggle="modal"
-                                    data-target="#top_generalModal" >
-                                <i class="fa fa-check-square-o "></i>
-                            </button-->
+                                    title="Generar acta"
+                                    data-target="#genera_acta_modal">
+                                <i class="fa fa-file-word-o "></i>
+                            </button>
                         </div>
                     </div>
 
@@ -369,14 +432,14 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label>Total ganadores:</label>
-                                                    <input id="total_ganadores" name="total_ganadores" class="form-control" title="Total de ganadores de la ronda">
+                                                    <input id="total_ganadores" name="total_ganadores" class="form-control" title="Total de ganadores de la ronda" required>
                                                     <!--p class="help-block">Digite el total de ganadores para la ronda.</p-->
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label>Total suplentes:</label>
-                                                    <input id="total_suplentes" name="total_suplentes" class="form-control" title="Total de suplentes de la ronda">
+                                                    <input id="total_suplentes" name="total_suplentes" class="form-control" title="Total de suplentes de la ronda" required>
                                                     <!--p class="help-block">Digite el total de ganadores para la ronda.</p-->
                                                 </div>
                                             </div>
@@ -413,7 +476,7 @@
                                     <div class="panel-body">
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <textarea id="aspectos" name="aspectos" class="form-control" rows="3" ></textarea>
+                                                <textarea id="aspectos" name="aspectos" class="form-control" rows="3" placeholder="Describa los aspectos destacados de las propuestas ganadoras (Si no cuenta con la información escriba no aplica)" required></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -425,7 +488,7 @@
                                     <div class="panel-body">
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <textarea id="recomendaciones" name="recomendaciones" class="form-control" rows="3"></textarea>
+                                                <textarea id="recomendaciones" name="recomendaciones" class="form-control" rows="3" placeholder="Describa las recomendaciones para la ejecución de las propuestas ganadoras (Si no cuenta con la información escriba no aplica)" required></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -437,19 +500,127 @@
                                     <div class="panel-body">
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <textarea id="comentarios" name="comentarios" class="form-control" rows="3"></textarea>
+                                                <textarea id="comentarios" name="comentarios" class="form-control" rows="3" placeholder="Describa de los comentarios generales sobre la convocatoria y las propuestas participantes (Si no cuenta con la información escriba no aplica)" required></textarea>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                              </fieldset>
-                          </form>
+                                <div style="text-align: right;">
+                                    <button type="button" class="btn btn-danger" id="btn_declarar_desierta" data-toggle="modal" data-target="#genera_acta_modal_desierta" >Declarar desierta</button>
+                                    <button type="button" class="btn btn-primary" id="btn_aceptar_top" data-toggle="modal" data-target="#exampleModaltop">Aceptar top general</button>
+                                </div>
+
+                            </fieldset>
+                        </form>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" id="btn_declarar_desierta" >Declarar desierta</button>
-                        <button type="button" class="btn btn-secondary" id="btn_aceptar_top" data-toggle="modal" data-target="#exampleModaltop">Aceptar top general</button>
+
+                        <!--button type="button" class="btn btn-primary" id="baceptar" style="display:none;">Aceptar</button-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+
+        <!--
+        15-06-2020
+        Wilmer Gustavo Mogollón Duque
+        Se incorpora modal para asignar estímulos a cada propuesta
+        -->
+        <!-- Modal asignar estímulos a cada propuesta-->
+        <div class="modal fade" id="asignar_estimulo_Modal" tabindex="-1" role="dialog" aria-labelledby="asignar_estimulo_ModalLabel" >
+            <div class="modal-dialog modal-lg " role="document">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="top_generalModalLabel">Asignar estímulos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="form_top_general_asignar" role="form">
+                            <fieldset id="fieldset_top_general">
+
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        Recomendación de ganadores
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <table id="table_recomendacion_ganadores_asignar" class="table" style="width: 100%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Código de la propuesta</th>
+                                                            <th>Nombre de la propuesta</th>
+                                                            <th>Top general</th>
+                                                            <th>Asignar estímulo</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="bcancelar">Cancelar</button>
+                        <!--<button type="button" class="btn btn-primary" id="baceptar" style="display:none;">Aceptar</button>-->
+                        <!--button type="button" class="btn btn-primary" id="baceptar" style="display:none;">Aceptar</button-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <!-- Modal asignar estímulos a cada propuesta-->
+        <div class="modal fade" id="asignar_monto" tabindex="-1" role="dialog" aria-labelledby="asignar_montoLabel" >
+            <div class="modal-dialog modal-sm " role="document">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="top_generalModalLabel">Asignar estímulos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="asignar_est_form" role="form">
+                            <fieldset id="fieldset_top_general">
+
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        Asignar estímulo para la propuesta
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label>Valor del estímulo:</label>
+                                                    <input type="hidden" id="id_propuesta" name="id_propuesta"/>
+                                                    <input id="monto_asignado" name="monto_asignado" class="form-control" title="Valor del estímulo asignado a la ronda">
+                                                    <!--p class="help-block">Digite el total de ganadores para la ronda.</p-->
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="bcancelarasg">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="baceptarasg" >Aceptar</button>
                         <!--button type="button" class="btn btn-primary" id="baceptar" style="display:none;">Aceptar</button-->
                     </div>
                 </div>
@@ -488,6 +659,7 @@
         </div>
         <!-- Modal -->
 
+
         <!-- Modal enviar a aceptar top general -->
         <div class="modal fade" id="exampleModaltop" tabindex="-1" role="dialog" aria-labelledby="exampleModaltopLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -513,8 +685,93 @@
         </div>
         <!-- Modal -->
 
+        <!--
+            12-06-2020
+            Wilmer Gustavo Mogollón Duque
+            Se agrega modal para notificación al generar acta.
+        -->
 
+        <!-- Modal generar acta -->
+        <div class="modal fade" id="genera_acta_modal" tabindex="-1" role="dialog" aria-labelledby="genera_acta_modalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!--h5 class="modal-title" id="exampleModalLabel">Modal title</h5-->
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
 
+                    <div class="modal-body">
+                        <div id="mensajegn" style="display:none;">
+                            ¿Está seguro de generar el acta de deliberación?<br/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="bcancelargn" style="display:none;">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="baceptargn" style="display:none;">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+
+        <!--
+            15-06-2020
+            Wilmer Gustavo Mogollón Duque
+            Se agrega modal para notificación al generar acta de convocatoria desierta.
+        -->
+
+        <!-- Modal declarar convocatoria desierta -->
+        <div class="modal fade" id="genera_acta_modal_desierta" tabindex="-1" role="dialog" aria-labelledby="genera_acta_modal_desiertaLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!--h5 class="modal-title" id="exampleModalLabel">Modal title</h5-->
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div id="mensajeds" style="display:none;">
+                            ¿Está seguro de declarar la convocatoria desierta?<br/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="bcancelards" style="display:none;">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="baceptards" style="display:none;">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        
+        
+        <!-- Modal anular deliberación -->
+        <div class="modal fade" id="anular_deliberacionModal" tabindex="-1" role="dialog" aria-labelledby="anular_deliberacionModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!--h5 class="modal-title" id="exampleModalLabel">Modal title</h5-->
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div id="mensaje_anular" style="display:none;">
+                            ¿Está seguro de anular la deliberación?<br/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="bcancelar_anular" style="display:none;">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="baceptar_anular" style="display:none;">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
 
         <!-- jQuery -->
         <script src="../../vendor/jquery/jquery.min.js"></script>

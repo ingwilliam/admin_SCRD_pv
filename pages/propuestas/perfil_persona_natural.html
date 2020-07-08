@@ -137,7 +137,7 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Orientación Sexual</label>
+                                                <label>Orientación Sexual <span class="icono_requerido">*</span></label>
                                                 <select id='orientacion_sexual' name="orientacion_sexual" class="form-control" >
                                                     <option value="">:: Seleccionar ::</option>
                                                 </select>
@@ -147,7 +147,7 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Identidad de género</label>
+                                                <label>Identidad de género <span class="icono_requerido">*</span></label>
                                                 <select id='identidad_genero' name="identidad_genero" class="form-control" >
                                                     <option value="">:: Seleccionar ::</option>
                                                 </select>
@@ -155,7 +155,7 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Grupo étnico</label>
+                                                <label>Grupo étnico <span class="icono_requerido">*</span></label>
                                                 <select id='grupo_etnico' name="grupo_etnico" class="form-control" >
                                                     <option value="">:: Seleccionar ::</option>
                                                 </select>
@@ -165,39 +165,88 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
+                                                <label>¿Tiene usted algún tipo de discapacidad? <span class="icono_requerido">*</span></label>
+                                                <select id='discapacidad' name="discapacidad" class="form-control" >
+                                                    <option value="">:: Seleccionar ::</option>
+                                                </select>
+                                            </div>
+                                        </div>                                        
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>A qué régimen de salud pertenece <span class="icono_requerido">*</span></label>
+                                                <select id='regimen_salud' name="regimen_salud" class="form-control" >
+                                                    <option value="">:: Seleccionar ::</option>
+                                                    <option value="Contributivo">Contributivo</option>
+                                                    <option value="Subsidiado">Subsidiado</option>
+                                                </select>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Es usted víctima del conflicto armado <span class="icono_requerido">*</span></label>
+                                                <select id='es_victima' name="es_victima" class="form-control" >
+                                                    <option value="">:: Seleccionar ::</option>
+                                                    <option value="Sí">Sí</option>
+                                                    <option value="No">No</option>
+                                                    <option value="No deseo responder">No deseo responder</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
                                                 <label>Fecha de nacimiento <span class="icono_requerido">*</span></label>
                                                 <div class="input-group date calendario" data-date="" data-date-format="yyyy-mm-dd" data-link-format="yyyy-mm-dd">
                                                     <input class="form-control" name="fecha_nacimiento" size="16" type="text" value="" readonly>
                                                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Ciudad de nacimiento</label>
-                                                <input type="text" id="ciudad_nacimiento_name" name="ciudad_nacimiento_name" class="form-control">
-                                                <input type="hidden" id="ciudad_nacimiento" name="ciudad_nacimiento" class="form-control">
-                                            </div>
-                                        </div>
+                                        </div>                                        
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Pais de residencia</label>
-                                                <select id='pais' name="pais" class="form-control">                                                    
+                                                <label>País de nacimiento <span class="icono_requerido">*</span></label>
+                                                <select id='pais_nacimiento' name="pais_nacimiento" class="form-control">                                                    
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">                                            
                                             <div class="form-group">
-                                                <label>Departamento de residencia</label>
+                                                <label>Departamento de nacimiento <span class="icono_requerido">*</span></label>
+                                                <select id='departamento_nacimiento' name="departamento_nacimiento" class="form-control">                                                    
+                                                    <option value="">:: Seleccionar ::</option>
+                                                </select>
+                                            </div>
+                                        </div>                                            
+                                    </div> 
+                                    <div class="row">                                        
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Ciudad de nacimiento <span class="icono_requerido">*</span></label>
+                                                <select id='ciudad_nacimiento' name="ciudad_nacimiento" class="form-control">                                                    
+                                                    <option value="">:: Seleccionar ::</option>
+                                                </select>
+                                            </div>                                                                                        
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>País de residencia <span class="icono_requerido">*</span></label>
+                                                <select id='pais' name="pais" class="form-control">                                                    
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">                                        
+                                        <div class="col-lg-6">                                            
+                                            <div class="form-group">
+                                                <label>Departamento de residencia <span class="icono_requerido">*</span></label>
                                                 <select id='departamento' name="departamento" class="form-control">                                                    
                                                     <option value="">:: Seleccionar ::</option>
                                                 </select>
                                             </div>
                                         </div>                                            
-                                    </div>                                    
-                                    <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Ciudad de residencia <span class="icono_requerido">*</span></label>
@@ -205,15 +254,25 @@
                                                     <option value="">:: Seleccionar ::</option>
                                                 </select>
                                              </div>
-                                        </div>                                                                                    
+                                        </div>     
+                                    </div>                                    
+                                    <div class="row">                                    
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Barrio residencia</label>
-                                                <input type="text" id="barrio_residencia_name" name="barrio_residencia_name" class="form-control">
-                                                <input type="hidden" id="barrio_residencia" name="barrio_residencia" class="form-control">
-                                            </div>
+                                                <label>Localidad de residencia <span class="icono_requerido">*</span></label>
+                                                <select id='localidad_residencia' name="localidad_residencia" class="form-control" >                                                                                                        
+                                                </select>
+                                            </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
-                                    </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Barrio de residencia</label>
+                                                <select id='barrio_residencia' name="barrio_residencia" class="form-control" >                                                    
+                                                    <option value="">:: Seleccionar ::</option>
+                                                </select>
+                                            </div>                                                                                                                                                                                                                                                                                                        
+                                        </div>
+                                    </div>                                                                        
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
@@ -239,33 +298,45 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
+                                                <label>Área</label>
+                                                <select id='area' name="area" class="form-control" >
+                                                    <option value="">:: Seleccionar ::</option>
+                                                    <option value="Urbana">Urbana</option>
+                                                    <option value="Rural">Rural</option>                                                    
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">                                        
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
                                                 <label>Teléfono fijo</label>
                                                 <input type="text" name="numero_telefono" class="form-control">
+                                            </div>
+                                        </div>                                    
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Número de celular personal <span class="icono_requerido">*</span></label>
+                                                <input type="text" name="numero_celular" class="form-control">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label>Número de celular personal</label>
-                                                <input type="text" name="numero_celular" class="form-control">
-                                            </div>
-                                        </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Correo electrónico <span class="icono_requerido">*</span></label>
                                                 <input type="text" name="correo_electronico" class="form-control" readonly="readonly">
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
+                                        </div>                                    
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Redes sociales</label>
                                                 <input type="text" name="redes_sociales" class="form-control">
                                             </div>
                                         </div>
-                                        <div class="col-lg-6">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Página web, vínculo o blog</label>
                                                 <input type="text" name="links" class="form-control">

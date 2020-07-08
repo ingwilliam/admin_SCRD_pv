@@ -140,17 +140,29 @@
                     <!-- /.col-lg-12 -->
                 </div>
 
+
+
                 <div class="row">
-                    <div class="panel-body" style="text-align: right">
-                        <button
-                            type="button"
-                            class="btn btn-info"
-                            id="busqueda_avanzada"
-                            title="búsqueda avanzada"
-                            data-toggle="modal" data-target="#exampleModal" >Búsqueda Banco de Jurados</button>
+                    <div class="col-lg-12">
+                        <!-- /.col-lg-12 -->
+                        <div class="panel-body" style="text-align: right">
+                            <button
+                                type="button"
+                                class="btn btn-danger"
+                                id="liberar_jurados"
+                                title="Liberar jurados de ésta convocatoria"
+                                data-toggle="modal" data-target="#confirmar_liberar" >Liberar jurados</button>
+                            <button
+                                type="button"
+                                class="btn btn-info"
+                                id="busqueda_avanzada"
+                                title="búsqueda avanzada"
+                                data-toggle="modal" data-target="#exampleModal" >Búsqueda Banco de Jurados</button>
+                        </div>
                     </div>
-                    <!-- /.col-lg-12 -->
                 </div>
+
+
 
                 <div class="row">
                     <div class="col-lg-12">
@@ -233,7 +245,7 @@
                             </div>
                             <br/>
 
-                            
+
 
                             <div class="form-group row col-lg-12">
                                 <div class="col-sm-12"><label>Participa en la categoria de</label></div>
@@ -260,7 +272,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="row" id="niveleseducativosextra">
                                 <div class="col-lg-12">
                                     <div class="form-group">
@@ -270,71 +282,71 @@
                                         </select>
                                     </div>
                                 </div>
-<!--                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label>Núcleo básico</label>
-                                        <select class="form-control" name="nucleo_basico" id="nucleo_basico">
-                                            <option value="" >:: Seleccionar ::</option>
-                                        </select>
-                                    </div>
-                                </div>-->
+                                <!--                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label>Núcleo básico</label>
+                                                                        <select class="form-control" name="nucleo_basico" id="nucleo_basico">
+                                                                            <option value="" >:: Seleccionar ::</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>-->
                             </div>
 
-<!--                            <div class="form-group row col-lg-12">
-
-                                <div class="col-sm-12">Educación Formal</div>
-                                <div class="col-sm-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="basica_secundaria" name="basica_secundaria" class="form-control">
-                                        <label class="form-check-label" for="gridCheck1">
-                                            Básica secundaria
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="tecnica" name="tecnica" class="form-control">
-                                        <label class="form-check-label" for="gridCheck1">
-                                            Técnica
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="tecnologica" name="tecnologica"  class="form-control">
-                                        <label class="form-check-label" for="gridCheck1">
-                                            Tecnológica
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="especializacion" name="especializacion" class="form-control">
-                                        <label class="form-check-label" for="gridCheck1">
-                                            Especialización
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="maestria" name="maestria" class="form-control">
-                                        <label class="form-check-label" for="gridCheck1">
-                                            Maestría
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="doctorado" name="doctorado" class="form-control">
-                                        <label class="form-check-label" for="gridCheck1">
-                                            Doctorado
-                                        </label>
-                                    </div>
-                                </div>
-
-                            </div>-->
+                            <!--                            <div class="form-group row col-lg-12">
+                            
+                                                            <div class="col-sm-12">Educación Formal</div>
+                                                            <div class="col-sm-6">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="basica_secundaria" name="basica_secundaria" class="form-control">
+                                                                    <label class="form-check-label" for="gridCheck1">
+                                                                        Básica secundaria
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="tecnica" name="tecnica" class="form-control">
+                                                                    <label class="form-check-label" for="gridCheck1">
+                                                                        Técnica
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                            
+                                                            <div class="col-sm-6">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="tecnologica" name="tecnologica"  class="form-control">
+                                                                    <label class="form-check-label" for="gridCheck1">
+                                                                        Tecnológica
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                            
+                                                            <div class="col-sm-6">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="especializacion" name="especializacion" class="form-control">
+                                                                    <label class="form-check-label" for="gridCheck1">
+                                                                        Especialización
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="maestria" name="maestria" class="form-control">
+                                                                    <label class="form-check-label" for="gridCheck1">
+                                                                        Maestría
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="doctorado" name="doctorado" class="form-control">
+                                                                    <label class="form-check-label" for="gridCheck1">
+                                                                        Doctorado
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                            
+                                                        </div>-->
 
                             <div class="form-group row col-lg-12">
                                 <div class="col-sm-12">Experiencia Profesional</div>
@@ -934,6 +946,43 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" id="bcancelar" >Cancelar</button>
                         <button type="button" class="btn btn-primary" id="baceptar" >Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+
+        <!-- Modal confirmar liberación -->
+        <div class="modal fade" id="confirmar_liberar" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content alert-danger">
+                    <div class="modal-header">
+                        <!--h5 class="modal-title" id="exampleModalLabel">Modal title</h5-->
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="mensaje_liberar" style="display: none;">
+                            ¿Está seguro de liberar las postulaciones de los jurados que no fueron seleccionados en ésta convocatoria?<br/>
+                            Se van a liberar las postulaciones que se encuentren dentro de las siguientes situaciones:<br/>
+                            <ul>
+                                <li>Las postulaciones de los jurados cuyo perfil no aplica para ésta convocatoria.</li>
+                                <li>Las postulaciones de los jurados que fueron evaluados y que no fueron seleccionados para conformar los grupos de evaluación en ésta convocatoria.</li>
+                                <li>Las postulaciones de los jurados que fueron seleccionados, pero sus notificaciones se encuentran en estado "Rechazada" o "Declinada".</li>
+                            </ul>
+                            
+                            <strong>Recuerde que luego de ejecutar esta acción no podrá deshacer los cambios</strong>
+                        </div>
+                        
+                        
+                        <div id="mensaje_seleccionar_convocatoria" style="display: none;">
+                            Recuerde que debe seleccionar una convocatoria
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="bcancelar_liberar"  style="display: none;">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="baceptar_liberar"  style="display: none;">Aceptar</button>
                     </div>
                 </div>
             </div>

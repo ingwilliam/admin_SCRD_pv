@@ -52,7 +52,14 @@ $(document).ready(function () {
                         if (json.entidades.length > 0) {
                             //var selected;
                             $.each(json.estados_propuestas, function (key, estado_propuesta) {
-                                $("#estado_propuesta").append('<option value="' + estado_propuesta.id + '" >' + estado_propuesta.nombre + '</option>');
+                                //21 por subsanar
+                                //23 rechazada
+                                //24 habilitada
+                                //33 Recomendada como Ganadora  
+                                if( estado_propuesta.id!=21 && estado_propuesta.id!=23 && estado_propuesta.id!=24 && estado_propuesta.id!=33)                                
+                                {                                                                    
+                                    $("#estado_propuesta").append('<option value="' + estado_propuesta.id + '" >' + estado_propuesta.nombre + '</option>');
+                                }
                             });
                         }
                     }

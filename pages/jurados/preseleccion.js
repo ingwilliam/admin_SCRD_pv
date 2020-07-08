@@ -156,6 +156,31 @@ $(document).ready(function () {
             confirmar_evaluacion(token_actual, $("#id_perfil_selecionado").val(), $("#id_participante_sel").val());
             $('#evaluar').modal('hide');
         });
+        
+        $("#liberar_jurados").click(function () {
+            if($("#convocatorias").val()===""){
+                $('#mensaje_seleccionar_convocatoria').show();
+                $('#bcancelar_liberar').show();
+                
+                $('#mensaje_liberar').hide();
+                $('#baceptar_liberar').hide();
+            }else{
+                $('#mensaje_liberar').show();
+                $('#bcancelar_liberar').show();
+                $('#baceptar_liberar').show();
+                $('#mensaje_seleccionar_convocatoria').hide();
+            }
+        });
+        
+        $("#baceptar_liberar").click(function () {
+            $('#confirmar_liberar').modal('hide');
+            if($("#categorias").val()===""){
+                liberar_postulaciones(token_actual, $("#convocatorias").val());
+            }else{
+                alert($("#categorias").val());
+                liberar_postulaciones(token_actual, $("#categorias").val());
+            }
+        });
 
 
 
@@ -2153,3 +2178,51 @@ function cargar_select_nucleobasico(token_actual, id_areasconocimientos, set_val
       }
     );
   }
+
+
+
+/*
+ * 06-07-2020
+ * Wilmer Gustavo Mogollón Duque
+ * Se agrega función liberar_postulaciones 
+ */
+function liberar_postulaciones(token_actual, convocatoria) {
+
+
+    $.ajax({
+        type: 'PUT',
+        url: url_pv + 'Juradospreseleccion/liberar_postulaciones/convocatoria/' + convocatoria,
+        data: "&modulo=Jurados&token=" + token_actual.token
+
+    }).done(function (data) {
+
+        switch (data) {
+            case 'error':
+                notify("danger", "ok", "Usuario:", "Se registro un error, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                break;
+            case 'error_metodo':
+                notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda soporte.convocatorias@scrd.gov.co");
+                break;
+            case 'error_token':
+                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                //notify("danger", "error_token", "URL:", 'PropuestasEvaluacion/evaluacionpropuestas/'+id_evaluacion+'/impedimentos');
+                break;
+            case 'acceso_denegado':
+                notify("danger", "remove", "Usuario:", "Aún no se han conformado todos los grupos de evaluación.");
+                break;
+            case 'error_rondas':
+                notify("danger", "ok", "Usuario:", "Esta convocatoria aún no tiene rondas de evaluación asociadas");
+                break;
+            case 'deshabilitado':
+                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                break;
+            default:
+                notify("success", "ok", "Usuario:", "Las postulaciones fueron liberadas con éxito.");
+                cargar_tabla(token_actual);
+                break;
+        }
+
+    });
+
+
+}

@@ -111,7 +111,8 @@ $(document).ready(function () {
                                     $("#reporte_propuestas_estados").empty();                
                                     $("#reporte_convocatorias_cerrar").empty();                
                                     $("#reporte_convocatorias_cantidad_jurados").empty();                
-                                    $("#reporte_convocatorias_listado_jurados").empty();                
+                                    $("#reporte_convocatorias_listado_jurados").empty(); 
+                                    $("#reporte_ganadores").empty();                                    
                                     $(".fecha_actual").empty();
 
                                     if (json.error == 'error_metodo')
@@ -135,6 +136,7 @@ $(document).ready(function () {
                                                 $("#reporte_convocatorias_cerrar").html(json.reporte_convocatorias_cerrar);                
                                                 $("#reporte_convocatorias_cantidad_jurados").html(json.reporte_convocatorias_cantidad_jurados);                
                                                 $("#reporte_convocatorias_listado_jurados").html(json.reporte_convocatorias_listado_jurados);                
+                                                $("#reporte_ganadores").html(json.reporte_ganadores);
 
                                                 $(".fecha_actual").html(json.fecha_actual);                            
 
@@ -174,6 +176,16 @@ $(document).ready(function () {
                                                     $.AjaxDownloader({
                                                         data: json,
                                                         url: url_pv + 'ConvocatoriasFormatos/reporte_listado_entidades_convocatorias_listado_jurados_xls/'
+                                                    });
+
+                                                });
+                                                
+                                                $('.reporte_propuestas_ganadoras').click(function () {
+                                                    var json = JSON.parse( $(this).attr("rel") );
+
+                                                    $.AjaxDownloader({
+                                                        data: json,
+                                                        url: url_pv + 'ConvocatoriasFormatos/reporte_ganadores_xls/'
                                                     });
 
                                                 });
