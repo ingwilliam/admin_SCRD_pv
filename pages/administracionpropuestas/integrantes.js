@@ -73,6 +73,13 @@ $(document).ready(function () {
                 $("#por_que_actualiza_text").html("");
                 $("#id").val("");
             });
+            
+            //Limpio el formulario de los anexos
+            $('#nuevo_integrante_pj').on('hidden.bs.modal', function () {
+                $("#formulario_principal_pj")[0].reset();
+                $("#por_que_actualiza_text_pj").html("");
+                $("#id_pj").val("");
+            });
                                         
 
         } else
@@ -193,6 +200,103 @@ function validator_form(token_actual) {
         $('#nuevo_integrante').modal('toggle');
 
     });
+    
+    //Validar el formulario
+    $('.formulario_principal_pj').bootstrapValidator({
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            numero_documento: {
+                validators: {
+                    notEmpty: {message: 'El número de Nit es requerido'},
+                    numeric: {message: 'Debe ingresar solo numeros'}
+                }
+            },
+            primer_nombre: {
+                validators: {
+                    notEmpty: {message: 'La razón Social es requerida'}
+                }
+            },
+            dv: {
+                validators: {
+                    notEmpty: {message: 'El dv es requerido'},
+                    numeric: {message: 'Debe ingresar solo numeros'}
+                }
+            },
+            por_que_actualiza: {
+                validators: {
+                    notEmpty: {message: 'La justificación de la actualización es requerido'}
+                }
+            }
+        }
+    }).on('success.form.bv', function (e) {
+        // Prevent form submission
+        e.preventDefault();
+        // Get the form instance
+        var $form = $(e.target);
+
+        // Get the BootstrapValidator instance
+        var bv = $form.data('bootstrapValidator');
+
+        // Valido si el id existe, con el fin de eviarlo al metodo correcto
+        $('#formulario_principal_pj').attr('action', url_pv + 'PropuestasJuntasAgrupaciones/crear_integrante');
+
+        //Se realiza la peticion con el fin de guardar el registro actual
+        $.ajax({
+            type: 'POST',
+            url: $form.attr('action'),
+            data: $form.serialize() + "&modulo=Ajustes Junta y Agrupación&token=" + token_actual.token
+        }).done(function (result) {
+            var result=result.trim();
+            
+            if (result == 'error')
+            {
+                notify("danger", "ok", "Integrantes:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+            } else
+            {
+                if (result == 'error_token')
+                {
+                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                } else
+                {
+                    if (result == 'acceso_denegado')
+                    {
+                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                    } else
+                    {
+                        if (result == 'error_metodo')
+                        {
+                            notify("danger", "ok", "Integrantes:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                        } else
+                        {
+                            if (result == 'error_representante')
+                            {
+                                notify("danger", "ok", "Integrantes:", "No puede registrar mas de un representante.");
+                            } else
+                            {
+                                if (isNaN(result)) {
+                                    notify("danger", "ok", "Integrantes:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                } else
+                                {
+                                    notify("success", "ok", "Integrantes:", "Se Guardó con el éxito el integrante.");
+                                    cargar_tabla(token_actual);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        });
+
+        $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
+        bv.resetForm();
+        $('#nuevo_integrante_pj').modal('toggle');
+
+    });
 
 }
 
@@ -277,46 +381,43 @@ function cargar_formulario(token_actual)
                     
                     $("#representante option[value='" + json.participante.representante + "']").prop('selected', true);
                     
+                    $("#active option[value='" + json.participante.active + "']").prop('selected', true);
+                    
                     $('#nuevo_integrante').modal('toggle');
                 }
             }
         });
     });
     
-    //Permite activar o eliminar una categoria
-    $(".activar_categoria").click(function () {
-
-        var active = "false";
-        if ($(this).prop('checked')) {
-            active = "true";
-        }
-
-
+    $(".cargar_formulario_pj").click(function () {
+        //Cargo el id actual        
+        $("#id").attr('value', $(this).attr('title'))
+        //Realizo la peticion para cargar el formulario
         $.ajax({
-            type: 'DELETE',
-            data: {"token": token_actual.token, "modulo": "Ajustes Junta y Agrupación", "active": active},
-            url: url_pv + 'Personasnaturales/eliminar_integrante/' + $(this).attr("title")
+            type: 'GET',
+            data: {"token": token_actual.token, "propuesta": $("#propuesta").attr('value'), "participante": $("#participante").attr('value'), "conv": $("#conv").attr('value'), "modulo": "Ajustes Junta y Agrupación", "m": getURLParameter('m'), "id": $("#id").attr('value')},
+            url: url_pv + 'PropuestasJuntasAgrupaciones/editar_integrante/'
         }).done(function (data) {
-            if (data == 'ok')
+            if (data == 'error_metodo')
             {
-                if (active == "true")
-                {
-                    notify("info", "ok", "Convocatorias:", "Se activó el integrante con éxito.");
-                } else
-                {
-                    notify("info", "ok", "Convocatorias:", "Se inactivo el integrante con éxito.");
-                }
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
-                if (data == 'acceso_denegado')
+                if (data == 'error_token')
                 {
-                    notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                 } else
                 {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                    var json = JSON.parse(data);
+
+                    //Cargo el formulario con los datos
+                    $('#formulario_principal_pj').loadJSON(json.participante);
+                    
+                    $('#por_que_actualiza_text_pj').html(json.por_que_actualiza_text);                                                            
+                    
+                    $('#nuevo_integrante_pj').modal('toggle');
                 }
             }
         });
-    });
-    
+    });        
 }
