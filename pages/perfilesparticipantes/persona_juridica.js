@@ -306,7 +306,7 @@ function validator_form(token_actual) {
             },
             primer_nombre: {
                 validators: {
-                    notEmpty: {message: 'El primer nombre es requerido'}
+                    notEmpty: {message: 'La razón social es requerida'}
                 }
             },
             dv: {

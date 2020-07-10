@@ -153,6 +153,17 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="form-group">
+                                                <label>¿Activo?<span class="icono_requerido">*</span></label>
+                                                <select id='active' name="active" class="form-control" >
+                                                    <option value="true">Sí</option>
+                                                    <option value="false">No</option>
+                                                </select>                                                
+                                            </div>                                                                                                                                                                                                                                                                                                        
+                                        </div> 
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
                                                 <label>Justifique la actualización de los integrantes de la junta o agrupación<span class="icono_requerido">*</span></label>
                                                 <textarea id="por_que_actualiza" name="por_que_actualiza" class="form-control" rows="3"></textarea>                                                
                                             </div>
@@ -169,6 +180,80 @@
                                     <div class="row">
                                         <div class="col-lg-12" style="text-align: right">
                                             <input type="hidden" id="id" name="id" />                                            
+                                            <input type="hidden" id="propuesta" name="propuesta" /> 
+                                            <input type="hidden" id="participante" name="participante" />                                             
+                                            <button type="submit" class="btn btn-default">Guardar</button>
+                                        </div>
+                                    </div>                                
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal fade" id="nuevo_integrante_pj">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Modal que se activa cuando se realiza cualquier peticion ajax -->
+                            <div class="loading centrado-porcentual"></div> 
+                            <!-- cabecera del diálogo -->
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Formulario del integrante</h4>                                                    
+                            </div>
+
+                            <!-- cuerpo del diálogo -->
+                            <div class="modal-body">
+                                <form id="formulario_principal_pj" action="" class="formulario_principal_pj" role="form" method="post" enctype="multipart/form-data">                                                                        
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Tipo de documento de identificación  <span class="icono_requerido">*</span></label>
+                                                <select class="form-control" >
+                                                    <option value="NIT">NIT</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Número de Nit <span class="icono_requerido">*</span></label>
+                                                <input type="text" name="numero_documento" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>DV <span class="icono_requerido">*</span></label>
+                                                <input type="text" name="dv" class="form-control" maxlength="8">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Razón Social <span class="icono_requerido">*</span></label>
+                                                <input type="text" name="primer_nombre" class="form-control">
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Justifique la actualización de los integrantes de la junta o agrupación<span class="icono_requerido">*</span></label>
+                                                <textarea name="por_que_actualiza" class="form-control" rows="3"></textarea>                                                
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group" id="por_que_actualiza_text_pj">
+                                                
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-12" style="text-align: right">
+                                            <input type="hidden" id="id_pj" name="id" />                                            
                                             <input type="hidden" id="propuesta" name="propuesta" /> 
                                             <input type="hidden" id="participante" name="participante" />                                             
                                             <button type="submit" class="btn btn-default">Guardar</button>
