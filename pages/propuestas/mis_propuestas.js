@@ -78,7 +78,7 @@ $(document).ready(function () {
                 "processing": true,
                 "serverSide": true,
                 "ordering": false,
-                "lengthMenu": [20, 30, 40],
+                "lengthMenu": [100, 150, 200],
                 "ajax": {
                     url: url_pv + "PropuestasParticipantes/buscar_propuestas",
                     data: function (d) {
