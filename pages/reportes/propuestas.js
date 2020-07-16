@@ -309,13 +309,15 @@ $(document).ready(function () {
                                                     
                                                     $('#btn_planillas').click(function () {
                                                         var ronda = $("#ronda").val();
+                                                        var deliberacion = $("#deliberacion").val();
+                                                        var codigos = $("#codigos").val();
                                                         if(ronda=="")
                                                         {
                                                             notify("danger", "remove", "Reportes:", "Debe seleccionar una ronda.");
                                                         }
                                                         else
                                                         {                                                    
-                                                            window.open(url_pv_report+'reporte_planillas_evaluacion.php?ronda='+ronda, '_blank');
+                                                            window.open(url_pv_report+'reporte_planillas_evaluacion.php?ronda='+ronda+'&deliberacion='+deliberacion+'&codigos='+codigos, '_blank');
                                                         }                                                
                                                     }); 
 

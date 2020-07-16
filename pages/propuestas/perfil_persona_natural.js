@@ -538,7 +538,11 @@ function validator_form(token_actual) {
             },
             numero_documento: {
                 validators: {
-                    notEmpty: {message: 'El número de documento de identificación es requerido'}
+                    notEmpty: {message: 'El número de documento de identificación es requerido'},
+                    regexp: {
+                        regexp: /^[a-zA-Z0-9]+$/i,
+                        message: 'Solo se permite números o letras'
+                    }
                 }
             },
             primer_nombre: {
