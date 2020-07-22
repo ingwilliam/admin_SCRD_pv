@@ -330,6 +330,38 @@
             </div>
           </div>
           <!-- Modal -->
+          
+          
+          <!--
+            20-07-2020
+            Wilmer Gustavo Mogollón Duque
+            Se agrega modal para notificación al generar el documento de aceptación.
+        -->
+
+        <!-- Modal generar acta -->
+        <div class="modal fade" id="genera_aceptacion" tabindex="-1" role="dialog" aria-labelledby="genera_aceptacionLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!--h5 class="modal-title" id="exampleModalLabel">Modal title</h5-->
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div id="mensaje">
+                            ¿Está seguro de generar la carta de aceptación?<br/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="bcancelarcarta">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="baceptarcarta">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
 
 
         <!-- jQuery -->
