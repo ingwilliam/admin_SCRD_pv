@@ -1580,6 +1580,9 @@ function anular_deliberacion(token_actual, id_ronda) {
             case 'acceso_denegado':
                 notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                 break;
+            case 'confirmo_top':
+                notify("danger", "remove", "Usuario:", "No tiene permisos para anular la deliberación porque yá confirmó el top general.");
+                break;
             case 'deshabilitado':
                 notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                 break;

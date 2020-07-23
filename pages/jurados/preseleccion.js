@@ -177,7 +177,6 @@ $(document).ready(function () {
             if($("#categorias").val()===""){
                 liberar_postulaciones(token_actual, $("#convocatorias").val());
             }else{
-                alert($("#categorias").val());
                 liberar_postulaciones(token_actual, $("#categorias").val());
             }
         });
@@ -2209,6 +2208,9 @@ function liberar_postulaciones(token_actual, convocatoria) {
                 break;
             case 'acceso_denegado':
                 notify("danger", "remove", "Usuario:", "Aún no se han conformado todos los grupos de evaluación.");
+                break;
+            case 'acceso_denegado':
+                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                 break;
             case 'error_rondas':
                 notify("danger", "ok", "Usuario:", "Esta convocatoria aún no tiene rondas de evaluación asociadas");
