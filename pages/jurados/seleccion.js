@@ -402,11 +402,17 @@ function acciones_registro(token_actual) {
     });
 
 
-    $(".btn_carta").click(function () {
 
-        alert($(this).attr("id"));
+    /*
+     * 22-07-2020
+     * Wilmer Gustavo Mogollón Duque
+     */
+    $('.btn_carta').click(function () {
 
-        genera_carta_acpetacion(token_actual, $(this).attr("id"))
+        var postulacion = $(this).attr("id");
+
+        window.open(url_pv_report + 'reporte_carta_aceptacion.php?postulacion=' + postulacion, '_blank');
+
 
     });
 
