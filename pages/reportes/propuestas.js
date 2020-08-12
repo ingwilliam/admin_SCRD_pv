@@ -222,6 +222,7 @@ $(document).ready(function () {
                                         $("#reporte_convocatorias_listado_contratistas").empty();
                                         $("#reporte_convocatorias_listado_no_inscritas").empty();
                                         $("#reporte_jurados_postulados").empty();//20-07-2020 -- Jurados postulados
+                                        $("#reporte_evaluacion_jurados").empty();//11-08-2020 -- Evaluación de Jurados postulados
                                         $("#reporte_convocatorias_listado_participantes").empty();                                                                                
                                         $(".fecha_actual").empty();
 
@@ -273,6 +274,8 @@ $(document).ready(function () {
                                                     $("#reporte_convocatorias_listado_no_inscritas").html(json.reporte_convocatorias_listado_no_inscritas);
                                                     
                                                     $("#reporte_jurados_postulados").html(json.reporte_jurados_postulados);
+                                                    
+                                                    $("#reporte_evaluacion_jurados").html(json.reporte_evaluacion_jurados);//11-08-2020 Reporte de evaluación jurados
                                                     
                                                     $("#reporte_convocatorias_listado_participantes").html(json.reporte_convocatorias_listado_participantes);
                                                     
@@ -335,6 +338,19 @@ $(document).ready(function () {
                                                         var convocatoria = $("#convocatoria").val();
                                                         
                                                         window.open(url_pv_report+'reporte_jurados_postulados.php?convocatoria='+convocatoria, '_blank');
+
+
+                                                    });
+                                                    
+                                                    /*
+                                                     * 11-08-2020
+                                                     * Wilmer Gustavo Mogollón Duque
+                                                     */
+                                                    $('.reporte_evaluacion_jurados').click(function () {
+                                                        
+                                                        var convocatoria = $("#convocatoria").val();
+                                                        
+                                                        window.open(url_pv_report+'reporte_evaluacion_jurados.php?convocatoria='+convocatoria, '_blank');
 
 
                                                     });
