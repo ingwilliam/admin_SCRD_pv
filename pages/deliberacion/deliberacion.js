@@ -910,6 +910,9 @@ function cargar_info_top_general(token_actual, id_ronda) {
             case 'error_confirmacion':
                 notify("danger", "remove", "Usuario:", "Hay evaluaciones sin confirmar.");
                 break;
+            case 'error_deliberacion':
+                notify("danger", "remove", "Usuario:", "Recuerde que es necesario enviar a deliberar.");
+                break;
             case 'exito':
 
                 $("#top_generalModal").modal('show');
