@@ -149,9 +149,12 @@ $(document).ready(function () {
 
                                                                         //Cargo el formulario con los datos
                                                                         $('#formulario_principal').loadJSON(json.propuesta);
+                                                                        $('#formulario_principal').loadJSON(json.propuesta_territorio);
 
                                                                         //agrego los totales de caracteres
-                                                                        $(".caracter_trayectoria_entidad").html(2000 - json.propuesta.trayectoria_entidad.length);
+                                                                        $(".caracter_poblacion_objetivo").html(1000 - json.propuesta.poblacion_objetivo.length);
+                                                                        $(".caracter_comunidad_objetivo").html(2000 - json.propuesta.comunidad_objetivo.length);
+                                                                        $(".caracter_establecio_cifra").html(500 - json.propuesta.establecio_cifra.length);
 
                                                                         //Valido formulario
                                                                         validator_form(token_actual);
@@ -162,116 +165,7 @@ $(document).ready(function () {
                                                             }
                                                         }
                                                     }
-                                                });
-
-                                                //Cargar Upz y Barrios
-                                                $('#localidad').on('change', function () {
-                                                    var localidad = $(this).val();
-                                                    $('#upz').find('option').remove();
-                                                    $('#barrio').find('option').remove();
-                                                    $.ajax({
-                                                        type: 'GET',
-                                                        data: {"token": token_actual.token, "localidad": localidad},
-                                                        url: url_pv + 'Upzs/select'
-                                                    }).done(function (data) {
-                                                        if (data == 'error_metodo')
-                                                        {
-                                                            notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                                                        } else
-                                                        {
-                                                            if (data == 'error_token')
-                                                            {
-                                                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                                                            } else
-                                                            {
-                                                                var json = JSON.parse(data);
-                                                                $("#upz").append('<option value="">:: Seleccionar ::</option>');
-                                                                if (json != null)
-                                                                {
-                                                                    if (json.length > 0) {
-                                                                        $.each(json, function (key, value) {
-                                                                            $("#upz").append('<option value="' + value.id + '">' + value.nombre + '</option>');
-                                                                        });
-                                                                    }
-                                                                }
-                                                                $("#barrio").append('<option value="">:: Seleccionar ::</option>');
-                                                            }
-                                                        }
-                                                    });
-                                                    $.ajax({
-                                                        type: 'GET',
-                                                        data: {"token": token_actual.token, "localidad": localidad},
-                                                        url: url_pv + 'Barrios/select'
-                                                    }).done(function (data) {
-                                                        if (data == 'error_metodo')
-                                                        {
-                                                            notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                                                        } else
-                                                        {
-                                                            if (data == 'error_token')
-                                                            {
-                                                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                                                            } else
-                                                            {
-                                                                var json = JSON.parse(data);
-                                                                $("#barrio").append('<option value="">:: Seleccionar ::</option>');
-                                                                if (json != null)
-                                                                {
-                                                                    if (json.length > 0) {
-                                                                        $.each(json, function (key, value) {
-                                                                            $("#barrio").append('<option value="' + value.id + '">' + value.nombre + '</option>');
-                                                                        });
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    });
-                                                });
-
-                                                //Cargar Barrios
-                                                $('#upz').on('change', function () {
-                                                    var upz = $(this).val();
-                                                    var localidad = $("#localidad").val();
-                                                    $('#barrio').find('option').remove();
-                                                    $.ajax({
-                                                        type: 'GET',
-                                                        data: {"token": token_actual.token, "localidad": localidad, "upz": upz},
-                                                        url: url_pv + 'Barrios/select'
-                                                    }).done(function (data) {
-                                                        if (data == 'error_metodo')
-                                                        {
-                                                            notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                                                        } else
-                                                        {
-                                                            if (data == 'error_token')
-                                                            {
-                                                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                                                            } else
-                                                            {
-                                                                var json = JSON.parse(data);
-                                                                $("#barrio").append('<option value="">:: Seleccionar ::</option>');
-                                                                if (json.length > 0) {
-                                                                    $.each(json, function (key, value) {
-                                                                        $("#barrio").append('<option value="' + value.id + '">' + value.nombre + '</option>');
-                                                                    });
-                                                                }
-                                                            }
-                                                        }
-                                                    });
-                                                });
-
-                                                //Cargar Barrios
-                                                $('#bogota').on('change', function () {
-                                                    var bogota = $(this).val();
-                                                    //Verifico si es bogota                                
-                                                    if (bogota == "true")
-                                                    {
-                                                        $(".desarrollo_bogota").removeAttr("disabled");
-                                                    } else
-                                                    {
-                                                        $(".desarrollo_bogota").attr("disabled", "disabled");
-                                                    }
-                                                });
+                                                });                                                
                                             }
                                         }
                                     }
@@ -329,7 +223,8 @@ function validator_form(token_actual) {
             },
             total_beneficiario: {
                 validators: {
-                    notEmpty: {message: 'Estimado total de beneficiarios o participantes, es requerido'}
+                    notEmpty: {message: 'Estimado total de beneficiarios o participantes, es requerido'},
+                    numeric: {message: 'Debe ingresar solo numeros'}
                 }
             },
             establecio_cifra: {
@@ -498,45 +393,57 @@ function validator_form(token_actual) {
         }
         
         //Valido Grupo etareo
-        if ($("#primera_infancia").val() == 'No' && $("#infancia").val() == 'No' && $("#adolescencia").val() == 'No' && $("#juventud").val() == 'No' && $("#adulto").val() == 'No' && $("#adulto_mayor").val() == 'No' )
+        if(validar)
         {
-            notify("danger", "ok", "Propuesta:", "Debe seleccionar al menos un grupo etareo.");
-            validar = false;            
-        } else
-        {
-            validar = true;
+            if ($("#primera_infancia").val() == 'No' && $("#infancia").val() == 'No' && $("#adolescencia").val() == 'No' && $("#juventud").val() == 'No' && $("#adulto").val() == 'No' && $("#adulto_mayor").val() == 'No' )
+            {
+                notify("danger", "ok", "Propuesta:", "Debe seleccionar al menos un grupo etareo.");
+                validar = false;            
+            } else
+            {
+                validar = true;
+            }
         }
-        
+    
         //Valido estrato
-        if ($("#estrato_1").val() == 'No' && $("#estrato_2").val() == 'No' && $("#estrato_3").val() == 'No' && $("#estrato_4").val() == 'No' && $("#estrato_5").val() == 'No' && $("#estrato_6").val() == 'No' )
+        if(validar)
         {
-            notify("danger", "ok", "Propuesta:", "Debe seleccionar al menos un estrato.");
-            validar = false;            
-        } else
-        {
-            validar = true;
+            if ($("#estrato_1").val() == 'No' && $("#estrato_2").val() == 'No' && $("#estrato_3").val() == 'No' && $("#estrato_4").val() == 'No' && $("#estrato_5").val() == 'No' && $("#estrato_6").val() == 'No' )
+            {
+                notify("danger", "ok", "Propuesta:", "Debe seleccionar al menos un estrato.");
+                validar = false;            
+            } else
+            {
+                validar = true;
+            }
         }
         
         //Valido etnico
-        if ($("#comunidades_negras_afrocolombianas").val() == 'No' && $("#comunidad_raizal").val() == 'No' && $("#pueblos_comunidades_indigenas").val() == 'No' && $("#pueblo_rom_gitano").val() == 'No' && $("#mestizo").val() == 'No' && $("#ninguno_etnico").val() == 'No' )
+        if(validar)
         {
-            notify("danger", "ok", "Propuesta:", "Debe seleccionar al menos un grupo étnico.");
-            validar = false;            
-        } else
-        {
-            validar = true;
+            if ($("#comunidades_negras_afrocolombianas").val() == 'No' && $("#comunidad_raizal").val() == 'No' && $("#pueblos_comunidades_indigenas").val() == 'No' && $("#pueblo_rom_gitano").val() == 'No' && $("#mestizo").val() == 'No' && $("#ninguno_etnico").val() == 'No' )
+            {
+                notify("danger", "ok", "Propuesta:", "Debe seleccionar al menos un grupo étnico.");
+                validar = false;            
+            } else
+            {
+                validar = true;
+            }
         }
         
         //Valido grupo
-        if ($("#artesanos").val() == 'No' && $("#discapacitados").val() == 'No' && $("#habitantes_calle").val() == 'No' && $("#lgbti").val() == 'No' && $("#personas_comunidades_rurales_campesinas").val() == 'No' && $("#personas_privadas_libertad").val() == 'No' && $("#victimas_conflicto").val() == 'No' && $("#ninguno_grupo").val() == 'No' )
+        if(validar)
         {
-            notify("danger", "ok", "Propuesta:", "Debe seleccionar al menos un grupos sociales y poblacionales.");
-            validar = false;            
-        } else
-        {
-            validar = true;
+            if ($("#artesanos").val() == 'No' && $("#discapacitados").val() == 'No' && $("#habitantes_calle").val() == 'No' && $("#lgbti").val() == 'No' && $("#personas_comunidades_rurales_campesinas").val() == 'No' && $("#personas_privadas_libertad").val() == 'No' && $("#victimas_conflicto").val() == 'No' && $("#ninguno_grupo").val() == 'No' )
+            {
+                notify("danger", "ok", "Propuesta:", "Debe seleccionar al menos un grupos sociales y poblacionales.");
+                validar = false;            
+            } else
+            {
+                validar = true;
+            }
         }
-
+        
         // Prevent form submission
         e.preventDefault();
         // Get the form instance
@@ -562,7 +469,7 @@ function validator_form(token_actual) {
             var bv = $form.data('bootstrapValidator');
 
             // Valido si el id existe, con el fin de eviarlo al metodo correcto
-            $('#formulario_principal').attr('action', url_pv + 'PropuestasPdac/editar_propuesta');
+            $('#formulario_principal').attr('action', url_pv + 'PropuestasPdac/editar_propuesta_territorio');
 
             modalConfirm(function (confirm) {
                 if (confirm) {
@@ -594,22 +501,8 @@ function validator_form(token_actual) {
                                     {
                                         notify("success", "ok", "Propuesta:", "Se actualizó con el éxito la propuesta.");
 
-                                        var redirect = "";
-                                        if (getURLParameter('m') == "pn")
-                                        {
-                                            redirect = "documentacion.html";
-                                        }
-                                        if (getURLParameter('m') == "pj")
-                                        {
-                                            redirect = "junta.html";
-                                        }
-                                        if (getURLParameter('m') == "agr")
-                                        {
-                                            redirect = "integrantes.html";
-                                        }
-
-
-
+                                        var redirect = "cronogramas.html";
+                                        
                                         setTimeout(function () {
                                             location.href = url_pv_admin + 'pages/propuestas/' + redirect + '?m=' + getURLParameter('m') + '&id=' + $("#conv").attr('value') + '&p=' + getURLParameter('p');
                                         }, 1800);
