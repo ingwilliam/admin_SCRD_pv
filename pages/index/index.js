@@ -33,23 +33,35 @@ $(document).ready(function () {
                     else
                     {
                         var json = JSON.parse(data);
-                        if(json.primer_nombre==null)
+                        if(json.user.primer_nombre==null)
                         {
-                           json.primer_nombre="";
+                           json.user.primer_nombre="";
                         }
-                        if(json.segundo_nombre==null)
+                        if(json.user.segundo_nombre==null)
                         {
-                           json.segundo_nombre="";
+                           json.user.segundo_nombre="";
                         }
-                        if(json.primer_apellido==null)
+                        if(json.user.primer_apellido==null)
                         {
-                           json.primer_apellido="";
+                           json.user.primer_apellido="";
                         }
-                        if(json.segundo_apellido==null)
+                        if(json.user.segundo_apellido==null)
                         {
-                           json.segundo_apellido="";
+                           json.user.segundo_apellido="";
                         }
-                        $("#nombre_bienvenida").html(json.primer_nombre+" "+json.segundo_nombre+" "+json.primer_apellido+" "+json.segundo_apellido);                        
+                        $("#nombre_bienvenida").html(json.user.primer_nombre+" "+json.user.segundo_nombre+" "+json.user.primer_apellido+" "+json.user.segundo_apellido);                        
+                        
+                        if(json.externo=="Si")
+                        {                            
+                            $(".manuales_externos").css("display","block");
+                            $(".manuales_internos").css("display","none");
+                        }
+                        else
+                        {
+                            $(".manuales_externos").css("display","none");
+                            $(".manuales_internos").css("display","block");
+                            
+                        }
                     }
                 }
             }
