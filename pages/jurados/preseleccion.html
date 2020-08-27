@@ -484,6 +484,8 @@
                                     </li>
                                     <li class=""><a href="#hoja_de_vida" data-toggle="tab" aria-expanded="false">Ver hoja de vida</a>
                                     </li>
+                                    <li class=""><a href="#inhabilidades" data-toggle="tab" aria-expanded="false">Ver inhabilidades</a>
+                                    </li>
                                     <li class=""><a href="#puntuacion" data-toggle="tab" aria-expanded="false">Puntuación</a>
                                     </li>
                                 </ul>
@@ -833,6 +835,131 @@
                                         <!-- Accordion -->
                                     </div>
 
+
+                                    <!-- 19-08-2020 Wilmer Gustavo Mogollón Duque --- Se incorpora reporte de inhabilidades -->
+
+                                    <div class="tab-pane fade" id="inhabilidades">
+
+                                        <!--Información básica-->
+                                        <div class="panel panel-info">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">Reporte de inhabilidades del jurado </h4>
+                                            </div>
+                                            <div class="panel-body" id="inhabilidades_jurados">
+                                                <div class="row">
+                                                    <div class="col-lg-12">                                                                
+                                                        <table id="info_propuesta_verificacion_1" class="table table-bordered table-striped">                                    
+                                                            <tbody>
+                                                                <tr>
+                                                                    <th>Estado</th>
+                                                                    <td id="nombre_estado"></td>
+                                                                    <th>Código</th>
+                                                                    <td id="codigo_propuesta"></td>
+                                                                </tr>
+                                                                <tr>                                                                            
+                                                                    <th>Tipo de participante</th>
+                                                                    <td id="tipo_participante"></td>
+                                                                    <th>Nombre del participante</th>
+                                                                    <td id="nombre_participante"></td>
+                                                                </tr>
+                                                                <tr>                                                                            
+                                                                    <th colspan="1">Nombre de la propuesta</th>
+                                                                    <td colspan="3" id="nombre_propuesta"></td>
+                                                                </tr>                                                                                                                                                                                
+                                                            </tbody>
+                                                        </table>                                                                
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--Contratista-->
+                                        <div id="contratistas" class="row" style="display: none">
+                                            <div class="col-lg-12"> 
+                                                <b>El participante tiene contratos en el sector, los cuales son:</b>
+
+                                                <table class="table table-bordered table-striped">                                    
+                                                    <thead>
+                                                        <tr style="background-color: #FA5858; color: #ffffff">
+                                                            <th>Participante</th>
+                                                            <th>Contratista en:</th>                                                                            
+                                                        </tr>                                                                                                                                                                                                                                                        
+                                                    </thead>
+                                                    <tbody id="body_contratistas">                                                                        
+
+                                                    </tbody>
+                                                </table>                                                                                                                                
+                                            </div>                                                            
+                                        </div>
+                                        <!--Jurados seleccionados-->
+                                        <div id="jurados_seleccionados" class="row" style="display: none">
+                                            <div class="col-lg-12"> 
+                                                <b>El jurado ya fue seleccionado en las siguientes convocatorias:</b>
+
+                                                <table class="table table-bordered table-striped">                                    
+                                                    <thead>
+                                                        <tr style="background-color: #FA5858; color: #ffffff">
+                                                            <th>Convocatoria</th>
+                                                            <th>Categoría</th>   
+                                                            <th>Tipo Rol</th>                        
+                                                            <th>Participante</th>                                                                            
+                                                            <th>Estado postulación</th>
+                                                        </tr>                                                                                                                                                                                                                                                        
+                                                    </thead>
+                                                    <tbody id="body_jurados_seleccionados">                                                                        
+
+                                                    </tbody>
+                                                </table>                                                                                                                                
+                                            </div>                                                            
+                                        </div>
+                                        <!--Jurados participa en otras convocatorias-->
+                                        <div id="propuestas_pn" class="row" style="display: none">
+                                                            <div class="col-lg-12"> 
+                                                                <b>El jurado participa en otras convocatorias, los cuales son:</b>
+
+                                                                <table class="table table-bordered table-striped">                                    
+                                                                    <thead>
+                                                                        <tr style="background-color: #FA5858; color: #ffffff">
+                                                                            <th>Convocatoria</th>
+                                                                            <th>Categoría</th>   
+                                                                            <th>Tipo Rol</th>                        
+                                                                            <th>Participante</th>
+                                                                            <th>Propuesta código</th>                                                                                                                   
+                                                                            <th>Estado propuesta</th>
+                                                                        </tr>                                                                                                                                                                                                                                                        
+                                                                    </thead>
+                                                                    <tbody id="body_propuestas_pn">                                                                        
+
+                                                                    </tbody>
+                                                                </table>                                                                                                                                
+                                                            </div>                                                            
+                                                        </div>
+                                        <!--Jurados seleccionados años anteriores-->
+                                        <div id="ganadoras_anios_anteriores" class="row" style="display: none">
+                                            <div class="col-lg-12"> 
+                                                <b>El jurado ya fue seleccionado como ganador en años anteriores para las siguientes convocatorias:</b>
+
+                                                <table class="table table-bordered table-striped">                                    
+                                                    <thead>
+                                                        <tr style="background-color: #FA5858; color: #ffffff">
+                                                            <th>Año</th>
+                                                            <th>Entidad</th>
+                                                            <th>Convocatoria</th>                                                                            
+                                                            <th>Categoría</th>   
+                                                            <th>Propuesta</th>                                                                            
+                                                            <th>Participante</th>
+                                                            <th>Tipo participante</th>                                                                                                    
+                                                            <th>Tipo Rol</th>                                                                            
+                                                        </tr>                                                                                                                                                                                                                                                        
+                                                    </thead>
+                                                    <tbody id="body_ganadoras_anios_anteriores">                                                                        
+
+                                                    </tbody>
+                                                </table>                                                                                                                                
+                                            </div>                                                            
+                                        </div>
+
+                                    </div>
+
                                     <div class="tab-pane fade" id="puntuacion">
 
                                         <div class="panel panel-info">
@@ -971,11 +1098,11 @@
                                 <li>Las postulaciones de los jurados que fueron evaluados y que no fueron seleccionados para conformar los grupos de evaluación en ésta convocatoria.</li>
                                 <li>Las postulaciones de los jurados que fueron seleccionados, pero sus notificaciones se encuentran en estado "Rechazada" o "Declinada".</li>
                             </ul>
-                            
+
                             <strong>Recuerde que luego de ejecutar esta acción no podrá deshacer los cambios</strong>
                         </div>
-                        
-                        
+
+
                         <div id="mensaje_seleccionar_convocatoria" style="display: none;">
                             Recuerde que debe seleccionar una convocatoria
                         </div>
