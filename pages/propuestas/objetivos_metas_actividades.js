@@ -46,9 +46,42 @@ $(document).ready(function () {
                 minView: 2,
                 forceParse: 0
             }).on('changeDate', function(ev){
+                                
+                //Capturo la fecha del calendario
+                var fecha = new Date(ev.date).toISOString().substring(0, 10);
                 
-            
-                alert(new Date(ev.date).toISOString().substring(0, 10));
+                $.ajax({
+                    type: 'POST',
+                    url: url_pv + 'PropuestasPdac/validar_periodo_ejecucion',
+                    data: "modulo=Menu Participante&token=" + token_actual.token + "&m=" + getURLParameter('m')+"&conv="+getURLParameter('id')+"&p="+getURLParameter('p')+"&fecha="+fecha
+                }).done(function (result) {
+
+                    if (result == 'error')
+                    {
+                        notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                    } else
+                    {
+                        if (result == 'error_token')
+                        {
+                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                        } else
+                        {
+                            if (result == 'acceso_denegado')
+                            {
+                                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                            } else
+                            {
+                                if(!Boolean(result))
+                                {
+                                    notify("danger", "remove", "Usuario:", "La semana de ejecución, esta fuera del periodo permitido para la ejecución de su propuesta.");
+                                    $("#fecha").val('');
+                                    $("#form_nuevo_cronograma").data('bootstrapValidator').resetForm();        
+                                    $("#form_nuevo_cronograma").bootstrapValidator('resetForm', true);
+                                }                                                                
+                            }
+                        }
+                    }
+                });                                         
             });            
             
             
@@ -194,7 +227,8 @@ $(document).ready(function () {
                 $("#objetivo").val("");
                 $("#meta").val("");
                 $("#orden").val("");                                                    
-                $("#id_registro").val("");                   
+                $("#id_registro").val("");  
+                $("#form_nuevo_objetivo").bootstrapValidator('disableSubmitButtons', false);                                                
             });
             
             //Limpio el formulario
@@ -202,6 +236,32 @@ $(document).ready(function () {
                 $("#actividad").val("");
                 $("#orden").val("");                                                    
                 $("#id_registro_2").val("");                   
+                $("#form_nuevo_actividad").bootstrapValidator('disableSubmitButtons', false);
+            }); 
+            
+            //Limpio el formulario
+            $('#nuevo_cronograma').on('hidden.bs.modal', function () {
+                $("#fecha").val("");                
+                $("#id_registro_3").val("");  
+                $("#form_nuevo_cronograma").data('bootstrapValidator').resetForm();        
+                $("#form_nuevo_cronograma").bootstrapValidator('resetForm', true);
+            });
+            
+            //Limpio el formulario
+            $('#nuevo_presupuesto').on('hidden.bs.modal', function () {
+                $("#id_registro_4").val("");
+                
+                $("#insumo").val("");  
+                $("#cantidad").val("");  
+                $("#unidadmedida").val("");  
+                $("#valorunitario").val("");  
+                $("#valortotal").val("");  
+                $("#aportesolicitado").val("");  
+                $("#aportecofinanciado").val("");  
+                $("#aportepropio").val("");  
+                
+                $("#form_nuevo_presupuesto").data('bootstrapValidator').resetForm();        
+                $("#form_nuevo_presupuesto").bootstrapValidator('resetForm', true);
             });                               
             
         } else
@@ -222,7 +282,38 @@ $(document).ready(function () {
         }
         $(".caracter_" + obj).html(total_actual);
     });
-
+    
+    $(".calcular_valor_total").focusout(function () {        
+        var cantidad = $("#cantidad").val();
+        var valorunitario = $("#valorunitario").val();        
+        var valortotal = cantidad*valorunitario;        
+        if (Number.isInteger(parseInt(valortotal)))
+        {            
+            $("#valortotal").attr("value",valortotal);
+        }
+        
+        var valortotal = parseInt($("#valortotal").val());  
+        
+        if(valortotal>0)
+        {        
+            var aportesolicitado = $("#aportesolicitado").val();
+            var aportecofinanciado = $("#aportecofinanciado").val();        
+            var total = parseInt(aportesolicitado)+parseInt(aportecofinanciado);        
+            var aportepropio=valortotal-total;              
+            if(total>0)
+            {
+                if( aportepropio>=0 && aportepropio<=valortotal)
+                {
+                    $("#aportepropio").attr("value",aportepropio);                                                
+                } 
+                else
+                {
+                    $("#aportepropio").attr("value","");
+                    notify("danger", "ok", "Presupuesto:", "El aporte recursos propios, no puede ser mayor o menor al Valor Total.");                            
+                } 
+            }            
+        }
+    });    
 });
 
 function validator_form(token_actual) {
@@ -334,6 +425,7 @@ function validator_form(token_actual) {
             invalid: 'glyphicon glyphicon-remove',
             validating: 'glyphicon glyphicon-refresh'
         },
+        excluded: [':disabled'],
         fields: {            
             orden: {
                 validators: {
@@ -374,7 +466,7 @@ function validator_form(token_actual) {
 
                 if (result == 'error')
                 {
-                    notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                    notify("danger", "ok", "Objetivos:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                 } else
                 {
                     if (result == 'error_token')
@@ -384,14 +476,14 @@ function validator_form(token_actual) {
                     {
                         if (result == 'acceso_denegado')
                         {
-                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                            notify("danger", "remove", "Objetivos:", "No tiene permisos para editar información.");
                         } else
                         {
                             if (isNaN(result)) {
-                                notify("danger", "ok", "Propuesta:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                notify("danger", "ok", "Objetivos:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                             } else
                             {
-                                notify("success", "ok", "Propuesta:", "Se guardo con el éxito el objetivo específico.");                               
+                                notify("success", "ok", "Objetivos:", "Se guardo con el éxito el objetivo específico.");                               
                                 $('#nuevo_objetivo').modal('toggle');
                                 cargar_tabla(token_actual);
                             }
@@ -409,6 +501,7 @@ function validator_form(token_actual) {
             invalid: 'glyphicon glyphicon-remove',
             validating: 'glyphicon glyphicon-refresh'
         },
+        excluded: [':disabled'],
         fields: {            
             propuestaobjetivo: {
                 validators: {
@@ -476,6 +569,203 @@ function validator_form(token_actual) {
 
             });                
     });
+    
+    
+    //Se debe colocar debido a que el calendario es un componente diferente
+    $('.semana').on('changeDate show', function (e) {
+        $('#form_nuevo_cronograma').bootstrapValidator('revalidateField', 'fecha');        
+    });
+    
+    //Validar el formulario    
+    $('.form_nuevo_cronograma').bootstrapValidator({
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        excluded: [':disabled'],
+        fields: {            
+            fecha: {
+                validators: {
+                    notEmpty: {message: 'La semana de ejecución, es requerido'}
+                }
+            }
+        }
+    }).on('success.form.bv', function (e) {
+        
+        // Prevent form submission
+        e.preventDefault();
+        // Get the form instance
+        var $form = $(e.target);
+
+            // Get the BootstrapValidator instance
+            var bv = $form.data('bootstrapValidator');
+
+            // Valido si el id existe, con el fin de eviarlo al metodo correcto
+            $('#form_nuevo_cronograma').attr('action', url_pv + 'PropuestasPdac/editar_propuesta_cronograma');
+
+            //Se realiza la peticion con el fin de guardar el registro actual
+            $.ajax({
+                type: 'POST',
+                url: $form.attr('action'),
+                data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token + "&m=" + getURLParameter('m')+"&propuesta="+getURLParameter('p'),
+            }).done(function (result) {
+
+                if (result == 'error')
+                {
+                    notify("danger", "ok", "Cronograma:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                } else
+                {
+                    if (result == 'error_token')
+                    {
+                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    } else
+                    {
+                        if (result == 'acceso_denegado')
+                        {
+                            notify("danger", "remove", "Cronograma:", "No tiene permisos para editar información.");
+                        } else
+                        {
+                            if (result == 'error_fecha')
+                            {
+                                notify("danger", "remove", "Cronograma:", "La semama de ejecución, ya esta registrada.");
+                            } 
+                            else
+                            {
+                                if (isNaN(result)) {
+                                    notify("danger", "ok", "Cronograma:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                } else
+                                {
+                                    notify("success", "ok", "Cronograma:", "Se guardo con el éxito la semana de ejecución.");                                
+                                    $("#fecha").val("");   
+                                    $("#form_nuevo_cronograma").data('bootstrapValidator').resetForm();        
+                                    $("#form_nuevo_cronograma").bootstrapValidator('resetForm', true);
+                                    cargar_tabla_cronograma(token_actual);
+                                }
+                            }
+                        }
+                    }
+                }
+
+            });                
+    }); 
+    
+    //Validar el formulario    
+    $('.form_nuevo_presupuesto').bootstrapValidator({
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        excluded: [':disabled'],
+        fields: {            
+            insumo: {
+                validators: {
+                    notEmpty: {message: 'El insumo, es requerido'}
+                }
+            },
+            unidadmedida: {
+                validators: {
+                    notEmpty: {message: 'La unidad de medida, es requerido'},
+                    integer: {message: 'Solo se permite números'}
+                }
+            },
+            cantidad: {
+                validators: {                    
+                    integer: {message: 'Solo se permite números'}
+                }
+            },
+            valorunitario: {
+                validators: {                    
+                    integer: {message: 'Solo se permite números'}
+                }
+            },
+            valortotal: {
+                validators: {   
+                    notEmpty: {message: 'El valor total, es requerido'},
+                    integer: {message: 'Solo se permite números'}
+                }
+            },
+            aportesolicitado: {
+                validators: {                    
+                    integer: {message: 'Solo se permite números'}
+                }
+            },
+            aportecofinanciado: {
+                validators: {                    
+                    integer: {message: 'Solo se permite números'}
+                }
+            },
+            aportepropio: {
+                validators: {
+                    notEmpty: {message: 'El aporte recursos propios, es requerido'},
+                    integer: {message: 'Solo se permite números'}
+                }
+            }
+        }
+    }).on('success.form.bv', function (e) {
+        
+        // Prevent form submission
+        e.preventDefault();
+        // Get the form instance
+        var $form = $(e.target);
+
+            // Get the BootstrapValidator instance
+            var bv = $form.data('bootstrapValidator');
+
+            // Valido si el id existe, con el fin de eviarlo al metodo correcto
+            $('#form_nuevo_presupuesto').attr('action', url_pv + 'PropuestasPdac/editar_propuesta_presupuesto');
+
+            if($("#aportepropio").val()==""){
+                notify("danger", "ok", "Presupuesto:", "El aporte recursos propios, es requerido.");
+            }
+            else
+            {
+                if($("#valortotal").val()==""){
+                    notify("danger", "ok", "Presupuesto:", "El valor total, es requerido.");
+                }
+                else
+                {
+                    //Se realiza la peticion con el fin de guardar el registro actual
+                    $.ajax({
+                        type: 'POST',
+                        url: $form.attr('action'),
+                        data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token + "&m=" + getURLParameter('m')+"&propuesta="+getURLParameter('p'),
+                    }).done(function (result) {
+
+                        if (result == 'error')
+                        {
+                            notify("danger", "ok", "Presupuesto:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                        } else
+                        {
+                            if (result == 'error_token')
+                            {
+                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                            } else
+                            {
+                                if (result == 'acceso_denegado')
+                                {
+                                    notify("danger", "remove", "Presupuesto:", "No tiene permisos para editar información.");
+                                } else
+                                {
+                                    if (isNaN(result)) {
+                                        notify("danger", "ok", "Presupuesto:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                    } else
+                                    {
+                                        notify("success", "ok", "Presupuesto:", "Se guardo con el éxito el presupuesto.");                                                                      
+                                        $("#form_nuevo_presupuesto").data('bootstrapValidator').resetForm();        
+                                        $("#form_nuevo_presupuesto").bootstrapValidator('resetForm', true);
+                                        cargar_tabla_presupuesto(token_actual);
+                                    }                            
+                                }
+                            }
+                        }
+
+                    });  
+                }
+                
+            }                        
+    });                           
 }
 
 function cargar_tabla(token_actual)
@@ -540,41 +830,115 @@ function cargar_tabla(token_actual)
     
 }
 
+function cargar_tabla_cronograma(token_actual)
+{    
+    $('#tabla_cronogramas').DataTable({
+        "language": {
+            "url": "../../dist/libraries/datatables/js/spanish.json"
+        },
+        "processing": true,
+        "destroy": true,
+        "serverSide": true,
+        "ordering": false,
+        "searching": false,
+        "lengthMenu": [20, 30, 40],
+        "ajax": {
+            url: url_pv + "PropuestasPdac/cargar_tabla_cronogramas",
+            data: {"token": token_actual.token, "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "p": getURLParameter('p'), "pa": $("#propuestaactividad").attr('value')}
+        },
+        "drawCallback": function (settings) {
+            $(".check_activar_t").attr("checked", "true");
+            $(".check_activar_f").removeAttr("checked");
+            //Cargo el formulario, para crear o editar
+            cargar_formulario_cronograma(token_actual);
+        },
+        "columns": [
+            {"data": "fecha"},
+            {"data": "activar_registro"},
+            {"data": "editar"}
+        ]
+    });
+}
+
+function cargar_tabla_presupuesto(token_actual)
+{    
+    $('#tabla_presupuesto').DataTable({
+        "language": {
+            "url": "../../dist/libraries/datatables/js/spanish.json"
+        },
+        "processing": true,
+        "destroy": true,
+        "serverSide": true,
+        "ordering": false,
+        "searching": false,
+        "lengthMenu": [20, 30, 40],
+        "ajax": {
+            url: url_pv + "PropuestasPdac/cargar_tabla_presupuestos",
+            data: {"token": token_actual.token, "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "p": getURLParameter('p'), "pa": $("#propuestaactividad_2").attr('value')}
+        },
+        "drawCallback": function (settings) {
+            $(".check_activar_t").attr("checked", "true");
+            $(".check_activar_f").removeAttr("checked");
+            //Cargo el formulario, para crear o editar
+            cargar_formulario_presupuesto(token_actual);
+        },
+        "columns": [
+            {"data": "insumo"},
+            {"data": "cantidad"},
+            {"data": "unidadmedida"},
+            {"data": "valorunitario"},
+            {"data": "valortotal"},
+            {"data": "aportesolicitado"},
+            {"data": "aportecofinanciado"},
+            {"data": "aportepropio"},
+            {"data": "activar_registro"},
+            {"data": "editar"}
+        ]
+    });
+}
+
 function cargar_formulario(token_actual)
 {
     $(".cargar_formulario").click(function () {
-        //Cargo el id actual        
-        $("#id").attr('value', $(this).attr('title'))
-        //Realizo la peticion para cargar el formulario
-        $.ajax({
-            type: 'GET',
-            data: {"token": token_actual.token, "propuesta": getURLParameter('p'), "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "id": $("#id").attr('value')},
-            url: url_pv + 'PropuestasPdac/consultar_objetivo/'
-        }).done(function (data) {
-            if (data == 'error_metodo')
-            {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-            } else
-            {
-                if (data == 'error_token')
+        
+        $("#form_nuevo_objetivo").data('bootstrapValidator').resetForm();        
+        $("#form_nuevo_objetivo").bootstrapValidator('resetForm', true);        
+        
+        if($(this).attr('title')>0)
+        {
+            //Cargo el id actual        
+            $("#id_registro").attr('value', $(this).attr('title'));
+            //Realizo la peticion para cargar el formulario
+            $.ajax({
+                type: 'GET',
+                data: {"token": token_actual.token, "propuesta": getURLParameter('p'), "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "id": $("#id_registro").attr('value')},
+                url: url_pv + 'PropuestasPdac/consultar_objetivo/'
+            }).done(function (data) {
+                if (data == 'error_metodo')
                 {
-                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                 } else
                 {
-                    var json = JSON.parse(data);
-                    
-                    //Cargo el formulario con los datos
-                    $('#form_nuevo_objetivo').loadJSON(json);
-                    $('#objetivo').val(json.objetivo);
-                    $('#meta').val(json.meta); 
-                    
-                    //agrego los totales de caracteres
-                    $(".caracter_objetivo").html(500 - json.objetivo.length);
-                    $(".caracter_meta").html(500 - json.meta.length);
-                    
+                    if (data == 'error_token')
+                    {
+                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    } else
+                    {
+                        var json = JSON.parse(data);
+
+                        //Cargo el formulario con los datos
+                        $('#form_nuevo_objetivo').loadJSON(json);
+                        $('#objetivo').val(json.objetivo);
+                        $('#meta').val(json.meta); 
+
+                        //agrego los totales de caracteres
+                        $(".caracter_objetivo").html(500 - json.objetivo.length);
+                        $(".caracter_meta").html(500 - json.meta.length);
+
+                    }
                 }
-            }
-        });
+            });
+        }        
     });       
     
     //Permite activar o inactivar un objetivo
@@ -594,19 +958,19 @@ function cargar_formulario(token_actual)
             {
                 if (active == "true")
                 {
-                    notify("info", "ok", "Convocatorias:", "Se activó el objetivo específico con éxito.");
+                    notify("info", "ok", "Objetivos:", "Se activó el objetivo específico con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se inactivo el objetivo específico con éxito.");
+                    notify("info", "ok", "Objetivos:", "Se inactivo el objetivo específico con éxito.");
                 }
             } else
             {
                 if (data == 'acceso_denegado')
                 {
-                    notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                    notify("danger", "remove", "Objetivos:", "Acceso denegado.");
                 } else
                 {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                    notify("danger", "ok", "Objetivos:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                 }
             }
         });
@@ -616,13 +980,25 @@ function cargar_formulario(token_actual)
 
 function cargar_formulario_actividad(token_actual)
 {
+    $(".cargar_actividad_cronograma").click(function () {
+        //Cargo el id actual        
+        $("#propuestaactividad").attr('value', $(this).attr('title'));  
+        cargar_tabla_cronograma(token_actual);
+    });
+    
+    $(".cargar_actividad_presupuesto").click(function () {
+        //Cargo el id actual        
+        $("#propuestaactividad_2").attr('value', $(this).attr('title'));         
+        cargar_tabla_presupuesto(token_actual);
+    });
+    
     $(".cargar_formulario_actividad").click(function () {
         //Cargo el id actual        
-        $("#id").attr('value', $(this).attr('title'))
+        $("#id_registro_2").attr('value', $(this).attr('title'));
         //Realizo la peticion para cargar el formulario
         $.ajax({
             type: 'GET',
-            data: {"token": token_actual.token, "propuesta": getURLParameter('p'), "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "id": $("#id").attr('value')},
+            data: {"token": token_actual.token, "propuesta": getURLParameter('p'), "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "id": $("#id_registro_2").attr('value')},
             url: url_pv + 'PropuestasPdac/consultar_actividad/'
         }).done(function (data) {
             if (data == 'error_metodo')
@@ -666,19 +1042,165 @@ function cargar_formulario_actividad(token_actual)
             {
                 if (active == "true")
                 {
-                    notify("info", "ok", "Convocatorias:", "Se activó la actividad con éxito.");
+                    notify("info", "ok", "Actividades:", "Se activó la actividad con éxito.");
                 } else
                 {
-                    notify("info", "ok", "Convocatorias:", "Se inactivo la actividad con éxito.");
+                    notify("info", "ok", "Actividades:", "Se inactivo la actividad con éxito.");
                 }
             } else
             {
                 if (data == 'acceso_denegado')
                 {
-                    notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                    notify("danger", "remove", "Actividades:", "Acceso denegado.");
                 } else
                 {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                    notify("danger", "ok", "Actividades:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                }
+            }
+        });
+    });
+    
+    
+}
+
+function cargar_formulario_cronograma(token_actual)
+{
+    //Permite activar o inactivar un actividad
+    $(".activar_cronograma").click(function () {
+
+        var active = "false";
+        if ($(this).prop('checked')) {
+            active = "true";
+        }
+
+        $.ajax({
+            type: 'DELETE',
+            data: {"token": token_actual.token, "modulo": "Menu Participante", "active": active},
+            url: url_pv + 'PropuestasPdac/eliminar_cronograma/' + $(this).attr("title")
+        }).done(function (data) {
+            if (data == 'ok')
+            {
+                if (active == "true")
+                {
+                    notify("info", "ok", "Cronograma:", "Se activó la semana de ejecución con éxito.");
+                } else
+                {
+                    notify("info", "ok", "Cronograma:", "Se inactivo la semana de ejecución con éxito.");
+                }
+            } else
+            {
+                if (data == 'acceso_denegado')
+                {
+                    notify("danger", "remove", "Cronograma:", "Acceso denegado.");
+                } else
+                {
+                    notify("danger", "ok", "Cronograma:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                }
+            }
+        });
+    });
+    
+    $(".cargar_formulario_cronograma").click(function () {
+        
+        $("#form_nuevo_cronograma").data('bootstrapValidator').resetForm();        
+        $("#form_nuevo_cronograma").bootstrapValidator('resetForm', true);
+
+        //Cargo el id actual        
+        $("#id_registro_3").attr('value', $(this).attr('title'));
+        //Realizo la peticion para cargar el formulario
+        $.ajax({
+            type: 'GET',
+            data: {"token": token_actual.token, "propuesta": getURLParameter('p'), "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "id": $("#id_registro_3").attr('value')},
+            url: url_pv + 'PropuestasPdac/consultar_cronograma/'
+        }).done(function (data) {
+            if (data == 'error_metodo')
+            {
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+            } else
+            {
+                if (data == 'error_token')
+                {
+                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                } else
+                {
+                    var json = JSON.parse(data);
+                    
+                    //Cargo el formulario con los datos
+                    $('.form_nuevo_cronograma').loadJSON(json);
+                    
+                }
+            }
+        });
+    });
+    
+    
+}
+
+function cargar_formulario_presupuesto(token_actual)
+{
+    //Permite activar o inactivar un actividad
+    $(".activar_presupuesto").click(function () {
+
+        var active = "false";
+        if ($(this).prop('checked')) {
+            active = "true";
+        }
+
+        $.ajax({
+            type: 'DELETE',
+            data: {"token": token_actual.token, "modulo": "Menu Participante", "active": active},
+            url: url_pv + 'PropuestasPdac/eliminar_presupuesto/' + $(this).attr("title")
+        }).done(function (data) {
+            if (data == 'ok')
+            {
+                if (active == "true")
+                {
+                    notify("info", "ok", "Presupuesto:", "Se activó el presupuesto con éxito.");
+                } else
+                {
+                    notify("info", "ok", "Presupuesto:", "Se inactivo el presupuesto con éxito.");
+                }
+            } else
+            {
+                if (data == 'acceso_denegado')
+                {
+                    notify("danger", "remove", "Presupuesto:", "Acceso denegado.");
+                } else
+                {
+                    notify("danger", "ok", "Presupuesto:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                }
+            }
+        });
+    });
+    
+    $(".cargar_formulario_presupuesto").click(function () {
+        
+        $("#form_nuevo_presupuesto").data('bootstrapValidator').resetForm();        
+        $("#form_nuevo_presupuesto").bootstrapValidator('resetForm', true);
+
+        //Cargo el id actual        
+        $("#id_registro_4").attr('value', $(this).attr('title'));
+        //Realizo la peticion para cargar el formulario
+        $.ajax({
+            type: 'GET',
+            data: {"token": token_actual.token, "propuesta": getURLParameter('p'), "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "id": $("#id_registro_4").attr('value')},
+            url: url_pv + 'PropuestasPdac/consultar_presupuesto/'
+        }).done(function (data) {
+            if (data == 'error_metodo')
+            {
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+            } else
+            {
+                if (data == 'error_token')
+                {
+                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                } else
+                {
+                    var json = JSON.parse(data);
+                    
+                    //Cargo el formulario con los datos
+                    $('.form_nuevo_presupuesto').loadJSON(json);
+                    
                 }
             }
         });
