@@ -6,26 +6,14 @@ $(document).ready(function () {
     var href_regresar = "";
     var href_siguiente = "";
     //Creando link de navegación
-    if (getURLParameter('m') == "agr")
-    {
-        href_regresar = "perfil_agrupacion.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-        href_siguiente = "integrantes.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-    }
-
-    if (getURLParameter('m') == "pn")
-    {
-        href_regresar = "perfil_persona_natural.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-        href_siguiente = "documentacion.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-    }
-
     if (getURLParameter('m') == "pj")
     {
-        href_regresar = "perfil_persona_juridica.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-        href_siguiente = "junta.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+        href_regresar = "grupos_trabajos.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+        href_siguiente = "territorios_poblaciones.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
     }
 
-    $("#link_participante").attr("onclick", "location.href = '" + href_regresar + "'");
-    $("#link_integrantes").attr("onclick", "location.href = '" + href_siguiente + "'");
+    $("#link_equipo").attr("onclick", "location.href = '" + href_regresar + "'");
+    $("#link_territorio").attr("onclick", "location.href = '" + href_siguiente + "'");
 
     //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
     if ($.isEmptyObject(token_actual)) {
@@ -185,8 +173,12 @@ $(document).ready(function () {
                                                                         //Cargo el formulario con los datos
                                                                         $('#formulario_principal').loadJSON(json.propuesta);                                                                        
 
-                                                                        //agrego los totales de caracteres
-                                                                        $(".caracter_objetivo_general").html(1000 - json.propuesta.objetivo_general.length);
+                                                                        
+                                                                        if(json.propuesta.objetivo_general!=null)
+                                                                        {
+                                                                            //agrego los totales de caracteres
+                                                                            $(".caracter_objetivo_general").html(1000 - json.propuesta.objetivo_general.length);
+                                                                        }
 
                                                                         //Limpio select de categorias
                                                                         $('#propuestaobjetivo').find('option').remove();
@@ -283,16 +275,21 @@ $(document).ready(function () {
         $(".caracter_" + obj).html(total_actual);
     });
     
+    calcular_totales();
+    
+});
+
+function calcular_totales(){
     $(".calcular_valor_total").focusout(function () {        
         var cantidad = $("#cantidad").val();
         var valorunitario = $("#valorunitario").val();        
-        var valortotal = cantidad*valorunitario;        
+        var valortotal = parseInt(cantidad)*parseInt(valorunitario);        
         if (Number.isInteger(parseInt(valortotal)))
-        {            
-            $("#valortotal").attr("value",valortotal);
+        {           
+            $("#valortotal").val(valortotal);
         }
         
-        var valortotal = parseInt($("#valortotal").val());  
+        var valortotal = $("#valortotal").val();          
         
         if(valortotal>0)
         {        
@@ -304,17 +301,17 @@ $(document).ready(function () {
             {
                 if( aportepropio>=0 && aportepropio<=valortotal)
                 {
-                    $("#aportepropio").attr("value",aportepropio);                                                
+                    $("#aportepropio").val(aportepropio);                                                
                 } 
                 else
                 {
-                    $("#aportepropio").attr("value","");
+                    $("#aportepropio").val("");
                     notify("danger", "ok", "Presupuesto:", "El aporte recursos propios, no puede ser mayor o menor al Valor Total.");                            
                 } 
             }            
         }
-    });    
-});
+    }); 
+}
 
 function validator_form(token_actual) {
 
@@ -730,7 +727,7 @@ function validator_form(token_actual) {
                     $.ajax({
                         type: 'POST',
                         url: $form.attr('action'),
-                        data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token + "&m=" + getURLParameter('m')+"&propuesta="+getURLParameter('p'),
+                        data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token + "&m=" + getURLParameter('m')+"&propuesta="+getURLParameter('p')+"&valortotal="+$("#valortotal").val()+"&aportepropio="+$("#aportepropio").val(),
                     }).done(function (result) {
 
                         if (result == 'error')
@@ -993,36 +990,43 @@ function cargar_formulario_actividad(token_actual)
     });
     
     $(".cargar_formulario_actividad").click(function () {
-        //Cargo el id actual        
-        $("#id_registro_2").attr('value', $(this).attr('title'));
-        //Realizo la peticion para cargar el formulario
-        $.ajax({
-            type: 'GET',
-            data: {"token": token_actual.token, "propuesta": getURLParameter('p'), "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "id": $("#id_registro_2").attr('value')},
-            url: url_pv + 'PropuestasPdac/consultar_actividad/'
-        }).done(function (data) {
-            if (data == 'error_metodo')
-            {
-                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-            } else
-            {
-                if (data == 'error_token')
+        
+        $("#form_nuevo_actividad").data('bootstrapValidator').resetForm();        
+        $("#form_nuevo_actividad").bootstrapValidator('resetForm', true); 
+        
+        if($(this).attr('title')>0)
+        {
+            //Cargo el id actual        
+            $("#id_registro_2").attr('value', $(this).attr('title'));
+            //Realizo la peticion para cargar el formulario
+            $.ajax({
+                type: 'GET',
+                data: {"token": token_actual.token, "propuesta": getURLParameter('p'), "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "id": $("#id_registro_2").attr('value')},
+                url: url_pv + 'PropuestasPdac/consultar_actividad/'
+            }).done(function (data) {
+                if (data == 'error_metodo')
                 {
-                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                 } else
                 {
-                    var json = JSON.parse(data);
-                    
-                    //Cargo el formulario con los datos
-                    $('#form_nuevo_actividad').loadJSON(json);
-                    $('#actividad').val(json.actividad);                    
-                    
-                    //agrego los totales de caracteres
-                    $(".caracter_actividad").html(500 - json.actividad.length);                    
-                    
+                    if (data == 'error_token')
+                    {
+                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    } else
+                    {
+                        var json = JSON.parse(data);
+
+                        //Cargo el formulario con los datos
+                        $('#form_nuevo_actividad').loadJSON(json);
+                        $('#actividad').val(json.actividad);                    
+
+                        //agrego los totales de caracteres
+                        $(".caracter_actividad").html(500 - json.actividad.length);                    
+
+                    }
                 }
-            }
-        });
+            });
+        }
     });       
     
     //Permite activar o inactivar un actividad
@@ -1200,7 +1204,6 @@ function cargar_formulario_presupuesto(token_actual)
                     
                     //Cargo el formulario con los datos
                     $('.form_nuevo_presupuesto').loadJSON(json);
-                    
                 }
             }
         });
