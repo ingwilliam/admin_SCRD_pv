@@ -6,26 +6,14 @@ $(document).ready(function () {
     var href_regresar = "";
     var href_siguiente = "";
     //Creando link de navegación
-    if (getURLParameter('m') == "agr")
+    if (getURLParameter('m') == "pj")
     {
-        href_regresar = "perfil_agrupacion.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-        href_siguiente = "integrantes.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-    }
-
-    if (getURLParameter('m') == "pn")
-    {
-        href_regresar = "perfil_persona_natural.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+        href_regresar = "objetivos_metas_actividades.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
         href_siguiente = "documentacion.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
     }
 
-    if (getURLParameter('m') == "pj")
-    {
-        href_regresar = "perfil_persona_juridica.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-        href_siguiente = "junta.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-    }
-
-    $("#link_participante").attr("onclick", "location.href = '" + href_regresar + "'");
-    $("#link_integrantes").attr("onclick", "location.href = '" + href_siguiente + "'");
+    $("#link_objetivos").attr("onclick", "location.href = '" + href_regresar + "'");
+    $("#link_documentacion").attr("onclick", "location.href = '" + href_siguiente + "'");
 
     //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
     if ($.isEmptyObject(token_actual)) {
@@ -130,31 +118,50 @@ $(document).ready(function () {
                                                                         }                                                                        
                                                                         
                                                                         
-                                                                        //Cargo el select de linea_estrategica                                
-                                                                        if (json.localidades.length > 0) {
-                                                                            $.each(json.localidades, function (key, localidad) {                                                                                
-                                                                                $("#localidades").append('<option value="' + localidad.nombre + '" >' + localidad.nombre + '</option>');
-                                                                            });
+                                                                        //Cargo el select de linea_estrategica   
+                                                                        if(json.localidades!=null)
+                                                                        {
+                                                                            if (json.localidades.length > 0) {
+                                                                                $.each(json.localidades, function (key, localidad) {                                                                                
+                                                                                    $("#localidades").append('<option value="' + localidad.nombre + '" >' + localidad.nombre + '</option>');
+                                                                                });
+                                                                            }
                                                                         }
                                                                         
                                                                         //Set los valores linea_estrategica
                                                                         $("#localidades option:selected").removeAttr("selected");
                                                                         $("#localidades option:selected").prop("selected", false);
-                                                                        $.each(JSON.parse(json.propuesta.localidades), function (i, e) {
-                                                                            $("#localidades option[value='" + e + "']").prop("selected", true);
-                                                                        });
+                                                                        if(json.propuesta.localidades!=null)
+                                                                        {
+                                                                            if (json.propuesta.localidades.length > 0) {
+                                                                                $.each(JSON.parse(json.propuesta.localidades), function (i, e) {
+                                                                                    $("#localidades option[value='" + e + "']").prop("selected", true);
+                                                                                });
+                                                                            }
+                                                                        }
 
                                                                         //Cargo los parametros obligatorios
                                                                         $("#validator").attr("value", JSON.stringify(json.validator));
 
                                                                         //Cargo el formulario con los datos
                                                                         $('#formulario_principal').loadJSON(json.propuesta);
-                                                                        $('#formulario_principal').loadJSON(json.propuesta_territorio);
-
+                                                                        if (typeof json.propuesta_territorio !== 'undefined') {
+                                                                            $('#formulario_principal').loadJSON(json.propuesta_territorio);
+                                                                        }
+                                                                        
                                                                         //agrego los totales de caracteres
-                                                                        $(".caracter_poblacion_objetivo").html(1000 - json.propuesta.poblacion_objetivo.length);
-                                                                        $(".caracter_comunidad_objetivo").html(2000 - json.propuesta.comunidad_objetivo.length);
-                                                                        $(".caracter_establecio_cifra").html(500 - json.propuesta.establecio_cifra.length);
+                                                                        if(json.propuesta.poblacion_objetivo!=null)
+                                                                        {
+                                                                            $(".caracter_poblacion_objetivo").html(1000 - json.propuesta.poblacion_objetivo.length);
+                                                                        }
+                                                                        if(json.propuesta.comunidad_objetivo!=null)
+                                                                        {
+                                                                            $(".caracter_comunidad_objetivo").html(2000 - json.propuesta.comunidad_objetivo.length);
+                                                                        }
+                                                                        if(json.propuesta.establecio_cifra!=null)
+                                                                        {
+                                                                            $(".caracter_establecio_cifra").html(500 - json.propuesta.establecio_cifra.length);
+                                                                        }
 
                                                                         //Valido formulario
                                                                         validator_form(token_actual);
@@ -501,7 +508,7 @@ function validator_form(token_actual) {
                                     {
                                         notify("success", "ok", "Propuesta:", "Se actualizó con el éxito la propuesta.");
 
-                                        var redirect = "cronogramas.html";
+                                        var redirect = "documentacion.html";
                                         
                                         setTimeout(function () {
                                             location.href = url_pv_admin + 'pages/propuestas/' + redirect + '?m=' + getURLParameter('m') + '&id=' + $("#conv").attr('value') + '&p=' + getURLParameter('p');

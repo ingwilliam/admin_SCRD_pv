@@ -266,6 +266,16 @@ $(document).ready(function () {
                                                                             $("#formulario_principal input,select,button[type=submit]").removeAttr("disabled");
                                                                         }
                                                                         
+                                                                        //Creo link de navegacion para persona juridica
+                                                                        if (getURLParameter('m') == "pj")
+                                                                        {
+                                                                            if (json.programa == 2)
+                                                                            {
+                                                                                $("#programa").val(json.programa);
+                                                                                $("#link_propuestas").attr("onclick", "location.href = 'propuestas_pdac.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p') + "'");
+                                                                            }                                                                                                                                                                                                                                                  
+                                                                        }
+                                                                        
                                                                         //Cargo los select de barrios
                                                                         $('#barrio_residencia').find('option').remove();
                                                                         $("#barrio_residencia").append('<option value="">:: Seleccionar ::</option>');
@@ -522,9 +532,17 @@ function validator_form(token_actual) {
                                             } else
                                             {
                                                 notify("success", "ok", "Persona jurídica:", "Se actualizó con el éxito el participante como persona jurídica.");
+                                                
+                                                var redirec = "propuestas";
+                                                if($("#programa").val()==2)
+                                                {
+                                                    redirec = "propuestas_pdac";
+                                                }
+                                                
                                                 setTimeout(function () {
-                                                    location.href = url_pv_admin + 'pages/propuestas/propuestas.html?m=pj&id=' + $("#conv").attr('value')+'&p='+getURLParameter('p');
+                                                    location.href = url_pv_admin + 'pages/propuestas/'+redirec+'.html?m=pj&id=' + $("#conv").attr('value')+'&p='+getURLParameter('p');
                                                 }, 1800);
+                                                
                                             }
                                         }
                                     }

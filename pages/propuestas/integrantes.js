@@ -5,21 +5,15 @@ $(document).ready(function () {
 
     var href_regresar = "";
     var href_siguiente = "";
-    //Creando link de navegación
+    //Creando link de navegación para la agrupacion
     if (getURLParameter('m') == "agr")
     {
         href_regresar = "propuestas.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
         href_siguiente = "documentacion.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+        
+        $("#link_propuestas").attr("onclick", "location.href = '" + href_regresar + "'");
+        $("#link_documentacion").attr("onclick", "location.href = '" + href_siguiente + "'");
     }
-
-    if (getURLParameter('m') == "pj")
-    {
-        href_regresar = "propuestas.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-        href_siguiente = "documentacion.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-    }
-
-    $("#link_propuestas").attr("onclick", "location.href = '" + href_regresar + "'");
-    $("#link_documentacion").attr("onclick", "location.href = '" + href_siguiente + "'");
 
     //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
     if ($.isEmptyObject(token_actual)) {
@@ -344,7 +338,6 @@ $(document).ready(function () {
                                                                             } else
                                                                             {
 
-
                                                                                 var json = JSON.parse(data);
 
                                                                                 //eliminó disabled todos los componentes
@@ -352,6 +345,38 @@ $(document).ready(function () {
                                                                                 {
                                                                                     $("#formulario_principal input,select,button[type=submit]").removeAttr("disabled");
                                                                                 }
+                                                                                
+                                                                                //Creo link de navegacion para persona juridica
+                                                                                if (getURLParameter('m') == "pj")
+                                                                                {
+                                                                                    if (json.programa == 2)
+                                                                                    {
+                                                                                        var path_actual = window.location.pathname;
+                                                                                        if(path_actual=="/admin_SCRD_pv/pages/propuestas/junta.html")
+                                                                                        {
+                                                                                            href_regresar = "propuestas_pdac.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                            href_siguiente = "grupos_trabajos.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                        
+                                                                                        }
+                                                                                        if(path_actual=="/admin_SCRD_pv/pages/propuestas/grupos_trabajos.html")
+                                                                                        {
+                                                                                            href_regresar = "junta.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                            href_siguiente = "objetivos_metas_actividades.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                        }                                                                                                                                                                                
+                                                                                    
+                                                                                        $("#link_propuestas").attr("onclick", "location.href = '" + href_regresar + "'");
+                                                                                        $("#link_documentacion").attr("onclick", "location.href = '" + href_siguiente + "'");
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        href_regresar = "propuestas.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                        href_siguiente = "documentacion.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                    
+                                                                                        $("#link_propuestas").attr("onclick", "location.href = '" + href_regresar + "'");
+                                                                                        $("#link_documentacion").attr("onclick", "location.href = '" + href_siguiente + "'");
+                                                                                    }                                                                                                                                                                       
+                                                                                }
+                                                                                
                                                                                 
                                                                                 //Cargos el select de grupo etnico
                                                                                 $('#discapacidad').find('option').remove();
@@ -431,11 +456,12 @@ $(document).ready(function () {
                                             });
 
                                             //Limpio el formulario de los anexos
-                                            $('#nuevo_integrante').on('hidden.bs.modal', function () {
-                                                $("#formulario_principal")[0].reset();
+                                            $('#nuevo_integrante').on('hidden.bs.modal', function () {                                                
+                                                $("#formulario_principal").bootstrapValidator('disableSubmitButtons', false);
+                                                $("#formulario_principal").bootstrapValidator('resetForm', true);                                                
                                                 $('#ciudad_residencia').find('option').remove();
                                                 $("#ciudad_residencia").append('<option value="">:: Seleccionar ::</option>');                                                
-                                                $("#id").val("");
+                                                $("#id").val("");                                                
                                             });
                                         }
                                     }
@@ -467,6 +493,7 @@ function validator_form(token_actual) {
             invalid: 'glyphicon glyphicon-remove',
             validating: 'glyphicon glyphicon-refresh'
         },
+        excluded: [':disabled'],
         fields: {
             tipo_documento: {
                 validators: {
