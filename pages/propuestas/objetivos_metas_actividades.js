@@ -483,6 +483,7 @@ function validator_form(token_actual) {
                                 notify("success", "ok", "Objetivos:", "Se guardo con el éxito el objetivo específico.");                               
                                 $('#nuevo_objetivo').modal('toggle');
                                 cargar_tabla(token_actual);
+                                cargar_select_objetivos(token_actual);
                             }
                         }
                     }
@@ -763,6 +764,64 @@ function validator_form(token_actual) {
                 
             }                        
     });                           
+}
+
+function cargar_select_objetivos(token_actual)
+{    
+    //Realizo la peticion para cargar el formulario
+    $.ajax({
+        type: 'GET',
+        data: {"token": token_actual.token, "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "p": getURLParameter('p')},
+        url: url_pv + 'PropuestasPdac/buscar_propuesta/'
+    }).done(function (data) {
+        if (data == 'error_metodo')
+        {
+            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+        } else
+        {
+            if (data == 'error_token')
+            {
+                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+            } else
+            {
+                if (data == 'acceso_denegado')
+                {
+                    notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
+                } else
+                {
+                    if (data == 'crear_perfil')
+                    {
+                        location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_natural.html?msg=Para poder inscribir la propuesta debe crear el perfil de persona natural.&msg_tipo=danger';
+                    } else
+                    {
+                        if (data == 'error_cod_propuesta')
+                        {
+                            location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=El código de la propuesta no es valido.&msg_tipo=danger';
+                        } else
+                        {
+
+                            var json = JSON.parse(data);
+
+                            //Limpio select de categorias
+                            $('#propuestaobjetivo').find('option').remove();
+
+                            $("#propuestaobjetivo").append('<option value="" >::Seleccionar::</option>');
+
+                            //Cargo el select de las categorias                                                
+                            if (json.objetivos_especificos.length > 0) {
+                                $.each(json.objetivos_especificos, function (key, objetivo) {
+                                    $("#propuestaobjetivo").append('<option value="' + objetivo.id + '" >' + objetivo.objetivo + '</option>');
+                                });
+                            }
+                            
+                        }
+                    }
+
+                }
+            }
+        }
+    });
+    
 }
 
 function cargar_tabla(token_actual)
