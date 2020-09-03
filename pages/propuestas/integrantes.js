@@ -873,25 +873,41 @@ function cargar_formulario(token_actual)
             data: {"token": token_actual.token, "modulo": "Menu Participante", "active": active},
             url: url_pv + 'Personasnaturales/eliminar_integrante/' + $(this).attr("title")
         }).done(function (data) {
-            if (data == 'ok')
+            if (data == 'error_metodo')
             {
-                if (active == "true")
-                {
-                    notify("info", "ok", "Convocatorias:", "Se activó el integrante con éxito.");
-                } else
-                {
-                    notify("info", "ok", "Convocatorias:", "Se inactivo el integrante con éxito.");
-                }
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
-                if (data == 'acceso_denegado')
+                if (data == 'error_token')
                 {
-                    notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                 } else
                 {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                    if (data == 'error')
+                    {
+                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                    } else
+                    {
+                        if (data == 'acceso_denegado')
+                        {
+                             notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                        }
+                        else
+                        {
+                            if (data == 'ok')
+                            {
+                                if (active == "true")
+                                {
+                                    notify("info", "ok", "Convocatorias:", "Se activó el integrante con éxito.");
+                                } else
+                                {
+                                    notify("info", "ok", "Convocatorias:", "Se inactivo el integrante con éxito.");
+                                }
+                            }
+                        }
+                    }
                 }
-            }
+            }                                    
         });
     });
     
