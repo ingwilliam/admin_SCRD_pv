@@ -122,8 +122,12 @@ $(document).ready(function () {
                                                 $("#conv").attr('value', getURLParameter('id'));
 
                                                 //disabled todos los componentes
-                                                $("#formulario_principal input,select,button[type=submit],textarea").attr("disabled", "disabled");
-
+                                                $("#formulario_principal input,textarea,select,button[type=submit]").attr("disabled", "disabled");                                                
+                                                $("#form_nuevo_objetivo input,textarea,select,button[type=submit]").attr("disabled", "disabled");
+                                                $("#form_nuevo_cronograma input,textarea,select,button[type=submit]").attr("disabled", "disabled");
+                                                $("#form_nuevo_presupuesto input,textarea,select,button[type=submit]").attr("disabled", "disabled");
+                                                $("#form_nuevo_actividad input,textarea,select,button[type=submit]").attr("disabled", "disabled");
+                                                
                                                 //Verifica si el token actual tiene acceso de lectura
                                                 permiso_lectura(token_actual, "Menu Participante");
 
@@ -164,7 +168,11 @@ $(document).ready(function () {
                                                                         //eliminó disabled todos los componentes
                                                                         if (json.estado == 7)
                                                                         {
-                                                                            $("#formulario_principal input,select,button[type=submit],textarea").removeAttr("disabled");
+                                                                            $("#formulario_principal input,textarea,select,button[type=submit]").removeAttr("disabled");
+                                                                            $("#form_nuevo_objetivo input,textarea,select,button[type=submit]").removeAttr("disabled");
+                                                                            $("#form_nuevo_cronograma input,textarea,select,button[type=submit]").removeAttr("disabled");
+                                                                            $("#form_nuevo_presupuesto input,textarea,select,button[type=submit]").removeAttr("disabled");
+                                                                            $("#form_nuevo_actividad input,textarea,select,button[type=submit]").removeAttr("disabled");                                                                            
                                                                         }                                                                        
                                                                                                                                                                                                                         
                                                                         //Cargo los parametros obligatorios
