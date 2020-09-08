@@ -173,6 +173,10 @@ $(document).ready(function () {
                                                                             $("#form_nuevo_cronograma input,textarea,select,button[type=submit]").removeAttr("disabled");
                                                                             $("#form_nuevo_presupuesto input,textarea,select,button[type=submit]").removeAttr("disabled");
                                                                             $("#form_nuevo_actividad input,textarea,select,button[type=submit]").removeAttr("disabled");                                                                            
+                                                                            
+                                                                            $("#valortotal").attr("disabled", "disabled");
+                                                                            $("#aportepropio").attr("disabled", "disabled");
+                                                                            
                                                                         }                                                                        
                                                                                                                                                                                                                         
                                                                         //Cargo los parametros obligatorios
@@ -292,6 +296,7 @@ function calcular_totales(){
         var cantidad = $("#cantidad").val();
         var valorunitario = $("#valorunitario").val();        
         var valortotal = parseInt(cantidad)*parseInt(valorunitario);        
+        
         if (Number.isInteger(parseInt(valortotal)))
         {           
             $("#valortotal").val(valortotal);
@@ -304,8 +309,8 @@ function calcular_totales(){
             var aportesolicitado = $("#aportesolicitado").val();
             var aportecofinanciado = $("#aportecofinanciado").val();        
             var total = parseInt(aportesolicitado)+parseInt(aportecofinanciado);        
-            var aportepropio=valortotal-total;              
-            if(total>0)
+            var aportepropio=valortotal-total;                          
+            if(total>=0)
             {
                 if( aportepropio>=0 && aportepropio<=valortotal)
                 {
@@ -317,6 +322,12 @@ function calcular_totales(){
                     notify("danger", "ok", "Presupuesto:", "El aporte recursos propios, no puede ser mayor o menor al Valor Total.");                            
                 } 
             }            
+        }
+        else
+        {
+            $("#aportesolicitado").val("0");
+            $("#aportecofinanciado").val("0");
+            $("#aportepropio").val("");
         }
     }); 
 }
@@ -672,17 +683,18 @@ function validator_form(token_actual) {
             },
             unidadmedida: {
                 validators: {
-                    notEmpty: {message: 'La unidad de medida, es requerido'},
-                    integer: {message: 'Solo se permite números'}
+                    notEmpty: {message: 'La unidad de medida, es requerido'}
                 }
             },
             cantidad: {
-                validators: {                    
+                validators: { 
+                    notEmpty: {message: 'La cantidad, es requerido'},
                     integer: {message: 'Solo se permite números'}
                 }
             },
             valorunitario: {
                 validators: {                    
+                    notEmpty: {message: 'El valor unitario, es requerido'},
                     integer: {message: 'Solo se permite números'}
                 }
             },
@@ -693,12 +705,14 @@ function validator_form(token_actual) {
                 }
             },
             aportesolicitado: {
-                validators: {                    
+                validators: {   
+                    notEmpty: {message: 'El aporte solicitado concertación, es requerido'},
                     integer: {message: 'Solo se permite números'}
                 }
             },
             aportecofinanciado: {
                 validators: {                    
+                    notEmpty: {message: 'El aporte cofinanciado por terceros, es requerido'},
                     integer: {message: 'Solo se permite números'}
                 }
             },
