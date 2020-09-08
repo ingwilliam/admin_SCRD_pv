@@ -1010,8 +1010,14 @@ function cargar_formulario(token_actual)
                         $('#meta').val(json.meta); 
 
                         //agrego los totales de caracteres
-                        $(".caracter_objetivo").html(500 - json.objetivo.length);
-                        $(".caracter_meta").html(500 - json.meta.length);
+                        if(json.objetivo!=null)
+                        {
+                            $(".caracter_objetivo").html(500 - json.objetivo.length);
+                        }
+                        if(json.meta!=null)
+                        {
+                            $(".caracter_meta").html(500 - json.meta.length);
+                        }
 
                     }
                 }
@@ -1102,7 +1108,10 @@ function cargar_formulario_actividad(token_actual)
                         $('#actividad').val(json.actividad);                    
 
                         //agrego los totales de caracteres
-                        $(".caracter_actividad").html(500 - json.actividad.length);                    
+                        if(json.actividad!=null)
+                        {
+                            $(".caracter_actividad").html(500 - json.actividad.length);                    
+                        }
 
                     }
                 }

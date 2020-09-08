@@ -461,6 +461,12 @@ $(document).ready(function () {
                                                 $("#formulario_principal").bootstrapValidator('resetForm', true);                                                
                                                 $('#ciudad_residencia').find('option').remove();
                                                 $("#ciudad_residencia").append('<option value="">:: Seleccionar ::</option>');                                                
+                                                $("#experiencia").val("");
+                                                $("#actividades_cargo").val("");
+                                                
+                                                $(".caracter_experiencia").html("1000");
+                                                $(".caracter_actividades_cargo").html("1000");
+                                                
                                                 $("#id").val("");                                                
                                             });
                                         }
@@ -470,6 +476,18 @@ $(document).ready(function () {
                         }
                     }
                 }
+            });
+            
+            $(".contar_caracteres").keyup(function () {
+                var total = $(this).attr("title");
+                var total_text = $(this).val().length;
+                var obj = $(this).attr("id");
+                var total_actual = total - total_text;
+                if (total_actual <= 0)
+                {
+                    total_actual = 0;
+                }
+                $(".caracter_" + obj).html(total_actual);
             });
 
         } else
@@ -621,6 +639,16 @@ function validator_form(token_actual) {
                 validators: {
                     notEmpty: {message: 'El rol que desempeña o ejecuta en la propuesta es requerido'}
                 }
+            },
+            experiencia: {
+                validators: {
+                    notEmpty: {message: 'La experiencia es requerido'}
+                }            
+            },
+            actividades_cargo: {
+                validators: {
+                    notEmpty: {message: 'Las actividades a cargo es requerido'}
+                }
             }
         }
     }).on('success.form.bv', function (e) {
@@ -727,15 +755,30 @@ function cargar_tabla(token_actual)
         "columnDefs": [{
                 "targets": 6,
                 "render": function (data, type, row, meta) {
-                    if (row.representante == true)
+                    if($("#tipo").val()=="EquipoTrabajo")
                     {
-                        row.representante = "<b>Sí</b>";
+                        if (row.director == true)
+                        {
+                            row.director = "<b>Sí</b>";
+                        }
+                        else
+                        {
+                            row.director = "No";
+                        }
+                        return row.director;
                     }
                     else
                     {
-                        row.representante = "No";
+                        if (row.representante == true)
+                        {
+                            row.representante = "<b>Sí</b>";
+                        }
+                        else
+                        {
+                            row.representante = "No";
+                        }
+                        return row.representante;
                     }
-                    return row.representante;
                 }
             }
         ]
@@ -841,6 +884,8 @@ function cargar_formulario(token_actual)
                     
                     $("#representante option[value='" + json.participante.representante + "']").prop('selected', true);
                     
+                    $("#director option[value='" + json.participante.director + "']").prop('selected', true);
+                    
                     //Valido para que muestre solo los barrios de bogota
                     //Se inactiva william barbosa 
                     //20 de mayo
@@ -853,6 +898,23 @@ function cargar_formulario(token_actual)
                         $("#barrio_residencia_name").css("display", "none");
                     }
                     */
+                   
+                    $('#experiencia').val(json.participante.experiencia); 
+                    
+                    if(json.participante.experiencia!=null)
+                    {
+                        //agrego los totales de caracteres
+                        $(".caracter_experiencia").html(1000 - json.participante.experiencia.length);
+                    }
+                    
+                    $('#actividades_cargo').val(json.participante.actividades_cargo); 
+                    
+                    if(json.participante.actividades_cargo!=null)
+                    {
+                        //agrego los totales de caracteres
+                        $(".caracter_actividades_cargo").html(1000 - json.participante.actividades_cargo.length);
+                    }
+                   
                     $('#nuevo_integrante').modal('toggle');
                 }
             }
