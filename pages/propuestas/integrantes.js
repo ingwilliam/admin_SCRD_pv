@@ -648,6 +648,11 @@ function validator_form(token_actual) {
             actividades_cargo: {
                 validators: {
                     notEmpty: {message: 'Las actividades a cargo es requerido'}
+                }            
+            },
+            profesion: {
+                validators: {
+                    notEmpty: {message: 'La profesión es requerido'}
                 }
             }
         }
