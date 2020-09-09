@@ -89,6 +89,31 @@ $(document).ready(function () {
                                                     }
                                                 }
                                             });
+                                            
+                                            //Realizo la peticion para cargar los tipos de participantes
+                                            $.ajax({
+                                                type: 'POST',
+                                                data: {"token": token_actual.token, "p": getURLParameter('p'),"modulo": "Menu Participante"},
+                                                url: url_pv + 'Convocatorias/nombre_convocatoria/' + $("#id").val()
+                                            }).done(function (data) {
+
+                                                if (data == 'error_metodo')
+                                                {
+                                                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                                } else
+                                                {
+                                                    if (data == 'error_token')
+                                                    {
+                                                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                                    } else
+                                                    {
+                                                        var json = JSON.parse(data);                                                        
+                                                        $("#titulo_convocatoria").html("Esta seguro de inscribir la propuesta en la convocatoria "+json.nombre_convocatoria);                                                        
+                                                        $("#programa").val(json.programa);                                                        
+                                                        $("#nombre_convocatoria_par").val(json.nombre_convocatoria_par);
+                                                    }
+                                                }
+                                            });
                                         }                                        
                                     }
                                 }
@@ -119,6 +144,15 @@ $(document).ready(function () {
                             return this.defaultSelected;
                         });
                     }
+                    
+                    if($("#programa").val()=="2"){
+                        $(".alianza_pdac").css("display", "block");                        
+                    }
+                    else
+                    {
+                        $(".alianza_pdac").css("display", "none");                        
+                    }
+                    
                 } else
                 {
                     $(".inactivo").css("display", "none");
@@ -147,6 +181,11 @@ $(document).ready(function () {
                     condiciones_participacion: {
                         validators: {
                             notEmpty: {message: 'Las condiciones generales de participación, son requeridas'}
+                        }
+                    },
+                    nombre_convocatoria: {
+                        validators: {
+                            notEmpty: {message: 'Debe confirmar la convocatoria a la cual desea realizar la inscripción de la propuesta, es requerido'}
                         }
                     }
                 }
@@ -188,49 +227,76 @@ $(document).ready(function () {
                     redirect_perfil = "agrupacion";
                 }
 
-                //Realizo la peticion para cargar el formulario
-                $.ajax({
-                    type: 'GET',
-                    data: {"token": token_actual.token, "conv": $("#id").val(), "modulo": "Menu Participante", "p": getURLParameter('p')},
-                    url: url_pv + controller + '/crear_propuesta_' + m + '/'
-                }).done(function (data) {
-                    if (data == 'error_metodo')
+
+                var enviar=true;
+                
+                if($("#programa").val()=="2"){
+                    if($("#alianza_sectorial").val()=="")
                     {
-                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                    } else
-                    {
-                        if (data == 'error_token')
+                        enviar=false;
+                        notify("danger", "ok", "Convocatorias:", "El ¿Proyecto de alianza sectorial?, es requrido");
+                    }
+                }                
+
+                if(enviar)
+                {
+                    //Realizo la peticion para cargar el formulario
+                    $.ajax({
+                        type: 'GET',
+                        data: {"token": token_actual.token, "conv": $("#id").val(), "alianza_sectorial": $("#alianza_sectorial").val(), "modulo": "Menu Participante", "p": getURLParameter('p')},
+                        url: url_pv + controller + '/crear_propuesta_' + m + '/'
+                    }).done(function (data) {
+                        if (data == 'error_metodo')
                         {
-                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                         } else
                         {
-                            if (data == 'acceso_denegado')
+                            if (data == 'error_token')
                             {
-                                notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
+                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                             } else
                             {
-                                if (data == 'crear_perfil')
+                                if (data == 'acceso_denegado')
                                 {
-                                    location.href = url_pv_admin + 'pages/perfilesparticipantes/'+redirect_perfil+'.html?msg=Para poder inscribir la propuesta debe crear el perfil ('+m+').&msg_tipo=danger';
+                                    notify("danger", "remove", "Convocatorias:", "No tiene permisos para ver la información.");
                                 } else
                                 {
-                                    if (data == 'error_participante_propuesta')
+                                    if (data == 'crear_perfil')
                                     {
-                                        location.href = url_pv_admin + 'pages/perfilesparticipantes/'+redirect_perfil+'.html?msg=Se registro un error al importar el participante, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co.&msg_tipo=danger';
+                                        location.href = url_pv_admin + 'pages/perfilesparticipantes/'+redirect_perfil+'.html?msg=Para poder inscribir la propuesta debe crear el perfil ('+m+').&msg_tipo=danger';
                                     } else
                                     {
-                                        var json = JSON.parse(data);
-                                        
-                                        location.href = redirect + ".html?m=" + m + "&id=" + id + "&p=" + json;                                        
-                                    }
+                                        if (data == 'error_participante_propuesta')
+                                        {
+                                            location.href = url_pv_admin + 'pages/perfilesparticipantes/'+redirect_perfil+'.html?msg=Se registro un error al importar el participante, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co.&msg_tipo=danger';
+                                        } else
+                                        {
+                                            if (data == 'error_maximo_propuesta_pdac')
+                                            {
+                                                notify("danger", "ok", "Convocatorias:", "Ya tiene el máximo de propuestas guardadas permitidas para esta convocatoria, solo se permite una propuesta con alianza sectorial y la otra sin alianza sectorial, para visualizar sus propuestas por favor ingrese al menú Mis propuestas.");
+                                            } else
+                                            {
+                                                if (data == 'error_otra_propuesta_pdac')
+                                                {
+                                                    notify("danger", "ok", "Convocatorias:", "No puede iniciar el procedo de inscripción de la propuesta, debido a que ya cuenta con una propuesta en la convocatoria ("+$("#nombre_convocatoria_par").val()+") , para visualizar sus propuestas por favor ingrese al menú Mis propuestas.");
+                                                } else
+                                                {
+                                                var json = JSON.parse(data);
 
+                                                location.href = redirect + ".html?m=" + m + "&id=" + id + "&p=" + json;                                        
+                                                }
+                                            }                                                                                                                                    
+                                        }
+
+                                    }
                                 }
                             }
                         }
-                    }
-                });
-
+                    });
+                }                
+                
                 bv.resetForm();
+                
             });
 
         } else

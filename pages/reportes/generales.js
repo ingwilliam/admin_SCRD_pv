@@ -84,6 +84,7 @@ $(document).ready(function () {
                                 var json = JSON.parse(data);
 
                                 $("#reporte_pn").empty();
+                                $("#reporte_inhabilidades_propuesta").empty();
                                 $("#reporte_ganadores").empty();
                                 $(".fecha_actual").empty();
 
@@ -105,6 +106,7 @@ $(document).ready(function () {
                                             $("#reportes_propuestas").css("display", "block");
 
                                             $("#reporte_pn").html(json.reporte_pn);
+                                            $("#reporte_inhabilidades_propuesta").html(json.reporte_inhabilidades_propuesta);
                                             $("#reporte_ganadores").html(json.reporte_ganadores);
                                             $(".fecha_actual").html(json.fecha_actual);
                                             
@@ -135,6 +137,10 @@ $(document).ready(function () {
 
                                             });
 
+                                            $('#btn_inhabilidades').click(function () {
+                                                var codigos = $("#inhabilidades_codigos").val();
+                                                window.open(url_pv_report+'reporte_inhabilidades_propuestas.php?codigos='+codigos+'&token='+token_actual.token, '_blank');                                                                                                
+                                            }); 
                                         }
                                     }
                                 }

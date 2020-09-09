@@ -5,21 +5,15 @@ $(document).ready(function () {
 
     var href_regresar = "";
     var href_siguiente = "";
-    //Creando link de navegación
+    //Creando link de navegación para la agrupacion
     if (getURLParameter('m') == "agr")
     {
         href_regresar = "propuestas.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
         href_siguiente = "documentacion.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+        
+        $("#link_propuestas").attr("onclick", "location.href = '" + href_regresar + "'");
+        $("#link_documentacion").attr("onclick", "location.href = '" + href_siguiente + "'");
     }
-
-    if (getURLParameter('m') == "pj")
-    {
-        href_regresar = "propuestas.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-        href_siguiente = "documentacion.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-    }
-
-    $("#link_propuestas").attr("onclick", "location.href = '" + href_regresar + "'");
-    $("#link_documentacion").attr("onclick", "location.href = '" + href_siguiente + "'");
 
     //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
     if ($.isEmptyObject(token_actual)) {
@@ -73,7 +67,7 @@ $(document).ready(function () {
                                             $("#conv").attr('value', getURLParameter('id'));
 
                                             //disabled todos los componentes
-                                            $("#formulario_principal input,select,button[type=submit]").attr("disabled", "disabled");
+                                            $("#formulario_principal input,textarea,select,button[type=submit]").attr("disabled", "disabled");
 
                                             //Verifica si el token actual tiene acceso de lectura
                                             permiso_lectura(token_actual, "Menu Participante");
@@ -344,14 +338,45 @@ $(document).ready(function () {
                                                                             } else
                                                                             {
 
-
                                                                                 var json = JSON.parse(data);
 
                                                                                 //eliminó disabled todos los componentes
                                                                                 if (json.estado == 7)
                                                                                 {
-                                                                                    $("#formulario_principal input,select,button[type=submit]").removeAttr("disabled");
+                                                                                    $("#formulario_principal input,textarea,select,button[type=submit]").removeAttr("disabled");
                                                                                 }
+                                                                                
+                                                                                //Creo link de navegacion para persona juridica
+                                                                                if (getURLParameter('m') == "pj")
+                                                                                {
+                                                                                    if (json.programa == 2)
+                                                                                    {
+                                                                                        var path_actual = window.location.pathname;
+                                                                                        if(path_actual=="/admin_SCRD_pv/pages/propuestas/junta.html")
+                                                                                        {
+                                                                                            href_regresar = "propuestas_pdac.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                            href_siguiente = "grupos_trabajos.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                        
+                                                                                        }
+                                                                                        if(path_actual=="/admin_SCRD_pv/pages/propuestas/grupos_trabajos.html")
+                                                                                        {
+                                                                                            href_regresar = "junta.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                            href_siguiente = "objetivos_metas_actividades.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                        }                                                                                                                                                                                
+                                                                                    
+                                                                                        $("#link_propuestas").attr("onclick", "location.href = '" + href_regresar + "'");
+                                                                                        $("#link_documentacion").attr("onclick", "location.href = '" + href_siguiente + "'");
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        href_regresar = "propuestas.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                        href_siguiente = "documentacion.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                    
+                                                                                        $("#link_propuestas").attr("onclick", "location.href = '" + href_regresar + "'");
+                                                                                        $("#link_documentacion").attr("onclick", "location.href = '" + href_siguiente + "'");
+                                                                                    }                                                                                                                                                                       
+                                                                                }
+                                                                                
                                                                                 
                                                                                 //Cargos el select de grupo etnico
                                                                                 $('#discapacidad').find('option').remove();
@@ -431,11 +456,18 @@ $(document).ready(function () {
                                             });
 
                                             //Limpio el formulario de los anexos
-                                            $('#nuevo_integrante').on('hidden.bs.modal', function () {
-                                                $("#formulario_principal")[0].reset();
+                                            $('#nuevo_integrante').on('hidden.bs.modal', function () {                                                
+                                                $("#formulario_principal").bootstrapValidator('disableSubmitButtons', false);
+                                                $("#formulario_principal").bootstrapValidator('resetForm', true);                                                
                                                 $('#ciudad_residencia').find('option').remove();
                                                 $("#ciudad_residencia").append('<option value="">:: Seleccionar ::</option>');                                                
-                                                $("#id").val("");
+                                                $("#experiencia").val("");
+                                                $("#actividades_cargo").val("");
+                                                
+                                                $(".caracter_experiencia").html("1000");
+                                                $(".caracter_actividades_cargo").html("1000");
+                                                
+                                                $("#id").val("");                                                
                                             });
                                         }
                                     }
@@ -444,6 +476,18 @@ $(document).ready(function () {
                         }
                     }
                 }
+            });
+            
+            $(".contar_caracteres").keyup(function () {
+                var total = $(this).attr("title");
+                var total_text = $(this).val().length;
+                var obj = $(this).attr("id");
+                var total_actual = total - total_text;
+                if (total_actual <= 0)
+                {
+                    total_actual = 0;
+                }
+                $(".caracter_" + obj).html(total_actual);
             });
 
         } else
@@ -467,6 +511,7 @@ function validator_form(token_actual) {
             invalid: 'glyphicon glyphicon-remove',
             validating: 'glyphicon glyphicon-refresh'
         },
+        excluded: [':disabled'],
         fields: {
             tipo_documento: {
                 validators: {
@@ -475,7 +520,11 @@ function validator_form(token_actual) {
             },
             numero_documento: {
                 validators: {
-                    notEmpty: {message: 'El número de documento de identificación es requerido'}
+                    notEmpty: {message: 'El número de documento de identificación es requerido'},
+                    regexp: {
+                        regexp: /^[a-zA-Z0-9]+$/i,
+                        message: 'Solo se permite números o letras'
+                    }
                 }
             },
             primer_nombre: {
@@ -590,6 +639,21 @@ function validator_form(token_actual) {
                 validators: {
                     notEmpty: {message: 'El rol que desempeña o ejecuta en la propuesta es requerido'}
                 }
+            },
+            experiencia: {
+                validators: {
+                    notEmpty: {message: 'La experiencia es requerido'}
+                }            
+            },
+            actividades_cargo: {
+                validators: {
+                    notEmpty: {message: 'Las actividades a cargo es requerido'}
+                }            
+            },
+            profesion: {
+                validators: {
+                    notEmpty: {message: 'La profesión es requerido'}
+                }
             }
         }
     }).on('success.form.bv', function (e) {
@@ -696,15 +760,30 @@ function cargar_tabla(token_actual)
         "columnDefs": [{
                 "targets": 6,
                 "render": function (data, type, row, meta) {
-                    if (row.representante == true)
+                    if($("#tipo").val()=="EquipoTrabajo")
                     {
-                        row.representante = "<b>Sí</b>";
+                        if (row.director == true)
+                        {
+                            row.director = "<b>Sí</b>";
+                        }
+                        else
+                        {
+                            row.director = "No";
+                        }
+                        return row.director;
                     }
                     else
                     {
-                        row.representante = "No";
+                        if (row.representante == true)
+                        {
+                            row.representante = "<b>Sí</b>";
+                        }
+                        else
+                        {
+                            row.representante = "No";
+                        }
+                        return row.representante;
                     }
-                    return row.representante;
                 }
             }
         ]
@@ -810,6 +889,8 @@ function cargar_formulario(token_actual)
                     
                     $("#representante option[value='" + json.participante.representante + "']").prop('selected', true);
                     
+                    $("#director option[value='" + json.participante.director + "']").prop('selected', true);
+                    
                     //Valido para que muestre solo los barrios de bogota
                     //Se inactiva william barbosa 
                     //20 de mayo
@@ -822,6 +903,23 @@ function cargar_formulario(token_actual)
                         $("#barrio_residencia_name").css("display", "none");
                     }
                     */
+                   
+                    $('#experiencia').val(json.participante.experiencia); 
+                    
+                    if(json.participante.experiencia!=null)
+                    {
+                        //agrego los totales de caracteres
+                        $(".caracter_experiencia").html(1000 - json.participante.experiencia.length);
+                    }
+                    
+                    $('#actividades_cargo').val(json.participante.actividades_cargo); 
+                    
+                    if(json.participante.actividades_cargo!=null)
+                    {
+                        //agrego los totales de caracteres
+                        $(".caracter_actividades_cargo").html(1000 - json.participante.actividades_cargo.length);
+                    }
+                   
                     $('#nuevo_integrante').modal('toggle');
                 }
             }
@@ -842,25 +940,41 @@ function cargar_formulario(token_actual)
             data: {"token": token_actual.token, "modulo": "Menu Participante", "active": active},
             url: url_pv + 'Personasnaturales/eliminar_integrante/' + $(this).attr("title")
         }).done(function (data) {
-            if (data == 'ok')
+            if (data == 'error_metodo')
             {
-                if (active == "true")
-                {
-                    notify("info", "ok", "Convocatorias:", "Se activó el integrante con éxito.");
-                } else
-                {
-                    notify("info", "ok", "Convocatorias:", "Se inactivo el integrante con éxito.");
-                }
+                notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
             } else
             {
-                if (data == 'acceso_denegado')
+                if (data == 'error_token')
                 {
-                    notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                 } else
                 {
-                    notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                    if (data == 'error')
+                    {
+                        notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                    } else
+                    {
+                        if (data == 'acceso_denegado')
+                        {
+                             notify("danger", "remove", "Convocatorias:", "Acceso denegado.");
+                        }
+                        else
+                        {
+                            if (data == 'ok')
+                            {
+                                if (active == "true")
+                                {
+                                    notify("info", "ok", "Convocatorias:", "Se activó el integrante con éxito.");
+                                } else
+                                {
+                                    notify("info", "ok", "Convocatorias:", "Se inactivo el integrante con éxito.");
+                                }
+                            }
+                        }
+                    }
                 }
-            }
+            }                                    
         });
     });
     

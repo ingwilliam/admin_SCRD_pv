@@ -65,7 +65,7 @@ $(document).ready(function () {
                                                 $("#conv").attr('value', getURLParameter('id'));
 
                                                 //disabled todos los componentes
-                                                $("#formulario_principal input,select,button[type=submit]").attr("disabled","disabled");   
+                                                $("#formulario_principal input,textarea,select,button[type=submit]").attr("disabled","disabled");   
 
                                                 //Verifica si el token actual tiene acceso de lectura
                                                 permiso_lectura(token_actual, "Menu Participante");
@@ -328,7 +328,7 @@ $(document).ready(function () {
                                                                         //eliminó disabled todos los componentes
                                                                         if(json.estado==7)
                                                                         {
-                                                                            $("#formulario_principal input,select,button[type=submit]").removeAttr("disabled");   
+                                                                            $("#formulario_principal input,textarea,select,button[type=submit]").removeAttr("disabled");   
                                                                         }
                                                                         
                                                                         //Cargo los select de barrios
@@ -538,7 +538,11 @@ function validator_form(token_actual) {
             },
             numero_documento: {
                 validators: {
-                    notEmpty: {message: 'El número de documento de identificación es requerido'}
+                    notEmpty: {message: 'El número de documento de identificación es requerido'},
+                    regexp: {
+                        regexp: /^[a-zA-Z0-9]+$/i,
+                        message: 'Solo se permite números o letras'
+                    }
                 }
             },
             primer_nombre: {

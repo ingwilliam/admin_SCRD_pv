@@ -78,7 +78,7 @@ $(document).ready(function () {
                 "processing": true,
                 "serverSide": true,
                 "ordering": false,
-                "lengthMenu": [20, 30, 40],
+                "lengthMenu": [100, 150, 200],
                 "ajax": {
                     url: url_pv + "PropuestasParticipantes/buscar_propuestas",
                     data: function (d) {
@@ -135,16 +135,29 @@ $(document).ready(function () {
                                 row.ver_propuesta = row.ver_propuesta+'<br/><a href="'+href_propuesta+'" ><button style="margin: 0 0 5px 0" type="button" class="btn btn-primary btn_tooltip" title="Ver encuesta"><span class="fa fa-edit"></span></button></a>';                            
                             }
                             
-                            
-                            
-                            if(row.fecha_subsanacion!=null)
+                            //Valido el programa PDAC
+                            if(row.programa==2)
                             {
-                                row.ver_reporte='<a href="'+url_pv_report+'reporte_propuesta_inscrita.php?id='+row.id_propuesta+'&token='+row.token+'" target="_blank"><button style="margin: 0 0 5px 0" type="button" class="btn btn-danger btn_tooltip" title="Reporte de propuesta inscrita"><span class="fa fa-bar-chart-o"></span></button></a><br/><a href="'+url_pv_report+'reporte_propuesta_subsanacion.php?id='+row.id_propuesta+'&token='+row.token+'" target="_blank"><button type="button" class="btn btn-info btn_tooltip" title="Reporte de propuesta subsanada"><span class="fa fa-bar-chart-o"></span></button></a>';
+                                if(row.fecha_subsanacion!=null)
+                                {
+                                    row.ver_reporte='<a href="'+url_pv_report+'reporte_propuesta_inscrita_pdac.php?id='+row.id_propuesta+'&token='+row.token+'" target="_blank"><button style="margin: 0 0 5px 0" type="button" class="btn btn-danger btn_tooltip" title="Reporte de propuesta inscrita"><span class="fa fa-bar-chart-o"></span></button></a><br/><a href="'+url_pv_report+'reporte_propuesta_subsanacion.php?id='+row.id_propuesta+'&token='+row.token+'" target="_blank"><button type="button" class="btn btn-info btn_tooltip" title="Reporte de propuesta subsanada"><span class="fa fa-bar-chart-o"></span></button></a>';
+                                }
+                                else
+                                {
+                                    row.ver_reporte='<a href="'+url_pv_report+'reporte_propuesta_inscrita_pdac.php?id='+row.id_propuesta+'&token='+row.token+'" target="_blank"><button type="button" class="btn btn-danger btn_tooltip" title="Reporte de propuesta inscrita"><span class="fa fa-bar-chart-o"></span></button></a>';
+                                }
                             }
                             else
                             {
-                                row.ver_reporte='<a href="'+url_pv_report+'reporte_propuesta_inscrita.php?id='+row.id_propuesta+'&token='+row.token+'" target="_blank"><button type="button" class="btn btn-danger btn_tooltip" title="Reporte de propuesta inscrita"><span class="fa fa-bar-chart-o"></span></button></a>';
-                            }
+                                if(row.fecha_subsanacion!=null)
+                                {
+                                    row.ver_reporte='<a href="'+url_pv_report+'reporte_propuesta_inscrita.php?id='+row.id_propuesta+'&token='+row.token+'" target="_blank"><button style="margin: 0 0 5px 0" type="button" class="btn btn-danger btn_tooltip" title="Reporte de propuesta inscrita"><span class="fa fa-bar-chart-o"></span></button></a><br/><a href="'+url_pv_report+'reporte_propuesta_subsanacion.php?id='+row.id_propuesta+'&token='+row.token+'" target="_blank"><button type="button" class="btn btn-info btn_tooltip" title="Reporte de propuesta subsanada"><span class="fa fa-bar-chart-o"></span></button></a>';
+                                }
+                                else
+                                {
+                                    row.ver_reporte='<a href="'+url_pv_report+'reporte_propuesta_inscrita.php?id='+row.id_propuesta+'&token='+row.token+'" target="_blank"><button type="button" class="btn btn-danger btn_tooltip" title="Reporte de propuesta inscrita"><span class="fa fa-bar-chart-o"></span></button></a>';
+                                }
+                            }                                                        
                             
                             //Valido que sea los edtados en
                             //21 por subsanar

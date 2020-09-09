@@ -51,7 +51,7 @@
         <link href="../../dist/libraries/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css"/>
 
         <!--Select2-->
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+        <link href="../../dist/css/select2.min.css" rel="stylesheet" />
 
 
     </head>
@@ -330,6 +330,38 @@
             </div>
           </div>
           <!-- Modal -->
+          
+          
+          <!--
+            20-07-2020
+            Wilmer Gustavo Mogollón Duque
+            Se agrega modal para notificación al generar el documento de aceptación.
+        -->
+
+        <!-- Modal generar acta -->
+        <div class="modal fade" id="genera_aceptacion" tabindex="-1" role="dialog" aria-labelledby="genera_aceptacionLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!--h5 class="modal-title" id="exampleModalLabel">Modal title</h5-->
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div id="mensaje">
+                            ¿Está seguro de generar la carta de aceptación?<br/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="bcancelarcarta">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="baceptarcarta">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
 
 
         <!-- jQuery -->
@@ -368,7 +400,7 @@
         <script src="../../dist/libraries/ajaxdownloader/ajaxdownloader.min.js" type="text/javascript"></script>
 
         <!--Select2-->
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+        <script src="../../dist/js/select2.min.js"></script>
 
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>

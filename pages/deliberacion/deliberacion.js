@@ -910,6 +910,9 @@ function cargar_info_top_general(token_actual, id_ronda) {
             case 'error_confirmacion':
                 notify("danger", "remove", "Usuario:", "Hay evaluaciones sin confirmar.");
                 break;
+            case 'error_deliberacion':
+                notify("danger", "remove", "Usuario:", "Recuerde que es necesario enviar a deliberar.");
+                break;
             case 'exito':
 
                 $("#top_generalModal").modal('show');
@@ -1579,6 +1582,9 @@ function anular_deliberacion(token_actual, id_ronda) {
                 break;
             case 'acceso_denegado':
                 notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                break;
+            case 'confirmo_top':
+                notify("danger", "remove", "Usuario:", "No tiene permisos para anular la deliberación porque yá confirmó el top general.");
                 break;
             case 'deshabilitado':
                 notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");

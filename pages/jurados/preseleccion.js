@@ -177,7 +177,6 @@ $(document).ready(function () {
             if($("#categorias").val()===""){
                 liberar_postulaciones(token_actual, $("#convocatorias").val());
             }else{
-                alert($("#categorias").val());
                 liberar_postulaciones(token_actual, $("#categorias").val());
             }
         });
@@ -485,6 +484,7 @@ function acciones_registro(token_actual) {
         cargar_tabla_reconocimiento(token_actual, $(this).attr("id"), $(this).attr("id-participante"));
         cargar_tabla_publicaciones(token_actual, $(this).attr("id"), $(this).attr("id-participante"));
         cargar_criterios_evaluacion(token_actual, $(this).attr("id"), $(this).attr("id-participante"));
+        cargar_inhabilidades(token_actual, $(this).attr("id"), $(this).attr("id-participante"));
         // cargar_datos_convocatoria(token_actual,  $(this).attr("id"),  $(this).attr("id-participante"));
 
     });
@@ -2210,6 +2210,9 @@ function liberar_postulaciones(token_actual, convocatoria) {
             case 'acceso_denegado':
                 notify("danger", "remove", "Usuario:", "Aún no se han conformado todos los grupos de evaluación.");
                 break;
+            case 'acceso_denegado':
+                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                break;
             case 'error_rondas':
                 notify("danger", "ok", "Usuario:", "Esta convocatoria aún no tiene rondas de evaluación asociadas");
                 break;
@@ -2224,5 +2227,137 @@ function liberar_postulaciones(token_actual, convocatoria) {
 
     });
 
+
+}
+
+
+
+/*
+ * 20-08-2020
+ * Wilmer Gustavo Mogollón Duque
+ * Se agrega función cargar_inhabilidades
+ */
+
+//function cargar_inhabilidades(token_actual, postulacion, participante){
+//    alert("Hola");
+//}
+
+function cargar_inhabilidades(token_actual, postulacion, participante) {
+    $("#perfiles_jurados").html("");
+    //consulto si tengo propuesta cargada
+
+    // cargo los datos
+    $.ajax({
+        type: 'GET',
+        url: url_pv + 'Juradospreseleccion/search_info_inhabilidades',
+        data: {"token": token_actual.token, "idc": $('#convocatorias').val(), "postulacion": postulacion, "participante": participante},
+    }).done(function (data) {
+
+        switch (data) {
+            case 'error':
+                notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                break;
+            case 'error_metodo':
+                notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                break;
+            case 'error_token':
+                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                break;
+            case 'acceso_denegado':
+                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                break;
+            case 'deshabilitado':
+                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                cargar_datos_formulario(token_actual);
+                break;
+            default:
+
+                var json = JSON.parse(data);
+
+                if (json.participante) {
+
+                    
+                    $('#nombre_participante').html(json.participante.primer_nombre + ' ' + json.participante.segundo_nombre + ' ' + json.participante.primer_apellido + ' ' + json.participante.segundo_apellido);
+                    $('#tipo_participante').html(json.participante.tipo);
+                    $('#codigo_propuesta').html(json.propuesta_codigo);
+                    $('#nombre_propuesta').html(json.propuesta_nombre);
+                    $('#nombre_estado').html(json.propuesta_estado);
+                    
+                    
+                    //Contratista
+                    
+                    if(Object.keys(json.contratistas).length>0)
+                    {
+                        $("#contratistas").css("display","block");
+                        
+                        var html_table = "";
+                        $( ".tr_contratistas" ).remove();
+                        $.each(json.contratistas, function (key, contratista) {
+                                 var nombre_contratista=String(contratista);
+                                 html_table = html_table+'<tr class="tr_contratistas"><td>'+key+'</td><td>'+nombre_contratista.replace(",","<br/>")+'</td></tr>';                                                      
+                        });                    
+                        $( "#body_contratistas" ).append(html_table);
+                        
+                    }
+                    else
+                    {
+                        $("#contratistas").css("display","none");
+                    }
+                    
+                    //Jurados seleccionados
+                    
+                    if(json.html_propuestas_jurados_seleccionados!=="")
+                    {
+                        $("#jurados_seleccionados").css("display","block");                                                                    
+                        $( ".tr_jurados_seleccionados" ).remove();
+                        $( "#body_jurados_seleccionados" ).append(json.html_propuestas_jurados_seleccionados);
+                        
+                    }
+                    else
+                    {
+                        $("#jurados_seleccionados").css("display","none");
+                    }
+                    
+                    //Personas naturales
+                    
+                    if(json.html_propuestas_ganadoras!=="")
+                    {
+                        $("#propuestas_ganadoras_pn").css("display","block");                                                                    
+                        $( ".tr_propuestas_ganadoras" ).remove();
+                        $( "#body_propuestas_ganadoras_pn" ).append(json.html_propuestas_ganadoras);
+                        
+                    }
+                    else
+                    {
+                        $("#propuestas_ganadoras_pn").css("display","none");
+                    }
+                    
+                    //Jurados seleccionados años anteriores
+                    
+                    if(json.html_ganadoras_anios_anteriores!=="")
+                    {
+                        $("#ganadoras_anios_anteriores").css("display","block");                                                                    
+                        $( ".tr_ganador_anio_anterior" ).remove();
+                        $( "#body_ganadoras_anios_anteriores" ).append(json.html_ganadoras_anios_anteriores);
+                        
+                    }
+                    else
+                    {
+                        $("#ganadoras_anios_anteriores").css("display","none");
+                    }
+
+
+
+                } else {
+
+
+                }
+
+                break;
+        }
+
+    }
+
+    );
 
 }
