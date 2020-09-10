@@ -333,7 +333,7 @@
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
                                                                 <label>Valor unitario <span class="icono_requerido">*</span></label>
-                                                                <input id="valorunitario" type="text" name="valorunitario" class="form-control calcular_valor_total">
+                                                                <input id="valorunitario" type="text" name="valorunitario" class="form-control calcular_valor_total separador_miles">
                                                             </div>
                                                         </div>                                                                                                                                                                                                                                                      
                                                     </div>                                    
@@ -341,7 +341,7 @@
                                                         <div class="col-lg-12">
                                                             <div class="form-group">
                                                                 <label>Valor Total</label>
-                                                                <input id="valortotal" type="text" name="valortotal" class="form-control" disabled="disabled">
+                                                                <input id="valortotal" type="text" name="valortotal" class="form-control separador_miles" disabled="disabled">
                                                             </div>
                                                         </div>
                                                     </div>                                                    
@@ -349,13 +349,13 @@
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
                                                                 <label>Aporte solicitado concertación <span class="icono_requerido">*</span></label>
-                                                                <input id="aportesolicitado" type="text" name="aportesolicitado" value="0" class="form-control calcular_valor_total">
+                                                                <input id="aportesolicitado" type="text" name="aportesolicitado" value="0" class="form-control calcular_valor_total separador_miles">
                                                             </div>
                                                         </div>       
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
                                                                 <label>Aporte cofinanciado por terceros <span class="icono_requerido">*</span></label>
-                                                                <input id="aportecofinanciado" type="text" name="aportecofinanciado" value="0" class="form-control calcular_valor_total">
+                                                                <input id="aportecofinanciado" type="text" name="aportecofinanciado" value="0" class="form-control calcular_valor_total separador_miles">
                                                             </div>
                                                         </div>
                                                     </div>                                                    
@@ -363,7 +363,7 @@
                                                         <div class="col-lg-12">
                                                             <div class="form-group">
                                                                 <label>Aporte recursos propios</label>
-                                                                <input id="aportepropio" type="text" name="aportepropio" class="form-control" disabled="disabled">
+                                                                <input id="aportepropio" type="text" name="aportepropio" class="form-control separador_miles" disabled="disabled">
                                                             </div>
                                                         </div>                                                                                                                                                                                                                                                      
                                                     </div>                                    
@@ -470,6 +470,7 @@
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
         <script src='../../dist/js/jquery.loadJSON.js'></script>
+        <script src='../../dist/js/jquery.number.js'></script>
         <script src='objetivos_metas_actividades.js'></script>        
 
     </body>
