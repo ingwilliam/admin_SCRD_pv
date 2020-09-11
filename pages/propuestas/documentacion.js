@@ -131,6 +131,8 @@ $(document).ready(function () {
                                                                                     $(".inactivar_estado_propuesta").removeAttr("disabled");   
                                                                                 }
                                                                                 
+                                                                                $("#programa").val(json.programa);
+                                                                                
                                                                                 if (getURLParameter('m') == "pj")
                                                                                 {                                                                                    
                                                                                     if (json.programa == 2)
@@ -405,7 +407,15 @@ $(document).ready(function () {
 
                                                     $("#modal-btn-reporte").on("click", function () {
                                                         callback(false);
-                                                        window.open(url_pv_report + "/reporte_propuesta_inscrita.php?token=" + token_actual.token + "&vi=1&id=" + $("#propuesta").attr('value'), '_blank');
+                                                        alert($("#programa").val());
+                                                        if($("#programa").val()==2)
+                                                        {
+                                                            window.open(url_pv_report + "/reporte_propuesta_inscrita_pdac.php?token=" + token_actual.token + "&vi=1&id=" + $("#propuesta").attr('value'), '_blank');
+                                                        }
+                                                        else
+                                                        {
+                                                            window.open(url_pv_report + "/reporte_propuesta_inscrita.php?token=" + token_actual.token + "&vi=1&id=" + $("#propuesta").attr('value'), '_blank');
+                                                        }                                                        
                                                     });
                                                 };
 
