@@ -272,6 +272,17 @@ $(document).ready(function () {
                 $("#form_nuevo_presupuesto").bootstrapValidator('resetForm', true);
             });
 
+            $("#generar_presupuesto").click(function () {
+                
+                $.AjaxDownloader({
+                    data : {
+                        propuesta   : getURLParameter('p'),
+                        token   : token_actual.token                        
+                    },
+                    url: url_pv + 'PropuestasFormatos/propuesta_presupuesto_xls/'
+                });
+            });
+
         } else
         {
             location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=El código de la propuesta no es valido.&msg_tipo=danger';
