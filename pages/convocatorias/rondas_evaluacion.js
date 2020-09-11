@@ -93,7 +93,7 @@ $(document).ready(function () {
                         if (typeof json.convocatoria.id === 'number') {
 
                             //Si la convocatoria fue publicada o cancelada o suspendida
-                            if(json.convocatoria.estado==5 || json.convocatoria.estado==32 || json.convocatoria.estado==43  || json.convocatoria.estado==45){
+                            if(json.convocatoria.estado==5 || json.convocatoria.estado==32 || json.convocatoria.estado==43  || json.convocatoria.estado==45   || json.convocatoria.estado==6){
                                 $("#form_validator button,input,select,button[type=submit],textarea").attr("disabled","disabled");
                                 $("#form_nuevo_ronda button,input,select,button[type=submit],textarea").attr("disabled","disabled");
                                 $("#btn_guardar").css("display","none");

@@ -74,7 +74,7 @@ $(document).ready(function () {
                                 }
                                 
                                 //Si la convocatoria fue publicada o cancelada o suspendida
-                                if(json.convocatoria.estado==5 || json.convocatoria.estado==32 || json.convocatoria.estado==43  || json.convocatoria.estado==45){
+                                if(json.convocatoria.estado==5 || json.convocatoria.estado==32 || json.convocatoria.estado==43  || json.convocatoria.estado==45   || json.convocatoria.estado==6){
                                     $("#form_nuevo_documento input,select,button[type=submit],textarea").attr("disabled","disabled");   
                                     $("#table_registros button,input,select,button[type=submit],textarea").attr("disabled","disabled");   
                                     $(".input-sm").css("display","none");                                       
