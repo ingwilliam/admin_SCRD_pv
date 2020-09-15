@@ -634,7 +634,8 @@ function acciones_registro(token_actual) {
         // cargar_select_rondas_editar(token_actual, $('#convocatorias').val(), $(this).attr("id") );
         // cargar_grupo(token_actual, $(this).attr("id") );
         //cargar_tabla_jurados_aceptaron_editar(token_actual, $(this).attr("id") );
-        cargar_info_basica(token_actual, $(this).attr("id_propuesta"));
+//        cargar_info_basica(token_actual, $(this).attr("id_propuesta"));
+        cargar_info_basica(token_actual, $(this).attr("id_propuesta"), $(this).attr("id"));
         cargar_criterios_evaluacion(token_actual, $(this).attr("id"));
         $("#id_evaluacion").val($(this).attr("id"));
 
@@ -667,7 +668,7 @@ function acciones_registro(token_actual) {
 
 }
 
-function cargar_info_basica(token_actual, id_propuesta) {
+function cargar_info_basica(token_actual, id_propuesta, id_evaluacion) {
 
     $("#codigo_propuesta").html("");
     $("#nombre_propuesta").html("");
@@ -678,7 +679,7 @@ function cargar_info_basica(token_actual, id_propuesta) {
     $.ajax({
         type: 'GET',
         url: url_pv + 'PropuestasEvaluacion/propuestas/' + id_propuesta,
-        data: {"token": token_actual.token},
+        data: {"token": token_actual.token, "evaluacion": id_evaluacion},//14-09-2020 --- se incorpora el id de la ronda
     }).done(function (data) {
 
         switch (data) {
