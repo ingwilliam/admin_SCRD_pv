@@ -208,6 +208,11 @@ function validator_form(token_actual) {
                     numeric: {message: 'Debe ingresar solo numeros'}
                 }
             },
+            tamano_permitido: {
+                validators: {
+                    notEmpty: {message: 'El tamaño máximo permitido es requerido'}
+                }
+            }
         }
     }).on('success.form.bv', function (e) {
         // Prevent form submission
