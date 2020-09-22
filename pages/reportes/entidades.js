@@ -112,6 +112,7 @@ $(document).ready(function () {
                                     $("#reporte_convocatorias_cerrar").empty();                
                                     $("#reporte_convocatorias_cantidad_jurados").empty();                
                                     $("#reporte_convocatorias_listado_jurados").empty(); 
+                                    $("#reporte_convocatorias_listado_participantes").empty();
                                     $("#reporte_ganadores").empty();                                    
                                     $(".fecha_actual").empty();
 
@@ -136,9 +137,20 @@ $(document).ready(function () {
                                                 $("#reporte_convocatorias_cerrar").html(json.reporte_convocatorias_cerrar);                
                                                 $("#reporte_convocatorias_cantidad_jurados").html(json.reporte_convocatorias_cantidad_jurados);                
                                                 $("#reporte_convocatorias_listado_jurados").html(json.reporte_convocatorias_listado_jurados);                
+                                                $("#reporte_convocatorias_listado_participantes").html(json.reporte_convocatorias_listado_participantes);
                                                 $("#reporte_ganadores").html(json.reporte_ganadores);
 
                                                 $(".fecha_actual").html(json.fecha_actual);                            
+                                                
+                                                $('.reporte_convocatorias_listado_participantes').click(function () {
+                                                    var json = JSON.parse($(this).attr("rel"));
+
+                                                    $.AjaxDownloader({
+                                                        data: json,
+                                                        url: url_pv + 'ConvocatoriasFormatos/reporte_listado_entidades_convocatorias_listado_participantes_xls/'
+                                                    });
+
+                                                });                                                                                                
 
                                                 $('.reporte_propuestas_estados_excel').click(function () {
                                                     var json = JSON.parse( $(this).attr("rel") );
