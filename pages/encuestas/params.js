@@ -14,7 +14,7 @@ $(document).ready(function () {
 
         
         //Asignamos el valor a input id y encuesta
-        $("#id").attr('value', "");
+        $("#id").attr('value', "");        
         $("#encuesta").attr('value', getURLParameter('id'));        
         
         //Realizo la peticion para cargar el formulario
@@ -83,7 +83,6 @@ function validator_form(token_actual) {
         var formData = new FormData(document.getElementById("form_nuevo_documento"));
         formData.append("modulo", "Encuestas");
         formData.append("token", token_actual.token);        
-        formData.append("anexos", "listados");
 
         if ($("#id").val().length < 1) {
             //Se realiza la peticion con el fin de guardar el registro actual
@@ -201,7 +200,7 @@ function cargar_tabla(token_actual)
         "lengthMenu": [30, 40, 50],
         "ajax": {
             url: url_pv + "Encuestas/all_params",
-            data: {"token": token_actual.token, "convocatoria": $("#id").attr('value'), "anexos": "listados"}
+            data: {"token": token_actual.token, "encuesta": $("#encuesta").attr('value')}
         },
         "drawCallback": function (settings) {
             $(".check_activar_t").attr("checked", "true");
