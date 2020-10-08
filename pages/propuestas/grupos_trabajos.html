@@ -96,6 +96,25 @@
                                                 <input type="text" name="rol" class="form-control">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>¿Director del Proyecto?<span class="icono_requerido">*</span></label>
+                                                <select id='director' name="director" class="form-control" >                                                    
+                                                    <option value="true">Sí</option>
+                                                    <option value="false" selected="selected">No</option>
+                                                </select>                                                
+                                            </div>                                                                                                                                                                                                                                                                                                        
+                                        </div> 
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Profesión <span class="icono_requerido">*</span></label>
+                                                <input type="text" name="profesion" class="form-control">
+                                            </div>
+                                        </div>
                                     </div>                                    
                                     <div class="row">
                                         <div class="col-lg-6">
@@ -359,6 +378,22 @@
                                         </div>
                                     </div>
                                     <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Experiencia <span class="icono_requerido">*</span> <span style="font-size: 10px; color: blue" class="caracter_experiencia">1000</span></label>
+                                                <textarea id="experiencia" name="experiencia" class="form-control contar_caracteres" title="1000" rows="3"></textarea>
+                                            </div>                                                                                                                                                                                                                                                                                                        
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Actividades a cargo <span class="icono_requerido">*</span> <span style="font-size: 10px; color: blue" class="caracter_actividades_cargo">1000</span></label>
+                                                <textarea id="actividades_cargo" name="actividades_cargo" class="form-control contar_caracteres" title="1000" rows="3"></textarea>
+                                            </div>                                                                                                                                                                                                                                                                                                        
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-lg-12" style="text-align: right">
                                             <input type="hidden" id="id" name="id" />
                                             <input type="hidden" id="conv" name="conv" /> 
@@ -384,14 +419,14 @@
                                     <div class="col-lg-12">
                                         <table id="table_registros" class="table">
                                             <thead>
-                                                <tr>
+                                                <tr>                                                    
                                                     <th>Tipo de documento de identificación</th>
                                                     <th>Número de documento de identificación</th>
                                                     <th>Primer nombre</th>
                                                     <th>Segundo nombre</th>
                                                     <th>Primer apellido</th>
                                                     <th>Segundo apellido</th>
-                                                    <th>¿Representante?</th>
+                                                    <th>¿Director del Proyecto?</th>
                                                     <th>Rol que desempeña o ejecuta en la propuesta</th>
                                                     <th>¿Activo?</th>
                                                     <th>Acciones</th>

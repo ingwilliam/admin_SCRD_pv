@@ -274,6 +274,15 @@ $(document).ready(function () {
                                                                         //Cargo el formulario con los datos
                                                                         $('#formulario_principal').loadJSON(json.propuesta);
 
+                                                                        if(json.propuesta.alianza_sectorial)
+                                                                        {
+                                                                            $("#valor_alianza").html("Sí");
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            $("#valor_alianza").html("No");
+                                                                        }
+                                                                        
                                                                         $("#alianza_sectorial option[value='" + json.propuesta.alianza_sectorial + "']").prop('selected', true);
 
                                                                         $("#primera_vez_pdac option[value='" + json.propuesta.primera_vez_pdac + "']").prop('selected', true);
@@ -281,15 +290,42 @@ $(document).ready(function () {
                                                                         $("#ejecucion_menores_edad option[value='" + json.propuesta.ejecucion_menores_edad + "']").prop('selected', true);
 
                                                                         //agrego los totales de caracteres
-                                                                        $(".caracter_trayectoria_entidad").html(2000 - json.propuesta.trayectoria_entidad.length);
-                                                                        $(".caracter_problema_necesidad").html(2000 - json.propuesta.problema_necesidad.length);
-                                                                        $(".caracter_diagnostico_problema").html(2000 - json.propuesta.diagnostico_problema.length);
-                                                                        $(".caracter_justificacion").html(2000 - json.propuesta.justificacion.length);
-                                                                        $(".caracter_atencedente").html(2000 - json.propuesta.atencedente.length);
-                                                                        $(".caracter_metodologia").html(2000 - json.propuesta.metodologia.length);
-                                                                        $(".caracter_impacto").html(2000 - json.propuesta.impacto.length);
-                                                                        $(".caracter_mecanismos_cualitativa").html(2000 - json.propuesta.mecanismos_cualitativa.length);
-                                                                        $(".caracter_mecanismos_cuantitativa").html(2000 - json.propuesta.mecanismos_cuantitativa.length);
+                                                                        if(json.propuesta.trayectoria_entidad!=null)
+                                                                        {
+                                                                            $(".caracter_trayectoria_entidad").html(2000 - json.propuesta.trayectoria_entidad.length);
+                                                                        }
+                                                                        if(json.propuesta.problema_necesidad!=null)
+                                                                        {
+                                                                            $(".caracter_problema_necesidad").html(2000 - json.propuesta.problema_necesidad.length);
+                                                                        }
+                                                                        if(json.propuesta.diagnostico_problema!=null)
+                                                                        {
+                                                                            $(".caracter_diagnostico_problema").html(2000 - json.propuesta.diagnostico_problema.length);
+                                                                        }
+                                                                        if(json.propuesta.justificacion!=null)
+                                                                        {
+                                                                            $(".caracter_justificacion").html(2000 - json.propuesta.justificacion.length);
+                                                                        }
+                                                                        if(json.propuesta.atencedente!=null)
+                                                                        {
+                                                                            $(".caracter_atencedente").html(2000 - json.propuesta.atencedente.length);
+                                                                        }
+                                                                        if(json.propuesta.metodologia!=null)
+                                                                        {
+                                                                            $(".caracter_metodologia").html(2000 - json.propuesta.metodologia.length);
+                                                                        }
+                                                                        if(json.propuesta.impacto!=null)
+                                                                        {
+                                                                            $(".caracter_impacto").html(2000 - json.propuesta.impacto.length);
+                                                                        }
+                                                                        if(json.propuesta.mecanismos_cualitativa!=null)
+                                                                        {
+                                                                            $(".caracter_mecanismos_cualitativa").html(2000 - json.propuesta.mecanismos_cualitativa.length);
+                                                                        }
+                                                                        if(json.propuesta.mecanismos_cuantitativa!=null)
+                                                                        {
+                                                                            $(".caracter_mecanismos_cuantitativa").html(2000 - json.propuesta.mecanismos_cuantitativa.length);
+                                                                        }
 
                                                                         //Valido formulario
                                                                         validator_form(token_actual);

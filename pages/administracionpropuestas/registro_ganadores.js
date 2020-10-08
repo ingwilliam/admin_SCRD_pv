@@ -65,6 +65,50 @@ $(document).ready(function () {
                         $('.estado_btn').click(function () {
                             $("#estado").val($(this).attr("title"));
                         });
+                        
+                        $('#no_ganador').click(function () {
+                            //Se realiza la peticion con el fin de guardar el registro actual
+                            $.ajax({
+                                type: 'POST',
+                                url: url_pv + 'PropuestasGanadoras/editar_propuesta',
+                                data: "id="+$("#id").val()+"&estado=44&modulo=Registro de ganadores&token=" + token_actual.token
+                            }).done(function (result) {
+                                var result = result.trim();
+
+                                if (result == 'error')
+                                {
+                                    notify("danger", "ok", "Propuestas:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                } else
+                                {
+                                    if (result == 'error_token')
+                                    {
+                                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                                    } else
+                                    {
+                                        if (result == 'acceso_denegado')
+                                        {
+                                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                        } else
+                                        {
+                                            if (result == 'error_metodo')
+                                            {
+                                                notify("danger", "ok", "Propuestas:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                            } else
+                                            {
+                                                if (isNaN(result)) {
+                                                    notify("danger", "ok", "Propuestas:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                                } else
+                                                {
+                                                    notify("success", "ok", "Propuestas:", "Se Guardó con el éxito la propuesta, No Ganadora.");
+                                                    cargar_tabla(token_actual);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                            });
+                        });                                                
                     }
                 }
             }

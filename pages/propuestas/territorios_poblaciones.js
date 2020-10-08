@@ -6,26 +6,14 @@ $(document).ready(function () {
     var href_regresar = "";
     var href_siguiente = "";
     //Creando link de navegación
-    if (getURLParameter('m') == "agr")
+    if (getURLParameter('m') == "pj")
     {
-        href_regresar = "perfil_agrupacion.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-        href_siguiente = "integrantes.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-    }
-
-    if (getURLParameter('m') == "pn")
-    {
-        href_regresar = "perfil_persona_natural.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+        href_regresar = "objetivos_metas_actividades.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
         href_siguiente = "documentacion.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
     }
 
-    if (getURLParameter('m') == "pj")
-    {
-        href_regresar = "perfil_persona_juridica.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-        href_siguiente = "junta.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-    }
-
-    $("#link_participante").attr("onclick", "location.href = '" + href_regresar + "'");
-    $("#link_integrantes").attr("onclick", "location.href = '" + href_siguiente + "'");
+    $("#link_objetivos").attr("onclick", "location.href = '" + href_regresar + "'");
+    $("#link_documentacion").attr("onclick", "location.href = '" + href_siguiente + "'");
 
     //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
     if ($.isEmptyObject(token_actual)) {
@@ -130,28 +118,50 @@ $(document).ready(function () {
                                                                         }                                                                        
                                                                         
                                                                         
-                                                                        //Cargo el select de linea_estrategica                                
-                                                                        if (json.localidades.length > 0) {
-                                                                            $.each(json.localidades, function (key, localidad) {                                                                                
-                                                                                $("#localidades").append('<option value="' + localidad.nombre + '" >' + localidad.nombre + '</option>');
-                                                                            });
+                                                                        //Cargo el select de linea_estrategica   
+                                                                        if(json.localidades!=null)
+                                                                        {
+                                                                            if (json.localidades.length > 0) {
+                                                                                $.each(json.localidades, function (key, localidad) {                                                                                
+                                                                                    $("#localidades").append('<option value="' + localidad.nombre + '" >' + localidad.nombre + '</option>');
+                                                                                });
+                                                                            }
                                                                         }
                                                                         
                                                                         //Set los valores linea_estrategica
                                                                         $("#localidades option:selected").removeAttr("selected");
                                                                         $("#localidades option:selected").prop("selected", false);
-                                                                        $.each(JSON.parse(json.propuesta.localidades), function (i, e) {
-                                                                            $("#localidades option[value='" + e + "']").prop("selected", true);
-                                                                        });
+                                                                        if(json.propuesta.localidades!=null)
+                                                                        {
+                                                                            if (json.propuesta.localidades.length > 0) {
+                                                                                $.each(JSON.parse(json.propuesta.localidades), function (i, e) {
+                                                                                    $("#localidades option[value='" + e + "']").prop("selected", true);
+                                                                                });
+                                                                            }
+                                                                        }
 
                                                                         //Cargo los parametros obligatorios
                                                                         $("#validator").attr("value", JSON.stringify(json.validator));
 
                                                                         //Cargo el formulario con los datos
                                                                         $('#formulario_principal').loadJSON(json.propuesta);
-
+                                                                        if (typeof json.propuesta_territorio !== 'undefined') {
+                                                                            $('#formulario_principal').loadJSON(json.propuesta_territorio);
+                                                                        }
+                                                                        
                                                                         //agrego los totales de caracteres
-                                                                        $(".caracter_trayectoria_entidad").html(2000 - json.propuesta.trayectoria_entidad.length);
+                                                                        if(json.propuesta.poblacion_objetivo!=null)
+                                                                        {
+                                                                            $(".caracter_poblacion_objetivo").html(1000 - json.propuesta.poblacion_objetivo.length);
+                                                                        }
+                                                                        if(json.propuesta.comunidad_objetivo!=null)
+                                                                        {
+                                                                            $(".caracter_comunidad_objetivo").html(2000 - json.propuesta.comunidad_objetivo.length);
+                                                                        }
+                                                                        if(json.propuesta.establecio_cifra!=null)
+                                                                        {
+                                                                            $(".caracter_establecio_cifra").html(500 - json.propuesta.establecio_cifra.length);
+                                                                        }
 
                                                                         //Valido formulario
                                                                         validator_form(token_actual);
@@ -162,116 +172,7 @@ $(document).ready(function () {
                                                             }
                                                         }
                                                     }
-                                                });
-
-                                                //Cargar Upz y Barrios
-                                                $('#localidad').on('change', function () {
-                                                    var localidad = $(this).val();
-                                                    $('#upz').find('option').remove();
-                                                    $('#barrio').find('option').remove();
-                                                    $.ajax({
-                                                        type: 'GET',
-                                                        data: {"token": token_actual.token, "localidad": localidad},
-                                                        url: url_pv + 'Upzs/select'
-                                                    }).done(function (data) {
-                                                        if (data == 'error_metodo')
-                                                        {
-                                                            notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                                                        } else
-                                                        {
-                                                            if (data == 'error_token')
-                                                            {
-                                                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                                                            } else
-                                                            {
-                                                                var json = JSON.parse(data);
-                                                                $("#upz").append('<option value="">:: Seleccionar ::</option>');
-                                                                if (json != null)
-                                                                {
-                                                                    if (json.length > 0) {
-                                                                        $.each(json, function (key, value) {
-                                                                            $("#upz").append('<option value="' + value.id + '">' + value.nombre + '</option>');
-                                                                        });
-                                                                    }
-                                                                }
-                                                                $("#barrio").append('<option value="">:: Seleccionar ::</option>');
-                                                            }
-                                                        }
-                                                    });
-                                                    $.ajax({
-                                                        type: 'GET',
-                                                        data: {"token": token_actual.token, "localidad": localidad},
-                                                        url: url_pv + 'Barrios/select'
-                                                    }).done(function (data) {
-                                                        if (data == 'error_metodo')
-                                                        {
-                                                            notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                                                        } else
-                                                        {
-                                                            if (data == 'error_token')
-                                                            {
-                                                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                                                            } else
-                                                            {
-                                                                var json = JSON.parse(data);
-                                                                $("#barrio").append('<option value="">:: Seleccionar ::</option>');
-                                                                if (json != null)
-                                                                {
-                                                                    if (json.length > 0) {
-                                                                        $.each(json, function (key, value) {
-                                                                            $("#barrio").append('<option value="' + value.id + '">' + value.nombre + '</option>');
-                                                                        });
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    });
-                                                });
-
-                                                //Cargar Barrios
-                                                $('#upz').on('change', function () {
-                                                    var upz = $(this).val();
-                                                    var localidad = $("#localidad").val();
-                                                    $('#barrio').find('option').remove();
-                                                    $.ajax({
-                                                        type: 'GET',
-                                                        data: {"token": token_actual.token, "localidad": localidad, "upz": upz},
-                                                        url: url_pv + 'Barrios/select'
-                                                    }).done(function (data) {
-                                                        if (data == 'error_metodo')
-                                                        {
-                                                            notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                                                        } else
-                                                        {
-                                                            if (data == 'error_token')
-                                                            {
-                                                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                                                            } else
-                                                            {
-                                                                var json = JSON.parse(data);
-                                                                $("#barrio").append('<option value="">:: Seleccionar ::</option>');
-                                                                if (json.length > 0) {
-                                                                    $.each(json, function (key, value) {
-                                                                        $("#barrio").append('<option value="' + value.id + '">' + value.nombre + '</option>');
-                                                                    });
-                                                                }
-                                                            }
-                                                        }
-                                                    });
-                                                });
-
-                                                //Cargar Barrios
-                                                $('#bogota').on('change', function () {
-                                                    var bogota = $(this).val();
-                                                    //Verifico si es bogota                                
-                                                    if (bogota == "true")
-                                                    {
-                                                        $(".desarrollo_bogota").removeAttr("disabled");
-                                                    } else
-                                                    {
-                                                        $(".desarrollo_bogota").attr("disabled", "disabled");
-                                                    }
-                                                });
+                                                });                                                
                                             }
                                         }
                                     }
@@ -329,7 +230,8 @@ function validator_form(token_actual) {
             },
             total_beneficiario: {
                 validators: {
-                    notEmpty: {message: 'Estimado total de beneficiarios o participantes, es requerido'}
+                    notEmpty: {message: 'Estimado total de beneficiarios o participantes, es requerido'},
+                    numeric: {message: 'Debe ingresar solo numeros'}
                 }
             },
             establecio_cifra: {
@@ -498,45 +400,57 @@ function validator_form(token_actual) {
         }
         
         //Valido Grupo etareo
-        if ($("#primera_infancia").val() == 'No' && $("#infancia").val() == 'No' && $("#adolescencia").val() == 'No' && $("#juventud").val() == 'No' && $("#adulto").val() == 'No' && $("#adulto_mayor").val() == 'No' )
+        if(validar)
         {
-            notify("danger", "ok", "Propuesta:", "Debe seleccionar al menos un grupo etareo.");
-            validar = false;            
-        } else
-        {
-            validar = true;
+            if ($("#primera_infancia").val() == 'No' && $("#infancia").val() == 'No' && $("#adolescencia").val() == 'No' && $("#juventud").val() == 'No' && $("#adulto").val() == 'No' && $("#adulto_mayor").val() == 'No' )
+            {
+                notify("danger", "ok", "Propuesta:", "Debe seleccionar al menos un grupo etareo.");
+                validar = false;            
+            } else
+            {
+                validar = true;
+            }
         }
-        
+    
         //Valido estrato
-        if ($("#estrato_1").val() == 'No' && $("#estrato_2").val() == 'No' && $("#estrato_3").val() == 'No' && $("#estrato_4").val() == 'No' && $("#estrato_5").val() == 'No' && $("#estrato_6").val() == 'No' )
+        if(validar)
         {
-            notify("danger", "ok", "Propuesta:", "Debe seleccionar al menos un estrato.");
-            validar = false;            
-        } else
-        {
-            validar = true;
+            if ($("#estrato_1").val() == 'No' && $("#estrato_2").val() == 'No' && $("#estrato_3").val() == 'No' && $("#estrato_4").val() == 'No' && $("#estrato_5").val() == 'No' && $("#estrato_6").val() == 'No' )
+            {
+                notify("danger", "ok", "Propuesta:", "Debe seleccionar al menos un estrato.");
+                validar = false;            
+            } else
+            {
+                validar = true;
+            }
         }
         
         //Valido etnico
-        if ($("#comunidades_negras_afrocolombianas").val() == 'No' && $("#comunidad_raizal").val() == 'No' && $("#pueblos_comunidades_indigenas").val() == 'No' && $("#pueblo_rom_gitano").val() == 'No' && $("#mestizo").val() == 'No' && $("#ninguno_etnico").val() == 'No' )
+        if(validar)
         {
-            notify("danger", "ok", "Propuesta:", "Debe seleccionar al menos un grupo étnico.");
-            validar = false;            
-        } else
-        {
-            validar = true;
+            if ($("#comunidades_negras_afrocolombianas").val() == 'No' && $("#comunidad_raizal").val() == 'No' && $("#pueblos_comunidades_indigenas").val() == 'No' && $("#pueblo_rom_gitano").val() == 'No' && $("#mestizo").val() == 'No' && $("#ninguno_etnico").val() == 'No' )
+            {
+                notify("danger", "ok", "Propuesta:", "Debe seleccionar al menos un grupo étnico.");
+                validar = false;            
+            } else
+            {
+                validar = true;
+            }
         }
         
         //Valido grupo
-        if ($("#artesanos").val() == 'No' && $("#discapacitados").val() == 'No' && $("#habitantes_calle").val() == 'No' && $("#lgbti").val() == 'No' && $("#personas_comunidades_rurales_campesinas").val() == 'No' && $("#personas_privadas_libertad").val() == 'No' && $("#victimas_conflicto").val() == 'No' && $("#ninguno_grupo").val() == 'No' )
+        if(validar)
         {
-            notify("danger", "ok", "Propuesta:", "Debe seleccionar al menos un grupos sociales y poblacionales.");
-            validar = false;            
-        } else
-        {
-            validar = true;
+            if ($("#artesanos").val() == 'No' && $("#discapacitados").val() == 'No' && $("#habitantes_calle").val() == 'No' && $("#lgbti").val() == 'No' && $("#personas_comunidades_rurales_campesinas").val() == 'No' && $("#personas_privadas_libertad").val() == 'No' && $("#victimas_conflicto").val() == 'No' && $("#ninguno_grupo").val() == 'No' )
+            {
+                notify("danger", "ok", "Propuesta:", "Debe seleccionar al menos un grupos sociales y poblacionales.");
+                validar = false;            
+            } else
+            {
+                validar = true;
+            }
         }
-
+        
         // Prevent form submission
         e.preventDefault();
         // Get the form instance
@@ -562,7 +476,7 @@ function validator_form(token_actual) {
             var bv = $form.data('bootstrapValidator');
 
             // Valido si el id existe, con el fin de eviarlo al metodo correcto
-            $('#formulario_principal').attr('action', url_pv + 'PropuestasPdac/editar_propuesta');
+            $('#formulario_principal').attr('action', url_pv + 'PropuestasPdac/editar_propuesta_territorio');
 
             modalConfirm(function (confirm) {
                 if (confirm) {
@@ -594,22 +508,8 @@ function validator_form(token_actual) {
                                     {
                                         notify("success", "ok", "Propuesta:", "Se actualizó con el éxito la propuesta.");
 
-                                        var redirect = "";
-                                        if (getURLParameter('m') == "pn")
-                                        {
-                                            redirect = "documentacion.html";
-                                        }
-                                        if (getURLParameter('m') == "pj")
-                                        {
-                                            redirect = "junta.html";
-                                        }
-                                        if (getURLParameter('m') == "agr")
-                                        {
-                                            redirect = "integrantes.html";
-                                        }
-
-
-
+                                        var redirect = "documentacion.html";
+                                        
                                         setTimeout(function () {
                                             location.href = url_pv_admin + 'pages/propuestas/' + redirect + '?m=' + getURLParameter('m') + '&id=' + $("#conv").attr('value') + '&p=' + getURLParameter('p');
                                         }, 1800);

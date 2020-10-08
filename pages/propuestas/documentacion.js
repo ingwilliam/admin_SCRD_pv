@@ -8,19 +8,14 @@ $(document).ready(function () {
     if (getURLParameter('m') == "agr")
     {
         href_regresar = "integrantes.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id')+ "&p=" + getURLParameter('p');
+        $("#link_regresar").attr("onclick", "location.href = '" + href_regresar + "'");
     }
 
     if (getURLParameter('m') == "pn")
     {
         href_regresar = "propuestas.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id')+ "&p=" + getURLParameter('p');
+        $("#link_regresar").attr("onclick", "location.href = '" + href_regresar + "'");
     }
-
-    if (getURLParameter('m') == "pj")
-    {
-        href_regresar = "junta.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id')+ "&p=" + getURLParameter('p');
-    }
-
-    $("#link_regresar").attr("onclick", "location.href = '" + href_regresar + "'");
 
     //Verifico si el token esta vacio, para enviarlo a que ingrese de nuevo
     if ($.isEmptyObject(token_actual)) {
@@ -134,6 +129,22 @@ $(document).ready(function () {
                                                                                 if(json.estado==7)
                                                                                 {
                                                                                     $(".inactivar_estado_propuesta").removeAttr("disabled");   
+                                                                                }
+                                                                                
+                                                                                $("#programa").val(json.programa);
+                                                                                
+                                                                                if (getURLParameter('m') == "pj")
+                                                                                {                                                                                    
+                                                                                    if (json.programa == 2)
+                                                                                    {
+                                                                                        href_regresar = "territorios_poblaciones.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id')+ "&p=" + getURLParameter('p');
+                                                                                        $("#link_regresar").attr("onclick", "location.href = '" + href_regresar + "'");
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        href_regresar = "junta.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id')+ "&p=" + getURLParameter('p');
+                                                                                        $("#link_regresar").attr("onclick", "location.href = '" + href_regresar + "'");
+                                                                                    }                                                                                                                                                                                                                                                             
                                                                                 }
 
                                                                                 $("#propuesta").attr("value", json.propuesta);
@@ -312,6 +323,11 @@ $(document).ready(function () {
                                                                                     nombre_requisito="No ha ingresado los integrantes de la agrupación.";
                                                                                 }
                                                                                 
+                                                                                if(documento.nombre=="EquipoTrabajo")
+                                                                                {
+                                                                                    nombre_requisito="No ha ingresado los integrantes del equipo de trabajo.";
+                                                                                }
+                                                                                
                                                                                 if(documento.nombre=="RJunta")
                                                                                 {
                                                                                     nombre_requisito="No ha ingresado el representante de la junta directiva.";
@@ -325,6 +341,41 @@ $(document).ready(function () {
                                                                                 if(documento.nombre=="FPropuesta")
                                                                                 {                                                                                    
                                                                                     nombre_requisito="No ha ingresado información en el formulario de la propuesta.";
+                                                                                }
+                                                                                
+                                                                                if(documento.nombre=="FObjetivogeneral")
+                                                                                {                                                                                    
+                                                                                    nombre_requisito="No ha ingresado información del objetivo general.";
+                                                                                }
+                                                                                
+                                                                                if(documento.nombre=="FTerritorio")
+                                                                                {                                                                                    
+                                                                                    nombre_requisito="No ha ingresado información en el formulario de los territorios y población.";
+                                                                                }
+                                                                                
+                                                                                if(documento.nombre=="FObjetivos")
+                                                                                {                                                                                    
+                                                                                    nombre_requisito="No ha ingresado información en el formulario de los objetivos especificos.";
+                                                                                }
+                                                                                
+                                                                                if(documento.nombre=="FActividades")
+                                                                                {                                                                                    
+                                                                                    nombre_requisito="No ha ingresado información en el formulario de las actividades, todo objetivo especifico debe tener al menos una actividad.";
+                                                                                }
+                                                                                
+                                                                                if(documento.nombre=="FCronograma")
+                                                                                {                                                                                    
+                                                                                    nombre_requisito="No ha ingresado información en el formulario del cronograma, todo actividad debe tener al menos un cronograma.";
+                                                                                }
+                                                                                
+                                                                                if(documento.nombre=="FPresupuesto")
+                                                                                {                                                                                    
+                                                                                    nombre_requisito="No ha ingresado información en el formulario del presupuesto, todo actividad debe tener al menos un presupuesto.";
+                                                                                }
+                                                                                
+                                                                                if(documento.nombre=="FPorcentajePresupuesto")
+                                                                                {                                                                                    
+                                                                                    nombre_requisito="El total de la cofinanciación es superior al 70% del valor total del proyecto, se debe ajustar.";
                                                                                 }
 
                                                                                 html_table = html_table + '<li>' + nombre_requisito + '</li>';
@@ -356,7 +407,15 @@ $(document).ready(function () {
 
                                                     $("#modal-btn-reporte").on("click", function () {
                                                         callback(false);
-                                                        window.open(url_pv_report + "/reporte_propuesta_inscrita.php?token=" + token_actual.token + "&vi=1&id=" + $("#propuesta").attr('value'), '_blank');
+                                                        alert($("#programa").val());
+                                                        if($("#programa").val()==2)
+                                                        {
+                                                            window.open(url_pv_report + "/reporte_propuesta_inscrita_pdac.php?token=" + token_actual.token + "&vi=1&id=" + $("#propuesta").attr('value'), '_blank');
+                                                        }
+                                                        else
+                                                        {
+                                                            window.open(url_pv_report + "/reporte_propuesta_inscrita.php?token=" + token_actual.token + "&vi=1&id=" + $("#propuesta").attr('value'), '_blank');
+                                                        }                                                        
                                                     });
                                                 };
 

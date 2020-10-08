@@ -79,6 +79,7 @@
                             </div>
                             <div class="panel-body"> 
                                 <input type="hidden" id="id" name="id" />
+                                <input type="hidden" id="nombre_convocatoria_par"/>
                                 <form id="formulario_principal" action="" class="form_validator" role="form" method="post">
                                     <div class="row">
                                         <div class="col-lg-12">
@@ -125,13 +126,24 @@
                                                 </select>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
+                                        <div class="col-lg-12 inactivo alianza_pdac">
+                                            <div class="form-group">
+                                                <label>¿Proyecto de alianza sectorial?</label>
+                                                <select id='alianza_sectorial' name="alianza_sectorial" class="form-control" >                                                    
+                                                    <option value="">::Seleccionar::</option>
+                                                    <option value="true">Sí</option>
+                                                    <option value="false">No</option>
+                                                </select>                                                
+                                            </div>                                                                                                                                                                                                                                                                                                        
+                                        </div>
                                         <div class="row inactivo">
                                             <div class="col-lg-12" style="text-align: right">                                                
+                                                <input type="hidden" id="programa" />
                                                 <button type="submit" class="btn btn-default">Guardar</button>                                            
                                             </div>
                                         </div> 
                                     </div>
-                                </form>
+                                </form>                                
                             </div>
                         </div>
                     </div>
