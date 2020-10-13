@@ -3,17 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/var/www/html/admin_SCRD_pv/pages/convocatorias/list_publicas.js</file>
-            <file>file:/var/www/html/admin_SCRD_pv/pages/convocatorias/update_publicas.js</file>
-            <file>file:/var/www/html/admin_SCRD_pv/pages/convocatorias/update.html</file>
-            <file>file:/var/www/html/admin_SCRD_pv/pages/convocatorias/update.js</file>
-            <file>file:/var/www/html/admin_SCRD_pv/pages/convocatorias/update_publicas.html</file>
-            <file>file:/var/www/html/admin_SCRD_pv/pages/administracionpropuestas/validar_propuestas.html</file>
-            <file>file:/var/www/html/admin_SCRD_pv/pages/administracionpropuestas/validar_propuestas.js</file>
-            <file>file:/var/www/html/admin_SCRD_pv/pages/reportes/generales.html</file>
-            <file>file:/var/www/html/admin_SCRD_pv/pages/administracionpropuestas/verificacion_propuestas.js</file>
-            <file>file:/var/www/html/admin_SCRD_pv/pages/reportes/generales.js</file>
-            <file>file:/var/www/html/admin_SCRD_pv/pages/administracionpropuestas/verificacion_propuestas.html</file>
+            <file>file:/var/www/html/admin_SCRD_pv/pages/propuestas/cambio_integrante.html</file>
+            <file>file:/var/www/html/admin_SCRD_pv/pages/propuestas/cambio_integrante.js</file>
         </group>
     </open-files>
 </project-private>
