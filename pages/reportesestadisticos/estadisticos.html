@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>::Reportes generales::</title>
+        <title>::Reportes estadísticos::</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -66,12 +66,12 @@
                 <div class="loading centrado-porcentual"></div>   
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Reportes generales</h1>
+                        <h1 class="page-header">Reportes estadísticos</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>                
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
                         <div class="form-group">
                             <label>Año</label>
                             <select id='anio' name="anio" class="form-control" >                                                    
@@ -80,22 +80,27 @@
                     </div>                                        
                 </div>                                                                                          
                 <div class="row">
-                    <div class="col-lg-12" style="text-align: right">
-                        <button id="buscar" type="submit" class="btn btn-default">Generar reportes</button>                                            
+                    <div class="col-lg-4 col-md-6 col-sm-12" style="text-align: right">
+                        <button id="buscar" type="submit" class="btn btn-default">Generar reportes estadísticos</button>                                            
                         <input type="hidden" id="busqueda" class="form-control" value="0">                       
                     </div>
                 </div>      
                 <br/>
                 <!-- /.row -->                
                 <div id="reportes_propuestas" class="row" style="display: none">
-                    <div class="col-lg-6">
-                        <div class="panel panel-default">
+                    <!--
+                    25-09-2020 
+                    Wilmmer Gustavo Mogollón Duque
+                    Se incorpora reporte de línea base de jurados
+                    -->
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="panel panel-info">
                             <div class="panel-heading">
-                                  Verificación de documento de identificación persona natural 
+                                Línea base de jurados general
                             </div>
                             <!-- /.panel-heading -->
                             <div class="panel-body">
-                                <div id="reporte_pn"></div>
+                                <div id="reporte_linea_base_jurados_general"></div>
                             </div>
                             <!-- /.panel-body -->
                             <div class="panel-footer">
@@ -104,24 +109,8 @@
                         </div>
                         <!-- /.panel -->                        
                         <!-- /.panel -->
-                    </div>  
-                    <div class="col-lg-6">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                  Verificación de inhabilidades por propuestas
-                            </div>
-                            <!-- /.panel-heading -->
-                            <div class="panel-body">
-                                <div id="reporte_inhabilidades_propuesta"></div>
-                            </div>
-                            <!-- /.panel-body -->
-                            <div class="panel-footer">
-                                Fecha de corte <span class="fecha_actual"></span>
-                            </div>
-                        </div>
-                        <!-- /.panel -->                        
-                        <!-- /.panel -->
-                    </div>                      
+                    </div>
+                    <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
             </div>
@@ -151,7 +140,7 @@
 
         <!-- funcionalidades principales -->
         <script src='../../dist/js/main.js'></script>
-        <script src='generales.js'></script>
+        <script src='estadisticos.js'></script>
 
         <link rel="stylesheet" href="../../dist/css/bootstrap-select.min.css" />
         <script src="../../dist/js/bootstrap-select.min.js"></script>

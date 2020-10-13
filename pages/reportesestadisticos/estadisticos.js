@@ -15,7 +15,7 @@ $(document).ready(function () {
         //Realizo la peticion para cargar el formulario
         $.ajax({
             type: 'GET',
-            data: {"token": token_actual.token, "modulo": "Reporte Propuestas"},
+            data: {"token": token_actual.token, "modulo": "Reportes estadísticos"},
             url: url_pv + 'Convocatorias/modulo_buscador_propuestas'
         }).done(function (data) {
             if (data == 'error_metodo')
@@ -61,7 +61,7 @@ $(document).ready(function () {
                 //Realizo la peticion para validar cargar las prouestas a subsanar
                 $.ajax({
                     type: 'GET',
-                    data: {"token": token_actual.token, "modulo": "Reporte Propuestas", "anio": $("#anio").val()},
+                    data: {"token": token_actual.token, "modulo": "Reportes estadísticos", "anio": $("#anio").val()},
                     url: url_pv + 'Reportes/generar_reportes_generales'
                 }).done(function (data) {
 
@@ -84,7 +84,10 @@ $(document).ready(function () {
                                 var json = JSON.parse(data);
 
                                 $("#reporte_pn").empty();
-                                $("#reporte_inhabilidades_propuesta").empty();                                
+                                $("#reporte_inhabilidades_propuesta").empty();
+                                $("#reporte_ganadores").empty();
+                                //se agrega reporte_linea_base_jurados_general
+                                $("#reporte_linea_base_jurados_general").empty();
                                 $(".fecha_actual").empty();
 
                                 if (json.error == 'error_metodo')
@@ -105,7 +108,9 @@ $(document).ready(function () {
                                             $("#reportes_propuestas").css("display", "block");
 
                                             $("#reporte_pn").html(json.reporte_pn);
-                                            $("#reporte_inhabilidades_propuesta").html(json.reporte_inhabilidades_propuesta);                                            
+                                            $("#reporte_inhabilidades_propuesta").html(json.reporte_inhabilidades_propuesta);
+                                            $("#reporte_ganadores").html(json.reporte_ganadores);
+                                            $("#reporte_linea_base_jurados_general").html(json.reporte_linea_base_jurados_general);
                                             $(".fecha_actual").html(json.fecha_actual);
                                             
                                             //Valido que sea solo numeros
@@ -125,6 +130,31 @@ $(document).ready(function () {
                                                 }                                                
                                             });         
                                             
+                                            $('.reporte_propuestas_ganadoras').click(function () {
+                                                var json = JSON.parse( $(this).attr("rel") );
+
+                                                $.AjaxDownloader({
+                                                    data: json,
+                                                    url: url_pv + 'ConvocatoriasFormatos/reporte_ganadores_xls/'
+                                                });
+
+                                            });
+                                            
+                                            /*
+                                             * 06-10-2020
+                                             * Wilmer Gustavo Mogollón Duque
+                                             * Se incorpora función para reporte de línea base de jurados general
+                                             */
+                                            $('.reporte_linea_base_general_btn').click(function () {
+                                                var json = JSON.parse( $(this).attr("rel") );
+
+                                                $.AjaxDownloader({
+                                                    data: json,
+                                                    url: url_pv + 'ConvocatoriasFormatos/reporte_linea_base_jurados_general_xls/'
+                                                });
+
+                                            });
+
                                             $('#btn_inhabilidades').click(function () {
                                                 var codigos = $("#inhabilidades_codigos").val();
                                                 window.open(url_pv_report+'reporte_inhabilidades_propuestas.php?codigos='+codigos+'&token='+token_actual.token, '_blank');                                                                                                
