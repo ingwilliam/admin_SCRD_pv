@@ -407,7 +407,6 @@ $(document).ready(function () {
 
                                                     $("#modal-btn-reporte").on("click", function () {
                                                         callback(false);
-                                                        
                                                         if($("#programa").val()==2)
                                                         {
                                                             window.open(url_pv_report + "/reporte_propuesta_inscrita_pdac.php?token=" + token_actual.token + "&vi=1&id=" + $("#propuesta").attr('value'), '_blank');
