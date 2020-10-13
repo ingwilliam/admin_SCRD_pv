@@ -46,6 +46,10 @@ $(document).ready(function () {
 
             //carga los datos en el select_tipo_acta
             cargar_select_tipo_acta(token_actual);
+            
+            //14-09-2020 Wilmer Mogollón --- Select tipo_evaluacion
+            //carga los datos en el select_tipo_evaluacion
+            cargar_select_tipo_evaluacion(token_actual);
 
             // $('#form_nuevo_convocatoria').attr('action', url_pv + 'Rondas/new');
             validator_form(token_actual);
@@ -228,6 +232,41 @@ function cargar_select_tipo_acta(token_actual) {
     );
 }
 
+/*
+ * 14-09-2020
+ * Wilmer Gustavo Mogollón Duque
+ * Incorporar función cargar_select_tipo_evaluación para ajustes PDAC
+ */
+function cargar_select_tipo_evaluacion(token_actual) {
+    $.ajax({
+        type: 'GET',
+        data: {"token": token_actual.token, "nombre": "tipo_evaluacion"},
+        url: url_pv + 'Tablasmaestras/select_general/'
+    }).done(function (data) {
+        var json = JSON.parse(data);
+
+
+        if (data == 'error_metodo') {
+            notify("danger", "ok", "Convocatorias:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+        } else if (data == 'error') {
+            notify("danger", "ok", "Convocatorias:", "No se encuentra registrado, por favor registrarse");
+        } else {
+
+            if (json.length > 0) {
+                //Cargo el select categorias
+                $('#tipo_evaluacion').find('option').remove();
+                $("#tipo_evaluacion").append('<option value="">:: Seleccionar ::</option>');
+
+                $.each(json, function (key, tipo) {
+                    $("#tipo_evaluacion").append('<option value="' + tipo + '"  >' + tipo + '</option>');
+                });
+            }
+        }
+
+    }
+    );
+}
+
 function validator_form(token_actual) {
 
 //  console.log("Validando");
@@ -295,6 +334,12 @@ function validator_form(token_actual) {
             tipo_acta: {
                 validators: {
                     notEmpty: {message: 'El tipo de acta es requerido'}
+                }
+            },
+            //14-09-2020 --- Agrego tipo evaluación
+            tipo_evaluacion: {
+                validators: {
+                    notEmpty: {message: 'El tipo de evaluación es requerido'}
                 }
             }
 
@@ -394,6 +439,8 @@ function acciones_ronda(token_actual) {
 
     cargar_select_categoria(token_actual);
     cargar_select_tipo_acta(token_actual);
+    // 14-09-2020 Agrego cargar_select_tipo_evaluacion
+    cargar_select_tipo_evaluacion(token_actual);
 
     //Permite activar o eliminar una registro
     $(".activar_registro").click(function () {
