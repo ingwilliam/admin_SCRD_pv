@@ -88,6 +88,8 @@ $(document).ready(function () {
                                 $("#reporte_ganadores").empty();
                                 //se agrega reporte_linea_base_jurados_general
                                 $("#reporte_linea_base_jurados_general").empty();
+                                //se agrega reporte_linea_base_convocatorias
+                                $("#reporte_linea_base_convocatorias").empty();
                                 $(".fecha_actual").empty();
 
                                 if (json.error == 'error_metodo')
@@ -111,6 +113,7 @@ $(document).ready(function () {
                                             $("#reporte_inhabilidades_propuesta").html(json.reporte_inhabilidades_propuesta);
                                             $("#reporte_ganadores").html(json.reporte_ganadores);
                                             $("#reporte_linea_base_jurados_general").html(json.reporte_linea_base_jurados_general);
+                                            $("#reporte_linea_base_convocatorias").html(json.reporte_linea_base_convocatorias);
                                             $(".fecha_actual").html(json.fecha_actual);
                                             
                                             //Valido que sea solo numeros
@@ -151,6 +154,22 @@ $(document).ready(function () {
                                                 $.AjaxDownloader({
                                                     data: json,
                                                     url: url_pv + 'ConvocatoriasFormatos/reporte_linea_base_jurados_general_xls/'
+                                                });
+
+                                            });
+                                            
+                                            
+                                            /*
+                                             * 14-10-2020
+                                             * Wilmer Gustavo Mogollón Duque
+                                             * Se incorpora función para reporte de línea base de convocatorias
+                                             */
+                                            $('.reporte_linea_base_convocatorias_btn').click(function () {
+                                                var json = JSON.parse( $(this).attr("rel") );
+
+                                                $.AjaxDownloader({
+                                                    data: json,
+                                                    url: url_pv + 'ConvocatoriasFormatos/reporte_linea_base_convocatorias_xls/'
                                                 });
 
                                             });
