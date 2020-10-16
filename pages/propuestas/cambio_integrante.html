@@ -67,10 +67,7 @@
                         <h1 class="page-header">Cambio de integrantes</h1>
                     </div>  
                     <div class="panel-body" style="text-align: right">                                            
-                        <button type="button" id="link_propuestas" class="btn btn-default btn-circle btn-lg" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa fa-arrow-left"></i>
-                        </button>
-
-                        <button type="button" id="link_documentacion" class="btn btn-default btn-circle btn-lg" data-toggle="tooltip" data-placement="top" title="Siguiente"><i class="fa fa-arrow-right"></i>
+                        <button type="button" onclick="location.href='mis_propuestas.html'"  class="btn btn-default btn-circle btn-lg" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa fa-arrow-left"></i>
                         </button>                        
                     </div>
                     <!-- /.col-lg-12 -->
@@ -88,7 +85,7 @@
                             </div>
 
                             <!-- cuerpo del diálogo -->
-                            <div class="modal-body">
+                            <div class="modal-body" style="height: 450px; overflow-y: auto;">
                                 <form id="formulario_principal" action="" class="formulario_principal" role="form" method="post" enctype="multipart/form-data">                                    
                                     <div class="row">
                                         <div class="col-lg-12">
@@ -97,17 +94,6 @@
                                                 <input type="text" name="rol" class="form-control">
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label>¿Representante?<span class="icono_requerido">*</span></label>
-                                                <select id='representante' name="representante" class="form-control" >                                                    
-                                                    <option value="true">Sí</option>
-                                                    <option value="false" selected="selected">No</option>
-                                                </select>                                                
-                                            </div>                                                                                                                                                                                                                                                                                                        
-                                        </div> 
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-6">
@@ -405,8 +391,7 @@
                                                     <th>Primer nombre</th>
                                                     <th>Segundo nombre</th>
                                                     <th>Primer apellido</th>
-                                                    <th>Segundo apellido</th>
-                                                    <th>¿Representante?</th>
+                                                    <th>Segundo apellido</th>                                                    
                                                     <th>Rol que desempeña o ejecuta en la propuesta</th>
                                                     <th>Acciones</th>
                                                 </tr>
@@ -443,6 +428,26 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" id="cambio-btn-si">Si</button>
                         <button type="button" class="btn btn-primary" id="cambio-btn-no">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        
+        <!-- Modal abrir formulario para crear nuevo integrante  -->
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="confirmar_nuevo_integrante">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>¿Esta seguro de iniciar el proceso para cambio del integrante (<span id="nombre_integrante"></span>) ?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#nuevo_integrante" >Si</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" >No</button>
                     </div>
                 </div>
             </div>
