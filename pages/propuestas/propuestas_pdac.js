@@ -122,7 +122,10 @@ $(document).ready(function () {
                                                                     {
 
                                                                         var json = JSON.parse(data);
-
+                                                                        if(json.convocatoria_padre_categoria=="621")
+                                                                        {
+                                                                            $(".campos_metropolitano").css("display","block");
+                                                                        }
                                                                         //eliminó disabled todos los componentes
                                                                         if (json.estado == 7)
                                                                         {
@@ -325,6 +328,15 @@ $(document).ready(function () {
                                                                         if(json.propuesta.mecanismos_cuantitativa!=null)
                                                                         {
                                                                             $(".caracter_mecanismos_cuantitativa").html(2000 - json.propuesta.mecanismos_cuantitativa.length);
+                                                                        }
+                                                                        
+                                                                        if(json.propuesta.proyeccion_reconocimiento!=null)
+                                                                        {
+                                                                            $(".caracter_proyeccion_reconocimiento").html(2000 - json.propuesta.proyeccion_reconocimiento.length);
+                                                                        }
+                                                                        if(json.propuesta.impacto_proyecto!=null)
+                                                                        {
+                                                                            $(".caracter_impacto_proyecto").html(2000 - json.propuesta.impacto_proyecto.length);
                                                                         }
 
                                                                         //Valido formulario
