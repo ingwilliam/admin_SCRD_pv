@@ -270,7 +270,7 @@ $(document).ready(function () {
                                     //Realizo la peticion para cargar el formulario
                                     $.ajax({
                                         type: 'GET',
-                                        data: {"token": token_actual.token, "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "p": getURLParameter('p')},
+                                        data: {"token": token_actual.token, "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('perfil'), "p": getURLParameter('p')},
                                         url: url_pv + 'Personasnaturales/formulario_integrante'
                                     }).done(function (data) {
                                         if (data == 'error_metodo')
@@ -314,7 +314,7 @@ $(document).ready(function () {
                                                                         location.href = url_pv_admin + 'pages/propuestas/propuestas_busqueda_convocatorias.html?msg=Para poder inscribir la propuesta debe crear el perfil de agrupacion.&msg_tipo=danger';
                                                                     } else
                                                                     {
-
+                                                                        
                                                                         var json = JSON.parse(data);
 
                                                                         //eliminó disabled todos los componentes
@@ -324,29 +324,29 @@ $(document).ready(function () {
                                                                         }
 
                                                                         //Creo link de navegacion para persona juridica
-                                                                        if (getURLParameter('m') == "pj")
+                                                                        if (getURLParameter('perfil') == "pj")
                                                                         {
                                                                             if (json.programa == 2)
                                                                             {
                                                                                 var path_actual = window.location.pathname;
                                                                                 if (path_actual == "/admin_SCRD_pv/pages/propuestas/junta.html")
                                                                                 {
-                                                                                    href_regresar = "propuestas_pdac.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-                                                                                    href_siguiente = "grupos_trabajos.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                    href_regresar = "propuestas_pdac.html?m=" + getURLParameter('perfil') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                    href_siguiente = "grupos_trabajos.html?m=" + getURLParameter('perfil') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
 
                                                                                 }
                                                                                 if (path_actual == "/admin_SCRD_pv/pages/propuestas/grupos_trabajos.html")
                                                                                 {
-                                                                                    href_regresar = "junta.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-                                                                                    href_siguiente = "objetivos_metas_actividades.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                    href_regresar = "junta.html?m=" + getURLParameter('perfil') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                    href_siguiente = "objetivos_metas_actividades.html?m=" + getURLParameter('perfil') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
                                                                                 }
 
                                                                                 $("#link_propuestas").attr("onclick", "location.href = '" + href_regresar + "'");
                                                                                 $("#link_documentacion").attr("onclick", "location.href = '" + href_siguiente + "'");
                                                                             } else
                                                                             {
-                                                                                href_regresar = "propuestas.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
-                                                                                href_siguiente = "documentacion.html?m=" + getURLParameter('m') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                href_regresar = "propuestas.html?m=" + getURLParameter('perfil') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
+                                                                                href_siguiente = "documentacion.html?m=" + getURLParameter('perfil') + "&id=" + getURLParameter('id') + "&p=" + getURLParameter('p');
 
                                                                                 $("#link_propuestas").attr("onclick", "location.href = '" + href_regresar + "'");
                                                                                 $("#link_documentacion").attr("onclick", "location.href = '" + href_siguiente + "'");
@@ -431,9 +431,6 @@ $(document).ready(function () {
                                         }
                                     });
 
-
-                                    //carga la tabla de los integrantes de la propuesta
-                                    cargar_tabla(token_actual);
 
                                     //Limpio el formulario de los anexos
                                     $('#nuevo_integrante').on('hidden.bs.modal', function () {
@@ -735,6 +732,7 @@ function validator_form(token_actual) {
 
 function cargar_tabla(token_actual)
 {
+    
     $('#table_registros').DataTable({
         "language": {
             "url": "../../dist/libraries/datatables/js/spanish.json"
@@ -746,7 +744,7 @@ function cargar_tabla(token_actual)
         "lengthMenu": [10, 20, 30],
         "ajax": {
             url: url_pv + "Personasnaturales/cargar_tabla_integrantes_cambio",
-            data: {"token": token_actual.token, "participante": $("#participante").attr('value'), "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('m'), "p": getURLParameter('p'), "tipo": $("#tipo").attr('value')}
+            data: {"token": token_actual.token, "participante": $("#participante").attr('value'), "conv": $("#conv").attr('value'), "modulo": "Menu Participante", "m": getURLParameter('perfil'), "p": getURLParameter('p'), "tipo": $("#tipo").attr('value')}
         },
         "drawCallback": function (settings) {
             $(".check_activar_t").attr("checked", "true");
@@ -760,37 +758,9 @@ function cargar_tabla(token_actual)
             {"data": "primer_nombre"},
             {"data": "segundo_nombre"},
             {"data": "primer_apellido"},
-            {"data": "segundo_apellido"},
-            {"data": "representante"},
+            {"data": "segundo_apellido"},            
             {"data": "rol"},
             {"data": "acciones"}
-        ],
-        "columnDefs": [{
-                "targets": 6,
-                "render": function (data, type, row, meta) {
-                    if ($("#tipo").val() == "EquipoTrabajo")
-                    {
-                        if (row.director == true)
-                        {
-                            row.director = "<b>Sí</b>";
-                        } else
-                        {
-                            row.director = "No";
-                        }
-                        return row.director;
-                    } else
-                    {
-                        if (row.representante == true)
-                        {
-                            row.representante = "<b>Sí</b>";
-                        } else
-                        {
-                            row.representante = "No";
-                        }
-                        return row.representante;
-                    }
-                }
-            }
         ]
     });
 
@@ -801,8 +771,9 @@ function cargar_formulario(token_actual)
 
     $(".cargar_cambio_integrante").click(function () {
         //Cargo el id actual       
-
         $("#id_participante_reemplazo").attr('value', $(this).attr('title'));
+        
+        $("#nombre_integrante").html($(this).attr('lang'));
 
     });
 

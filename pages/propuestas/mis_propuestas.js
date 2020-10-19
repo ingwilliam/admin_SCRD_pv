@@ -139,7 +139,7 @@ $(document).ready(function () {
                             //copio el formulario
                             if(row.id_estado==34)
                             {
-                                href_propuesta = "cambio_integrante.html?m=" + m + "&id=" + row.id_convocatoria + "&p=" + row.id_propuesta;                              
+                                href_propuesta = "cambio_integrante.html?perfil=" + m + "&id=" + row.id_convocatoria + "&p=" + row.id_propuesta;                              
                                 row.ver_propuesta = row.ver_propuesta+'<br/><a href="'+href_propuesta+'" ><button style="margin: 0 0 5px 0" type="button" class="btn btn-warning btn_tooltip" title="Realizar cambio de integrante"><span class="fa fa-users"></span></button></a>';
                             }
                             
