@@ -351,6 +351,7 @@ $(document).ready(function () {
                                                                                 {
                                                                                     if (json.programa == 2)
                                                                                     {
+                                                                                        
                                                                                         var path_actual = window.location.pathname;
                                                                                         if(path_actual=="/admin_SCRD_pv/pages/propuestas/junta.html")
                                                                                         {
@@ -377,6 +378,14 @@ $(document).ready(function () {
                                                                                     }                                                                                                                                                                       
                                                                                 }
                                                                                 
+                                                                                if (json.programa == 2)
+                                                                                {
+                                                                                    $(".programa_actual").html("PDAC")
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    $(".programa_actual").html("PDE")
+                                                                                }
                                                                                 
                                                                                 //Cargos el select de grupo etnico
                                                                                 $('#discapacidad').find('option').remove();
@@ -642,18 +651,21 @@ function validator_form(token_actual) {
             },
             experiencia: {
                 validators: {
-                    notEmpty: {message: 'La experiencia es requerido'}
+                    notEmpty: {message: 'La experiencia es requerido'},
+                    stringLength: {
+                        message: 'Ya cuenta con el máximo de caracteres permitidos, los cuales son 1000.',
+                        max: '1000'
+                    }
                 }            
             },
             actividades_cargo: {
                 validators: {
-                    notEmpty: {message: 'Las actividades a cargo es requerido'}
+                    notEmpty: {message: 'Las actividades a cargo es requerido'},
+                    stringLength: {
+                        message: 'Ya cuenta con el máximo de caracteres permitidos, los cuales son 1000.',
+                        max: '1000'
+                    }
                 }            
-            },
-            profesion: {
-                validators: {
-                    notEmpty: {message: 'La profesión es requerido'}
-                }
             }
         }
     }).on('success.form.bv', function (e) {

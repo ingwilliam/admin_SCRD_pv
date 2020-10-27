@@ -233,16 +233,14 @@ $(document).ready(function () {
             //Limpio el formulario
             $('#nuevo_objetivo').on('hidden.bs.modal', function () {
                 $("#objetivo").val("");
-                $("#meta").val("");
-                $("#orden").val("");
+                $("#meta").val("");                
                 $("#id_registro").val("");
                 $("#form_nuevo_objetivo").bootstrapValidator('disableSubmitButtons', false);
             });
 
             //Limpio el formulario
             $('#nuevo_actividad').on('hidden.bs.modal', function () {
-                $("#actividad").val("");
-                $("#orden").val("");
+                $("#actividad").val("");                
                 $("#id_registro_2").val("");
                 $("#form_nuevo_actividad").bootstrapValidator('disableSubmitButtons', false);
             });
@@ -357,7 +355,11 @@ function validator_form(token_actual) {
         fields: {
             objetivo_general: {
                 validators: {
-                    notEmpty: {message: 'El objetivo general, es requerido'}
+                    notEmpty: {message: 'El objetivo general, es requerido'},
+                    stringLength: {
+                        message: 'Ya cuenta con el máximo de caracteres permitidos, los cuales son 1000.',
+                        max: '1000'
+                    }
                 }
             }
         }
@@ -454,21 +456,23 @@ function validator_form(token_actual) {
             validating: 'glyphicon glyphicon-refresh'
         },
         excluded: [':disabled'],
-        fields: {
-            orden: {
-                validators: {
-                    notEmpty: {message: 'El orden del objetivo específico, es requerido'},
-                    numeric: {message: 'Debe ingresar solo numeros'}
-                }
-            },
+        fields: {            
             objetivo: {
                 validators: {
-                    notEmpty: {message: 'El objetivo específico, es requerido'}
+                    notEmpty: {message: 'El objetivo específico, es requerido'},
+                    stringLength: {
+                        message: 'Ya cuenta con el máximo de caracteres permitidos, los cuales son 500.',
+                        max: '500'
+                    }
                 }
             },
             meta: {
                 validators: {
-                    notEmpty: {message: 'La meta, es requerido'}
+                    notEmpty: {message: 'La meta, es requerido'},
+                    stringLength: {
+                        message: 'Ya cuenta con el máximo de caracteres permitidos, los cuales son 500.',
+                        max: '500'
+                    }
                 }
             }
         }
@@ -507,14 +511,20 @@ function validator_form(token_actual) {
                         notify("danger", "remove", "Objetivos:", "No tiene permisos para editar información.");
                     } else
                     {
-                        if (isNaN(result)) {
-                            notify("danger", "ok", "Objetivos:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                        if (result == 'error_maximo_objetivos')
+                        {
+                            notify("danger", "remove", "Objetivos:", "Ya cuenta con el máximo de objetivos específicos.");
                         } else
                         {
-                            notify("success", "ok", "Objetivos:", "Se guardo con el éxito el objetivo específico.");
-                            $('#nuevo_objetivo').modal('toggle');
-                            cargar_tabla(token_actual);
-                            cargar_select_objetivos(token_actual);
+                            if (isNaN(result)) {
+                                notify("danger", "ok", "Objetivos:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                            } else
+                            {
+                                notify("success", "ok", "Objetivos:", "Se guardo con el éxito el objetivo específico.");
+                                $('#nuevo_objetivo').modal('toggle');
+                                cargar_tabla(token_actual);
+                                cargar_select_objetivos(token_actual);
+                            }
                         }
                     }
                 }
@@ -536,16 +546,14 @@ function validator_form(token_actual) {
                 validators: {
                     notEmpty: {message: 'El objetivo específico, es requerido'}
                 }
-            },
-            orden: {
-                validators: {
-                    notEmpty: {message: 'El orden de la actividad, es requerido'},
-                    numeric: {message: 'Debe ingresar solo numeros'}
-                }
-            },
+            },            
             actividad: {
                 validators: {
-                    notEmpty: {message: 'La actividad, es requerido'}
+                    notEmpty: {message: 'La actividad, es requerido'},
+                    stringLength: {
+                        message: 'Ya cuenta con el máximo de caracteres permitidos, los cuales son 500.',
+                        max: '500'
+                    }
                 }
             }
         }
@@ -866,14 +874,13 @@ function cargar_select_objetivos(token_actual)
 
 function cargar_tabla(token_actual)
 {
-    $('#table_registros').DataTable({
+    var tabla_objetivos= $('#table_registros').DataTable({
         "language": {
             "url": "../../dist/libraries/datatables/js/spanish.json"
         },
         "processing": true,
         "destroy": true,
-        "serverSide": true,
-        "ordering": false,
+        "serverSide": true,        
         "lengthMenu": [20, 30, 40],
         "ajax": {
             url: url_pv + "PropuestasPdac/cargar_tabla_objetivos",
@@ -886,22 +893,28 @@ function cargar_tabla(token_actual)
             cargar_formulario(token_actual);
         },
         "columns": [
-            {"data": "orden"},
+            {"data": null},
             {"data": "objetivo"},
             {"data": "meta"},
             {"data": "activar_registro"},
             {"data": "editar"}
         ]
     });
+    
+    tabla_objetivos.on( 'order.dt search.dt', function () {
+        tabla_objetivos.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {            
+            cell.innerHTML = i+1;
+        } );
+    } ).draw();
+    
 
-    $('#tabla_actividades').DataTable({
+    var tabla_actividades = $('#tabla_actividades').DataTable({
         "language": {
             "url": "../../dist/libraries/datatables/js/spanish.json"
         },
         "processing": true,
         "destroy": true,
-        "serverSide": true,
-        "ordering": false,
+        "serverSide": true,        
         "lengthMenu": [20, 30, 40],
         "ajax": {
             url: url_pv + "PropuestasPdac/cargar_tabla_actividades",
@@ -914,7 +927,7 @@ function cargar_tabla(token_actual)
             cargar_formulario_actividad(token_actual);
         },
         "columns": [
-            {"data": "orden"},
+            {"data": null},
             {"data": "objetivo"},
             {"data": "actividad"},
             {"data": "activar_registro"},
@@ -923,6 +936,12 @@ function cargar_tabla(token_actual)
             {"data": "editar"}
         ]
     });
+    
+    tabla_actividades.on( 'order.dt search.dt', function () {
+        tabla_actividades.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {            
+            cell.innerHTML = i+1;
+        } );
+    } ).draw();
 
 }
 
