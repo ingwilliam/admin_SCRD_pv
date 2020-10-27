@@ -221,6 +221,18 @@ $(document).ready(function () {
                                                                                 $("#relacion_plan").append('<option value="' + medio + '" >' + medio + '</option>');
                                                                             });
                                                                         }
+                                                                        
+                                                                        //Cargo el select de alcance_territorial 
+                                                                        if (json.alcance_territorial.length > 0) {
+                                                                            $.each(json.alcance_territorial, function (key, medio) {
+                                                                                var selected = '';
+                                                                                if (medio == json.propuesta.alcance_territorial)
+                                                                                {
+                                                                                    selected = 'selected="selected"';
+                                                                                }
+                                                                                $("#alcance_territorial").append('<option value="' + medio + '" >' + medio + '</option>');
+                                                                            });
+                                                                        }
 
                                                                         //Cargo el select de linea_estrategica                                
                                                                         if (json.linea_estrategica.length > 0) {
@@ -258,6 +270,13 @@ $(document).ready(function () {
                                                                         $("#relacion_plan option:selected").prop("selected", false);
                                                                         $.each(JSON.parse(json.propuesta.relacion_plan), function (i, e) {
                                                                             $("#relacion_plan option[value='" + e + "']").prop("selected", true);
+                                                                        });
+                                                                        
+                                                                        //Set los valores alcance_territorial
+                                                                        $("#alcance_territorial option:selected").removeAttr("selected");
+                                                                        $("#alcance_territorial option:selected").prop("selected", false);
+                                                                        $.each(JSON.parse(json.propuesta.alcance_territorial), function (i, e) {
+                                                                            $("#alcance_territorial option[value='" + e + "']").prop("selected", true);
                                                                         });
 
                                                                         //Set los valores linea_estrategica
