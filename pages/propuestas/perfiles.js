@@ -109,8 +109,9 @@ $(document).ready(function () {
                                                     {
                                                         var json = JSON.parse(data);                                                        
                                                         $("#titulo_convocatoria").html("Esta seguro de inscribir la propuesta en la convocatoria "+json.nombre_convocatoria);                                                        
-                                                        $("#programa").val(json.programa);                                                        
+                                                        $("#programa").val(json.programa);                                                                                                                
                                                         $("#nombre_convocatoria_par").val(json.nombre_convocatoria_par);
+                                                        $("#convocatoria_padre").val(json.convocatoria_padre);                                                        
                                                     }
                                                 }
                                             });
@@ -131,6 +132,25 @@ $(document).ready(function () {
                     $(".inactivo").css("display", "block");
                     $("#terminos_condiciones_pdf").attr("src", $("#tipo_participante option:selected").attr("title"));
                     $("#condiciones_participacion_pdf").attr("src", $("#tipo_participante option:selected").attr("lang"));
+                    
+                    if($("#programa").val()=="2"){
+                        if($("#convocatoria_padre").val()=="608")
+                        {
+                            $(".alianza_pdac").css("display", "block");
+                        }
+                        else
+                        {
+                            $(".alianza_pdac").css("display", "none");
+                        }
+                                                
+                        $(".pasos_pdac").css("display", "block");                        
+                    }
+                    else
+                    {
+                        $(".alianza_pdac").css("display", "none");                       
+                        $(".pasos_pdac").css("display", "none");                        
+                    }
+                    
                     if ($("#tipo_participante option:selected").attr("dir") == "true")
                     {
                         $("#terminos_condiciones option[value='" + $("#tipo_participante option:selected").attr("dir") + "']").prop('selected', true);
@@ -145,17 +165,11 @@ $(document).ready(function () {
                         });
                     }
                     
-                    if($("#programa").val()=="2"){
-                        $(".alianza_pdac").css("display", "block");                        
-                    }
-                    else
-                    {
-                        $(".alianza_pdac").css("display", "none");                        
-                    }
-                    
                 } else
                 {
                     $(".inactivo").css("display", "none");
+                    $(".alianza_pdac").css("display", "none");                       
+                    $(".pasos_pdac").css("display", "none");                        
                 }
             });
 
@@ -230,7 +244,7 @@ $(document).ready(function () {
 
                 var enviar=true;
                 
-                if($("#programa").val()=="2"){
+                if($("#convocatoria_padre").val()=="608"){
                     if($("#alianza_sectorial").val()=="")
                     {
                         enviar=false;

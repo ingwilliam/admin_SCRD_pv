@@ -146,6 +146,15 @@ $(document).ready(function () {
                                                                                         $("#link_regresar").attr("onclick", "location.href = '" + href_regresar + "'");
                                                                                     }                                                                                                                                                                                                                                                             
                                                                                 }
+                                                                                
+                                                                                if (json.programa == 2)
+                                                                                {
+                                                                                    $(".programa_actual").html("PDAC")
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    $(".programa_actual").html("PDE")
+                                                                                }
 
                                                                                 $("#propuesta").attr("value", json.propuesta);
                                                                                 $("#participante").attr("value", json.participante);
