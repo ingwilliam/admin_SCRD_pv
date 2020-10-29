@@ -126,6 +126,10 @@ $(document).ready(function () {
                                                                         {
                                                                             $(".campos_metropolitano").css("display","block");
                                                                         }
+                                                                        else
+                                                                        {
+                                                                            $(".div_alianza").css("display","block");                                                                            
+                                                                        }
                                                                         //eliminó disabled todos los componentes
                                                                         if (json.estado == 7)
                                                                         {
