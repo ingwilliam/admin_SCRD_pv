@@ -129,6 +129,7 @@ $(document).ready(function () {
                                                                         else
                                                                         {
                                                                             $(".div_alianza").css("display","block");                                                                            
+                                                                            $(".localidad_principal").css("display","block");                                                                            
                                                                         }
                                                                         //eliminó disabled todos los componentes
                                                                         if (json.estado == 7)
