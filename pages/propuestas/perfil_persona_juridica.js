@@ -227,6 +227,19 @@ $(document).ready(function () {
                                                     });
                                                 });
 
+                                                $('#cuenta_sede').on('change', function () {
+                                                    var cuenta_sede = $(this).val();
+                                                    
+                                                    if(cuenta_sede=="false"){                                                        
+                                                        $("#tipo_sede option[value='']").prop('selected', true);
+                                                        $('#tipo_sede').attr("disabled", true); 
+                                                    }
+                                                    else
+                                                    {
+                                                        $('#tipo_sede').attr("disabled", false); 
+                                                    }
+                                                });
+
                                                 //Realizo la peticion para cargar el formulario
                                                 $.ajax({
                                                     type: 'GET',
@@ -362,6 +375,16 @@ $(document).ready(function () {
                                                                         $("#pais option[value='" + json.pais_residencia_id + "']").prop('selected', true);
 
                                                                         $("#cuenta_sede option[value='" + json.participante.cuenta_sede + "']").prop('selected', true);
+                                                                        
+                                                                        if(json.participante.cuenta_sede){                                                        
+                                                                            $('#tipo_sede').attr("disabled", false);                                                                             
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            $("#tipo_sede option[value='']").prop('selected', true);
+                                                                            $('#tipo_sede').attr("disabled", true); 
+                                                                        }                                                                        
+                                                                        
                                                                     }
                                                                 }
 

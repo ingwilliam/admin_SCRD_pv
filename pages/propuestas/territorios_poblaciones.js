@@ -111,9 +111,10 @@ $(document).ready(function () {
 
                                                                         var json = JSON.parse(data);
                                                                         
-                                                                        if(json.convocatoria_padre_categoria=="621")
+                                                                        //Si la convocatoria es interlocales
+                                                                        if(json.convocatoria_padre_categoria=="608")
                                                                         {
-                                                                            $(".campos_metropolitano").css("display","block");
+                                                                            $(".campos_locales").css("display","block");
                                                                         }
 
                                                                         //eliminó disabled todos los componentes
