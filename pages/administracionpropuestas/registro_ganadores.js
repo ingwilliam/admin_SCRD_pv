@@ -216,6 +216,15 @@ $(document).ready(function () {
             }
 
         });
+        
+        
+        //Limpio el formulario de los anexos
+        $('#ver_propuesta').on('hidden.bs.modal', function () {
+            $("#formulario_principal")[0].reset();            
+            $("#id").val("");
+            $("#estado").val("");
+            $(".text_limpiar").val("");            
+        });
 
     }
 });
