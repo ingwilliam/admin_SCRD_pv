@@ -245,7 +245,10 @@ function validator_form(token_actual) {
             total_beneficiario: {
                 validators: {
                     notEmpty: {message: 'Estimado total de beneficiarios o participantes, es requerido'},
-                    numeric: {message: 'Debe ingresar solo numeros'}
+                    regexp: {
+                        regexp: /^[0-9]+$/i,
+                        message: 'Debe ingresar solo números'
+                    }
                 }
             },
             establecio_cifra: {
