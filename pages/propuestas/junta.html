@@ -167,6 +167,38 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
+                                                <label>¿Tiene RUT? <span class="icono_requerido">*</span></label>
+                                                <select id='tiene_rut' name="tiene_rut" class="form-control" >
+                                                    <option value="">:: Seleccionar ::</option>
+                                                    <option value="Sí">Sí</option>
+                                                    <option value="No">No</option>                                                    
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>¿cuál es el código CIIU de su actividad principal?</label>
+                                                <select id='ciiu' name="ciiu" class="form-control" disabled="disabled">
+                                                    <option value="">:: Seleccionar ::</option>
+                                                </select>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>¿Cuenta usted con matrícula mercantil? <span class="icono_requerido">*</span></label>
+                                                <select id='tiene_matricula' name="tiene_matricula" class="form-control" >
+                                                    <option value="">:: Seleccionar ::</option>
+                                                    <option value="Sí">Sí</option>
+                                                    <option value="No">No</option>                                                    
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
                                                 <label>Sexo <span class="icono_requerido">*</span></label>
                                                 <select id='sexo' name="sexo" class="form-control" >
                                                     <option value="">:: Seleccionar ::</option>
@@ -228,7 +260,7 @@
                                                     <option value="">:: Seleccionar ::</option>
                                                     <option value="Sí">Sí</option>
                                                     <option value="No">No</option>
-                                                    <option value="No deseo responder">No deseo responder</option>
+                                                    <option value="Prefiero no responder">Prefiero no responder</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -291,7 +323,7 @@
                                                 <select id='ciudad_residencia' name="ciudad_residencia" class="form-control">                                                    
                                                     <option value="">:: Seleccionar ::</option>
                                                 </select>
-                                             </div>
+                                            </div>
                                         </div>     
                                     </div>                                    
                                     <div class="row">                                    
@@ -368,16 +400,104 @@
                                         </div>                                    
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Redes sociales</label>
-                                                <input type="text" name="redes_sociales" class="form-control">
+                                                <label>¿Tiene redes sociales personales?</label>
+                                                <select id='tiene_redes' name="tiene_redes" class="form-control" >
+                                                    <option value="">:: Seleccionar ::</option>
+                                                    <option value="Sí">Sí</option>
+                                                    <option value="No">No</option>                                                    
+                                                </select>
+                                            </div>                                                                                        
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Instagram</label>
+                                                <input type="text" name="instagram" class="form-control si_tiene_redes" disabled="disabled">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Página web, vínculo o blog</label>
-                                                <input type="text" name="links" class="form-control">
+                                                <label>Twitter</label>
+                                                <input type="text" name="twitter" class="form-control si_tiene_redes" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Facebook</label>
+                                                <input type="text" name="facebook" class="form-control si_tiene_redes" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Tik ToK</label>
+                                                <input type="text" name="tik_tok" class="form-control si_tiene_redes" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>LinkedIn</label>
+                                                <input type="text" name="linked_in" class="form-control si_tiene_redes" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>¿Cuenta con espacios de circulación de contenidos en línea?</label>
+                                                <select id='tiene_paginas' name="tiene_paginas" class="form-control" >
+                                                    <option value="">:: Seleccionar ::</option>
+                                                    <option value="Sí">Sí</option>
+                                                    <option value="No">No</option>                                                    
+                                                </select>
+                                            </div>                                                                                        
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Página web</label>
+                                                <input type="text" name="pagina_web" class="form-control si_tiene_espacios" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>YouTube</label>
+                                                <input type="text" name="you_tube" class="form-control si_tiene_espacios" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Vimeo</label>
+                                                <input type="text" name="vimeo" class="form-control si_tiene_espacios" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Blog</label>
+                                                <input type="text" name="blog" class="form-control si_tiene_espacios" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Podcast</label>
+                                                <input type="text" name="podcast" class="form-control si_tiene_espacios" disabled="disabled">
                                             </div>
                                         </div>
                                     </div>
