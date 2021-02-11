@@ -72,6 +72,42 @@ $(document).ready(function () {
 
                                                 //Valido formulario
                                                 validator_form(token_actual);
+                                                
+                                                //cargar select tiene_rut
+                                                $('#tiene_rut').on('change', function () {            
+                                                    if($(this).val()==="Sí")
+                                                    {
+                                                        $("#ciiu").removeAttr("disabled");
+                                                    }
+                                                    else
+                                                    {
+                                                        $("#ciiu").attr("disabled","disabled");
+                                                    }
+                                                });
+
+                                                //cargar select tiene_redes
+                                                $('#tiene_redes').on('change', function () {            
+                                                    if($(this).val()==="Sí")
+                                                    {
+                                                        $(".si_tiene_redes").removeAttr("disabled");
+                                                    }
+                                                    else
+                                                    {
+                                                        $(".si_tiene_redes").attr("disabled","disabled");
+                                                    }
+                                                });
+
+                                                //cargar select tiene_paginas
+                                                $('#tiene_paginas').on('change', function () {            
+                                                    if($(this).val()==="Sí")
+                                                    {
+                                                        $(".si_tiene_espacios").removeAttr("disabled");
+                                                    }
+                                                    else
+                                                    {
+                                                        $(".si_tiene_espacios").attr("disabled","disabled");
+                                                    }
+                                                });
 
                                                 //Realizo la peticion para cargar el formulario
                                                 $.ajax({
@@ -114,6 +150,26 @@ $(document).ready(function () {
 
                                                                         //Cargo el formulario con los datos
                                                                         $('#formulario_principal').loadJSON(json.participante);
+                                                                        
+                                                                        //Valido el tiene_redes                        
+                                                                        if(json.participante.tiene_redes==="Sí")
+                                                                        {
+                                                                            $(".si_tiene_redes").removeAttr("disabled");
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            $(".si_tiene_redes").attr("disabled","disabled");
+                                                                        }
+
+                                                                        //Valido el tiene_paginas                        
+                                                                        if(json.participante.tiene_paginas==="Sí")
+                                                                        {
+                                                                            $(".si_tiene_espacios").removeAttr("disabled");
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            $(".si_tiene_espacios").attr("disabled","disabled");
+                                                                        } 
 
                                                                     }
                                                                 }
