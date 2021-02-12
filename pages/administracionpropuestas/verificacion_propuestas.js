@@ -803,17 +803,17 @@ function cargar_verificacion_1(token_actual, propuesta) {
                             
                             //Se debe habilitar el estado subsanar en los documentos tecnicos
                             //de modalidad LEP
-                            if(json.modalidad==6)
+                            //if(json.modalidad==6)
+                            //{
+                            //    html_table = html_table + '<option value="' + estado.id + '" ' + selected + '>' + estado.nombre + '</option>';
+                            //}
+                            //else
+                            //{
+                            if (estado.id != 27)
                             {
                                 html_table = html_table + '<option value="' + estado.id + '" ' + selected + '>' + estado.nombre + '</option>';
                             }
-                            else
-                            {
-                                if (estado.id != 27)
-                                {
-                                    html_table = html_table + '<option value="' + estado.id + '" ' + selected + '>' + estado.nombre + '</option>';
-                                }
-                            }                                                                                    
+                            //}                                                                                    
                         });
                         
                         var color_boton_guardado="btn-success";
