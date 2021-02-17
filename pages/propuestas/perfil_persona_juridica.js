@@ -593,6 +593,7 @@ function validator_form(token_actual) {
         // Valido si el id existe, con el fin de eviarlo al metodo correcto
         $('#formulario_principal').attr('action', url_pv + 'Personasjuridicas/editar_participante');
 
+
         if(enviar)
         {
             
