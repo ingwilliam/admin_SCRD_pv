@@ -331,7 +331,7 @@ $(document).ready(function () {
 
                                                                                 if(documento.nombre=="Integrante")
                                                                                 {
-                                                                                    nombre_requisito="No ha ingresado los integrantes de la agrupación.";
+                                                                                    nombre_requisito="No ha ingresado el mínimo de los integrantes de la agrupación.";
                                                                                 }
                                                                                 
                                                                                 if(documento.nombre=="EquipoTrabajo")
