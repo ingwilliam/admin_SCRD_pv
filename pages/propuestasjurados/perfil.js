@@ -553,7 +553,7 @@ function validator_form(token_actual) {
           }
 
 
-        $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
+        // $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
         //$form.bootstrapValidator('destroy', true);
         bv.resetForm();
     });
