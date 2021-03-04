@@ -69,43 +69,113 @@ $(document).ready(function () {
                 //else { Return your label here }
             }
         });
-        //Peticion para buscar barrios
-        var json_barrio = function (request, response) {
-            $.ajax({
-                type: 'GET',
-                data: {"token": token_actual.token, "id": $("#id").attr('value'), q: request.term},
-                url: url_pv + 'Barrios/autocompletar/',
-                dataType: "jsonp",
-                success: function (data) {
-                    response(data);
-                }
-            });
-        };
-        //Cargos el autocomplete de barrios
-        $("#barrio_residencia_name").autocomplete({
-            source: json_barrio,
-            minLength: 2,
-            select: function (event, ui) {
-                $(this).val(ui.item ? ui.item : " ");
-                $("#barrio_residencia").val(ui.item.id);
-            },
-            change: function (event, ui) {
-                if (!ui.item) {
-                    this.value = '';
-                    $("#barrio_residencia").val("");
+
+
+        /*
+         * 10-02-2021
+         * Wilmer Gustavo Mogollón Duque
+         * Se incorpora la variable localidad al formulario
+         * los barrios se cargarán dependiendo de la localidad
+         */
+
+        //Cargar el select de Localidades
+        $.ajax({
+            type: 'GET',
+            data: {"token": token_actual.token, "ciudad": 151},
+            url: url_pv + 'Localidades/select'
+        }).done(function (data) {
+            if (data == 'error_metodo')
+            {
+                notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+            } else
+            {
+                if (data == 'error')
+                {
+                    notify("danger", "ok", "Usuarios:", "El usuario no se encuentra registrado, por favor registrarse");
+                } else
+                {
+                    var json = JSON.parse(data);
+                    $("#localidad_residencia").append('<option value="">:: Seleccionar ::</option>');
+                    if (json.length > 0) {
+                        $.each(json, function (key, pais) {
+                            $("#localidad_residencia").append('<option value="' + pais.id + '">' + pais.nombre + '</option>');
+                        });
+                    }
                 }
             }
         });
-        
-                
-        
-        
-        
+
+        //Cargar Upz y Barrios
+        $('#localidad_residencia').on('change', function () {
+            var localidad = $(this).val();
+            $('#barrio_residencia').find('option').remove();
+            $.ajax({
+                type: 'GET',
+                data: {"token": token_actual.token, "localidad": localidad},
+                url: url_pv + 'Barrios/select'
+            }).done(function (data) {
+                if (data == 'error_metodo')
+                {
+                    notify("danger", "ok", "Usuarios:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                } else
+                {
+                    if (data == 'error_token')
+                    {
+                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    } else
+                    {
+                        var json = JSON.parse(data);
+                        $("#barrio_residencia").append('<option value="">:: Seleccionar ::</option>');
+                        if (json != null)
+                        {
+                            if (json.length > 0) {
+                                $.each(json, function (key, value) {
+                                    $("#barrio_residencia").append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                                });
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+//        //Peticion para buscar barrios
+//        var json_barrio = function (request, response) {
+//            $.ajax({
+//                type: 'GET',
+//                data: {"token": token_actual.token, "id": $("#id").attr('value'), q: request.term},
+//                url: url_pv + 'Barrios/autocompletar/',
+//                dataType: "jsonp",
+//                success: function (data) {
+//                    response(data);
+//                }
+//            });
+//        };
+//        //Cargos el autocomplete de barrios
+//        $("#barrio_residencia_name").autocomplete({
+//            source: json_barrio,
+//            minLength: 2,
+//            select: function (event, ui) {
+//                $(this).val(ui.item ? ui.item : " ");
+//                $("#barrio_residencia").val(ui.item.id);
+//            },
+//            change: function (event, ui) {
+//                if (!ui.item) {
+//                    this.value = '';
+//                    $("#barrio_residencia").val("");
+//                }
+//            }
+//        });
+
+
+
+
+
         cargar_datos_formulario(token_actual);
         validator_form(token_actual);
     }
-    
-    
+
+
 
 });
 function cargar_select_tipodocumentos(token_actual) {
@@ -268,36 +338,51 @@ function cargar_datos_formulario(token_actual) {
                     if (json.participante.ciudad_residencia != null) {
                         $("#ciudad_residencia_name").val(json.ciudad_residencia_name);
                     }
-                    
+
                     /*
                      * Wilmer Mogollón 19-04-2020
                      */
-                    
-                    if(json.pais_residencia_id!=46){
+
+                    if (json.pais_residencia_id != 46) {
                         $('#estrato').hide();
                     }
 
-                    if (json.participante.barrio_residencia != null) {
-                        $("#barrio_residencia_name").val(json.barrio_residencia_name);
-                    }
+//                    if (json.participante.barrio_residencia != null) {
+//                        $("#barrio_residencia_name").val(json.barrio_residencia_name);
+//                    }
 
                     $('#direccion_residencia').val(json.participante.direccion_residencia);
                     $('#direccion_correspondencia').val(json.participante.direccion_correspondencia);
                     $('#numero_telefono').val(json.participante.numero_telefono);
                     $('#numero_celular').val(json.participante.numero_celular);
                     $('#correo_electronico').val(json.participante.correo_electronico);
+
+                    //Cargo los select de barrios
+                    $('#barrio_residencia').find('option').remove();
+                    $("#barrio_residencia").append('<option value="">:: Seleccionar ::</option>');
+                    if (json.barrios.length > 0) {
+                        
+                        $.each(json.barrios, function (key, barrio) {
+                            var selected = '';
+                            if (barrio.id === json.participante.barrio_residencia)
+                            {
+                                selected = 'selected="selected"';
+                            }
+                            $("#barrio_residencia").append('<option value="' + barrio.id + '" ' + selected + ' >' + barrio.nombre + '</option>');
+                        });
+                    }
                 }
-                
-                 /**
+
+                /**
                  * 15-04-2020
                  * Wilmer Gustavo Mogollón Duque
                  * Se modifica la forma de validar el campo estrato (No aplica para otros paises).
                  */
 
                 $("#ciudad_residencia_name").blur(function () {
-                    console.log ($("#ciudad_residencia_name").val());
-                    console.log ($("#ciudad_residencia").attr("label").includes('Colombia')); 
-                    
+                    console.log($("#ciudad_residencia_name").val());
+                    console.log($("#ciudad_residencia").attr("label").includes('Colombia'));
+
                     if ($("#ciudad_residencia").attr("label").includes('Colombia')) {
                         $('#estrato').show();
                         $('#formulario_principal').bootstrapValidator('enableFieldValidators', 'estrato', true);
@@ -308,6 +393,8 @@ function cargar_datos_formulario(token_actual) {
                         $('#formulario_principal').bootstrapValidator('validateField', 'estrato');
                     }
                 })
+
+
 
 
 
@@ -335,7 +422,7 @@ function validator_form(token_actual) {
     });
     //Validar el formulario
     $('.formulario_principal').bootstrapValidator({
-        
+
         feedbackIcons: {
             valid: 'glyphicon glyphicon-ok',
             invalid: 'glyphicon glyphicon-remove',
@@ -408,7 +495,7 @@ function validator_form(token_actual) {
         var $form = $(e.target);
         // Get the BootstrapValidator instance
         var bv = $form.data('bootstrapValidator');
-        
+
         if (typeof $("#idd").attr('value') === 'undefined' || $("#idd").val() == null || $("#idd").val() == '') {
 
 //  alert("nuevo!!!");
@@ -459,7 +546,7 @@ function validator_form(token_actual) {
 
             });
         } else {
-  
+
 
 //  alert("editado!!!");
 //Realizo la peticion con el fin de editar el registro actual

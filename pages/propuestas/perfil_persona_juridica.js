@@ -101,6 +101,42 @@ $(document).ready(function () {
                                                         }
                                                     }
                                                 });
+                                                
+                                                //cargar select tiene_rut
+                                                $('#tiene_rut').on('change', function () {            
+                                                    if($(this).val()==="Sí")
+                                                    {
+                                                        $("#ciiu").removeAttr("disabled");
+                                                    }
+                                                    else
+                                                    {
+                                                        $("#ciiu").attr("disabled","disabled");
+                                                    }
+                                                });
+
+                                                //cargar select tiene_redes
+                                                $('#tiene_redes').on('change', function () {            
+                                                    if($(this).val()==="Sí")
+                                                    {
+                                                        $(".si_tiene_redes").removeAttr("disabled");
+                                                    }
+                                                    else
+                                                    {
+                                                        $(".si_tiene_redes").attr("disabled","disabled");
+                                                    }
+                                                });
+
+                                                //cargar select tiene_paginas
+                                                $('#tiene_paginas').on('change', function () {            
+                                                    if($(this).val()==="Sí")
+                                                    {
+                                                        $(".si_tiene_espacios").removeAttr("disabled");
+                                                    }
+                                                    else
+                                                    {
+                                                        $(".si_tiene_espacios").attr("disabled","disabled");
+                                                    }
+                                                });
 
                                                 //Cargar el select de Localidades
                                                 $.ajax({
@@ -315,6 +351,20 @@ $(document).ready(function () {
                                                                                 $("#departamento").append('<option value="' + departamento.id + '" '+selected+' >' + departamento.nombre + '</option>');
                                                                             });
                                                                         }
+                                                                        
+                                                                        //Cargos el select de ciius
+                                                                        $('#ciiu').find('option').remove();
+                                                                        $("#ciiu").append('<option value="">:: Seleccionar ::</option>');
+                                                                        if (json.ciius.length > 0) {
+                                                                            $.each(json.ciius, function (key, array) {
+                                                                                var selected = '';
+                                                                                if (array.id == json.participante.ciiu)
+                                                                                {
+                                                                                    selected = 'selected="selected"';
+                                                                                }
+                                                                                $("#ciiu").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
+                                                                            });
+                                                                        }
 
                                                                         $('#ciudad_residencia').find('option').remove();
                                                                         $("#ciudad_residencia").append('<option value="">:: Seleccionar ::</option>');
@@ -371,6 +421,36 @@ $(document).ready(function () {
 
                                                                         //Cargo el formulario con los datos
                                                                         $('#formulario_principal').loadJSON(json.participante);
+                                                                        
+                                                                        //Valido el ciiu                        
+                                                                        if(json.participante.tiene_rut==="Sí")
+                                                                        {
+                                                                            $("#ciiu").removeAttr("disabled");
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            $("#ciiu").attr("disabled","disabled");
+                                                                        }
+
+                                                                        //Valido el tiene_redes                        
+                                                                        if(json.participante.tiene_redes==="Sí")
+                                                                        {
+                                                                            $(".si_tiene_redes").removeAttr("disabled");
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            $(".si_tiene_redes").attr("disabled","disabled");
+                                                                        }
+
+                                                                        //Valido el tiene_paginas                        
+                                                                        if(json.participante.tiene_paginas==="Sí")
+                                                                        {
+                                                                            $(".si_tiene_espacios").removeAttr("disabled");
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            $(".si_tiene_espacios").attr("disabled","disabled");
+                                                                        }
                                                                         
                                                                         $("#pais option[value='" + json.pais_residencia_id + "']").prop('selected', true);
 
@@ -437,6 +517,11 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'El primer nombre es requerido'}
                 }
             },
+            tiene_rut: {
+                validators: {
+                    notEmpty: {message: 'El RUT es requerido'}
+                }
+            },
             dv: {
                 validators: {
                     notEmpty: {message: 'El dv es requerido'},
@@ -485,19 +570,17 @@ function validator_form(token_actual) {
         }
     }).on('success.form.bv', function (e) {
 
-        $("#mi-modal").modal('show');
+        var enviar = true;
 
-        var modalConfirm = function (callback) {
-            $("#modal-btn-si").on("click", function () {
-                callback(true);
-                $("#mi-modal").modal('hide');
-            });
+        if ($("#tiene_rut").val() === "Sí")
+        {
+            if ($("#ciiu").val() === "")
+            {
+                notify("danger", "ok", "Persona natural:", "Código CIIU de su actividad principal, es requerido");
+                enviar = false;
+            }
+        }
 
-            $("#modal-btn-no").on("click", function () {
-                callback(false);
-                $("#mi-modal").modal('hide');
-            });
-        };
 
         // Prevent form submission
         e.preventDefault();
@@ -511,75 +594,94 @@ function validator_form(token_actual) {
         $('#formulario_principal').attr('action', url_pv + 'Personasjuridicas/editar_participante');
 
 
-        modalConfirm(function (confirm) {
-            if (confirm) {
-                //Se realiza la peticion con el fin de guardar el registro actual
-                $.ajax({
-                    type: 'POST',
-                    url: $form.attr('action'),
-                    data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
-                }).done(function (result) {
+        if(enviar)
+        {
+            
+            $("#mi-modal").modal('show');
 
-                    if (result == 'error')
-                    {
-                        notify("danger", "ok", "Persona jurídica:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                    } else
-                    {
-                        if (result == 'error_token')
+            var modalConfirm = function (callback) {
+                $("#modal-btn-si").on("click", function () {
+                    callback(true);
+                    $("#mi-modal").modal('hide');
+                });
+
+                $("#modal-btn-no").on("click", function () {
+                    callback(false);
+                    $("#mi-modal").modal('hide');
+                });
+            };
+            
+
+            modalConfirm(function (confirm) {
+                if (confirm) {
+                    //Se realiza la peticion con el fin de guardar el registro actual
+                    $.ajax({
+                        type: 'POST',
+                        url: $form.attr('action'),
+                        data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
+                    }).done(function (result) {
+
+                        if (result == 'error')
                         {
-                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                            notify("danger", "ok", "Persona jurídica:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                         } else
                         {
-                            if (result == 'acceso_denegado')
+                            if (result == 'error_token')
                             {
-                                notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                                location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                             } else
                             {
-                                if (result == 'error_usuario_perfil')
+                                if (result == 'acceso_denegado')
                                 {
-                                    notify("danger", "ok", "Persona jurídica:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                    notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                                 } else
                                 {
-                                    if (result == 'no_existente_participante')
+                                    if (result == 'error_usuario_perfil')
                                     {
-                                        location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_juridica.html?msg=Para poder inscribir la propuesta debe crear el perfil de persona jurídica.&msg_tipo=danger';
+                                        notify("danger", "ok", "Persona jurídica:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                     } else
                                     {
-                                        if (result == 'participante_existente')
+                                        if (result == 'no_existente_participante')
                                         {
-                                            notify("danger", "ok", "Persona jurídica:", "El participante que intenta ingresar ya se encuentra registrado en la base de datos, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                            location.href = url_pv_admin + 'pages/perfilesparticipantes/persona_juridica.html?msg=Para poder inscribir la propuesta debe crear el perfil de persona jurídica.&msg_tipo=danger';
                                         } else
                                         {
-                                            if (isNaN(result)) {
-                                                notify("danger", "ok", "Persona jurídica:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                            if (result == 'participante_existente')
+                                            {
+                                                notify("danger", "ok", "Persona jurídica:", "El participante que intenta ingresar ya se encuentra registrado en la base de datos, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                             } else
                                             {
-                                                notify("success", "ok", "Persona jurídica:", "Se actualizó con el éxito el participante como persona jurídica.");
-                                                
-                                                var redirec = "propuestas";
-                                                if($("#programa").val()==2)
+                                                if (isNaN(result)) {
+                                                    notify("danger", "ok", "Persona jurídica:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                                } else
                                                 {
-                                                    redirec = "propuestas_pdac";
+                                                    notify("success", "ok", "Persona jurídica:", "Se actualizó con el éxito el participante como persona jurídica.");
+
+                                                    var redirec = "propuestas";
+                                                    if($("#programa").val()==2)
+                                                    {
+                                                        redirec = "propuestas_pdac";
+                                                    }
+
+                                                    setTimeout(function () {
+                                                        location.href = url_pv_admin + 'pages/propuestas/'+redirec+'.html?m=pj&id=' + $("#conv").attr('value')+'&p='+getURLParameter('p');
+                                                    }, 1800);
+
                                                 }
-                                                
-                                                setTimeout(function () {
-                                                    location.href = url_pv_admin + 'pages/propuestas/'+redirec+'.html?m=pj&id=' + $("#conv").attr('value')+'&p='+getURLParameter('p');
-                                                }, 1800);
-                                                
                                             }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
 
-                });
-            } else
-            {
-                $form.bootstrapValidator('disableSubmitButtons', false);
-            }
-        });
+                    });
+                } else
+                {
+                    $form.bootstrapValidator('disableSubmitButtons', false);
+                }
+            });
+        }
     });
 
 }

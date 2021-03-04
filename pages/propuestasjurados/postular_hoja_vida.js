@@ -27,7 +27,7 @@
          cargar_datos_formulario(token_actual);
 
          $("#postular").click(function(){
-           if( $("#acepta").prop('checked') ){
+           if( $("#acepta").prop('checked') && $("#acepta_tratamiento").prop('checked') ){
 
                $("#mensaje").show();
                $("#bcancelar").show();
@@ -46,6 +46,7 @@
                 $("#aceptar").show();
 
            }
+           
 
          });
 
@@ -65,6 +66,26 @@
 
             $("#condiciones_banco_jurados").attr("href", json.archivo);
             $("#terminos_condiciones_pdf").attr("src", json.archivo);
+            
+
+          });
+          
+          /*
+           * 12-02-2021
+           * Wilmer Gustavo Mogollón Duque
+           * //Se agrega para mostrar documento de tratamiento de datos
+            $("#tratamiento_datos_pdf").attr("src", json.archivo);
+           */
+          $.ajax({
+              type: 'GET',
+              data: {"token": token_actual.token},
+              url: url_pv + 'PropuestasJurados/download_tratamiento'
+          }).done(function (data) {
+
+            var json = JSON.parse(data);
+
+            //Se agrega para mostrar documento de tratamiento de datos
+            $("#tratamiento_datos_pdf").attr("src", json.archivo);
 
           });
 

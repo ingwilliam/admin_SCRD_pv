@@ -103,6 +103,42 @@ $(document).ready(function () {
             });
         });
         
+        //cargar select tiene_rut
+        $('#tiene_rut').on('change', function () {            
+            if($(this).val()==="Sí")
+            {
+                $("#ciiu").removeAttr("disabled");
+            }
+            else
+            {
+                $("#ciiu").attr("disabled","disabled");
+            }
+        });
+        
+        //cargar select tiene_redes
+        $('#tiene_redes').on('change', function () {            
+            if($(this).val()==="Sí")
+            {
+                $(".si_tiene_redes").removeAttr("disabled");
+            }
+            else
+            {
+                $(".si_tiene_redes").attr("disabled","disabled");
+            }
+        });
+        
+        //cargar select tiene_paginas
+        $('#tiene_paginas').on('change', function () {            
+            if($(this).val()==="Sí")
+            {
+                $(".si_tiene_espacios").removeAttr("disabled");
+            }
+            else
+            {
+                $(".si_tiene_espacios").attr("disabled","disabled");
+            }
+        });
+        
         //cargar select departamento
         $('#pais_nacimiento').on('change', function () {
             var pais_nacimiento = $(this).val();
@@ -351,6 +387,21 @@ $(document).ready(function () {
                                 $("#sexo").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
                             });
                         }
+                        
+                        //Cargos el select de ciius
+                        $('#ciiu').find('option').remove();
+                        $("#ciiu").append('<option value="">:: Seleccionar ::</option>');
+                        if (json.ciius.length > 0) {
+                            $.each(json.ciius, function (key, array) {
+                                var selected = '';
+                                if (array.id == json.participante.ciiu)
+                                {
+                                    selected = 'selected="selected"';
+                                }
+                                $("#ciiu").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
+                            });
+                        }                        
+                        
                         //Cargos el select de orientacion sexual
                         $('#orientacion_sexual').find('option').remove();
                         $("#orientacion_sexual").append('<option value="">:: Seleccionar ::</option>');
@@ -420,6 +471,36 @@ $(document).ready(function () {
                         //Cargo el formulario con los datos
                         $('#formulario_principal').loadJSON(json.participante);
                         
+                        //Valido el ciiu                        
+                        if(json.participante.tiene_rut==="Sí")
+                        {
+                            $("#ciiu").removeAttr("disabled");
+                        }
+                        else
+                        {
+                            $("#ciiu").attr("disabled","disabled");
+                        }
+                        
+                        //Valido el tiene_redes                        
+                        if(json.participante.tiene_redes==="Sí")
+                        {
+                            $(".si_tiene_redes").removeAttr("disabled");
+                        }
+                        else
+                        {
+                            $(".si_tiene_redes").attr("disabled","disabled");
+                        }
+                        
+                        //Valido el tiene_paginas                        
+                        if(json.participante.tiene_paginas==="Sí")
+                        {
+                            $(".si_tiene_espacios").removeAttr("disabled");
+                        }
+                        else
+                        {
+                            $(".si_tiene_espacios").attr("disabled","disabled");
+                        }                       
+                        
                         $("#pais option[value='" + json.pais_residencia_id + "']").prop('selected', true);
                         
                         $("#pais_nacimiento option[value='" + json.pais_nacimiento_id + "']").prop('selected', true);
@@ -470,6 +551,16 @@ function validator_form(token_actual) {
             primer_apellido: {
                 validators: {
                     notEmpty: {message: 'El primer apellido es requerido'}
+                }
+            },
+            tiene_rut: {
+                validators: {
+                    notEmpty: {message: 'El RUT es requerido'}
+                }
+            },
+            tiene_matricula: {
+                validators: {
+                    notEmpty: {message: '¿Cuenta usted con matrícula mercantil?, es requerido'}
                 }
             },
             fecha_nacimiento: {
@@ -572,6 +663,18 @@ function validator_form(token_actual) {
             }
         }
     }).on('success.form.bv', function (e) {
+        
+        var enviar = true;
+
+        if ($("#tiene_rut").val() === "Sí")
+        {
+            if ($("#ciiu").val() === "")
+            {
+                notify("danger", "ok", "Persona natural:", "Código CIIU de su actividad principal, es requerido");
+                enviar = false;
+            }
+        }
+        
         // Prevent form submission
         e.preventDefault();
         // Get the form instance
@@ -582,70 +685,72 @@ function validator_form(token_actual) {
 
         // Valido si el id existe, con el fin de eviarlo al metodo correcto
         $('#formulario_principal').attr('action', url_pv + 'Personasnaturales/new');
+        
+        if(enviar)
+        {
+            //Se realiza la peticion con el fin de guardar el registro actual
+            $.ajax({
+                type: 'POST',
+                url: $form.attr('action'),
+                data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
+            }).done(function (result) {
+                var json = JSON.parse(result);
 
-
-        //Se realiza la peticion con el fin de guardar el registro actual
-        $.ajax({
-            type: 'POST',
-            url: $form.attr('action'),
-            data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
-        }).done(function (result) {
-            var json = JSON.parse(result);
-                        
-            if (json.error === 1)
-            {
-                notify("danger", "ok", "Persona natural:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-            } else
-            {
-                if (json.error === 2)
+                if (json.error === 1)
                 {
-                    location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                    notify("danger", "ok", "Persona natural:", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                 } else
                 {
-                    if (json.error === 3)
+                    if (json.error === 2)
                     {
-                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
                     } else
                     {
-                        if (json.error === 4)
+                        if (json.error === 3)
                         {
-                            notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
                         } else
                         {
-                        
-                            if (json.error === 5)
+                            if (json.error === 4)
                             {
-                                notify("danger", "ok", "Persona natural:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                             } else
                             {
-                                if (json.error === 6)
+
+                                if (json.error === 5)
                                 {
-                                    notify("danger", "ok", "Persona natural:", json.mensaje);
+                                    notify("danger", "ok", "Persona natural:", "Se registro un error al crear el perfil, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
                                 } else
                                 {
-                                    if (json.error === 0)
+                                    if (json.error === 6)
                                     {
-                                        /**
-                                        *Cesar Britto, 2020-02-28.
-                                        *Se realiza el ajuste para cuando se crea perfil de pn
-                                        */
-                                          $("#id").val(json.respuesta);
-                                          notify("success", "ok", "Persona natural:", "Se actualizo con el éxito el participante como persona natural.");
-                                    }
-                                    else
+                                        notify("danger", "ok", "Persona natural:", json.mensaje);
+                                    } else
                                     {
-                                        notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                                    }
+                                        if (json.error === 0)
+                                        {
+                                            /**
+                                            *Cesar Britto, 2020-02-28.
+                                            *Se realiza el ajuste para cuando se crea perfil de pn
+                                            */
+                                              $("#id").val(json.respuesta);
+                                              notify("success", "ok", "Persona natural:", "Se actualizo con el éxito el participante como persona natural.");
+                                        }
+                                        else
+                                        {
+                                            notify("danger", "ok", "Persona natural:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                                        }
 
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
 
-        //$form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
+            //$form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
+        }                
     });
 
 }
