@@ -504,6 +504,10 @@
             notify("danger", "remove", "Usuario:", "Se cumplió el máximo de postulaciones activas.");
             ///  cargar_tabla_p(token_actual);
             break;
+          case 'error_banco':
+            notify("danger", "remove", "Usuario:", "Para postularse a convocatorias de la vigencia actual debe inscribir su hoja de vida en el Bannco de Jurados del presente año.");
+            ///  cargar_tabla_p(token_actual);
+            break;
           default:
             notify("success", "ok", "Convocatorias:", "Se postuló la hoja de vida con éxito.");
               $('#table_list_b').DataTable().clear().destroy();
