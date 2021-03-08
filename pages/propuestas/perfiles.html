@@ -69,7 +69,7 @@
                         </button>                                                
                     </div>
                     <!-- /.col-lg-12 -->
-                </div>
+                </div>                
                 <!-- /.row -->
                 <div class="row validar_acceso">                    
                     <div class="col-lg-12">
@@ -80,6 +80,7 @@
                             <div class="panel-body"> 
                                 <input type="hidden" id="id" name="id" />
                                 <input type="hidden" id="nombre_convocatoria_par"/>
+                                <input type="hidden" id="convocatoria_padre"/>
                                 <form id="formulario_principal" action="" class="form_validator" role="form" method="post">
                                     <div class="row">
                                         <div class="col-lg-12">
@@ -88,7 +89,25 @@
                                                 <select id='tipo_participante' name="tipo_participante" class="form-control" >                                                                                                                                                            
                                                 </select>                                                
                                             </div>                                                                                                                                                                                                                                                                                                                                                
-                                        </div>
+                                        </div>                                        
+                                        <div class="col-lg-12 pasos_pdac" style="display: none">                        
+                                            <div class="panel panel-info">
+                                                <div class="panel-heading">
+                                                    Antes de diligenciar el formulario, por favor lea la siguiente información:
+                                                </div>
+                                                <div class="panel-body">
+                                                    <ol type="1">
+                                                        <li>Asegúrese de tener una buena conexión a internet en el momento de hacer la inscripción.</li>
+                                                        <li>Cerciórese de que su navegador (Chrome, Internet Explorer, Mozzila) esté actualizado al momento de ingresar a SICON.</li>
+                                                        <li>Revise el cronograma de la convocatoria y realice el proceso de registro e inscripción con oportunidad. Tenga en cuenta que, según las estadísticas de nuestras más recientes convocatorias, más del 40% de los participantes se inscriben en el último día.</li>
+                                                        <li>Si ya se registró en el PDE, tenga en cuenta que debe usar el mismo correo electrónico con que se registró para inscribir su proyecto en el PDAC.</li>
+                                                        <li>El NIT que usted registre se asociará a un único correo electrónico.</li>
+                                                        <li>Verifique que el nombre de la ESAL con la cual se inscribe coincida con el nombre reportado en el certificado de existencia y representación legal.</li>
+                                                        <li>Si presenta algún problema con la inscripción, escriba su caso al correo electrónico convocatorias@scrd.gov.co, y soporte su consulta con un video o capturas de pantalla, detalle la dificultad con la plataforma. Los profesionales encargados de soporte le brindarán una solución inmediata.</li>                                    
+                                                    </ol>
+                                                </div>                        
+                                            </div>
+                                        </div>                                    
                                         <div class="col-lg-12 inactivo">
                                             <div class="form-group">
                                                 <iframe id="terminos_condiciones_pdf" src="" style="width: 100%;height: 300px" height="480"></iframe>
@@ -126,7 +145,7 @@
                                                 </select>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
-                                        <div class="col-lg-12 inactivo alianza_pdac">
+                                        <div class="col-lg-12 alianza_pdac" style="display: none">
                                             <div class="form-group">
                                                 <label>¿Proyecto de alianza sectorial?</label>
                                                 <select id='alianza_sectorial' name="alianza_sectorial" class="form-control" >                                                    

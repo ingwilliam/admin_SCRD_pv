@@ -73,7 +73,19 @@
                         </button>                        
                     </div>
                     <!-- /.col-lg-12 -->
-                </div>                
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">                        
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                Antes de diligenciar el formulario, por favor lea la siguiente información:                                
+                            </div>
+                            <div class="panel-body">
+                                <p>En esta sección la entidad sin ánimo de lucro podrá relacionar los objetivos, metas y actividades que se desarrollarán en la ejecución la propuesta/proyecto.</p>
+                            </div>                        
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
@@ -95,13 +107,13 @@
                                             <div class="panel panel-primary">
                                                 <div class="panel-heading">
                                                     Objetivos específicos
-                                                    <button type="button" class="btn btn-success btn-circle cargar_formulario" data-toggle="modal" data-target="#nuevo_objetivo" title="Crear objetivo específico"><i class="fa fa-plus"></i></button>
+                                                    <button type="button" class="btn btn-success btn-circle cargar_formulario" data-toggle="modal" data-target="#nuevo_objetivo" data-placement="top" title="Agregue los objetivos específicos los cuales hacen referencia a los propósitos puntuales para lograr el objetivo general."><i class="fa fa-plus"></i></button>
                                                 </div>
                                                 <div class="panel-body">                                                                                        
                                                     <table id="table_registros" class="table">
                                                         <thead>
                                                             <tr>
-                                                                <th>Orden</th>
+                                                                <th></th>
                                                                 <th>Objetivo específico</th>
                                                                 <th>Meta</th>
                                                                 <th>¿Activo?</th>
@@ -162,12 +174,21 @@
                                             <div class="modal-body">                                                
                                                 <form id="form_nuevo_objetivo" action="" class="form_nuevo_objetivo" role="form" method="post">
                                                     <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label>Orden del objetivo específico<span class="icono_requerido">*</span></label>
-                                                                <input id="orden" type="text" name="orden" class="form-control" maxlength="9">                                                
-                                                            </div>                                                                                                                                                                                                                                                                                                        
+                                                        <div class="col-lg-12">                        
+                                                            <div class="panel panel-info">
+                                                                <div class="panel-heading">
+                                                                    Antes de diligenciar el formulario, por favor lea la siguiente información:
+                                                                </div>
+                                                                <div class="panel-body">
+                                                                    <ul>
+                                                                        <li>Agregue los objetivos específicos los cuales hacen referencia a los propósitos puntuales para lograr el objetivo general.</li>
+                                                                        <li>Se permite un máximo de 4 objetivos específicos.</li>
+                                                                    </ul>
+                                                                </div>                        
+                                                            </div>
                                                         </div>
+                                                    </div>
+                                                    <div class="row">
                                                         <div class="col-lg-12">
                                                             <div class="form-group">
                                                                 <label>Objetivo específico <span class="icono_requerido">*</span><span style="font-size: 10px; color: blue" class="caracter_objetivo">500</span></label>
@@ -216,12 +237,6 @@
                                                         </div>
                                                         <div class="col-lg-12">
                                                             <div class="form-group">
-                                                                <label>Orden de la actividad <span class="icono_requerido">*</span></label>
-                                                                <input id="orden" type="text" name="orden" class="form-control" maxlength="9">                                                
-                                                            </div>                                                                                                                                                                                                                                                                                                        
-                                                        </div>
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
                                                                 <label>Actividad <span class="icono_requerido">*</span><span style="font-size: 10px; color: blue" class="caracter_actividad">500</span></label>
                                                                 <textarea id="actividad" name="actividad" class="form-control contar_caracteres" title="500" rows="3"></textarea>                                                
                                                             </div>                                                                                                                                                                                                                                                                                                        
@@ -252,6 +267,18 @@
                                             <!-- cuerpo del diálogo -->
                                             <div class="modal-body">                                                
                                                 <form id="form_nuevo_cronograma" action="" class="form_nuevo_cronograma" role="form" method="post">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">                        
+                                                            <div class="panel panel-info">
+                                                                <div class="panel-heading">
+                                                                    Antes de diligenciar el formulario, por favor lea la siguiente información:
+                                                                </div>
+                                                                <div class="panel-body">
+                                                                    <p>Ordene las actividades en un tiempo determinado.</p>
+                                                                </div>                        
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="row">
                                                         <div class="col-lg-12">
                                                             <div class="form-group">
@@ -310,6 +337,18 @@
                                             <!-- cuerpo del diálogo -->
                                             <div class="modal-body">                                                
                                                 <form id="form_nuevo_presupuesto" action="" class="form_nuevo_presupuesto" role="form" method="post">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">                        
+                                                            <div class="panel panel-info">
+                                                                <div class="panel-heading">
+                                                                    Antes de diligenciar el formulario, por favor lea la siguiente información:
+                                                                </div>
+                                                                <div class="panel-body">
+                                                                    <p>Organice y valore los recursos necesarios en cada una de las actividades.</p>
+                                                                </div>                        
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="row">
                                                         <div class="col-lg-6">
                                                             <div class="form-group">

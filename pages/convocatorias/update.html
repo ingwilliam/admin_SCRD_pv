@@ -66,6 +66,8 @@
                         </button>
                         <button type="button" class="btn btn-success btn-circle btn-lg" onclick="location.href = 'create.html'" data-toggle="tooltip" data-placement="top" title="Crear convocatoria."><i class="fa fa-file-o"></i>
                         </button>                        
+                        <button id="crear_qr" type="button" class="btn btn-info btn-circle btn-lg" data-toggle="tooltip" data-placement="top" title="Crear QR."><i class="fa fa-qrcode "></i>
+                        </button>                        
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -330,6 +332,23 @@
                                                 <label>¿Cuántos perfiles de jurado requiere? <span class="icono_requerido">*</span></label>
                                                 <select id='cantidad_perfil_jurado' name="cantidad_perfil_jurado" class="form-control diferentes_categorias_disable" >                                                    
                                                     <option value="">:: Seleccionar ::</option>
+                                                </select>                                                                                                
+                                            </div>                                                                                                                                                                                                                                                                                                        
+                                        </div>                                                                                                                                                    
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Precise la cantidad mínima de integrantes de la agrupación<span class="icono_requerido">*</span></label>
+                                                <select id='cantidad_integrantes' name="cantidad_integrantes" class="form-control" >                                                    
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
                                                 </select>                                                                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>                                                                                                                                                    

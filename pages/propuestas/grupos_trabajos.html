@@ -75,6 +75,18 @@
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
+                <div class="row">
+                    <div class="col-lg-12">                        
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                Antes de diligenciar el formulario, por favor lea la siguiente información:
+                            </div>
+                            <div class="panel-body">
+                                <p>En esta sección la entidad sin ánimo de lucro, podrá diligenciar el formulario con los datos solicitados por el <span class="programa_actual"></span>, para cada uno de los integrantes que conforman el equipo de trabajo encargado de la ejecución de la propuesta/proyecto.</p>
+                            </div>                        
+                        </div>
+                    </div>
+                </div>
                 <div class="modal fade" id="nuevo_integrante">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
@@ -107,15 +119,7 @@
                                                 </select>                                                
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div> 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label>Profesión <span class="icono_requerido">*</span></label>
-                                                <input type="text" name="profesion" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>                                    
+                                    </div>                                                                        
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
@@ -207,7 +211,7 @@
                                         </div>                                        
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>A qué régimen de salud pertenece <span class="icono_requerido">*</span></label>
+                                                <label>¿A qué régimen de salud pertenece?  <span class="icono_requerido">*</span></label>
                                                 <select id='regimen_salud' name="regimen_salud" class="form-control" >
                                                     <option value="">:: Seleccionar ::</option>
                                                     <option value="Contributivo">Contributivo</option>
@@ -219,7 +223,7 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Es usted víctima del conflicto armado <span class="icono_requerido">*</span></label>
+                                                <label>¿Es usted víctima del conflicto armado? <span class="icono_requerido">*</span></label>
                                                 <select id='es_victima' name="es_victima" class="form-control" >
                                                     <option value="">:: Seleccionar ::</option>
                                                     <option value="Sí">Sí</option>
@@ -365,7 +369,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Redes sociales</label>
-                                                <input type="text" name="redes_sociales" class="form-control">
+                                                <input type="text" name="facebook" class="form-control">
                                             </div>
                                         </div>
                                     </div>
@@ -380,7 +384,7 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Experiencia <span class="icono_requerido">*</span> <span style="font-size: 10px; color: blue" class="caracter_experiencia">1000</span></label>
+                                                <label>Experiencia <span class="icono_requerido">*</span> <span style="font-size: 10px; color: blue" class="caracter_experiencia">1000</span></label>&nbsp;<button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Describa su experiencia en el rol que desempeñará en la ejecución de la la propuesta/proyecto."><i class="fa fa-question"></i></button>
                                                 <textarea id="experiencia" name="experiencia" class="form-control contar_caracteres" title="1000" rows="3"></textarea>
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>
@@ -388,7 +392,7 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label>Actividades a cargo <span class="icono_requerido">*</span> <span style="font-size: 10px; color: blue" class="caracter_actividades_cargo">1000</span></label>
+                                                <label>Actividades a cargo <span class="icono_requerido">*</span> <span style="font-size: 10px; color: blue" class="caracter_actividades_cargo">1000</span></label>&nbsp;<button type="button" class="btn btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Mencione las actividades que estarán bajo su cargo en la ejecución de la la propuesta/proyecto."><i class="fa fa-question"></i></button>
                                                 <textarea id="actividades_cargo" name="actividades_cargo" class="form-control contar_caracteres" title="1000" rows="3"></textarea>
                                             </div>                                                                                                                                                                                                                                                                                                        
                                         </div>

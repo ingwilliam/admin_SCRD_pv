@@ -146,6 +146,17 @@ $(document).ready(function () {
                                                                                         $("#link_regresar").attr("onclick", "location.href = '" + href_regresar + "'");
                                                                                     }                                                                                                                                                                                                                                                             
                                                                                 }
+                                                                                
+                                                                                if (json.programa === 2)
+                                                                                {
+                                                                                    $(".programa_actual").html("PDAC")
+                                                                                    $(".mensaje_pdac").css("display","block");
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    $(".programa_actual").html("PDE")                                                                                    
+                                                                                    $(".mensaje_pdac").css("display","none");
+                                                                                }
 
                                                                                 $("#propuesta").attr("value", json.propuesta);
                                                                                 $("#participante").attr("value", json.participante);
@@ -320,7 +331,7 @@ $(document).ready(function () {
 
                                                                                 if(documento.nombre=="Integrante")
                                                                                 {
-                                                                                    nombre_requisito="No ha ingresado los integrantes de la agrupación.";
+                                                                                    nombre_requisito="No ha ingresado el mínimo de los integrantes de la agrupación.";
                                                                                 }
                                                                                 
                                                                                 if(documento.nombre=="EquipoTrabajo")
@@ -341,6 +352,16 @@ $(document).ready(function () {
                                                                                 if(documento.nombre=="FPropuesta")
                                                                                 {                                                                                    
                                                                                     nombre_requisito="No ha ingresado información en el formulario de la propuesta.";
+                                                                                }
+                                                                                
+                                                                                if(documento.nombre=="FParticipantePN")
+                                                                                {                                                                                    
+                                                                                    nombre_requisito="No ha actualizado la información en el formulario de la persona natural.";
+                                                                                }
+                                                                                
+                                                                                if(documento.nombre=="FParticipantePJ")
+                                                                                {                                                                                    
+                                                                                    nombre_requisito="No ha actualizado la información en el formulario de la persona jurídica.";
                                                                                 }
                                                                                 
                                                                                 if(documento.nombre=="FObjetivogeneral")

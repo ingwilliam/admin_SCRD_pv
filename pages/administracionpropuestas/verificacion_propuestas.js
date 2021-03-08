@@ -696,7 +696,8 @@ function cargar_verificacion_1(token_actual, propuesta) {
                         html_table = html_table + '<td><b>Archivos<b/><br/><br/>';
 
                         $.each(documento.archivos, function (key, archivo) {
-                            html_table = html_table + '<p><a href="javascript:void(0)" onclick="download_file(\'' + archivo.id_alfresco + '\')">' + archivo.nombre + '</a></p>';
+                            html_table = html_table + '<p><a style="color:#5cb85c" href="javascript:void(0)" onclick="download_file(\'' + archivo.id_alfresco + '\')">(Descargar) ' + archivo.nombre + '</a><br/>';
+                            html_table = html_table + '<a style="color:#f0ad4e" target="_blank" href="' + archivo.url_alfresco + '" >(Ver Documento) ' + archivo.nombre + '</a></p>';
                         });
                         html_table = html_table + '<b>Links<b/><br/><br/>';
                         var numero_link = 1;
@@ -778,7 +779,8 @@ function cargar_verificacion_1(token_actual, propuesta) {
                         html_table = html_table + '<td><b>Archivos<b/><br/><br/>';
 
                         $.each(documento.archivos, function (key, archivo) {
-                            html_table = html_table + '<p><a href="javascript:void(0)" onclick="download_file(\'' + archivo.id_alfresco + '\')">' + archivo.nombre + '</a></p>';
+                            html_table = html_table + '<p><a style="color:#5cb85c" href="javascript:void(0)" onclick="download_file(\'' + archivo.id_alfresco + '\')">(Descargar) ' + archivo.nombre + '</a><br/>';
+                            html_table = html_table + '<a style="color:#f0ad4e" target="_blank" href="' + archivo.url_alfresco + '" >(Ver Documento) ' + archivo.nombre + '</a></p>';
                         });
                         html_table = html_table + '<b>Links<b/><br/><br/>';
                         var numero_link = 1;
@@ -801,17 +803,17 @@ function cargar_verificacion_1(token_actual, propuesta) {
                             
                             //Se debe habilitar el estado subsanar en los documentos tecnicos
                             //de modalidad LEP
-                            if(json.modalidad==6)
+                            //if(json.modalidad==6)
+                            //{
+                            //    html_table = html_table + '<option value="' + estado.id + '" ' + selected + '>' + estado.nombre + '</option>';
+                            //}
+                            //else
+                            //{
+                            if (estado.id != 27)
                             {
                                 html_table = html_table + '<option value="' + estado.id + '" ' + selected + '>' + estado.nombre + '</option>';
                             }
-                            else
-                            {
-                                if (estado.id != 27)
-                                {
-                                    html_table = html_table + '<option value="' + estado.id + '" ' + selected + '>' + estado.nombre + '</option>';
-                                }
-                            }                                                                                    
+                            //}                                                                                    
                         });
                         
                         var color_boton_guardado="btn-success";
@@ -1020,7 +1022,8 @@ function cargar_verificacion_2(token_actual, propuesta) {
                         html_table = html_table + '<td><b>Archivos<b/><br/><br/>';
 
                         $.each(documento.archivos, function (key, archivo) {
-                            html_table = html_table + '<p><a href="javascript:void(0)" onclick="download_file(\'' + archivo.id_alfresco + '\')">' + archivo.nombre + '</a></p>';
+                            html_table = html_table + '<p><a style="color:#5cb85c" href="javascript:void(0)" onclick="download_file(\'' + archivo.id_alfresco + '\')">(Descargar) ' + archivo.nombre + '</a><br/>';
+                            html_table = html_table + '<a style="color:#f0ad4e" target="_blank" href="' + archivo.url_alfresco + '" >(Ver Documento) ' + archivo.nombre + '</a></p>';
                         });
                         html_table = html_table + '<b>Links<b/><br/><br/>';
                         var numero_link = 1;
@@ -1095,7 +1098,8 @@ function cargar_verificacion_2(token_actual, propuesta) {
                         html_table = html_table + '<td><b>Archivos<b/><br/><br/>';
 
                         $.each(documento.archivos, function (key, archivo) {
-                            html_table = html_table + '<p><a href="javascript:void(0)" onclick="download_file(\'' + archivo.id_alfresco + '\')">' + archivo.nombre + '</a></p>';
+                            html_table = html_table + '<p><a style="color:#5cb85c" href="javascript:void(0)" onclick="download_file(\'' + archivo.id_alfresco + '\')">(Descargar) ' + archivo.nombre + '</a><br/>';
+                            html_table = html_table + '<a style="color:#f0ad4e" target="_blank" href="' + archivo.url_alfresco + '" >(Ver Documento) ' + archivo.nombre + '</a></p>';
                         });
                         html_table = html_table + '<b>Links<b/><br/><br/>';
                         var numero_link = 1;

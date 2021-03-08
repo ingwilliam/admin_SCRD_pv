@@ -12,6 +12,15 @@ $(document).ready(function () {
         location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
     } else
     {
+        //Crear link qr
+        $("#crear_qr").click(function () {
+            window.open(
+                url_pv + 'ConvocatoriasWS/convocatoria_qr/'+$("#id").attr('value'),
+                '_blank' // <- This is what makes it open in a new window.
+              );
+        });
+        
+        
         permiso_lectura(token_actual, "Convocatorias");
 
         $('#form_validator').attr('action', url_pv + 'Convocatorias/new');

@@ -122,7 +122,15 @@ $(document).ready(function () {
                                                                     {
 
                                                                         var json = JSON.parse(data);
-
+                                                                        if(json.convocatoria_padre_categoria=="621")
+                                                                        {
+                                                                            $(".campos_metropolitano").css("display","block");
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            $(".div_alianza").css("display","block");                                                                            
+                                                                            $(".localidad_principal").css("display","block");                                                                            
+                                                                        }
                                                                         //eliminó disabled todos los componentes
                                                                         if (json.estado == 7)
                                                                         {
@@ -218,6 +226,18 @@ $(document).ready(function () {
                                                                                 $("#relacion_plan").append('<option value="' + medio + '" >' + medio + '</option>');
                                                                             });
                                                                         }
+                                                                        
+                                                                        //Cargo el select de alcance_territorial 
+                                                                        if (json.alcance_territorial.length > 0) {
+                                                                            $.each(json.alcance_territorial, function (key, medio) {
+                                                                                var selected = '';
+                                                                                if (medio == json.propuesta.alcance_territorial)
+                                                                                {
+                                                                                    selected = 'selected="selected"';
+                                                                                }
+                                                                                $("#alcance_territorial").append('<option value="' + medio + '" >' + medio + '</option>');
+                                                                            });
+                                                                        }
 
                                                                         //Cargo el select de linea_estrategica                                
                                                                         if (json.linea_estrategica.length > 0) {
@@ -246,30 +266,47 @@ $(document).ready(function () {
                                                                         //Set los valores del medio que se entero
                                                                         $("#porque_medio option:selected").removeAttr("selected");
                                                                         $("#porque_medio option:selected").prop("selected", false);
-                                                                        $.each(JSON.parse(json.propuesta.porque_medio), function (i, e) {
-                                                                            $("#porque_medio option[value='" + e + "']").prop("selected", true);
-                                                                        });
+                                                                        if(json.propuesta.porque_medio !== '' &&  json.propuesta.porque_medio !== null){
+                                                                            $.each(JSON.parse(json.propuesta.porque_medio), function (i, e) {
+                                                                                $("#porque_medio option[value='" + e + "']").prop("selected", true);
+                                                                            });
+                                                                        }
 
                                                                         //Set los valores relacion_plan
                                                                         $("#relacion_plan option:selected").removeAttr("selected");
                                                                         $("#relacion_plan option:selected").prop("selected", false);
-                                                                        $.each(JSON.parse(json.propuesta.relacion_plan), function (i, e) {
-                                                                            $("#relacion_plan option[value='" + e + "']").prop("selected", true);
-                                                                        });
+                                                                        if(json.propuesta.relacion_plan !== '' &&  json.propuesta.relacion_plan !== null){
+                                                                            $.each(JSON.parse(json.propuesta.relacion_plan), function (i, e) {
+                                                                                $("#relacion_plan option[value='" + e + "']").prop("selected", true);
+                                                                            });
+                                                                        }
+                                                                        
+                                                                        //Set los valores alcance_territorial
+                                                                        $("#alcance_territorial option:selected").removeAttr("selected");
+                                                                        $("#alcance_territorial option:selected").prop("selected", false);                                                                        
+                                                                        if(json.propuesta.alcance_territorial !== '' &&  json.propuesta.alcance_territorial !== null){
+                                                                            $.each(JSON.parse(json.propuesta.alcance_territorial), function (i, e) {
+                                                                                $("#alcance_territorial option[value='" + e + "']").prop("selected", true);
+                                                                            });
+                                                                        }
 
                                                                         //Set los valores linea_estrategica
                                                                         $("#linea_estrategica option:selected").removeAttr("selected");
                                                                         $("#linea_estrategica option:selected").prop("selected", false);
-                                                                        $.each(JSON.parse(json.propuesta.linea_estrategica), function (i, e) {
-                                                                            $("#linea_estrategica option[value='" + e + "']").prop("selected", true);
-                                                                        });
+                                                                        if(json.propuesta.linea_estrategica !== '' &&  json.propuesta.linea_estrategica !== null){
+                                                                            $.each(JSON.parse(json.propuesta.linea_estrategica), function (i, e) {
+                                                                                $("#linea_estrategica option[value='" + e + "']").prop("selected", true);
+                                                                            });
+                                                                        }
 
                                                                         //Set los valores area
                                                                         $("#area option:selected").removeAttr("selected");
                                                                         $("#area option:selected").prop("selected", false);
-                                                                        $.each(JSON.parse(json.propuesta.area), function (i, e) {
-                                                                            $("#area option[value='" + e + "']").prop("selected", true);
-                                                                        });
+                                                                        if(json.propuesta.area !== '' &&  json.propuesta.area !== null){
+                                                                            $.each(JSON.parse(json.propuesta.area), function (i, e) {
+                                                                                $("#area option[value='" + e + "']").prop("selected", true);
+                                                                            });
+                                                                        }
 
                                                                         //Cargo el formulario con los datos
                                                                         $('#formulario_principal').loadJSON(json.propuesta);
@@ -325,6 +362,15 @@ $(document).ready(function () {
                                                                         if(json.propuesta.mecanismos_cuantitativa!=null)
                                                                         {
                                                                             $(".caracter_mecanismos_cuantitativa").html(2000 - json.propuesta.mecanismos_cuantitativa.length);
+                                                                        }
+                                                                        
+                                                                        if(json.propuesta.proyeccion_reconocimiento!=null)
+                                                                        {
+                                                                            $(".caracter_proyeccion_reconocimiento").html(2000 - json.propuesta.proyeccion_reconocimiento.length);
+                                                                        }
+                                                                        if(json.propuesta.impacto_proyecto!=null)
+                                                                        {
+                                                                            $(".caracter_impacto_proyecto").html(2000 - json.propuesta.impacto_proyecto.length);
                                                                         }
 
                                                                         //Valido formulario

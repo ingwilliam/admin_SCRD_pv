@@ -110,6 +110,12 @@ $(document).ready(function () {
                                                                     {
 
                                                                         var json = JSON.parse(data);
+                                                                        
+                                                                        //Si la convocatoria es interlocales
+                                                                        if(json.convocatoria_padre_categoria=="608")
+                                                                        {
+                                                                            $(".campos_locales").css("display","block");
+                                                                        }
 
                                                                         //eliminó disabled todos los componentes
                                                                         if (json.estado == 7)
@@ -220,23 +226,38 @@ function validator_form(token_actual) {
             },
             poblacion_objetivo: {
                 validators: {
-                    notEmpty: {message: 'Describa brevemente la población objetivo del proyecto, es requerido'}
+                    notEmpty: {message: 'Describa brevemente la población objetivo del proyecto, es requerido'},
+                    stringLength: {
+                        message: 'Ya cuenta con el máximo de caracteres permitidos, los cuales son 1000.',
+                        max: '1000'
+                    }
                 }
             },
             comunidad_objetivo: {
                 validators: {
-                    notEmpty: {message: '¿Cómo se concertó el proyecto con la comunidad objetivo?, es requerido'}
+                    notEmpty: {message: '¿Cómo se concertó el proyecto con la comunidad objetivo?, es requerido'},
+                    stringLength: {
+                        message: 'Ya cuenta con el máximo de caracteres permitidos, los cuales son 2000.',
+                        max: '2000'
+                    }
                 }
             },
             total_beneficiario: {
                 validators: {
                     notEmpty: {message: 'Estimado total de beneficiarios o participantes, es requerido'},
-                    numeric: {message: 'Debe ingresar solo numeros'}
+                    regexp: {
+                        regexp: /^[0-9]+$/i,
+                        message: 'Debe ingresar solo números'
+                    }
                 }
             },
             establecio_cifra: {
                 validators: {
-                    notEmpty: {message: 'Cómo se estableció esta cifra, es requerido'}
+                    notEmpty: {message: 'Cómo se estableció esta cifra, es requerido'},
+                    stringLength: {
+                        message: 'Ya cuenta con el máximo de caracteres permitidos, los cuales son 500.',
+                        max: '500'
+                    }
                 }
             },
             femenino: {
