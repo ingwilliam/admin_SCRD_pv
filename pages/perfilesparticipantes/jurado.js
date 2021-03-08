@@ -139,6 +139,23 @@ $(document).ready(function () {
             });
         });
 
+        /*
+         *08-03-2021
+         *Wilmer Gustavo Mogollón Duque
+         *Se ajusta para incorporar los campos de RUT, CIIU Y MATRÍCULA MERCANTIL 
+         */
+
+        //cargar select tiene_rut
+        $('#tiene_rut').on('change', function () {
+            if ($(this).val() === "Sí")
+            {
+                $("#ciiu").removeAttr("disabled");
+            } else
+            {
+                $("#ciiu").attr("disabled", "disabled");
+            }
+        });
+
 //        //Peticion para buscar barrios
 //        var json_barrio = function (request, response) {
 //            $.ajax({
@@ -361,7 +378,7 @@ function cargar_datos_formulario(token_actual) {
                     $('#barrio_residencia').find('option').remove();
                     $("#barrio_residencia").append('<option value="">:: Seleccionar ::</option>');
                     if (json.barrios.length > 0) {
-                        
+
                         $.each(json.barrios, function (key, barrio) {
                             var selected = '';
                             if (barrio.id === json.participante.barrio_residencia)
@@ -370,6 +387,38 @@ function cargar_datos_formulario(token_actual) {
                             }
                             $("#barrio_residencia").append('<option value="' + barrio.id + '" ' + selected + ' >' + barrio.nombre + '</option>');
                         });
+                    }
+
+                    //Cargos el select de ciius
+                    $('#ciiu').find('option').remove();
+                    $("#ciiu").append('<option value="">:: Seleccionar ::</option>');
+                    if (json.ciius.length > 0) {
+                        $.each(json.ciius, function (key, array) {
+                            var selected = '';
+                            if (array.id === json.participante.ciiu)
+                            {
+                                selected = 'selected="selected"';
+                            }
+                            $("#ciiu").append('<option value="' + array.id + '" ' + selected + ' >' + array.nombre + '</option>');
+                        });
+                    }
+
+                    /*
+                     *08-03-2021
+                     *Wilmer Gustavo Mogollón Duque
+                     *Se ajusta para incorporar los campos de RUT, CIIU Y MATRÍCULA MERCANTIL 
+                     */
+
+                    //Cargo el formulario con los datos
+                    $('#formulario_principal').loadJSON(json.participante);
+
+                    //Valido el ciiu                        
+                    if (json.participante.tiene_rut === "Sí")
+                    {
+                        $("#ciiu").removeAttr("disabled");
+                    } else
+                    {
+                        $("#ciiu").attr("disabled", "disabled");
                     }
                 }
 
@@ -450,6 +499,21 @@ function validator_form(token_actual) {
                     notEmpty: {message: 'El primer apellido es requerido'}
                 }
             },
+            /*
+             *08-03-2021
+             *Wilmer Gustavo Mogollón Duque
+             *Se ajusta para incorporar los campos de RUT, CIIU Y MATRÍCULA MERCANTIL 
+             */
+            tiene_rut: {
+                validators: {
+                    notEmpty: {message: 'El RUT es requerido'}
+                }
+            },
+            tiene_matricula: {
+                validators: {
+                    notEmpty: {message: '¿Cuenta usted con matrícula mercantil?, es requerido'}
+                }
+            },
             fecha_nacimiento: {
                 validators: {
                     notEmpty: {message: 'La fecha de nacimiento es requerida'}
@@ -489,6 +553,22 @@ function validator_form(token_actual) {
 
 //  alert("idd-->"+typeof $("#idd").attr('value')+" idd-->>"+$("#idd").val() )
 
+        /*
+         *08-03-2021
+         *Wilmer Gustavo Mogollón Duque
+         *Se ajusta para incorporar los campos de RUT, CIIU Y MATRÍCULA MERCANTIL 
+         */
+
+        var enviar = true;
+
+        if ($("#tiene_rut").val() === "Sí")
+        {
+            if ($("#ciiu").val() === "")
+            {
+                notify("danger", "ok", "Persona natural:", "Código CIIU de su actividad principal, es requerido");
+                enviar = false;
+            }
+        }
 // Prevent form submission
         e.preventDefault();
         // Get the form instance
@@ -496,108 +576,113 @@ function validator_form(token_actual) {
         // Get the BootstrapValidator instance
         var bv = $form.data('bootstrapValidator');
 
-        if (typeof $("#idd").attr('value') === 'undefined' || $("#idd").val() == null || $("#idd").val() == '') {
+        if (enviar) {
+            if (typeof $("#idd").attr('value') === 'undefined' || $("#idd").val() == null || $("#idd").val() == '') {
 
 //  alert("nuevo!!!");
 //  alert("Continúe la inscripción en la sección “Convocatorias - Búsqueda de convocatorias”. Allí seleccione el tipo de programa y/o el tipo de convocatoria en el que desea participar.");
 //Se realiza la peticion con el fin de guardar el registro actual
-            $.ajax({
-                type: 'POST',
-                url: url_pv + 'Jurados/new',
-                data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
-            }).done(function (data) {
+                $.ajax({
+                    type: 'POST',
+                    url: url_pv + 'Jurados/new',
+                    data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
+                }).done(function (data) {
 
 
-                switch (data) {
-                    case 'error':
-                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                        break;
-                    case 'error_metodo':
-                        notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                        break;
-                    case 'error_token':
-                        location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                        break;
-                    case 'acceso_denegado':
-                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                        break;
-                    case 'deshabilitado':
-                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                        cargar_datos_formulario(token_actual);
-                        break;
-                    case 'error_duplicado':
-                        notify("danger", "remove", "Usuario:", "Ya existe un usuario registrado con el mismo documento de identificación.");
-                        cargar_datos_formulario(token_actual);
-                        break;
-                    default:
-                        notify("success", "ok", "Convocatorias:", "Se creó el registro con éxito.");
-                        //Cargar datos de la tabla de rondas
-                        //cargar_tabla_criterio($("#convocatoria_ronda").attr('value'),token_actual);
-                        $("#idd").val(data);
-                        cargar_datos_formulario(token_actual);
-                        /*
-                         * 11-05-2020
-                         * Wilmer Gustavo Mogollón Duque
-                         * Se agrega alert con información pertinente a los pasos que debe seguir
-                         */
-                        alert("Continúe la inscripción en la sección “Convocatorias - Búsqueda de convocatorias”. Allí seleccione el tipo de programa y/o el tipo de convocatoria en el que desea participar.");
-                        break;
-                }
+                    switch (data) {
+                        case 'error':
+                            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                            break;
+                        case 'error_metodo':
+                            notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                            break;
+                        case 'error_token':
+                            location.href = url_pv_admin + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                            break;
+                        case 'acceso_denegado':
+                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                            break;
+                        case 'deshabilitado':
+                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                            cargar_datos_formulario(token_actual);
+                            break;
+                        case 'error_duplicado':
+                            notify("danger", "remove", "Usuario:", "Ya existe un usuario registrado con el mismo documento de identificación.");
+                            cargar_datos_formulario(token_actual);
+                            break;
+                        default:
+                            notify("success", "ok", "Convocatorias:", "Se creó el registro con éxito.");
+                            //Cargar datos de la tabla de rondas
+                            //cargar_tabla_criterio($("#convocatoria_ronda").attr('value'),token_actual);
+                            $("#idd").val(data);
+                            cargar_datos_formulario(token_actual);
+                            /*
+                             * 11-05-2020
+                             * Wilmer Gustavo Mogollón Duque
+                             * Se agrega alert con información pertinente a los pasos que debe seguir
+                             */
+                            alert("Continúe la inscripción en la sección “Convocatorias - Búsqueda de convocatorias”. Allí seleccione el tipo de programa y/o el tipo de convocatoria en el que desea participar.");
+                            break;
+                    }
 
-            });
-        } else {
+                });
+            } else {
 
 
 //  alert("editado!!!");
 //Realizo la peticion con el fin de editar el registro actual
-            $.ajax({
-                type: 'PUT',
-                url: url_pv + 'Jurados/edit/' + $("#idd").val(),
-                data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
-            }).done(function (data) {
+                $.ajax({
+                    type: 'PUT',
+                    url: url_pv + 'Jurados/edit/' + $("#idd").val(),
+                    data: $form.serialize() + "&modulo=Menu Participante&token=" + token_actual.token
+                }).done(function (data) {
 
-                switch (data) {
-                    case 'error':
-                        notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                        break;
-                    case 'error_metodo':
-                        notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
-                        break;
-                    case 'error_token':
-                        location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
-                        break;
-                    case 'acceso_denegado':
-                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                        break;
-                    case 'deshabilitado':
-                        notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
-                        cargar_datos_formulario(token_actual);
-                        break;
-                    case 'error_duplicado':
-                        notify("danger", "remove", "Usuario:", "Ya existe un usuario registrado con el mismo documento de identificación.");
-                        cargar_datos_formulario(token_actual);
-                        break;
-                    default:
-                        notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
-                        //Cargar datos de la tabla de rondas
-                        //cargar_tabla_criterio($("#convocatoria_ronda").attr('value'),token_actual);
-                        $("#idd").val(data);
-                        cargar_datos_formulario(token_actual);
-                        /*
-                         * 11-05-2020
-                         * Wilmer Gustavo Mogollón Duque
-                         * Se agrega alert con información pertinente a los pasos que debe seguir
-                         */
-                        alert("Continúe la inscripción en la sección “Convocatorias - Búsqueda de convocatorias”. Allí seleccione el tipo de programa y/o el tipo de convocatoria en el que desea participar.");
-                        break;
-                }
+                    switch (data) {
+                        case 'error':
+                            notify("danger", "ok", "Convocatorias:", "Se registro un error, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                            break;
+                        case 'error_metodo':
+                            notify("danger", "ok", "Se registro un error en el método, comuníquese con la mesa de ayuda convocatorias@scrd.gov.co");
+                            break;
+                        case 'error_token':
+                            location.href = url_pv + 'index.html?msg=Su sesión ha expirado, por favor vuelva a ingresar.&msg_tipo=danger';
+                            break;
+                        case 'acceso_denegado':
+                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                            break;
+                        case 'deshabilitado':
+                            notify("danger", "remove", "Usuario:", "No tiene permisos para editar información.");
+                            cargar_datos_formulario(token_actual);
+                            break;
+                        case 'error_duplicado':
+                            notify("danger", "remove", "Usuario:", "Ya existe un usuario registrado con el mismo documento de identificación.");
+                            cargar_datos_formulario(token_actual);
+                            break;
+                        default:
+                            notify("success", "ok", "Convocatorias:", "Se actualizó el registro con éxito.");
+                            //Cargar datos de la tabla de rondas
+                            //cargar_tabla_criterio($("#convocatoria_ronda").attr('value'),token_actual);
+                            $("#idd").val(data);
+                            cargar_datos_formulario(token_actual);
+                            /*
+                             * 11-05-2020
+                             * Wilmer Gustavo Mogollón Duque
+                             * Se agrega alert con información pertinente a los pasos que debe seguir
+                             */
+                            alert("Continúe la inscripción en la sección “Convocatorias - Búsqueda de convocatorias”. Allí seleccione el tipo de programa y/o el tipo de convocatoria en el que desea participar.");
+                            break;
+                    }
 
-            });
+                });
+            }
+            $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
+            //$form.bootstrapValidator('destroy', true);
+            bv.resetForm();
         }
 
-        $form.bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
-        //$form.bootstrapValidator('destroy', true);
-        bv.resetForm();
+
+
+
     });
 }
 
